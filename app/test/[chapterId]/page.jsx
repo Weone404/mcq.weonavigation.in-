@@ -78,8 +78,14 @@ export default function TestPage({ params }) {
     setSaving(true);
     const score = questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0);
     const total = questions.length;
+    const answerDetails = questions.map((q, i) => ({
+      questionId: q.id,
+      selected: answers[i] != null ? answers[i] : -1,
+      correct: q.correct,
+      isCorrect: answers[i] === q.correct,
+    }));
     try {
-      await saveResult({ userEmail: user.email, chapterId, score, total });
+      await saveResult({ userEmail: user.email, chapterId, score, total, answers: answerDetails });
       await updateLeaderboard(user, score, total, chapterId);
     } catch (err) {
       console.error('Failed to save result:', err);

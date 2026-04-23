@@ -87,6 +87,10 @@ export default function LoginPage() {
             {loading ? <span className="spinner-wrap"><span className="spinner" /> Connecting to server...</span> : 'Begin Training →'}
           </button>
         </form>
+        <div className="teacher-link">
+          <span>Are you a teacher?</span>
+          <button type="button" className="teacher-btn" onClick={() => router.push('/teacher')}>Teacher Dashboard</button>
+        </div>
       </div>
 
       <style jsx>{`
@@ -123,6 +127,9 @@ export default function LoginPage() {
         .submit-btn { width:100%; padding:.85rem; background:linear-gradient(135deg,#00c864,#00a050); border:none; border-radius:8px; color:#fff; font-size:1rem; font-weight:700; cursor:pointer; margin-top:.75rem; transition:opacity .2s,transform .15s; }
         .submit-btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
         .submit-btn:disabled{opacity:.7;cursor:not-allowed}
+        .teacher-link{margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;justify-content:center;color:#94a3b8;font-size:.9rem;}
+        .teacher-btn{background:transparent;border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:.7rem 1rem;color:#fff;cursor:pointer;}
+        .teacher-btn:hover{background:rgba(255,255,255,0.06)}
         .spinner-wrap{display:flex;align-items:center;justify-content:center;gap:.5rem}
         .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}

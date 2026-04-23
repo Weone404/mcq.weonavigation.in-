@@ -22,6 +22,7 @@ export async function GET(request) {
         chapterId: r.chapterId,
         score: r.score,
         total: r.total,
+        answers: r.answers || [],
         date: r.date,
       }))
     );
@@ -42,11 +43,19 @@ export async function POST(request) {
       return NextResponse.json({ error: 'userEmail, chapterId, score, and total are required.' }, { status: 400 });
     }
 
+    const answers = Array.isArray(body.answers) ? body.answers.map(a => ({
+      questionId: a.questionId,
+      selected: Number(a.selected),
+      correct: Number(a.correct),
+      isCorrect: Boolean(a.isCorrect),
+    })) : [];
+
     const result = await ResultModel.create({
       userEmail: userEmail.toLowerCase().trim(),
       chapterId,
       score: Number(score),
       total: Number(total),
+      answers,
     });
 
     // Enforce max 50 results per user — delete oldest beyond that

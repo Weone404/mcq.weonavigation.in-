@@ -4,8 +4,5 @@
   "/teacher/page": "app/teacher/page.js",
   "/leaderboard/page": "app/leaderboard/page.js",
   "/results/page": "app/results/page.js",
-  "/page": "app/page.js",
-  "/api/user/route": "app/api/user/route.js",
-  "/api/stats/route": "app/api/stats/route.js",
-  "/api/results/route": "app/api/results/route.js"
+  "/api/teacher/students/route": "app/api/teacher/students/route.js"
 }

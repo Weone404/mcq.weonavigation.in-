@@ -23,12 +23,12 @@ export default function RootPage() {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#070b14',
-      color: '#e2e8f0',
+      background: 'linear-gradient(135deg, #e0f2fe, #f8fafc)',
+      color: '#0f172a',
       fontFamily: "'Segoe UI', system-ui, sans-serif",
     }}>
-      <div style={{ fontSize: '3rem', marginBottom: '1rem', animation: 'spin 2s linear infinite' }}>✈</div>
-      <div style={{ color: '#6b7a8f', fontSize: '1rem', letterSpacing: '0.1em' }}>Loading...</div>
+      <div style={{ fontSize: '3rem', marginBottom: '1rem', animation: 'spin 2s linear infinite', color: '#2563eb' }}>✈</div>
+      <div style={{ color: '#475569', fontSize: '1rem', letterSpacing: '0.1em' }}>Loading...</div>
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }

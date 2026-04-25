@@ -9,12 +9,17 @@ html {
 }
 
 body {
-  background: #070b14;
-  color: #e2e8f0;
+  background: linear-gradient(180deg, #eff6ff 0%, #f8fbff 100%);
+  color: #0f172a;
   -webkit-font-smoothing: antialiased;
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 button, input, textarea, select {
   font-family: inherit;
+}
+
+::selection {
+  background: rgba(59,130,246,0.25);
+  color: #0f172a;
 }

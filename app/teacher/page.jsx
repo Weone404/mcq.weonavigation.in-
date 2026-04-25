@@ -130,14 +130,15 @@ export default function TeacherPage() {
                     <button className="teacher-back" onClick={() => router.push('/')}>← Back to App</button>
                 </div>
                 <style jsx>{`
-          .teacher-auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #070b14; color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; padding: 1rem; }
-          .teacher-auth-card { width: 100%; max-width: 420px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 2rem; text-align: center; }
-          .teacher-auth-card h1 { margin-bottom: 0.5rem; font-size: 1.8rem; }
-          .teacher-auth-card p { margin-bottom: 1.5rem; color: #94a3b8; }
-          .teacher-auth-card input { width: 100%; padding: 0.95rem 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #e2e8f0; margin-bottom: 1rem; outline: none; }
-          .teacher-auth-card button { width: 100%; padding: 0.95rem 1rem; border: none; border-radius: 12px; background: linear-gradient(135deg, #00c864, #15803d); color: #fff; font-weight: 700; cursor: pointer; margin-bottom: 0.75rem; }
-          .teacher-back { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #9ca3af; }
-          .teacher-error { color: #f87171; margin-bottom: 1rem; font-size: 0.95rem; }
+          .teacher-auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e0f2fe, #f8fafc); color: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; padding: 1rem; }
+          .teacher-auth-card { width: 100%; max-width: 420px; background: #ffffff; border: 1px solid #dbeafe; border-radius: 24px; padding: 2rem; text-align: center; box-shadow: 0 30px 80px rgba(15,23,42,0.08); }
+          .teacher-auth-card h1 { margin-bottom: 0.5rem; font-size: 1.9rem; color: #0f172a; }
+          .teacher-auth-card p { margin-bottom: 1.5rem; color: #475569; }
+          .teacher-auth-card input { width: 100%; padding: 0.95rem 1rem; border-radius: 14px; border: 1px solid #dbeafe; background: #f8fafc; color: #0f172a; margin-bottom: 1rem; outline: none; }
+          .teacher-auth-card input:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
+          .teacher-auth-card button { width: 100%; padding: 0.95rem 1rem; border: none; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 700; cursor: pointer; margin-bottom: 0.75rem; }
+          .teacher-back { background: transparent; border: 1px solid #dbeafe; color: #475569; }
+          .teacher-error { color: #ef4444; margin-bottom: 1rem; font-size: 0.95rem; }
         `}</style>
             </div>
         );
@@ -302,63 +303,63 @@ export default function TeacherPage() {
             </div>
 
             <style jsx>{`
-        .teacher-page { min-height: 100vh; background: #060b16; color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        .teacher-nav { display: flex; align-items: center; justify-content: space-between; padding: 1.15rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(7, 11, 20, 0.95); position: sticky; top: 0; z-index: 20; }
-        .teacher-nav-brand { font-weight: 700; letter-spacing: 0.02em; }
+        .teacher-page { min-height: 100vh; background: linear-gradient(180deg, #eff6ff 0%, #f8fbff 100%); color: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .teacher-nav { display: flex; align-items: center; justify-content: space-between; padding: 1.15rem 1.5rem; border-bottom: 1px solid #dbeafe; background: #ffffff; position: sticky; top: 0; z-index: 20; box-shadow: 0 10px 30px rgba(15,23,42,0.05); }
+        .teacher-nav-brand { font-weight: 700; letter-spacing: 0.02em; color: #0f172a; }
         .teacher-nav-actions { display: flex; gap: 0.75rem; }
-        .teacher-nav-btn { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #e2e8f0; border-radius: 10px; padding: 0.7rem 1rem; cursor: pointer; }
+        .teacher-nav-btn { border: 1px solid #dbeafe; background: #eff6ff; color: #2563eb; border-radius: 10px; padding: 0.75rem 1rem; cursor: pointer; }
         .teacher-nav-btn.logout { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
         .teacher-content { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
         .teacher-hero { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1.75rem; }
-        .teacher-hero h1 { font-size: clamp(2rem, 2.8vw, 3rem); margin-bottom: 0.6rem; line-height: 1.05; }
-        .teacher-hero p { max-width: 680px; color: #94a3b8; font-size: 1rem; }
+        .teacher-hero h1 { font-size: clamp(2rem, 2.8vw, 3rem); margin-bottom: 0.6rem; line-height: 1.05; color: #0f172a; }
+        .teacher-hero p { max-width: 680px; color: #475569; font-size: 1rem; }
         .teacher-summary { display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr)); gap: 1rem; align-items: stretch; }
-        .teacher-summary div { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 1rem 1.15rem; text-align: center; }
-        .teacher-summary span { display: block; font-size: 2rem; font-weight: 800; margin-bottom: 0.35rem; }
-        .teacher-summary small { color: #94a3b8; }
-        .teacher-loading, .teacher-error-card { padding: 2rem 1.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; text-align: center; }
+        .teacher-summary div { background: #ffffff; border: 1px solid #dbeafe; border-radius: 18px; padding: 1.25rem 1.35rem; text-align: center; box-shadow: 0 18px 40px rgba(15,23,42,0.05); }
+        .teacher-summary span { display: block; font-size: 2rem; font-weight: 800; margin-bottom: 0.35rem; color: #0f172a; }
+        .teacher-summary small { color: #64748b; }
+        .teacher-loading, .teacher-error-card { padding: 2rem 1.5rem; background: #ffffff; border: 1px solid #dbeafe; border-radius: 18px; text-align: center; box-shadow: 0 18px 40px rgba(15,23,42,0.05); }
         .teacher-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; }
-        .teacher-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 1.25rem; }
+        .teacher-panel { background: #ffffff; border: 1px solid #dbeafe; border-radius: 20px; padding: 1.5rem; box-shadow: 0 18px 40px rgba(15,23,42,0.05); }
         .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-        .panel-header h2 { margin: 0; font-size: 1.05rem; }
-        .panel-header span { color: #94a3b8; font-size: 0.9rem; }
+        .panel-header h2 { margin: 0; font-size: 1.05rem; color: #0f172a; }
+        .panel-header span { color: #64748b; font-size: 0.9rem; }
         .teacher-table-wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 650px; }
-        th, td { padding: 0.9rem 0.85rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        th { color: #94a3b8; font-size: 0.84rem; text-transform: uppercase; letter-spacing: 0.04em; }
-        td button { padding: 0.45rem 0.8rem; border-radius: 10px; border: none; background: rgba(255,255,255,0.08); color: #fff; cursor: pointer; }
-        tr:hover { background: rgba(255,255,255,0.04); }
-        tr.selected { background: rgba(0,200,100,0.08); }
+        th, td { padding: 0.95rem 0.85rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { color: #64748b; font-size: 0.84rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        td button { padding: 0.5rem 0.9rem; border-radius: 10px; border: none; background: #eff6ff; color: #2563eb; cursor: pointer; }
+        tr:hover { background: #f8fafc; }
+        tr.selected { background: #dbeafe; }
         .student-detail-card { display: grid; gap: 1rem; }
         .student-info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .student-info-row div { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1rem; }
-        .student-info-row strong { display: block; color: #94a3b8; margin-bottom: 0.5rem; font-size: 0.82rem; }
-        .student-info-row span { font-size: 1rem; font-weight: 700; }
+        .student-info-row div { background: #f8fafc; border: 1px solid #dbeafe; border-radius: 16px; padding: 1rem; }
+        .student-info-row strong { display: block; color: #64748b; margin-bottom: 0.5rem; font-size: 0.82rem; }
+        .student-info-row span { font-size: 1rem; font-weight: 700; color: #0f172a; }
         .student-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-        .student-metrics div { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1rem; text-align: center; }
-        .student-metrics strong { display: block; color: #94a3b8; font-size: 0.82rem; margin-bottom: 0.5rem; }
+        .student-metrics div { background: #f8fafc; border: 1px solid #dbeafe; border-radius: 16px; padding: 1rem; text-align: center; }
+        .student-metrics strong { display: block; color: #64748b; font-size: 0.82rem; margin-bottom: 0.5rem; }
         .student-insights { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .insight-block { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 1rem; }
-        .insight-block h3 { margin: 0 0 0.75rem; font-size: 1rem; }
-        .topic-grid { display: grid; gap: 0.65rem; }
-        .topic-chip { padding: 0.75rem 1rem; border-radius: 14px; background: rgba(255,255,255,0.06); color: #e2e8f0; font-size: 0.9rem; }
-        .topic-chip.clear { border: 1px solid rgba(34,197,94,0.3); }
-        .topic-chip.weak { border: 1px solid rgba(239,68,68,0.35); }
-        .results-section h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+        .insight-block { background: #ffffff; border: 1px solid #dbeafe; border-radius: 18px; padding: 1rem; }
+        .insight-block h3 { margin: 0 0 0.75rem; font-size: 1rem; color: #0f172a; }
+        .topic-grid { display: grid; gap: 0.75rem; }
+        .topic-chip { padding: 0.75rem 1rem; border-radius: 14px; background: #eff6ff; color: #2563eb; font-size: 0.9rem; }
+        .topic-chip.clear { border: 1px solid #a7f3d0; }
+        .topic-chip.weak { border: 1px solid #fecaca; }
+        .results-section h3 { margin: 0 0 0.75rem; font-size: 1rem; color: #0f172a; }
         .results-list { display: grid; gap: 0.75rem; }
-        .result-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.95rem 1rem; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
-        .result-row strong { display: block; font-size: 0.95rem; }
-        .result-row span { color: #94a3b8; font-size: 0.85rem; }
+        .result-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.95rem 1rem; border-radius: 16px; background: #f8fafc; border: 1px solid #e2e8f0; }
+        .result-row strong { display: block; font-size: 0.95rem; color: #0f172a; }
+        .result-row span { color: #64748b; font-size: 0.85rem; }
         .wrong-questions-section { margin-top: 1rem; }
-        .wrong-questions-section h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+        .wrong-questions-section h3 { margin: 0 0 0.75rem; font-size: 1rem; color: #0f172a; }
         .wrong-list { display: grid; gap: 0.75rem; }
-        .wrong-row { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1rem; display: grid; gap: 0.5rem; }
-        .wrong-row p { margin: 0.25rem 0 0; color: #e2e8f0; font-size: 0.95rem; line-height: 1.4; }
+        .wrong-row { background: #ffffff; border: 1px solid #dbeafe; border-radius: 16px; padding: 1rem; display: grid; gap: 0.5rem; }
+        .wrong-row p { margin: 0.25rem 0 0; color: #475569; font-size: 0.95rem; line-height: 1.4; }
         .wrong-meta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-        .wrong-label, .correct-label { font-size: 0.85rem; color: #cbd5e1; }
-        .wrong-label { color: #f87171; }
-        .correct-label { color: #34d399; }
-        .empty-state { padding: 1.5rem; border-radius: 16px; border: 1px dashed rgba(255,255,255,0.18); color: #94a3b8; text-align: center; }
+        .wrong-label, .correct-label { font-size: 0.85rem; color: #475569; }
+        .wrong-label { color: #ef4444; }
+        .correct-label { color: #16a34a; }
+        .empty-state { padding: 1.5rem; border-radius: 16px; border: 1px dashed #93c5fd; color: #64748b; text-align: center; background: #eff6ff; }
         @media (max-width: 980px) { .teacher-grid { grid-template-columns: 1fr; } .student-info-row { grid-template-columns: 1fr; } .student-metrics { grid-template-columns: 1fr; } }
       `}</style>
         </div>

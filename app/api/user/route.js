@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '../../../lib/mongoose';
 import { UserModel } from '../../../lib/models';
 
+export const dynamic = 'force-dynamic';
+
 // POST /api/user — register (upsert) a user
 export async function POST(request) {
   try {
@@ -35,7 +37,7 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     await connectDB();
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const email = searchParams.get('email');
     if (!email) return NextResponse.json({ error: 'email is required.' }, { status: 400 });
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getUser, saveResult, updateLeaderboard } from '../../../lib/storage';
 import { chapters, questions as allQuestions } from '../../../data/questions';
 
-const TOTAL_TIME = 600;
+const TOTAL_TIME = 300;
 
 export default function TestPage({ params }) {
   const { chapterId } = params;
@@ -96,7 +96,7 @@ export default function TestPage({ params }) {
   const mins = Math.floor(timeLeft / 60);
   const secs = timeLeft % 60;
   const timerPct = timeLeft / TOTAL_TIME;
-  const timerColor = timerPct > 0.4 ? '#00c864' : timerPct > 0.15 ? '#f59e0b' : '#ef4444';
+  const timerColor = timerPct > 0.4 ? '#2563eb' : timerPct > 0.15 ? '#7c3aed' : '#dc2626';
   const circumference = 2 * Math.PI * 22;
   const strokeDashoffset = circumference * (1 - timerPct);
 
@@ -116,12 +116,17 @@ export default function TestPage({ params }) {
     return 'Keep Practicing!';
   }
   function getScoreColor(pct) {
-    if (pct >= 80) return '#00c864';
-    if (pct >= 50) return '#f59e0b';
-    return '#ef4444';
+    if (pct >= 80) return '#2563eb';
+    if (pct >= 50) return '#7c3aed';
+    return '#dc2626';
   }
 
+  // ── CHANGE 1: getDotState now handles 'finish' screen with 'unanswered' state ──
   function getDotState(i) {
+    if (screen === 'finish') {
+      if (answers[i] === undefined) return 'unanswered';
+      return answers[i] === questions[i]?.correct ? 'correct' : 'wrong';
+    }
     if (i === currentQ) return 'active';
     if (answers[i] !== undefined) {
       return answers[i] === questions[i]?.correct ? 'correct' : 'wrong';
@@ -159,20 +164,20 @@ export default function TestPage({ params }) {
         </div>
 
         <style jsx>{`
-          .page { min-height: 100vh; background: #070b14; display: flex; align-items: center; justify-content: center; padding: 1rem; font-family: 'Segoe UI', system-ui, sans-serif; }
+          .page { min-height: 100vh; background: linear-gradient(135deg, #e0f2fe, #f8fafc); display: flex; align-items: center; justify-content: center; padding: 1rem; font-family: 'Segoe UI', system-ui, sans-serif; }
           .start-wrap { width: 100%; max-width: 560px; }
-          .start-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-left: 4px solid ${chapter.color}; border-radius: 16px; padding: 2.5rem 2rem; text-align: center; }
+          .start-card { background: rgba(255,255,255,0.95); border: 1px solid rgba(59,130,246,0.2); border-left: 4px solid #2563eb; border-radius: 16px; padding: 2.5rem 2rem; text-align: center; box-shadow: 0 8px 32px rgba(59,130,246,0.1); }
           .start-icon { font-size: 4rem; margin-bottom: 1rem; }
-          .start-title { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
-          .start-sub { font-size: 0.9rem; color: #6b7a8f; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1.5rem; }
+          .start-title { font-size: 1.8rem; font-weight: 800; color: #1e40af; margin-bottom: 0.4rem; }
+          .start-sub { font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1.5rem; }
           .meta-badges { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
-          .meta-badge { background: rgba(0,200,100,0.1); border: 1px solid rgba(0,200,100,0.2); color: #00c864; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+          .meta-badge { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); color: #2563eb; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
           .rules { list-style: none; text-align: left; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
-          .rules li { font-size: 0.88rem; color: #e2e8f0; padding: 0.6rem 0.9rem; background: rgba(255,255,255,0.03); border-radius: 8px; }
-          .start-btn { width: 100%; padding: 0.9rem; background: linear-gradient(135deg, #00c864, #00a050); border: none; border-radius: 8px; color: #fff; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-bottom: 0.75rem; transition: opacity 0.2s, transform 0.15s; }
+          .rules li { font-size: 0.88rem; color: #374151; padding: 0.6rem 0.9rem; background: rgba(59,130,246,0.05); border-radius: 8px; }
+          .start-btn { width: 100%; padding: 0.9rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; color: #fff; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-bottom: 0.75rem; transition: opacity 0.2s, transform 0.15s; }
           .start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-          .ghost-btn { width: 100%; padding: 0.8rem; background: none; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #e2e8f0; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
-          .ghost-btn:hover { background: rgba(255,255,255,0.06); }
+          .ghost-btn { width: 100%; padding: 0.8rem; background: none; border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; color: #374151; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
+          .ghost-btn:hover { background: rgba(59,130,246,0.05); }
         `}</style>
       </div>
     );
@@ -214,7 +219,7 @@ export default function TestPage({ params }) {
 
         {/* PROGRESS BAR */}
         <div className="progress-bar-wrap">
-          <div className="progress-bar-fill" style={{ width: `${((currentQ + 1) / total) * 100}%`, background: chapter.color }} />
+          <div className="progress-bar-fill" style={{ width: `${((currentQ + 1) / total) * 100}%` }} />
         </div>
 
         <div className="test-body">
@@ -280,77 +285,81 @@ export default function TestPage({ params }) {
         </div>
 
         <style jsx>{`
-          .page { min-height: 100vh; background: #070b14; font-family: 'Segoe UI', system-ui, sans-serif; color: #e2e8f0; }
+          .page { min-height: 100vh; background: linear-gradient(135deg, #e0f2fe, #f8fafc); font-family: 'Segoe UI', system-ui, sans-serif; color: #374151; }
 
           .test-header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(10,16,30,0.98);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.95);
+            border-bottom: 1px solid rgba(59,130,246,0.2);
             backdrop-filter: blur(10px);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0.6rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.1);
           }
-          .back-btn { background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.4rem 0.85rem; color: #e2e8f0; font-size: 0.85rem; cursor: pointer; }
-          .ch-name { font-size: 0.95rem; font-weight: 600; color: #fff; }
+          .back-btn { background: none; border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; padding: 0.4rem 0.85rem; color: #374151; font-size: 0.85rem; cursor: pointer; }
+          .ch-name { font-size: 0.95rem; font-weight: 600; color: #1e40af; }
           .timer-wrap { position: relative; display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; }
           .timer-text { position: absolute; font-size: 0.72rem; font-weight: 700; }
 
-          .progress-bar-wrap { height: 3px; background: rgba(255,255,255,0.06); }
-          .progress-bar-fill { height: 100%; transition: width 0.3s; }
+          .progress-bar-wrap { height: 3px; background: rgba(59,130,246,0.2); }
+          .progress-bar-fill { height: 100%; transition: width 0.3s; background: #2563eb; }
 
           .test-body { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem; }
 
           .dots-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
           .dot {
             width: 34px; height: 34px; border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.04);
-            color: #6b7a8f; font-size: 0.78rem; font-weight: 600;
+            border: 1px solid rgba(59,130,246,0.3);
+            background: rgba(255,255,255,0.8);
+            color: #64748b; font-size: 0.78rem; font-weight: 600;
             cursor: pointer; transition: all 0.15s;
           }
-          .dot:hover { border-color: #00c864; color: #00c864; }
-          .dot-active { border-color: #00c864 !important; background: rgba(0,200,100,0.15) !important; color: #00c864 !important; }
-          .dot-correct { background: #00c864 !important; border-color: #00c864 !important; color: #fff !important; }
-          .dot-wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: #fff !important; }
+          .dot:hover { border-color: #2563eb; color: #2563eb; }
+          .dot-active { border-color: #2563eb !important; background: rgba(59,130,246,0.15) !important; color: #2563eb !important; }
+          .dot-correct { background: #2563eb !important; border-color: #2563eb !important; color: #fff !important; }
+          .dot-wrong { background: #dc2626 !important; border-color: #dc2626 !important; color: #fff !important; }
+          /* ── CHANGE 2: blue dot for unanswered questions on finish screen ── */
+          .dot-unanswered { background: rgba(59,130,246,0.2) !important; border-color: #3b82f6 !important; color: #3b82f6 !important; }
 
           .q-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.95);
+            border: 1px solid rgba(59,130,246,0.2);
             border-radius: 14px;
             padding: 1.75rem;
             margin-bottom: 1.25rem;
+            box-shadow: 0 4px 16px rgba(59,130,246,0.1);
           }
-          .q-label { font-size: 0.78rem; color: #6b7a8f; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
-          .q-text { font-size: 1.1rem; font-weight: 700; color: #fff; line-height: 1.5; margin-bottom: 1.5rem; }
+          .q-label { font-size: 0.78rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+          .q-text { font-size: 1.1rem; font-weight: 700; color: #1e40af; line-height: 1.5; margin-bottom: 1.5rem; }
 
           .options { display: flex; flex-direction: column; gap: 0.7rem; }
           .option {
             display: flex; align-items: center; gap: 0.75rem;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(59,130,246,0.2);
             border-radius: 10px;
             padding: 0.8rem 1rem;
             cursor: pointer;
             text-align: left;
-            color: #e2e8f0;
+            color: #374151;
             font-size: 0.92rem;
             transition: border-color 0.15s, background 0.15s;
           }
-          .option:hover:not(:disabled) { border-color: #00c864; background: rgba(0,200,100,0.06); }
+          .option:hover:not(:disabled) { border-color: #2563eb; background: rgba(59,130,246,0.05); }
           .option:disabled { cursor: default; }
           .opt-letter {
             width: 28px; height: 28px; border-radius: 50%;
-            background: rgba(255,255,255,0.08);
+            background: rgba(59,130,246,0.1);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+            font-size: 0.8rem; font-weight: 700; flex-shrink: 0; color: #2563eb;
           }
           .opt-text { flex: 1; }
-          .opt-correct { background: rgba(0,200,100,0.12) !important; border-color: #00c864 !important; color: #fff !important; }
-          .opt-wrong { background: rgba(239,68,68,0.12) !important; border-color: #ef4444 !important; }
+          .opt-correct { background: rgba(59,130,246,0.12) !important; border-color: #2563eb !important; color: #1e40af !important; }
+          .opt-wrong { background: rgba(220,38,38,0.12) !important; border-color: #dc2626 !important; }
           .opt-faded { opacity: 0.4; }
           .opt-badge { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 20px; flex-shrink: 0; }
-          .badge-correct { background: rgba(0,200,100,0.2); color: #00c864; }
-          .badge-wrong { background: rgba(239,68,68,0.2); color: #ef4444; }
+          .badge-correct { background: rgba(59,130,246,0.2); color: #2563eb; }
+          .badge-wrong { background: rgba(220,38,38,0.2); color: #dc2626; }
 
           .explanation {
             margin-top: 1.25rem;
@@ -359,27 +368,27 @@ export default function TestPage({ params }) {
             border: 1px solid rgba(59,130,246,0.2);
             border-radius: 10px;
           }
-          .exp-label { font-size: 0.82rem; font-weight: 700; color: #3b82f6; display: block; margin-bottom: 0.4rem; }
-          .exp-text { font-size: 0.88rem; color: #e2e8f0; line-height: 1.6; }
+          .exp-label { font-size: 0.82rem; font-weight: 700; color: #2563eb; display: block; margin-bottom: 0.4rem; }
+          .exp-text { font-size: 0.88rem; color: #374151; line-height: 1.6; }
 
           .nav-row {
             display: flex; align-items: center; justify-content: space-between;
             gap: 1rem;
           }
           .nav-btn {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(59,130,246,0.2);
             border-radius: 8px;
             padding: 0.65rem 1.25rem;
-            color: #e2e8f0;
+            color: #374151;
             font-size: 0.9rem;
             cursor: pointer;
             transition: background 0.2s;
           }
-          .nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.1); }
+          .nav-btn:hover:not(:disabled) { background: rgba(59,130,246,0.05); }
           .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-          .nav-next { color: #00c864; border-color: rgba(0,200,100,0.3); }
-          .answered-count { font-size: 0.82rem; color: #6b7a8f; white-space: nowrap; }
+          .nav-next { color: #2563eb; border-color: rgba(59,130,246,0.3); }
+          .answered-count { font-size: 0.82rem; color: #64748b; white-space: nowrap; }
           .submit-test-btn {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             border: none; border-radius: 8px;
@@ -404,7 +413,9 @@ export default function TestPage({ params }) {
   // SCREEN 3: FINISH
   // ──────────────────────────────────────────────────────────────────
   const correctCount = questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0);
-  const wrongCount = total - correctCount;
+  // ── CHANGE 3: separate not-answered from wrong ──
+  const notAnsweredCount = questions.filter((_, i) => answers[i] === undefined).length;
+  const wrongCount = total - correctCount - notAnsweredCount;
 
   return (
     <div className="page">
@@ -417,17 +428,42 @@ export default function TestPage({ params }) {
           </div>
           <div className="score-pct" style={{ color: getScoreColor(scorePct) }}>{scorePct}%</div>
 
+          {/* ── CHANGE 4: three-card breakdown with blue "Not Answered" ── */}
           <div className="breakdown">
-            <div className="breakdown-item" style={{ background: 'rgba(0,200,100,0.1)', borderColor: 'rgba(0,200,100,0.3)' }}>
-              <span style={{ color: '#00c864', fontSize: '1.2rem' }}>✓</span>
+            <div className="breakdown-item" style={{ background: 'rgba(59,130,246,0.1)', borderColor: 'rgba(59,130,246,0.3)' }}>
+              <span style={{ color: '#2563eb', fontSize: '1.2rem' }}>✓</span>
               <span className="bd-val">{correctCount}</span>
               <span className="bd-label">Correct</span>
             </div>
-            <div className="breakdown-item" style={{ background: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.3)' }}>
-              <span style={{ color: '#ef4444', fontSize: '1.2rem' }}>✗</span>
+            <div className="breakdown-item" style={{ background: 'rgba(220,38,38,0.1)', borderColor: 'rgba(220,38,38,0.3)' }}>
+              <span style={{ color: '#dc2626', fontSize: '1.2rem' }}>✗</span>
               <span className="bd-val">{wrongCount}</span>
               <span className="bd-label">Wrong</span>
             </div>
+            <div className="breakdown-item" style={{ background: 'rgba(59,130,246,0.1)', borderColor: 'rgba(59,130,246,0.3)' }}>
+              <span style={{ color: '#3b82f6', fontSize: '1.2rem' }}>–</span>
+              <span className="bd-val">{notAnsweredCount}</span>
+              <span className="bd-label">Not Answered</span>
+            </div>
+          </div>
+
+          {/* Dot legend */}
+          <div className="dot-legend">
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#2563eb' }} />Correct</span>
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#dc2626' }} />Wrong</span>
+            <span className="legend-item"><span className="legend-dot" style={{ background: 'rgba(59,130,246,0.3)', border: '1px solid #3b82f6' }} />Not Answered</span>
+          </div>
+
+          {/* Dots review on finish screen */}
+          <div className="finish-dots">
+            {questions.map((_, i) => {
+              const ds = getDotState(i);
+              return (
+                <span key={i} className={`fdot fdot-${ds}`} title={`Q${i + 1}`}>
+                  {i + 1}
+                </span>
+              );
+            })}
           </div>
 
           <button className="save-btn" onClick={handleSaveAndContinue} disabled={saving}>
@@ -438,44 +474,61 @@ export default function TestPage({ params }) {
       </div>
 
       <style jsx>{`
-        .page { min-height: 100vh; background: #070b14; display: flex; align-items: center; justify-content: center; padding: 1rem; font-family: 'Segoe UI', system-ui, sans-serif; }
-        .finish-wrap { width: 100%; max-width: 460px; }
+        .page { min-height: 100vh; background: linear-gradient(135deg, #e0f2fe, #f8fafc); display: flex; align-items: center; justify-content: center; padding: 1rem; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .finish-wrap { width: 100%; max-width: 480px; }
         .finish-card {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(255,255,255,0.95);
+          border: 1px solid rgba(59,130,246,0.2);
           border-radius: 16px;
           padding: 2.5rem 2rem;
           text-align: center;
+          box-shadow: 0 8px 32px rgba(59,130,246,0.1);
         }
         .result-emoji { font-size: 4.5rem; margin-bottom: 0.75rem; }
-        .result-title { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+        .result-title { font-size: 1.8rem; font-weight: 800; color: #1e40af; margin-bottom: 0.5rem; }
         .score-display { font-size: 3.5rem; font-weight: 900; line-height: 1; }
         .score-pct { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
-        .breakdown { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
+        .breakdown { display: flex; gap: 0.75rem; justify-content: center; margin-bottom: 1.25rem; }
         .breakdown-item {
           flex: 1; display: flex; flex-direction: column; align-items: center;
-          padding: 1rem; border: 1px solid; border-radius: 12px; gap: 0.3rem;
+          padding: 0.85rem 0.5rem; border: 1px solid; border-radius: 12px; gap: 0.3rem;
         }
-        .bd-val { font-size: 1.5rem; font-weight: 800; color: #fff; }
-        .bd-label { font-size: 0.78rem; color: #6b7a8f; }
+        .bd-val { font-size: 1.5rem; font-weight: 800; color: #1e40af; }
+        .bd-label { font-size: 0.72rem; color: #64748b; }
+        .dot-legend { display: flex; gap: 1rem; justify-content: center; margin-bottom: 0.85rem; }
+        .legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: #64748b; }
+        .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .finish-dots { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-bottom: 1.75rem; }
+        .fdot {
+          width: 30px; height: 30px; border-radius: 50%;
+          display: inline-flex; align-items: center; justify-content: center;
+          font-size: 0.72rem; font-weight: 600;
+          border: 1px solid rgba(59,130,246,0.2);
+          background: rgba(255,255,255,0.8);
+          color: #64748b;
+        }
+        .fdot-correct { background: #2563eb !important; border-color: #2563eb !important; color: #fff !important; }
+        .fdot-wrong   { background: #dc2626 !important; border-color: #dc2626 !important; color: #fff !important; }
+        .fdot-unanswered { background: rgba(59,130,246,0.2) !important; border-color: #3b82f6 !important; color: #3b82f6 !important; }
         .save-btn {
           width: 100%; padding: 0.9rem;
-          background: linear-gradient(135deg, #00c864, #00a050);
+          background: linear-gradient(135deg, #2563eb, #1d4ed8);
           border: none; border-radius: 8px;
           color: #fff; font-size: 1rem; font-weight: 700;
           cursor: pointer; margin-bottom: 0.75rem;
           transition: opacity 0.2s;
         }
         .save-btn:hover { opacity: 0.9; }
+        .save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .retry-btn {
           width: 100%; padding: 0.8rem;
           background: none;
-          border: 1px solid rgba(255,255,255,0.12);
+          border: 1px solid rgba(59,130,246,0.3);
           border-radius: 8px;
-          color: #e2e8f0; font-size: 0.95rem;
+          color: #374151; font-size: 0.95rem;
           cursor: pointer; transition: background 0.2s;
         }
-        .retry-btn:hover { background: rgba(255,255,255,0.06); }
+        .retry-btn:hover { background: rgba(59,130,246,0.05); }
       `}</style>
     </div>
   );

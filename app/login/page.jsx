@@ -94,44 +94,44 @@ export default function LoginPage() {
       </div>
 
       <style jsx>{`
-        .page { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#070b14; padding:1rem; position:relative; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; }
+        .page { min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #e0f2fe, #f8fafc); padding:1rem; position:relative; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#0f172a; }
         .radar-bg { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:0; }
-        .ring { position:absolute; border-radius:50%; border:1px solid rgba(0,200,100,0.08); animation:expand 4s ease-out infinite; }
+        .ring { position:absolute; border-radius:50%; border:1px solid rgba(59,130,246,0.12); animation:expand 4s ease-out infinite; }
         .ring-1{width:200px;height:200px;animation-delay:0s}
         .ring-2{width:400px;height:400px;animation-delay:1s}
         .ring-3{width:600px;height:600px;animation-delay:2s}
         .ring-4{width:800px;height:800px;animation-delay:3s}
         @keyframes expand{0%{opacity:.5;transform:scale(.95)}100%{opacity:0;transform:scale(1.05)}}
-        .sweep { position:absolute; width:400px; height:400px; border-radius:50%; background:conic-gradient(from 0deg,transparent 340deg,rgba(0,200,100,0.08) 360deg); animation:sweep 4s linear infinite; }
+        .sweep { position:absolute; width:400px; height:400px; border-radius:50%; background:conic-gradient(from 0deg,transparent 340deg,rgba(59,130,246,0.12) 360deg); animation:sweep 4s linear infinite; }
         @keyframes sweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-        .card { position:relative; z-index:1; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:2.5rem 2rem; width:100%; max-width:440px; backdrop-filter:blur(12px); }
+        .card { position:relative; z-index:1; background:#ffffff; border:1px solid rgba(59,130,246,0.18); border-radius:20px; padding:2.5rem 2rem; width:100%; max-width:440px; box-shadow:0 30px 80px rgba(15,23,42,0.08); }
         .logo { display:flex; align-items:center; gap:.75rem; margin-bottom:2rem; justify-content:center; }
-        .logo-icon { font-size:2rem; filter:drop-shadow(0 0 8px #00c864); }
-        .logo-title { font-size:1.5rem; font-weight:700; color:#fff; letter-spacing:.05em; }
-        .logo-sub { font-size:.65rem; color:#00c864; letter-spacing:.15em; font-weight:600; }
-        .heading { font-size:1.4rem; font-weight:700; color:#fff; text-align:center; margin-bottom:.35rem; }
-        .subheading { font-size:.85rem; color:#6b7a8f; text-align:center; margin-bottom:1.25rem; }
-        .api-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:.75rem 1rem; color:#ef4444; font-size:.85rem; margin-bottom:1rem; }
+        .logo-icon { font-size:2rem; color:#2563eb; }
+        .logo-title { font-size:1.5rem; font-weight:700; color:#0f172a; letter-spacing:.05em; }
+        .logo-sub { font-size:.65rem; color:#2563eb; letter-spacing:.15em; font-weight:700; }
+        .heading { font-size:1.4rem; font-weight:700; color:#0f172a; text-align:center; margin-bottom:.35rem; }
+        .subheading { font-size:.85rem; color:#475569; text-align:center; margin-bottom:1.25rem; }
+        .api-error { background:#fee2e2; border:1px solid #fecaca; border-radius:8px; padding:.75rem 1rem; color:#b91c1c; font-size:.85rem; margin-bottom:1rem; }
         .field { margin-bottom:1.2rem; }
-        .field label { display:block; font-size:.82rem; font-weight:600; color:#e2e8f0; margin-bottom:.4rem; }
-        .field input { width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:.7rem 1rem; color:#fff; font-size:.95rem; outline:none; transition:border-color .2s,box-shadow .2s; }
-        .field input:focus { border-color:#00c864; box-shadow:0 0 0 3px rgba(0,200,100,.15); }
-        .field input.error { border-color:#ef4444; }
-        .field input::placeholder { color:#6b7a8f; }
-        .field input:disabled { opacity:.6; }
-        .phone-wrap { display:flex; align-items:center; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; overflow:hidden; transition:border-color .2s; }
-        .phone-wrap:focus-within { border-color:#00c864; box-shadow:0 0 0 3px rgba(0,200,100,.15); }
-        .prefix { background:rgba(0,200,100,.1); color:#00c864; padding:.7rem .75rem; font-size:.9rem; font-weight:600; border-right:1px solid rgba(255,255,255,.1); white-space:nowrap; }
+        .field label { display:block; font-size:.82rem; font-weight:600; color:#475569; margin-bottom:.4rem; }
+        .field input { width:100%; background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:.8rem 1rem; color:#0f172a; font-size:.95rem; outline:none; transition:border-color .2s,box-shadow .2s; }
+        .field input:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(59,130,246,.14); }
+        .field input.error { border-color:#f87171; }
+        .field input::placeholder { color:#94a3b8; }
+        .field input:disabled { opacity:.75; }
+        .phone-wrap { display:flex; align-items:center; background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; overflow:hidden; transition:border-color .2s; }
+        .phone-wrap:focus-within { border-color:#2563eb; box-shadow:0 0 0 3px rgba(59,130,246,.14); }
+        .prefix { background:#eff6ff; color:#2563eb; padding:.75rem .85rem; font-size:.9rem; font-weight:700; border-right:1px solid #cbd5e1; white-space:nowrap; }
         .phone-wrap input { background:transparent; border:none!important; border-radius:0!important; box-shadow:none!important; flex:1; }
         .err { display:block; margin-top:.35rem; font-size:.78rem; color:#ef4444; }
-        .submit-btn { width:100%; padding:.85rem; background:linear-gradient(135deg,#00c864,#00a050); border:none; border-radius:8px; color:#fff; font-size:1rem; font-weight:700; cursor:pointer; margin-top:.75rem; transition:opacity .2s,transform .15s; }
-        .submit-btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+        .submit-btn { width:100%; padding:.95rem; background:linear-gradient(135deg,#2563eb,#1d4ed8); border:none; border-radius:10px; color:#fff; font-size:1rem; font-weight:700; cursor:pointer; margin-top:.75rem; transition:opacity .2s,transform .15s; }
+        .submit-btn:hover:not(:disabled){opacity:.95;transform:translateY(-1px)}
         .submit-btn:disabled{opacity:.7;cursor:not-allowed}
-        .teacher-link{margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;justify-content:center;color:#94a3b8;font-size:.9rem;}
-        .teacher-btn{background:transparent;border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:.7rem 1rem;color:#fff;cursor:pointer;}
-        .teacher-btn:hover{background:rgba(255,255,255,0.06)}
+        .teacher-link{margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;justify-content:center;color:#64748b;font-size:.9rem;}
+        .teacher-btn{background:#ffffff;border:1px solid #cbd5e1;border-radius:10px;padding:.75rem 1rem;color:#0f172a;cursor:pointer;}
+        .teacher-btn:hover{background:#eef2ff}
         .spinner-wrap{display:flex;align-items:center;justify-content:center;gap:.5rem}
-        .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+        .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(37,99,235,.25);border-top-color:#2563eb;border-radius:50%;animation:spin .7s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
         @media(max-width:480px){.card{padding:2rem 1.25rem}}
       `}</style>

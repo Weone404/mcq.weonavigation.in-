@@ -26,15 +26,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/leaderboard/page.js"
     ],
-    "/results/page": [
+    "/teacher/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/results/page.js"
-    ],
-    "/test/[chapterId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/test/[chapterId]/page.js"
+      "static/chunks/app/teacher/page.js"
     ]
   }
 }

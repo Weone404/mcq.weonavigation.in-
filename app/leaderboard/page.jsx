@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUser, getLeaderboard } from '../../lib/storage';
+import { getUser, getLeaderboard, clearUser } from '../../lib/storage';
 
 // ─── COLOUR TOKENS ────────────────────────────────────────────────────────────
 const C = {

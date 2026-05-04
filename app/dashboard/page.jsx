@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUser, clearUser, getStats, getResults } from '../../lib/storage';
-import { chapters } from '../../data/questions';
+import { chapters, questions as allQuestions } from '../../data/questions';
 import LecturesPage from './LecturesPage.jsx';
 import ResourcesPage from './ResourcesPage.jsx';
+import DoubtAgent from '../../components/DoubtAgent/DoubtAgent';
 
 // ─── COLOUR TOKENS ─────────────────────────────────────────────────────────────
 const C = {
@@ -22,6 +23,22 @@ const C = {
   muted: '#64748B',
   border: '#E2E8F0',
 };
+
+// ─── SHUFFLE HELPER ────────────────────────────────────────────────────────────
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildMockPool(count = 50) {
+  let pool = [];
+  Object.values(allQuestions).forEach(arr => pool.push(...arr));
+  return shuffleArray(pool).slice(0, count);
+}
 
 // ─── SUBJECTS CONFIG ───────────────────────────────────────────────────────────
 const SUBJECTS = [
@@ -55,7 +72,8 @@ const SUBJECTS = [
     chapterIds: [],
     stats: 'Coming Soon',
     exam: 'ATPL / CPL',
-    locked: true,
+    locked: false,
+    comingSoon: true,
   },
   {
     id: 'navigation',
@@ -68,7 +86,8 @@ const SUBJECTS = [
     chapterIds: [],
     stats: 'Coming Soon',
     exam: 'ATPL / CPL',
-    locked: true,
+    locked: false,
+    comingSoon: true,
   },
   {
     id: 'technical',
@@ -81,7 +100,8 @@ const SUBJECTS = [
     chapterIds: [],
     stats: 'Coming Soon',
     exam: 'AME / ATPL',
-    locked: true,
+    locked: false,
+    comingSoon: true,
   },
   {
     id: 'rtfm',
@@ -94,7 +114,8 @@ const SUBJECTS = [
     chapterIds: [],
     stats: 'Coming Soon',
     exam: 'RTR (Aero)',
-    locked: true,
+    locked: false,
+    comingSoon: true,
   },
   {
     id: 'mock',
@@ -154,10 +175,61 @@ const Skeleton = ({ w = '100%', h = 16, r = 8 }) => (
   <div style={{ width: w, height: h, borderRadius: r, background: 'linear-gradient(90deg,#E2E8F0 25%,#F1F5F9 50%,#E2E8F0 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.4s infinite' }} />
 );
 
+// ─── COMING SOON PLACEHOLDER ──────────────────────────────────────────────────
+function ComingSoonPage({ subject, onBack }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 480, background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, padding: '48px 32px', textAlign: 'center' }}>
+      <div style={{
+        width: 90, height: 90, borderRadius: 24, marginBottom: 24,
+        background: subject.gradient,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 42,
+        boxShadow: `0 8px 32px ${subject.color}40`,
+      }}>
+        {subject.icon}
+      </div>
+      <div style={{ fontSize: 28, fontWeight: 900, color: C.text, marginBottom: 8 }}>{subject.title}</div>
+      <div style={{ fontSize: 14, color: C.muted, marginBottom: 28, maxWidth: 400, lineHeight: 1.7 }}>
+        {subject.subtitle} — this subject is currently being prepared by our content team.
+        We'll notify you as soon as it's live!
+      </div>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 32 }}>
+        {[['📅', 'Launching Soon'], ['✍️', 'MCQs in Progress'], ['🎯', subject.exam]].map(([icon, label]) => (
+          <span key={label} style={{
+            background: subject.color + '15', color: subject.color,
+            border: `1px solid ${subject.color}30`,
+            padding: '7px 16px', borderRadius: 20, fontSize: 12, fontWeight: 700,
+          }}>{icon} {label}</span>
+        ))}
+      </div>
+      <div style={{
+        background: '#FFF7ED', border: `1px solid ${C.accent}40`,
+        borderRadius: 14, padding: '16px 22px', marginBottom: 32,
+        maxWidth: 420, width: '100%', textAlign: 'left',
+      }}>
+        <div style={{ fontWeight: 700, fontSize: 13, color: C.accent, marginBottom: 6 }}>💡 While you wait…</div>
+        <div style={{ fontSize: 13, color: C.muted, lineHeight: 1.7 }}>
+          Start with <strong style={{ color: C.text }}>Air Regulations</strong> — it's fully loaded with 26 chapters and 200+ MCQs.
+          Or take a <strong style={{ color: C.text }}>Mock Test</strong> to benchmark your current knowledge.
+        </div>
+      </div>
+      <button
+        onClick={onBack}
+        style={{
+          background: subject.gradient, color: '#fff', border: 'none',
+          borderRadius: 12, padding: '12px 32px', fontWeight: 700,
+          fontSize: 14, cursor: 'pointer',
+        }}>
+        ← Back to Subjects
+      </button>
+    </div>
+  );
+}
+
 // ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { icon: '🏠', label: 'Dashboard', id: 'home' },
   { icon: '📚', label: 'Chapter Tests', id: 'tests' },
+  { icon: '🤖', label: 'AI Doubt Chat', id: 'doubt' },
   { icon: '📈', label: 'My Progress', id: 'progress' },
   { icon: '📅', label: 'Live Classes', id: 'classes', badge: 'LIVE' },
   { icon: '🎬', label: 'Lectures', id: 'lectures' },
@@ -172,7 +244,17 @@ function Sidebar({ active, onChange, onLogout, user }) {
     <div style={{ width: 220, minHeight: '100vh', background: C.sidebar, display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 100, overflowY: 'auto' }}>
       <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid #1E3A5F' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 38, height: 38, borderRadius: 10, background: C.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>✈️</div>
+          <div style={{ width: 38, height: 38, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+            <img
+              src="/Logo.webp"
+              alt="DGCA Prep Logo"
+              style={{ width: 30, height: 30, objectFit: 'contain' }}
+              onError={e => {
+                e.target.style.display = 'none';
+                e.target.parentElement.innerHTML = '<span style="font-size:20px">✈️</span>';
+              }}
+            />
+          </div>
           <div>
             <div style={{ color: '#fff', fontWeight: 800, fontSize: 14, lineHeight: 1.1 }}>DGCA</div>
             <div style={{ color: C.accent, fontWeight: 700, fontSize: 11, letterSpacing: 1 }}>PREP</div>
@@ -386,11 +468,10 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate 
   );
 }
 
-// ─── SUBJECT SELECTOR (step 1 of tests flow) ──────────────────────────────────
+// ─── SUBJECT SELECTOR ──────────────────────────────────────────────────────────
 function SubjectSelector({ allResults, onSelectSubject, onMockTest }) {
   return (
     <div>
-      {/* Header */}
       <div style={{ marginBottom: 28 }}>
         <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: C.text }}>Select a Subject</h2>
         <p style={{ margin: '5px 0 0', color: C.muted, fontSize: 13 }}>Choose a subject below to start chapter-wise tests or a full mock test.</p>
@@ -398,7 +479,6 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: 20 }}>
         {SUBJECTS.map(sub => {
-          // Compute stats for this subject
           const subChapters = chapters.filter(c => sub.chapterIds.includes(c.id));
           const attempted = subChapters.filter(c => allResults.some(r => r.chapterId === c.id)).length;
           const allPcts = allResults
@@ -408,22 +488,20 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest }) {
 
           return (
             <div key={sub.id}
-              onClick={() => sub.locked ? null : sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
+              onClick={() => sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
               style={{
                 background: C.card, borderRadius: 20, border: `1px solid ${C.border}`,
-                overflow: 'hidden', cursor: sub.locked ? 'not-allowed' : 'pointer',
-                opacity: sub.locked ? 0.6 : 1,
+                overflow: 'hidden', cursor: 'pointer', opacity: 1,
                 transition: 'all .2s', position: 'relative',
               }}
-              onMouseEnter={e => { if (!sub.locked) { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 32px ${sub.color}25`; } }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 32px ${sub.color}25`; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
 
-              {/* Coloured top strip */}
               <div style={{ background: sub.gradient, padding: '22px 22px 18px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{ width: 54, height: 54, borderRadius: 16, background: 'rgba(255,255,255,.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{sub.icon}</div>
-                  {sub.locked
-                    ? <span style={{ background: 'rgba(0,0,0,.3)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>🔒 Coming Soon</span>
+                  {sub.comingSoon
+                    ? <span style={{ background: 'rgba(0,0,0,.25)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>🚧 Coming Soon</span>
                     : sub.isMock
                       ? <span style={{ background: 'rgba(255,255,255,.3)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>🎯 Full Paper</span>
                       : attempted > 0
@@ -434,14 +512,11 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest }) {
                 <div style={{ color: 'rgba(255,255,255,.8)', fontSize: 12 }}>{sub.subtitle}</div>
               </div>
 
-              {/* Body */}
               <div style={{ padding: '16px 22px 20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                   <span style={{ fontSize: 12, color: C.muted }}>{sub.stats}</span>
                   <span style={{ fontSize: 11, background: sub.color + '15', color: sub.color, padding: '3px 10px', borderRadius: 20, fontWeight: 700 }}>{sub.exam}</span>
                 </div>
-
-                {/* Part tags */}
                 {sub.parts.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
                     {sub.parts.map(p => (
@@ -449,9 +524,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest }) {
                     ))}
                   </div>
                 )}
-
-                {/* Progress bar (only if not locked/mock) */}
-                {!sub.locked && !sub.isMock && subChapters.length > 0 && (
+                {!sub.comingSoon && !sub.isMock && subChapters.length > 0 && (
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                       <span style={{ fontSize: 11, color: C.muted }}>Avg Score</span>
@@ -460,14 +533,13 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest }) {
                     <ProgressBar value={avgPct} color={sub.color} height={6} />
                   </div>
                 )}
-
                 <button style={{
                   marginTop: 14, width: '100%', padding: '10px 0',
-                  background: sub.locked ? C.border : sub.gradient,
-                  color: sub.locked ? C.muted : '#fff',
-                  border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 13, cursor: sub.locked ? 'not-allowed' : 'pointer',
+                  background: sub.gradient,
+                  color: '#fff', border: 'none', borderRadius: 10,
+                  fontWeight: 700, fontSize: 13, cursor: 'pointer',
                 }}>
-                  {sub.locked ? '🔒 Coming Soon' : sub.isMock ? '🎯 Start Mock Test →' : '📚 View Chapters →'}
+                  {sub.comingSoon ? '🚧 Preview Coming Soon →' : sub.isMock ? '🎯 Start Mock Test →' : '📚 View Chapters →'}
                 </button>
               </div>
             </div>
@@ -478,11 +550,10 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest }) {
   );
 }
 
-// ─── CHAPTER LIST (step 2 – after picking Air Regulations) ────────────────────
+// ─── CHAPTER LIST ─────────────────────────────────────────────────────────────
 function AirRegChapterList({ allResults, onStartTest, onBack }) {
   const [search, setSearch] = useState('');
 
-  // Group chapters by part
   const parts = [
     { label: 'Part I – Air Regulations', color: C.primary, ids: ['ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20', 'ch21', 'ch22'] },
     { label: 'Part II – Human Factors', color: C.purple, ids: ['ch23', 'ch24', 'ch25', 'ch26'] },
@@ -500,7 +571,6 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
 
   return (
     <div>
-      {/* Back + Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
         <button onClick={onBack}
           style={{ width: 40, height: 40, borderRadius: 12, background: C.card, border: `1px solid ${C.border}`, fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -512,8 +582,6 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
             {chapters.length} chapters · R.K. Bali 16th Ed (2024) · Click a chapter to start MCQ test
           </p>
         </div>
-
-        {/* Search */}
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, background: C.card, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}` }}>
           <span style={{ color: C.muted }}>🔍</span>
           <input
@@ -525,7 +593,6 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
         </div>
       </div>
 
-      {/* Summary strip */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
         {[
           { icon: '📚', val: chapters.length, label: 'Total Chapters' },
@@ -543,13 +610,11 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
         ))}
       </div>
 
-      {/* Parts */}
       {parts.map(part => {
         const partChapters = filtered.filter(c => part.ids.includes(c.id));
         if (!partChapters.length) return null;
         return (
           <div key={part.label} style={{ marginBottom: 32 }}>
-            {/* Part header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
               <div style={{ height: 3, width: 28, borderRadius: 99, background: part.color }} />
               <span style={{ fontWeight: 800, fontSize: 15, color: part.color }}>{part.label}</span>
@@ -557,9 +622,8 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
               <span style={{ fontSize: 12, color: C.muted }}>{partChapters.length} chapters</span>
             </div>
 
-            {/* Chapter cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: 14 }}>
-              {partChapters.map((ch, idx) => {
+              {partChapters.map((ch) => {
                 const best = getBest(ch.id);
                 const attempts = allResults.filter(r => r.chapterId === ch.id).length;
                 const chNum = ch.id.replace('ch', '');
@@ -571,7 +635,6 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${part.color}20`; e.currentTarget.style.borderColor = part.color; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = C.border; e.currentTarget.style.borderLeftColor = part.color; }}>
 
-                    {/* Top row */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <div style={{ width: 44, height: 44, borderRadius: 12, background: part.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
@@ -588,13 +651,11 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
                       </div>
                     </div>
 
-                    {/* Title */}
                     <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 4, lineHeight: 1.3 }}>{ch.title}</div>
                     <div style={{ fontSize: 11, color: C.muted, marginBottom: 12 }}>
                       {ch.part} · {attempts} attempt{attempts !== 1 ? 's' : ''}
                     </div>
 
-                    {/* Progress */}
                     <ProgressBar value={best ?? 0} color={part.color} height={5} />
                     <div style={{ marginTop: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: 11, color: best !== null ? getScoreColor(best) : C.muted, fontWeight: best !== null ? 700 : 400 }}>
@@ -614,51 +675,42 @@ function AirRegChapterList({ allResults, onStartTest, onBack }) {
 }
 
 // ─── MOCK TEST PAGE ───────────────────────────────────────────────────────────
-// Picks 50 random questions from all chapters and runs a 60-min timed test.
-function MockTestPage({ onBack, user }) {
-  const router = useRouter();
-  const TOTAL_TIME = 3600; // 60 min
+function MockTestPage({ onBack }) {
+  const TOTAL_TIME = 3600;
   const TOTAL_Q = 50;
 
-  // ── build question pool once ──
-  const [pool] = useState(() => {
-    // lazy-import questions
-    try {
-      const { questions: allQ } = require('../../data/questions');
-      let pool = [];
-      Object.values(allQ).forEach(arr => pool.push(...arr));
-      // shuffle + pick 50
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      return pool.slice(0, TOTAL_Q);
-    } catch { return []; }
-  });
-
-  const [screen, setScreen] = useState('intro');   // intro | test | finish
+  const [pool, setPool] = useState(() => buildMockPool(TOTAL_Q));
+  const [screen, setScreen] = useState('intro');
   const [answers, setAnswers] = useState({});
   const [currentQ, setCurrentQ] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
-  const timerRef = useState(null);
+  const timerRef = useRef(null);
 
-  // timer
+  function resetMock() {
+    clearInterval(timerRef.current);
+    setPool(buildMockPool(TOTAL_Q));
+    setAnswers({});
+    setCurrentQ(0);
+    setTimeLeft(TOTAL_TIME);
+    setScreen('intro');
+  }
+
   useEffect(() => {
     if (screen !== 'test') return;
-    timerRef[0] = setInterval(() => {
+    timerRef.current = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev <= 1) { clearInterval(timerRef[0]); setScreen('finish'); return 0; }
+        if (prev <= 1) { clearInterval(timerRef.current); setScreen('finish'); return 0; }
         return prev - 1;
       });
     }, 1000);
-    return () => clearInterval(timerRef[0]);
+    return () => clearInterval(timerRef.current);
   }, [screen]);
 
   function handleAnswer(idx) {
     if (answers[currentQ] !== undefined) return;
     setAnswers(prev => ({ ...prev, [currentQ]: idx }));
   }
-  function submit() { clearInterval(timerRef[0]); setScreen('finish'); }
+  function submit() { clearInterval(timerRef.current); setScreen('finish'); }
 
   const mins = Math.floor(timeLeft / 60);
   const secs = timeLeft % 60;
@@ -669,7 +721,7 @@ function MockTestPage({ onBack, user }) {
   const score = pool.reduce((a, q, i) => a + (answers[i] === q.correct ? 1 : 0), 0);
   const scorePct = pool.length ? Math.round((score / pool.length) * 100) : 0;
   const answered = Object.keys(answers).length;
-  const notAnswered = pool.length - Object.keys(answers).length;
+  const notAnswered = pool.length - answered;
   const wrong = pool.length - score - notAnswered;
 
   function getDotState(i) {
@@ -682,7 +734,6 @@ function MockTestPage({ onBack, user }) {
     return 'default';
   }
 
-  // ── INTRO SCREEN ──
   if (screen === 'intro') return (
     <div style={{ maxWidth: 560, margin: '0 auto' }}>
       <button onClick={onBack} style={{ marginBottom: 20, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontSize: 13, color: C.text }}>← Back to Tests</button>
@@ -694,6 +745,10 @@ function MockTestPage({ onBack, user }) {
           {[['❓', '50 Questions'], ['⏱️', '60 Minutes'], ['📚', 'All Chapters'], ['💡', 'Instant Results']].map(([icon, label]) => (
             <span key={label} style={{ background: C.primaryLight, color: C.primary, border: `1px solid ${C.primary}30`, padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>{icon} {label}</span>
           ))}
+        </div>
+        <div style={{ background: '#FFF7ED', border: `1px solid ${C.accent}40`, borderRadius: 12, padding: '12px 16px', marginBottom: 24, textAlign: 'left' }}>
+          <div style={{ fontWeight: 700, fontSize: 12, color: C.accent, marginBottom: 6 }}>🎲 Questions are randomised every attempt</div>
+          <div style={{ fontSize: 12, color: C.muted }}>You'll get a unique set of 50 questions drawn from all chapters each time you take this test.</div>
         </div>
         <ul style={{ textAlign: 'left', listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: 8 }}>
           {['Each question has 4 options — choose the best answer', 'Once answered, selection cannot be changed', 'Test auto-submits when the timer reaches zero', 'Score summary shown at the end with chapter analysis'].map(r => (
@@ -711,21 +766,18 @@ function MockTestPage({ onBack, user }) {
     </div>
   );
 
-  // ── TEST SCREEN ──
   if (screen === 'test') {
     const q = pool[currentQ];
     const selected = answers[currentQ];
     const isAnswered = selected !== undefined;
     return (
       <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
-        {/* Sticky header */}
         <div style={{ position: 'sticky', top: 64, zIndex: 80, background: 'rgba(255,255,255,.97)', borderBottom: `1px solid ${C.border}`, backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', marginBottom: 20 }}>
           <button onClick={onBack} style={{ background: 'none', border: `1px solid ${C.border}`, borderRadius: 8, padding: '6px 14px', color: C.text, fontSize: 13, cursor: 'pointer' }}>← Exit</button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <span style={{ fontWeight: 700, fontSize: 14, color: C.text }}>🎯 Mock Test</span>
             <span style={{ fontSize: 12, color: C.muted }}>{answered}/{pool.length} answered</span>
           </div>
-          {/* Circular timer */}
           <div style={{ position: 'relative', width: 52, height: 52 }}>
             <svg width="52" height="52" viewBox="0 0 52 52">
               <circle cx="26" cy="26" r="22" fill="none" stroke={C.border} strokeWidth="4" />
@@ -739,12 +791,10 @@ function MockTestPage({ onBack, user }) {
           </div>
         </div>
 
-        {/* Progress bar */}
         <div style={{ height: 3, background: C.border, borderRadius: 99, marginBottom: 20 }}>
           <div style={{ height: '100%', width: `${((currentQ + 1) / pool.length) * 100}%`, background: C.primary, borderRadius: 99, transition: 'width .3s' }} />
         </div>
 
-        {/* Question dots */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
           {pool.map((_, i) => {
             const ds = getDotState(i);
@@ -760,7 +810,6 @@ function MockTestPage({ onBack, user }) {
           })}
         </div>
 
-        {/* Question card */}
         <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: '24px 28px', marginBottom: 16, boxShadow: `0 4px 16px ${C.primary}08` }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
             <span style={{ fontSize: 12, color: C.muted, textTransform: 'uppercase', letterSpacing: .8 }}>Question {currentQ + 1} of {pool.length}</span>
@@ -800,7 +849,6 @@ function MockTestPage({ onBack, user }) {
           )}
         </div>
 
-        {/* Nav row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button onClick={() => setCurrentQ(c => c - 1)} disabled={currentQ === 0}
             style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '10px 20px', color: C.text, fontSize: 13, cursor: currentQ === 0 ? 'not-allowed' : 'pointer', opacity: currentQ === 0 ? .4 : 1 }}>
@@ -824,7 +872,6 @@ function MockTestPage({ onBack, user }) {
         <div style={{ fontSize: 48, fontWeight: 900, color: getScoreColor(scorePct), lineHeight: 1 }}>{score}/{pool.length}</div>
         <div style={{ fontSize: 20, fontWeight: 700, color: getScoreColor(scorePct), marginBottom: 24 }}>{scorePct}%</div>
 
-        {/* 3-way breakdown */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 24 }}>
           {[
             { icon: '✓', val: score, label: 'Correct', bg: '#EFF6FF', co: C.primary, br: `${C.primary}40` },
@@ -839,7 +886,6 @@ function MockTestPage({ onBack, user }) {
           ))}
         </div>
 
-        {/* Dot legend */}
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 12 }}>
           {[['#1D4ED8', 'Correct'], ['#EF4444', 'Wrong'], ['rgba(139,92,246,.4)', 'Not Answered']].map(([bg, label]) => (
             <span key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: C.muted }}>
@@ -849,7 +895,6 @@ function MockTestPage({ onBack, user }) {
           ))}
         </div>
 
-        {/* Dots grid */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center', marginBottom: 24 }}>
           {pool.map((_, i) => {
             const ds = getDotState(i);
@@ -866,19 +911,29 @@ function MockTestPage({ onBack, user }) {
         <button onClick={onBack} style={{ width: '100%', padding: '13px', background: `linear-gradient(135deg,${C.primary},${C.purple})`, border: 'none', borderRadius: 12, color: '#fff', fontSize: 15, fontWeight: 800, cursor: 'pointer', marginBottom: 10 }}>
           Back to Tests
         </button>
-        <button onClick={() => { setAnswers({}); setCurrentQ(0); setTimeLeft(TOTAL_TIME); setScreen('intro'); }}
+        <button onClick={resetMock}
           style={{ width: '100%', padding: '11px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 12, color: C.muted, fontSize: 13, cursor: 'pointer' }}>
-          ↺ Retry Mock Test
+          🎲 Retry with New Questions
         </button>
       </div>
     </div>
   );
 }
 
-// ─── CHAPTER TESTS PAGE (top-level controller) ────────────────────────────────
+// ─── CHAPTER TESTS PAGE ───────────────────────────────────────────────────────
 function ChapterTestsPage({ allResults, onStartTest }) {
-  // subView: 'subjects' | 'air_regulations' | 'mock'
   const [subView, setSubView] = useState('subjects');
+
+  // Show coming soon page for unlocked-but-no-content subjects
+  const comingSoonSubject = SUBJECTS.find(s => s.id === subView && s.comingSoon);
+  if (comingSoonSubject) {
+    return (
+      <ComingSoonPage
+        subject={comingSoonSubject}
+        onBack={() => setSubView('subjects')}
+      />
+    );
+  }
 
   if (subView === 'air_regulations') {
     return (
@@ -896,10 +951,11 @@ function ChapterTestsPage({ allResults, onStartTest }) {
       />
     );
   }
+
   return (
     <SubjectSelector
       allResults={allResults}
-      onSelectSubject={id => { if (id === 'air_regulations') setSubView('air_regulations'); }}
+      onSelectSubject={id => setSubView(id)}
       onMockTest={() => setSubView('mock')}
     />
   );
@@ -992,7 +1048,7 @@ export default function DashboardPage() {
   const [allResults, setAll] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState('home');
-  const [subPage, setSubPage] = useState('');   // tracks nested state for TopBar breadcrumb
+  const [subPage, setSubPage] = useState('');
 
   useEffect(() => {
     const u = getUser();
@@ -1026,10 +1082,16 @@ export default function DashboardPage() {
         );
       case 'progress': return <ProgressPage stats={stats} allResults={allResults} loading={loading} />;
       case 'resources': return <ResourcesPage />;
-      case 'classes':
       case 'lectures': return <LecturesPage user={user} />;
+      case 'classes': return <LecturesPage user={user} />;
       case 'practice':
       case 'mocktests': return <Placeholder page={page} />;
+      case 'doubt':
+        return (
+          <div style={{ minHeight: '600px' }}>
+            <DoubtAgent studentId={user?.id} />
+          </div>
+        );
       default:
         return (
           <HomePage

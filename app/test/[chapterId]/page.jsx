@@ -7,6 +7,10 @@ import { chapters, questions as allQuestions } from '../../../data/questions';
 
 const TOTAL_TIME = 300;
 
+function shuffleArray(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
 export default function TestPage({ params }) {
   const { chapterId } = params;
   const router = useRouter();
@@ -21,6 +25,38 @@ export default function TestPage({ params }) {
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const timerRef = useRef(null);
 
+  // ── Tab-switch guard ──────────────────────────────────────────────
+  const testActiveRef = useRef(false); // tracks if test is running without stale closure
+
+  useEffect(() => {
+    testActiveRef.current = screen === 'test';
+  }, [screen]);
+
+  useEffect(() => {
+    function handleVisibilityChange() {
+      if (document.hidden && testActiveRef.current) {
+        clearInterval(timerRef.current);
+        router.replace('/dashboard?reason=tab_switch');
+      }
+    }
+
+    function handleBlur() {
+      if (testActiveRef.current) {
+        clearInterval(timerRef.current);
+        router.replace('/dashboard?reason=tab_switch');
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleBlur);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleBlur);
+    };
+  }, [router]);
+  // ─────────────────────────────────────────────────────────────────
+
   useEffect(() => {
     const u = getUser();
     if (!u) { router.replace('/login'); return; }
@@ -28,7 +64,8 @@ export default function TestPage({ params }) {
     const ch = chapters.find(c => c.id === chapterId);
     if (!ch) { router.replace('/dashboard'); return; }
     setChapter(ch);
-    setQuestions(allQuestions[chapterId] || []);
+    const raw = allQuestions[chapterId] || [];
+    setQuestions(shuffleArray(raw));
   }, [chapterId, router]);
 
   const submitTest = useCallback(() => {
@@ -52,6 +89,8 @@ export default function TestPage({ params }) {
   }, [screen, submitTest]);
 
   function startTest() {
+    const raw = allQuestions[chapterId] || [];
+    setQuestions(shuffleArray(raw));
     setAnswers({});
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
@@ -60,6 +99,8 @@ export default function TestPage({ params }) {
 
   function resetTest() {
     clearInterval(timerRef.current);
+    const raw = allQuestions[chapterId] || [];
+    setQuestions(shuffleArray(raw));
     setAnswers({});
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
@@ -121,7 +162,6 @@ export default function TestPage({ params }) {
     return '#dc2626';
   }
 
-  // ── CHANGE 1: getDotState now handles 'finish' screen with 'unanswered' state ──
   function getDotState(i) {
     if (screen === 'finish') {
       if (answers[i] === undefined) return 'unanswered';
@@ -158,6 +198,20 @@ export default function TestPage({ params }) {
               <li>✔ Explanations are shown immediately after answering</li>
               <li>✔ Test auto-submits when the timer reaches zero</li>
             </ul>
+
+            {/* ── Tab-switch warning notice ── */}
+            <div className="tab-warning">
+              <span className="tab-warning-icon">🚫</span>
+              <div>
+                <p className="tab-warning-title">Do not switch tabs or windows</p>
+                <p className="tab-warning-body">
+                  If you switch tabs, minimize the browser, or navigate away during the test,
+                  you will be <strong>immediately redirected to the dashboard</strong> and your
+                  progress will be lost.
+                </p>
+              </div>
+            </div>
+
             <button className="start-btn" onClick={startTest}>Start Test →</button>
             <button className="ghost-btn" onClick={() => router.push('/dashboard')}>← Back to Dashboard</button>
           </div>
@@ -172,8 +226,23 @@ export default function TestPage({ params }) {
           .start-sub { font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1.5rem; }
           .meta-badges { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
           .meta-badge { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); color: #2563eb; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
-          .rules { list-style: none; text-align: left; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+          .rules { list-style: none; text-align: left; margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; }
           .rules li { font-size: 0.88rem; color: #374151; padding: 0.6rem 0.9rem; background: rgba(59,130,246,0.05); border-radius: 8px; }
+
+          .tab-warning {
+            display: flex; align-items: flex-start; gap: 0.75rem; text-align: left;
+            background: rgba(220,38,38,0.06);
+            border: 1px solid rgba(220,38,38,0.3);
+            border-left: 4px solid #dc2626;
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            margin-bottom: 1.75rem;
+          }
+          .tab-warning-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+          .tab-warning-title { font-size: 0.88rem; font-weight: 700; color: #b91c1c; margin: 0 0 0.3rem; }
+          .tab-warning-body { font-size: 0.82rem; color: #6b1c1c; line-height: 1.5; margin: 0; }
+          .tab-warning-body strong { font-weight: 700; }
+
           .start-btn { width: 100%; padding: 0.9rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 8px; color: #fff; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-bottom: 0.75rem; transition: opacity 0.2s, transform 0.15s; }
           .start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
           .ghost-btn { width: 100%; padding: 0.8rem; background: none; border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; color: #374151; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
@@ -318,7 +387,6 @@ export default function TestPage({ params }) {
           .dot-active { border-color: #2563eb !important; background: rgba(59,130,246,0.15) !important; color: #2563eb !important; }
           .dot-correct { background: #2563eb !important; border-color: #2563eb !important; color: #fff !important; }
           .dot-wrong { background: #dc2626 !important; border-color: #dc2626 !important; color: #fff !important; }
-          /* ── CHANGE 2: blue dot for unanswered questions on finish screen ── */
           .dot-unanswered { background: rgba(59,130,246,0.2) !important; border-color: #3b82f6 !important; color: #3b82f6 !important; }
 
           .q-card {
@@ -413,7 +481,6 @@ export default function TestPage({ params }) {
   // SCREEN 3: FINISH
   // ──────────────────────────────────────────────────────────────────
   const correctCount = questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0);
-  // ── CHANGE 3: separate not-answered from wrong ──
   const notAnsweredCount = questions.filter((_, i) => answers[i] === undefined).length;
   const wrongCount = total - correctCount - notAnsweredCount;
 
@@ -428,7 +495,6 @@ export default function TestPage({ params }) {
           </div>
           <div className="score-pct" style={{ color: getScoreColor(scorePct) }}>{scorePct}%</div>
 
-          {/* ── CHANGE 4: three-card breakdown with blue "Not Answered" ── */}
           <div className="breakdown">
             <div className="breakdown-item" style={{ background: 'rgba(59,130,246,0.1)', borderColor: 'rgba(59,130,246,0.3)' }}>
               <span style={{ color: '#2563eb', fontSize: '1.2rem' }}>✓</span>
@@ -447,14 +513,12 @@ export default function TestPage({ params }) {
             </div>
           </div>
 
-          {/* Dot legend */}
           <div className="dot-legend">
             <span className="legend-item"><span className="legend-dot" style={{ background: '#2563eb' }} />Correct</span>
             <span className="legend-item"><span className="legend-dot" style={{ background: '#dc2626' }} />Wrong</span>
             <span className="legend-item"><span className="legend-dot" style={{ background: 'rgba(59,130,246,0.3)', border: '1px solid #3b82f6' }} />Not Answered</span>
           </div>
 
-          {/* Dots review on finish screen */}
           <div className="finish-dots">
             {questions.map((_, i) => {
               const ds = getDotState(i);

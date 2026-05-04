@@ -1,0 +1,351 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 600px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #ffffff;
+    font-family: "DM Sans", "Segoe UI", sans-serif;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.07);
+}
+
+/* ── Top bar ── */
+.topBar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+    flex-wrap: wrap;
+}
+
+.topBarLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.statusText {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.subjectSelect {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #f1f5f9;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+}
+
+.subjectSelect:focus {
+    border-color: #6366f1;
+}
+
+.modeToggle {
+    display: flex;
+    gap: 4px;
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 3px;
+}
+
+.modeBtn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.modeActive {
+    background: #6366f1;
+    color: #ffffff;
+}
+
+/* ── Messages ── */
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #f8fafc;
+}
+
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-track { background: transparent; }
+.messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+/* ── Bubbles ── */
+.bubble {
+    max-width: 78%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    line-height: 1.55;
+}
+
+.bubbleUser {
+    align-self: flex-end;
+    background: #6366f1;
+    color: #ffffff;
+    border-bottom-right-radius: 4px;
+}
+
+.bubbleAgent {
+    align-self: flex-start;
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.agentLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+}
+
+.agentDot {
+    width: 6px;
+    height: 6px;
+    background: #6366f1;
+    border-radius: 50%;
+}
+
+.bubbleText {
+    margin: 0;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.bubbleTime {
+    font-size: 10px;
+    opacity: 0.5;
+    align-self: flex-end;
+}
+
+/* ── Audio ── */
+.audioRow {
+    margin-top: 4px;
+}
+
+.audioBtn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid #6366f1;
+    background: #eef2ff;
+    color: #6366f1;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.audioBtn:hover { background: #e0e7ff; }
+
+/* ── Sources ── */
+.sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.sourcesLabel {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.sourceChip {
+    font-size: 11px;
+    background: #f1f5f9;
+    color: #475569;
+    border-radius: 20px;
+    padding: 2px 9px;
+    border: 1px solid #e2e8f0;
+}
+
+/* ── Typing indicator ── */
+.typing {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px 14px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    width: fit-content;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    background: #94a3b8;
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+}
+
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+}
+
+/* ── Input area ── */
+.inputArea {
+    padding: 14px 16px;
+    border-top: 1px solid #e2e8f0;
+    background: #ffffff;
+}
+
+.textRow {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.textarea {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+}
+
+.textarea:focus { border-color: #6366f1; background: #fff; }
+.textarea::placeholder { color: #94a3b8; }
+
+.sendBtn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, opacity 0.15s;
+}
+
+.sendBtn:hover:not(:disabled) { background: #4f46e5; }
+.sendBtn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Voice ── */
+.voiceRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.recordBtn {
+    padding: 12px 32px;
+    border-radius: 40px;
+    border: 2px solid #6366f1;
+    background: #eef2ff;
+    color: #6366f1;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.recordBtn:hover { background: #e0e7ff; }
+
+.recording {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #ef4444;
+    animation: recordPulse 1s infinite;
+}
+
+@keyframes recordPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+.voiceActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.recorded {
+    font-size: 13px;
+    font-weight: 600;
+    color: #22c55e;
+}
+
+.resetBtn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: transparent;
+    color: #64748b;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.resetBtn:hover { background: #f1f5f9; }
+
+.micError {
+    color: #ef4444;
+    font-size: 13px;
+    margin: 0;
+    text-align: center;
+}

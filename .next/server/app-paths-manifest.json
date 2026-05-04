@@ -1,9 +1,7 @@
 {
-  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/leaderboard/page": "app/leaderboard/page.js",
-  "/teacher/page": "app/teacher/page.js",
+  "/test/[chapterId]/page": "app/test/[chapterId]/page.js",
   "/api/stats/route": "app/api/stats/route.js",
-  "/api/leaderboard/route": "app/api/leaderboard/route.js",
   "/api/results/route": "app/api/results/route.js"
 }

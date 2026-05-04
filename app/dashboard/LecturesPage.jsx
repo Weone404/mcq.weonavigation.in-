@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -20,6 +19,7 @@ const C = {
   sidebar: '#0A1628',
 };
 
+// Only the first 2 lectures GLOBALLY (across all subjects) are free
 const FREE_LIMIT = 2;
 
 const LECTURES = [
@@ -34,7 +34,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
     description: 'Introduction to key definitions and abbreviations used in Indian Air Regulations.',
-    isFree: true,
     order: 1,
     uploadedAt: '2024-01-01T00:00:00Z',
   },
@@ -48,7 +47,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
     description: 'Classification of aircraft under DGCA regulations — types, categories, and classes.',
-    isFree: true,
     order: 2,
     uploadedAt: '2024-01-02T00:00:00Z',
   },
@@ -62,7 +60,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
     description: 'Aircraft registration requirements, nationality marks, and DGCA procedures.',
-    isFree: false,
     order: 3,
     uploadedAt: '2024-01-03T00:00:00Z',
   },
@@ -76,7 +73,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
     description: 'Aircraft registration requirements, nationality marks, and DGCA procedures.',
-    isFree: false,
     order: 4,
     uploadedAt: '2024-01-04T00:00:00Z',
   },
@@ -90,7 +86,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
     description: 'Aircraft registration requirements, nationality marks, and DGCA procedures.',
-    isFree: false,
     order: 5,
     uploadedAt: '2024-01-05T00:00:00Z',
   },
@@ -98,7 +93,7 @@ const LECTURES = [
   // ── METEOROLOGY ──────────────────────────────────────────────────────────
   {
     id: 'met-001',
-    title: 'Meteorology : Atmosphere',
+    title: 'Meteorology: Atmosphere',
     subject: 'Meteorology',
     chapter: 'Chapter 1',
     videoUrl: 'https://drive.google.com/file/d/1sSKySNACSx6Lgyko6y2fwvkLJ161uM3P/view?usp=drive_link',
@@ -106,13 +101,12 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Structure of the atmosphere, layers, and standard atmosphere.',
-    isFree: true,
     order: 1,
     uploadedAt: '2024-02-01T00:00:00Z',
   },
   {
     id: 'met-002',
-    title: 'Meteorology – ic-Temerature part-1',
+    title: 'Meteorology – Temperature Part-1',
     subject: 'Meteorology',
     chapter: 'Chapter 2',
     videoUrl: 'https://drive.google.com/file/d/1WSNOhyrJbsHdqrffufdfzG0TBe3iXd3i/view?usp=drive_link',
@@ -120,51 +114,47 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Temperature gradients, pressure systems, and their effects on flight.',
-    isFree: true,
     order: 2,
     uploadedAt: '2024-02-02T00:00:00Z',
   },
   {
     id: 'met-003',
-    title: 'Meteorology – ic-Temerature part-2',
+    title: 'Meteorology – Temperature Part-2',
     subject: 'Meteorology',
-    chapter: 'Chapter 2 part-2',
+    chapter: 'Chapter 2 Part-2',
     videoUrl: 'https://drive.google.com/file/d/1XiOdkvgAnuRjDz92KiYcABRgT0aWR9ID/view?usp=drive_link',
     thumbnailUrl: '',
     duration: '',
     instructor: 'Your Instructor Name',
-    description: 'Global wind patterns, local winds, and their aviation significance.',
-    isFree: false,
+    description: 'Continued study of temperature effects and atmospheric stability.',
     order: 3,
     uploadedAt: '2024-02-03T00:00:00Z',
   },
   {
     id: 'met-004',
-    title: 'Meteorology – Atmospheric pressure part-1',
+    title: 'Meteorology – Atmospheric Pressure Part-1',
     subject: 'Meteorology',
     chapter: 'Chapter 4',
     videoUrl: 'https://drive.google.com/file/d/1fnPKGpELy5lBK1a9r9UV-xuG3Dy11x_O/view?usp=drive_link',
     thumbnailUrl: '',
     duration: '',
     instructor: 'Your Instructor Name',
-    description: 'Global wind patterns, local winds, and their aviation significance.',
-    isFree: false,
-    order: 3,
-    uploadedAt: '2024-02-03T00:00:00Z',
+    description: 'Atmospheric pressure concepts and their aviation significance.',
+    order: 4,
+    uploadedAt: '2024-02-04T00:00:00Z',
   },
   {
-    id: 'met-004',
-    title: 'Meteorology – Atmosperic pressure part-2',
+    id: 'met-004b',
+    title: 'Meteorology – Atmospheric Pressure Part-2',
     subject: 'Meteorology',
-    chapter: 'Chapter 4 part-2',
+    chapter: 'Chapter 4 Part-2',
     videoUrl: 'https://drive.google.com/file/d/14MpmzxrlUmKIysLWZLpjrRZuOU9UnStp/view?usp=drive_link',
     thumbnailUrl: '',
     duration: '',
     instructor: 'Your Instructor Name',
-    description: 'Global wind patterns, local winds, and their aviation significance.',
-    isFree: false,
-    order: 3,
-    uploadedAt: '2024-02-03T00:00:00Z',
+    description: 'Advanced atmospheric pressure systems and altimetry.',
+    order: 5,
+    uploadedAt: '2024-02-05T00:00:00Z',
   },
   {
     id: 'met-005',
@@ -175,23 +165,22 @@ const LECTURES = [
     thumbnailUrl: '',
     duration: '',
     instructor: 'Your Instructor Name',
-    description: 'Global wind patterns, local winds, and their aviation significance.',
-    isFree: false,
-    order: 3,
-    uploadedAt: '2024-02-03T00:00:00Z',
-  }, {
+    description: 'Air density, density altitude, and effects on aircraft performance.',
+    order: 6,
+    uploadedAt: '2024-02-06T00:00:00Z',
+  },
+  {
     id: 'met-006',
-    title: 'Meteorology – Humidity part-1',
+    title: 'Meteorology – Humidity Part-1',
     subject: 'Meteorology',
-    chapter: 'Chapter 6 part-1',
+    chapter: 'Chapter 6',
     videoUrl: 'https://drive.google.com/file/d/10PnlY4PoVeXFplVR9trEduZW0r_T4Pp-/view?usp=drive_link',
     thumbnailUrl: '',
     duration: '',
     instructor: 'Your Instructor Name',
-    description: 'Global wind patterns, local winds, and their aviation significance.',
-    isFree: false,
-    order: 3,
-    uploadedAt: '2024-02-03T00:00:00Z',
+    description: 'Humidity, dew point, and moisture in the atmosphere.',
+    order: 7,
+    uploadedAt: '2024-02-07T00:00:00Z',
   },
 
   // ── NAVIGATION ───────────────────────────────────────────────────────────
@@ -205,7 +194,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Fundamentals of air navigation — charts, coordinates, and direction.',
-    isFree: true,
     order: 1,
     uploadedAt: '2024-03-01T00:00:00Z',
   },
@@ -219,7 +207,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'VOR and ILS navigation aids, approach procedures, and limitations.',
-    isFree: true,
     order: 2,
     uploadedAt: '2024-03-02T00:00:00Z',
   },
@@ -233,7 +220,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Area navigation, GPS systems, and performance-based navigation.',
-    isFree: false,
     order: 3,
     uploadedAt: '2024-03-03T00:00:00Z',
   },
@@ -249,7 +235,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Aircraft structural components, loads, and materials.',
-    isFree: true,
     order: 1,
     uploadedAt: '2024-04-01T00:00:00Z',
   },
@@ -263,7 +248,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Piston engine operation, systems, and maintenance principles.',
-    isFree: true,
     order: 2,
     uploadedAt: '2024-04-02T00:00:00Z',
   },
@@ -277,7 +261,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Gas turbine engine theory, components, and operational characteristics.',
-    isFree: false,
     order: 3,
     uploadedAt: '2024-04-03T00:00:00Z',
   },
@@ -293,7 +276,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Standard RTF procedures, phraseology, and communication techniques.',
-    isFree: true,
     order: 1,
     uploadedAt: '2024-05-01T00:00:00Z',
   },
@@ -307,7 +289,6 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'Emergency communications, distress and urgency procedures.',
-    isFree: true,
     order: 2,
     uploadedAt: '2024-05-02T00:00:00Z',
   },
@@ -321,49 +302,40 @@ const LECTURES = [
     duration: '',
     instructor: 'Your Instructor Name',
     description: 'ATC communication procedures, clearances, and read-back requirements.',
-    isFree: false,
     order: 3,
     uploadedAt: '2024-05-03T00:00:00Z',
   },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SUBJECT CONFIG — all comingSoon: false
-// ─────────────────────────────────────────────────────────────────────────────
 const SUBJECT_CONFIG = {
   'Air Regulations': {
     icon: '📋',
     subtitle: 'ICAO, DGCA, National Law & Procedures',
     examTags: ['ATPL', 'CPL', 'DGCA'],
-    comingSoon: false,
   },
   'Meteorology': {
     icon: '🌤️',
     subtitle: 'Weather, Clouds, Pressure Systems',
     examTags: ['ATPL', 'CPL'],
-    comingSoon: false,
   },
   'Navigation': {
     icon: '🧭',
     subtitle: 'Charts, VOR, ILS, RNAV',
     examTags: ['ATPL', 'CPL'],
-    comingSoon: false,
   },
   'Technical General': {
     icon: '⚙️',
     subtitle: 'Airframes, Engines, Systems',
     examTags: ['AME', 'ATPL'],
-    comingSoon: false,
   },
   'Radio Telephony': {
     icon: '📡',
     subtitle: 'RTF Procedures & Phraseology',
     examTags: ['RTR (Aero)'],
-    comingSoon: false,
   },
 };
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function fmtDate(iso) {
   return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
@@ -475,7 +447,7 @@ function PaywallModal({ user, onSuccess, onClose }) {
           <div style={{ fontSize: 36, marginBottom: 10 }}>👑</div>
           <div style={{ color: '#fff', fontWeight: 900, fontSize: 22, marginBottom: 6 }}>Unlock All Lectures</div>
           <div style={{ color: '#93C5FD', fontSize: 13, lineHeight: 1.6 }}>
-            First {FREE_LIMIT} lectures per subject are free. Subscribe to access everything.
+            First {FREE_LIMIT} lectures are free. Subscribe to access everything.
           </div>
           <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
             {['🎬 All Lectures', '📋 All Chapters', '📝 Mock Tests', '📊 Analytics'].map(p => (
@@ -527,26 +499,27 @@ function PaywallModal({ user, onSuccess, onClose }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SUBJECT FOLDER CARD
+// freeLecturesOverride = how many in THIS subject are globally free
 // ─────────────────────────────────────────────────────────────────────────────
-function SubjectFolderCard({ subject, lectures, subscribed, subtitle, examTags, onClick }) {
+function SubjectFolderCard({ subject, lectures, subscribed, subtitle, examTags, onClick, freeLecturesOverride }) {
   const cfg = SUBJECT_CONFIG[subject] || {};
   const icon = cfg.icon || '📁';
   const totalLectures = lectures.length;
-  // Per-subject: first FREE_LIMIT lectures are free, rest locked
-  const freeLectures = Math.min(totalLectures, FREE_LIMIT);
-  const lockedLectures = Math.max(0, totalLectures - FREE_LIMIT);
+
+  // Use the globally-computed free count passed from parent
+  const freeLectures = freeLecturesOverride !== undefined
+    ? freeLecturesOverride
+    : Math.min(totalLectures, FREE_LIMIT);
+  const lockedLectures = Math.max(0, totalLectures - freeLectures);
+
   const chapters = [...new Set(lectures.map(l => l.chapter).filter(Boolean))];
 
   return (
     <div
       onClick={onClick}
       style={{
-        background: C.card,
-        borderRadius: 18,
-        border: `1px solid ${C.border}`,
-        overflow: 'hidden',
-        cursor: 'pointer',
-        transition: 'all .2s',
+        background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
+        overflow: 'hidden', cursor: 'pointer', transition: 'all .2s',
         boxShadow: '0 2px 8px rgba(0,0,0,.05)',
       }}
       onMouseEnter={e => {
@@ -564,13 +537,10 @@ function SubjectFolderCard({ subject, lectures, subscribed, subtitle, examTags, 
       <div style={{ padding: '18px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
           <div style={{
-            width: 50, height: 50, borderRadius: 14,
-            background: C.bg, border: `1.5px solid ${C.border}`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 24, flexShrink: 0,
-          }}>
-            {icon}
-          </div>
+            width: 50, height: 50, borderRadius: 14, background: C.bg,
+            border: `1.5px solid ${C.border}`, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', fontSize: 24, flexShrink: 0,
+          }}>{icon}</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
               <div style={{ fontWeight: 800, fontSize: 15, color: C.text, lineHeight: 1.3 }}>{subject}</div>
@@ -579,12 +549,10 @@ function SubjectFolderCard({ subject, lectures, subscribed, subtitle, examTags, 
               </span>
             </div>
             {subtitle && <div style={{ fontSize: 11, color: C.muted, marginTop: 3 }}>{subtitle}</div>}
-            {examTags && examTags.length > 0 && (
+            {examTags?.length > 0 && (
               <div style={{ display: 'flex', gap: 5, marginTop: 8, flexWrap: 'wrap' }}>
                 {examTags.map(tag => (
-                  <span key={tag} style={{ fontSize: 10, fontWeight: 600, color: C.muted, background: C.bg, border: `1px solid ${C.border}`, padding: '1px 8px', borderRadius: 20 }}>
-                    {tag}
-                  </span>
+                  <span key={tag} style={{ fontSize: 10, fontWeight: 600, color: C.muted, background: C.bg, border: `1px solid ${C.border}`, padding: '1px 8px', borderRadius: 20 }}>{tag}</span>
                 ))}
               </div>
             )}
@@ -593,13 +561,13 @@ function SubjectFolderCard({ subject, lectures, subscribed, subtitle, examTags, 
 
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
           {freeLectures > 0 && (
-            <span style={{ fontSize: 11, fontWeight: 600, background: C.bg, color: C.muted, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.border}` }}>
+            <span style={{ fontSize: 11, fontWeight: 600, background: '#F0FDF4', color: C.green, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.green}30` }}>
               🆓 {freeLectures} free
             </span>
           )}
           {!subscribed && lockedLectures > 0 && (
-            <span style={{ fontSize: 11, fontWeight: 600, background: C.bg, color: C.muted, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.border}` }}>
-              🔒 {lockedLectures} locked
+            <span style={{ fontSize: 11, fontWeight: 600, background: '#FDF4FF', color: C.purple, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.purple}30` }}>
+              🔒 {lockedLectures} premium
             </span>
           )}
           {subscribed && lockedLectures > 0 && (
@@ -607,28 +575,27 @@ function SubjectFolderCard({ subject, lectures, subscribed, subtitle, examTags, 
               ✅ All unlocked
             </span>
           )}
+          {freeLectures === 0 && !subscribed && (
+            <span style={{ fontSize: 11, fontWeight: 600, background: '#FDF4FF', color: C.purple, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.purple}30` }}>
+              🔒 All premium
+            </span>
+          )}
         </div>
 
         {chapters.length > 0 && (
           <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 10 }}>
             {chapters.slice(0, 4).map(ch => (
-              <span key={ch} style={{ fontSize: 10, color: C.muted, background: C.bg, padding: '2px 8px', borderRadius: 6, border: `1px solid ${C.border}` }}>
-                {ch}
-              </span>
+              <span key={ch} style={{ fontSize: 10, color: C.muted, background: C.bg, padding: '2px 8px', borderRadius: 6, border: `1px solid ${C.border}` }}>{ch}</span>
             ))}
             {chapters.length > 4 && (
-              <span style={{ fontSize: 10, color: C.muted, background: C.bg, padding: '2px 8px', borderRadius: 6, border: `1px solid ${C.border}` }}>
-                +{chapters.length - 4} more
-              </span>
+              <span style={{ fontSize: 10, color: C.muted, background: C.bg, padding: '2px 8px', borderRadius: 6, border: `1px solid ${C.border}` }}>+{chapters.length - 4} more</span>
             )}
           </div>
         )}
 
         <div style={{
-          marginTop: 14,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-          background: C.bg, border: `1px solid ${C.border}`,
-          borderRadius: 10, padding: '8px',
+          marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px',
           color: C.text, fontWeight: 700, fontSize: 12,
         }}>
           📂 Open Subject →
@@ -640,59 +607,126 @@ function SubjectFolderCard({ subject, lectures, subscribed, subtitle, examTags, 
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LECTURE CARD
-// KEY FIX: uses subjectIndex (position within subject) not globalIdx
-// so first 2 in every subject are always free
+// globalIndex = position across ALL lectures in ALL subjects (0-based)
+// 0 and 1 → FREE,  2+ → LOCKED (triggers paywall)
 // ─────────────────────────────────────────────────────────────────────────────
-function LectureCard({ lecture, subjectIndex, subscribed, onPlay, onLock }) {
-  // Lock if: not subscribed AND this lecture's position in its subject >= FREE_LIMIT
-  const isLocked = !subscribed && subjectIndex >= FREE_LIMIT;
+function LectureCard({ lecture, globalIndex, subscribed, onPlay, onLock }) {
+  // Lock is based on globalIndex — only first FREE_LIMIT lectures on the platform are free
+  const isLocked = !subscribed && globalIndex >= FREE_LIMIT;
   const thumb = getThumb(lecture.videoUrl, lecture.thumbnailUrl);
   const isDrive = isGoogleDrive(lecture.videoUrl);
   const isLocal = isLocalVideo(lecture.videoUrl);
 
   return (
-    <div onClick={() => isLocked ? onLock() : onPlay(lecture)}
-      style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer', transition: 'all .2s', opacity: isLocked ? .85 : 1 }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 10px 28px rgba(29,78,216,.15)`; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
-
+    <div
+      onClick={() => isLocked ? onLock() : onPlay(lecture)}
+      style={{
+        background: C.card, borderRadius: 16,
+        border: `2px solid ${isLocked ? C.purple + '40' : C.border}`,
+        overflow: 'hidden', cursor: 'pointer', transition: 'all .2s',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-3px)';
+        e.currentTarget.style.boxShadow = isLocked ? `0 10px 28px rgba(139,92,246,.2)` : `0 10px 28px rgba(29,78,216,.15)`;
+      }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+    >
+      {/* Thumbnail */}
       <div style={{ position: 'relative', paddingBottom: '56.25%', background: '#0F172A', overflow: 'hidden' }}>
         {thumb
-          ? <img src={thumb} alt={lecture.title} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: isLocked ? .5 : 1 }} />
+          ? <img src={thumb} alt={lecture.title} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: isLocked ? .4 : 1 }} />
           : <div style={{
             position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            background: isDrive ? 'linear-gradient(135deg,#1A3A6A,#0A1628)' : isLocal ? 'linear-gradient(135deg,#064E3B,#0A1628)' : `linear-gradient(135deg,${C.sidebar},${C.primary})`,
+            background: isLocked ? 'linear-gradient(135deg,#2D1B69,#1E0A3C)'
+              : isDrive ? 'linear-gradient(135deg,#1A3A6A,#0A1628)'
+                : isLocal ? 'linear-gradient(135deg,#064E3B,#0A1628)'
+                  : `linear-gradient(135deg,${C.sidebar},${C.primary})`,
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40,
           }}>
-            {isDrive ? '📁' : isLocal ? '💾' : '🎬'}
+            {isLocked ? '🔒' : isDrive ? '📁' : isLocal ? '💾' : '🎬'}
           </div>
         }
+
+        {/* Locked purple overlay */}
+        {isLocked && (
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(139,92,246,.35) 0%, transparent 60%)' }} />
+        )}
+
+        {/* Centre play/lock button */}
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: 52, height: 52, borderRadius: '50%', background: isLocked ? 'rgba(0,0,0,.7)' : 'rgba(255,255,255,.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, boxShadow: '0 4px 16px rgba(0,0,0,.4)' }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: '50%',
+            background: isLocked ? `linear-gradient(135deg,${C.purple},#6D28D9)` : 'rgba(255,255,255,.92)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 22, boxShadow: '0 4px 20px rgba(0,0,0,.45)',
+          }}>
             {isLocked ? '🔒' : '▶'}
           </div>
         </div>
-        {lecture.duration && <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,.8)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>{lecture.duration}</div>}
-        {isDrive && <div style={{ position: 'absolute', bottom: 8, left: 8, background: '#1A73E8', color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 6 }}>📁 Drive</div>}
-        {isLocal && <div style={{ position: 'absolute', bottom: 8, left: 8, background: '#059669', color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 6 }}>💾 Local</div>}
-        {!isLocked && subjectIndex < FREE_LIMIT && (
-          <div style={{ position: 'absolute', top: 8, left: 8, background: C.green, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>FREE</div>
+
+        {/* Top-left badge */}
+        {isLocked ? (
+          <div style={{ position: 'absolute', top: 8, left: 8, background: `linear-gradient(135deg,${C.purple},#6D28D9)`, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>
+            👑 PREMIUM
+          </div>
+        ) : (
+          <div style={{ position: 'absolute', top: 8, left: 8, background: C.green, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>
+            🆓 FREE
+          </div>
         )}
-        {isLocked && <div style={{ position: 'absolute', top: 8, left: 8, background: C.purple, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>👑 PREMIUM</div>}
-        <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,.7)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>#{subjectIndex + 1}</div>
+
+        {/* Number badge — shows position within subject for clarity */}
+        <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,.7)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
+          #{lecture.order}
+        </div>
+
+        {/* Duration */}
+        {lecture.duration && (
+          <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,.8)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
+            {lecture.duration}
+          </div>
+        )}
+
+        {/* Drive / Local badge */}
+        {!isLocked && isDrive && <div style={{ position: 'absolute', bottom: 8, left: 8, background: '#1A73E8', color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 6 }}>📁 Drive</div>}
+        {!isLocked && isLocal && <div style={{ position: 'absolute', bottom: 8, left: 8, background: '#059669', color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 6 }}>💾 Local</div>}
       </div>
 
-      <div style={{ padding: '14px 16px' }}>
+      {/* Card body */}
+      <div style={{ padding: '14px 16px', background: isLocked ? '#FDFAFF' : C.card }}>
         <div style={{ display: 'flex', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 10, fontWeight: 700, background: C.primaryLight, color: C.primary, padding: '2px 8px', borderRadius: 20 }}>{lecture.subject}</span>
-          {lecture.chapter && <span style={{ fontSize: 10, fontWeight: 700, background: C.bg, color: C.muted, padding: '2px 8px', borderRadius: 20 }}>{lecture.chapter}</span>}
+          <span style={{ fontSize: 10, fontWeight: 700, background: C.primaryLight, color: C.primary, padding: '2px 8px', borderRadius: 20 }}>
+            {lecture.subject}
+          </span>
+          {lecture.chapter && (
+            <span style={{ fontSize: 10, fontWeight: 700, background: C.bg, color: C.muted, padding: '2px 8px', borderRadius: 20 }}>
+              {lecture.chapter}
+            </span>
+          )}
         </div>
-        <div style={{ fontWeight: 800, fontSize: 14, color: C.text, lineHeight: 1.4, marginBottom: 6 }}>{lecture.title}</div>
+
+        <div style={{ fontWeight: 800, fontSize: 14, color: isLocked ? C.muted : C.text, lineHeight: 1.4, marginBottom: 6 }}>
+          {lecture.title}
+        </div>
+
         {lecture.description && (
           <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5, marginBottom: 10, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {lecture.description}
           </div>
         )}
+
+        {/* Locked CTA */}
+        {isLocked && (
+          <div style={{
+            background: `linear-gradient(135deg,${C.purple}15,${C.primary}12)`,
+            border: `1px solid ${C.purple}35`, borderRadius: 10, padding: '10px 12px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10,
+          }}>
+            <div style={{ fontSize: 12, color: C.purple, fontWeight: 700 }}>🔒 Subscribe to watch</div>
+            <div style={{ fontSize: 11, color: C.purple, fontWeight: 700, whiteSpace: 'nowrap' }}>from ₹299 →</div>
+          </div>
+        )}
+
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontSize: 11, color: C.muted }}>{lecture.instructor}</div>
           <div style={{ fontSize: 11, color: C.muted }}>{fmtDate(lecture.uploadedAt)}</div>
@@ -729,10 +763,10 @@ function SubStatusBar({ sub, onUpgrade }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function FreeLimitBanner({ total, onUpgrade }) {
   return (
-    <div style={{ background: `linear-gradient(135deg,${C.purple}18,${C.primary}18)`, border: `1px solid ${C.primary}30`, borderRadius: 14, padding: '18px 22px', marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
+    <div style={{ background: `linear-gradient(135deg,${C.purple}15,${C.primary}15)`, border: `1px solid ${C.primary}30`, borderRadius: 14, padding: '18px 22px', marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
       <div>
-        <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 4 }}>🎬 First {FREE_LIMIT} lectures per subject are free</div>
-        <div style={{ fontSize: 13, color: C.muted }}>Subscribe to unlock all {total} lectures — instant access.</div>
+        <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 4 }}>🎬 First {FREE_LIMIT} lectures are free — across all subjects</div>
+        <div style={{ fontSize: 13, color: C.muted }}>Subscribe to unlock all {total} lectures — instant access, all subjects.</div>
       </div>
       <button onClick={onUpgrade} style={{ background: `linear-gradient(135deg,${C.primary},${C.purple})`, color: '#fff', border: 'none', borderRadius: 12, padding: '12px 24px', fontWeight: 800, fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }}>
         👑 Unlock All →
@@ -765,56 +799,84 @@ export default function LecturesPage() {
     setShowPaywall(false);
   }
 
-  // Deduplicate by id, then sort
+  // ── Build subject map ─────────────────────────────────────────────────────
   const seen = new Set();
-  const allLectures = LECTURES.filter(l => {
+  const dedupedLectures = LECTURES.filter(l => {
     if (seen.has(l.id)) return false;
     seen.add(l.id);
     return true;
-  }).sort((a, b) => a.order - b.order);
+  });
 
-  // Build per-subject map
   const subjectMap = {};
-  allLectures.forEach(l => {
+  dedupedLectures.forEach(l => {
     if (!subjectMap[l.subject]) subjectMap[l.subject] = [];
     subjectMap[l.subject].push(l);
+  });
+  Object.keys(subjectMap).forEach(s => {
+    subjectMap[s].sort((a, b) => a.order - b.order);
   });
 
   const ALL_SUBJECTS = Object.keys(SUBJECT_CONFIG);
   ALL_SUBJECTS.forEach(s => { if (!subjectMap[s]) subjectMap[s] = []; });
+
+  const allLectures = dedupedLectures;
   const subjects = ALL_SUBJECTS;
 
-  // Lectures shown inside selected subject, filtered by search
-  const subjectLectures = selectedSubject
-    ? (subjectMap[selectedSubject] || []).filter(l =>
-      !search ||
-      l.title.toLowerCase().includes(search.toLowerCase()) ||
-      l.chapter?.toLowerCase().includes(search.toLowerCase())
-    )
-    : [];
+  // ── Compute global index offset for each subject ──────────────────────────
+  // This assigns a continuous global index across ALL subjects in order.
+  // Subject 1 lectures: index 0, 1, 2, ...
+  // Subject 2 lectures: index (subject1.length), (subject1.length)+1, ...
+  // etc.
+  // Only globalIndex < FREE_LIMIT (i.e. 0 and 1) are free.
+  function getGlobalOffset(subject) {
+    const pos = ALL_SUBJECTS.indexOf(subject);
+    return ALL_SUBJECTS.slice(0, pos).reduce((acc, s) => acc + (subjectMap[s]?.length || 0), 0);
+  }
 
-  const totalLocked = allLectures.filter((_, i) => i >= FREE_LIMIT).length;
-  const showBanner = !subscribed && totalLocked > 0;
+  // ── Lectures for selected subject ─────────────────────────────────────────
+  const allSubjectLectures = selectedSubject ? (subjectMap[selectedSubject] || []) : [];
+  const globalOffset = selectedSubject ? getGlobalOffset(selectedSubject) : 0;
+
+  // Attach globalIndex BEFORE search filtering so lock status never shifts
+  const subjectLecturesWithIndex = allSubjectLectures.map((lecture, idx) => ({
+    lecture,
+    globalIndex: globalOffset + idx,  // 0 & 1 = FREE globally, 2+ = LOCKED
+  }));
+
+  const filteredLectures = search
+    ? subjectLecturesWithIndex.filter(({ lecture }) =>
+      lecture.title.toLowerCase().includes(search.toLowerCase()) ||
+      lecture.chapter?.toLowerCase().includes(search.toLowerCase())
+    )
+    : subjectLecturesWithIndex;
 
   const selectedCfg = selectedSubject ? (SUBJECT_CONFIG[selectedSubject] || {}) : {};
   const subjectIcon = selectedCfg.icon || '📁';
 
+  // ── Compute per-subject free lecture count for folder cards ───────────────
+  function getSubjectFreeLectureCount(subject) {
+    const offset = getGlobalOffset(subject);
+    const count = subjectMap[subject]?.length || 0;
+    // How many lectures in this subject fall within the global FREE_LIMIT?
+    return Math.max(0, Math.min(count, FREE_LIMIT - offset));
+  }
+
   return (
     <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } } * { box-sizing: border-box; }`}</style>
+      <style>{`* { box-sizing: border-box; }`}</style>
 
       {activeVideo && <VideoModal lecture={activeVideo} onClose={() => setActiveVideo(null)} />}
       {showPaywall && <PaywallModal user={user} onSuccess={handlePaySuccess} onClose={() => setShowPaywall(false)} />}
 
-      {/* ── TOP HEADER ── */}
+      {/* ── HEADER ── */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20, flexWrap: 'wrap', gap: 14 }}>
           <div>
             <h2 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: C.text }}>🎬 Recorded Lectures</h2>
             <p style={{ margin: '5px 0 0', color: C.muted, fontSize: 13 }}>
               {subscribed
-                ? `👑 Premium — Full access · ${allLectures.length} lectures across ${subjects.length} subject${subjects.length !== 1 ? 's' : ''}`
-                : `First ${FREE_LIMIT} lectures per subject free · Subscribe to unlock all ${allLectures.length}`}
+                ? `👑 Premium — Full access · ${allLectures.length} lectures across ${subjects.length} subjects`
+                : `First ${FREE_LIMIT} lectures free (across all subjects) · Subscribe to unlock all ${allLectures.length}`}
             </p>
           </div>
           {!subscribed && (
@@ -824,9 +886,8 @@ export default function LecturesPage() {
             </button>
           )}
         </div>
-
         {subscribed && sub && <SubStatusBar sub={sub} onUpgrade={() => setShowPaywall(true)} />}
-        {showBanner && <FreeLimitBanner total={allLectures.length} onUpgrade={() => setShowPaywall(true)} />}
+        {!subscribed && <FreeLimitBanner total={allLectures.length} onUpgrade={() => setShowPaywall(true)} />}
       </div>
 
       {/* ══════════════════════════════════════════
@@ -834,12 +895,13 @@ export default function LecturesPage() {
       ══════════════════════════════════════════ */}
       {!selectedSubject && (
         <>
+          {/* Stats row */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
             {[
               { icon: '📚', val: subjects.length, label: 'Subjects' },
               { icon: '🎬', val: allLectures.length, label: 'Total Lectures' },
-              { icon: '🆓', val: subjects.length * FREE_LIMIT, label: 'Free' },
-              { icon: '👑', val: Math.max(0, allLectures.length - subjects.length * FREE_LIMIT), label: 'Premium' },
+              { icon: '🆓', val: FREE_LIMIT, label: 'Free' },
+              { icon: '👑', val: Math.max(0, allLectures.length - FREE_LIMIT), label: 'Premium' },
             ].map(s => (
               <div key={s.label} style={{ background: C.card, borderRadius: 12, padding: '10px 16px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: 18 }}>{s.icon}</span>
@@ -851,16 +913,19 @@ export default function LecturesPage() {
             ))}
           </div>
 
+          {/* Section heading */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <div style={{ height: 3, width: 28, borderRadius: 99, background: C.primary }} />
             <span style={{ fontWeight: 800, fontSize: 15, color: C.text }}>All Subjects</span>
             <div style={{ flex: 1, height: 1, background: C.border }} />
-            <span style={{ fontSize: 12, color: C.muted }}>{subjects.length} subject{subjects.length !== 1 ? 's' : ''}</span>
+            <span style={{ fontSize: 12, color: C.muted }}>{subjects.length} subjects</span>
           </div>
 
+          {/* Subject grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
-            {subjects.map((subject) => {
+            {subjects.map(subject => {
               const cfg = SUBJECT_CONFIG[subject] || {};
+              const freeCount = getSubjectFreeLectureCount(subject);
               return (
                 <SubjectFolderCard
                   key={subject}
@@ -869,6 +934,7 @@ export default function LecturesPage() {
                   subscribed={subscribed}
                   subtitle={cfg.subtitle || ''}
                   examTags={cfg.examTags || []}
+                  freeLecturesOverride={freeCount}
                   onClick={() => { setSelectedSubject(subject); setSearch(''); }}
                 />
               );
@@ -882,17 +948,16 @@ export default function LecturesPage() {
       ══════════════════════════════════════════ */}
       {selectedSubject && (
         <>
+          {/* Subject header */}
           <div style={{
-            background: C.card, border: `1px solid ${C.border}`,
-            borderRadius: 16, padding: '18px 22px', marginBottom: 20,
+            background: C.card, border: `1px solid ${C.border}`, borderRadius: 16,
+            padding: '18px 22px', marginBottom: 20,
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 14,
-                background: C.bg, border: `1.5px solid ${C.border}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0,
-              }}>{subjectIcon}</div>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: C.bg, border: `1.5px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>
+                {subjectIcon}
+              </div>
               <div>
                 <div style={{ color: C.text, fontWeight: 900, fontSize: 17 }}>{selectedSubject}</div>
                 {selectedCfg.subtitle && <div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>{selectedCfg.subtitle}</div>}
@@ -905,16 +970,23 @@ export default function LecturesPage() {
             </button>
           </div>
 
+          {/* Meta */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 12, color: C.muted }}>
-              {(subjectMap[selectedSubject] || []).length} lecture{(subjectMap[selectedSubject] || []).length !== 1 ? 's' : ''}
-              {!subscribed && ` · First ${FREE_LIMIT} free`}
+              {allSubjectLectures.length} lecture{allSubjectLectures.length !== 1 ? 's' : ''}
+              {!subscribed && (() => {
+                const free = getSubjectFreeLectureCount(selectedSubject);
+                return free > 0
+                  ? ` · ${free} free, ${allSubjectLectures.length - free} require subscription`
+                  : ` · All require subscription`;
+              })()}
             </span>
-            {selectedCfg.examTags && selectedCfg.examTags.map(tag => (
+            {selectedCfg.examTags?.map(tag => (
               <span key={tag} style={{ fontSize: 11, fontWeight: 600, color: C.muted, background: C.bg, border: `1px solid ${C.border}`, padding: '2px 10px', borderRadius: 20 }}>{tag}</span>
             ))}
           </div>
 
+          {/* Search */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: C.card, borderRadius: 10, padding: '9px 14px', border: `1px solid ${C.border}`, marginBottom: 20 }}>
             <span style={{ color: C.muted }}>🔍</span>
             <input
@@ -928,7 +1000,8 @@ export default function LecturesPage() {
             )}
           </div>
 
-          {subjectLectures.length === 0 ? (
+          {/* Lecture grid */}
+          {filteredLectures.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '60px 20px', background: C.card, borderRadius: 16, border: `1px solid ${C.border}` }}>
               <div style={{ fontSize: 48, marginBottom: 12 }}>{search ? '🔍' : '🎬'}</div>
               <div style={{ fontWeight: 800, fontSize: 18, color: C.text, marginBottom: 6 }}>
@@ -940,11 +1013,11 @@ export default function LecturesPage() {
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 18 }}>
-              {subjectLectures.map((lecture, subjectIndex) => (
+              {filteredLectures.map(({ lecture, globalIndex }) => (
                 <LectureCard
                   key={lecture.id}
                   lecture={lecture}
-                  subjectIndex={subjectIndex}  // ← position within this subject
+                  globalIndex={globalIndex}
                   subscribed={subscribed}
                   onPlay={l => setActiveVideo(l)}
                   onLock={() => setShowPaywall(true)}
@@ -955,6 +1028,7 @@ export default function LecturesPage() {
         </>
       )}
 
+      {/* Bottom CTA */}
       {!subscribed && allLectures.length > 0 && (
         <div style={{ marginTop: 32, background: `linear-gradient(135deg,${C.sidebar},${C.primary})`, borderRadius: 20, padding: '32px', textAlign: 'center' }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🚀</div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DoubtAgent from "@/components/DoubtAgent";
-import { getSubjects } from "@/lib/doubtApi";
+// ✅ Fix both imports
+import DoubtAgent from '@/components/DoubtAgent.jsx';
+import { askDoubt, askDoubtVoice, buildAudioUrl } from '@/lib/doubtApi.js';
 
 export default function DoubtPage() {
     const [subjects, setSubjects] = useState([]);

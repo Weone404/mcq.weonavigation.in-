@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 // ✅ Fix both imports
-import DoubtAgent from '@/components/DoubtAgent.jsx';
-import { askDoubt, askDoubtVoice, buildAudioUrl } from '@/lib/doubtApi.js';
+import DoubtAgent from '../../../components/DoubtAgent/DoubtAgent.jsx';
+import { askDoubt, askDoubtVoice, buildAudioUrl } from '../../../lib/doubtApi.js';
 
 export default function DoubtPage() {
     const [subjects, setSubjects] = useState([]);

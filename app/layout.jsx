@@ -9,8 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children} </body>
-      {/* <AliaWidget /> ← this places the icon on every page */}
+      <body>
+        {children}
+        <AliaWidget />
+      </body>
     </html>
   );
 }

@@ -3,7 +3,7 @@
 // AI Doubt Solver Page — fits into the dgca-mcq project
 
 import { useState } from "react";
-import DoubtChat from "@/components/DoubtChat";
+import DoubtChat from "../../../components/DoubtChat/page.jsx";
 
 const TOPICS = [
     { label: "Air Regulations", icon: "📜", color: "#6366f1" },

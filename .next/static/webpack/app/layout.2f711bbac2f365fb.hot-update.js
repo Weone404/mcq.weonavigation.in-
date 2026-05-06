@@ -1,0 +1,21 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+self["webpackHotUpdate_N_E"]("app/layout",{
+
+/***/ "(app-pages-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22E%3A%5C%5Cdgca-mcq-platform%5C%5Cdgca-mcq%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22E%3A%5C%5Cdgca-mcq-platform%5C%5Cdgca-mcq%5C%5Ccomponents%5C%5CAliaWidget%5C%5Cpage.jsx%22%2C%22ids%22%3A%5B%5D%7D&server=false!":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22E%3A%5C%5Cdgca-mcq-platform%5C%5Cdgca-mcq%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22E%3A%5C%5Cdgca-mcq-platform%5C%5Cdgca-mcq%5C%5Ccomponents%5C%5CAliaWidget%5C%5Cpage.jsx%22%2C%22ids%22%3A%5B%5D%7D&server=false! ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+eval(__webpack_require__.ts("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./app/globals.css */ \"(app-pages-browser)/./app/globals.css\"));\n;\nPromise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./components/AliaWidget/page.jsx */ \"(app-pages-browser)/./components/AliaWidget/page.jsx\"));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwcC1wYWdlcy1icm93c2VyKS8uL25vZGVfbW9kdWxlcy9uZXh0L2Rpc3QvYnVpbGQvd2VicGFjay9sb2FkZXJzL25leHQtZmxpZ2h0LWNsaWVudC1lbnRyeS1sb2FkZXIuanM/bW9kdWxlcz0lN0IlMjJyZXF1ZXN0JTIyJTNBJTIyRSUzQSU1QyU1Q2RnY2EtbWNxLXBsYXRmb3JtJTVDJTVDZGdjYS1tY3ElNUMlNUNhcHAlNUMlNUNnbG9iYWxzLmNzcyUyMiUyQyUyMmlkcyUyMiUzQSU1QiU1RCU3RCZtb2R1bGVzPSU3QiUyMnJlcXVlc3QlMjIlM0ElMjJFJTNBJTVDJTVDZGdjYS1tY3EtcGxhdGZvcm0lNUMlNUNkZ2NhLW1jcSU1QyU1Q2NvbXBvbmVudHMlNUMlNUNBbGlhV2lkZ2V0JTVDJTVDcGFnZS5qc3glMjIlMkMlMjJpZHMlMjIlM0ElNUIlNUQlN0Qmc2VydmVyPWZhbHNlISIsIm1hcHBpbmdzIjoiQUFBQSw0SkFBc0Y7QUFDdEY7QUFDQSwwTEFBc0ciLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9fTl9FLz8zNmUyIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCgvKiB3ZWJwYWNrTW9kZTogXCJlYWdlclwiICovIFwiRTpcXFxcZGdjYS1tY3EtcGxhdGZvcm1cXFxcZGdjYS1tY3FcXFxcYXBwXFxcXGdsb2JhbHMuY3NzXCIpO1xuO1xuaW1wb3J0KC8qIHdlYnBhY2tNb2RlOiBcImVhZ2VyXCIgKi8gXCJFOlxcXFxkZ2NhLW1jcS1wbGF0Zm9ybVxcXFxkZ2NhLW1jcVxcXFxjb21wb25lbnRzXFxcXEFsaWFXaWRnZXRcXFxccGFnZS5qc3hcIik7XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(app-pages-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22E%3A%5C%5Cdgca-mcq-platform%5C%5Cdgca-mcq%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22E%3A%5C%5Cdgca-mcq-platform%5C%5Cdgca-mcq%5C%5Ccomponents%5C%5CAliaWidget%5C%5Cpage.jsx%22%2C%22ids%22%3A%5B%5D%7D&server=false!\n"));
+
+/***/ })
+
+});

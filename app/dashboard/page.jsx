@@ -6,7 +6,7 @@ import { getUser, clearUser, getStats, getResults } from '../../lib/storage';
 import { chapters, questions as allQuestions } from '../../data/questions';
 import LecturesPage from './LecturesPage.jsx';
 import ResourcesPage from './ResourcesPage.jsx';
-import DoubtAgent from '../../components/DoubtAgent/DoubtAgent.jsx';
+import DoubtChat from '../../components/DoubtChat/page.jsx';
 
 // ─── COLOUR TOKENS ─────────────────────────────────────────────────────────────
 const C = {
@@ -1760,7 +1760,7 @@ export default function DashboardPage() {
       case 'doubt':
         return (
           <div style={{ minHeight: '600px' }}>
-            <DoubtAgent studentId={user?.id} />
+            <DoubtChat studentId={user?.id} />
           </div>
         );
       default:

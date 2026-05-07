@@ -1,101 +1,118 @@
 // app/api/doubt/route.js
-// v4 - NO model caching, tries every model fresh each time
+// AI Doubt Solver — powered by Groq (FREE, no daily quota, ultra fast)
+// Model: llama-3.3-70b-versatile — smart & free on Groq
 
 import { NextResponse } from "next/server";
 
-const SYSTEM_PROMPT = `You are EduBot, an expert DGCA exam tutor. Answer aviation questions clearly, use bullet points, be encouraging, end with a memory tip.`;
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-// Hardcoded from your available models list — lite/smaller models first (lower quota usage)
-const MODELS_TO_TRY = [
-    "gemini-2.0-flash-lite",
-    "gemini-2.0-flash-lite-001",
-    "gemini-2.5-flash-lite",
-    "gemini-2.0-flash-001",
-    "gemini-2.0-flash",
-    "gemini-2.5-flash",
-];
+const SYSTEM_PROMPT = `You are EduBot, an expert academic tutor for DGCA (Directorate General of Civil Aviation) exam preparation. You help students understand aviation concepts, regulations, and theory.
+
+Your behavior:
+- Answer clearly and concisely in a student-friendly tone
+- Break down complex aviation topics into simple explanations
+- Use bullet points for multi-part explanations
+- Be encouraging and supportive
+- End with a helpful memory tip when relevant
+- If a question is outside aviation scope, gently redirect
+
+Format: Direct answer → Explanation → Key bullet points → Memory tip`;
 
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { pdfBase64, history = [], mode = "chat" } = body;
+        const { history = [] } = body;
+
         const question = body.question != null ? String(body.question).trim() : "";
 
         if (!question) {
             return NextResponse.json({ error: "Question is required" }, { status: 400 });
         }
 
-        const apiKey = process.env.GEMINI_API_KEY;
+        const apiKey = process.env.GROQ_API_KEY;
         if (!apiKey) {
-            return NextResponse.json({ error: "GEMINI_API_KEY not set in .env.local" }, { status: 500 });
+            return NextResponse.json(
+                { error: "GROQ_API_KEY not set in .env.local — get your free key at https://console.groq.com/keys" },
+                { status: 500 }
+            );
         }
 
-        // Build contents array
-        const contents = [];
+        // ── Build messages array (OpenAI-compatible format) ──────────────────────
+        const messages = [
+            { role: "system", content: SYSTEM_PROMPT }
+        ];
+
+        // Add conversation history
         for (const turn of history) {
-            const uParts = [];
-            if (turn.pdfBase64) uParts.push({ inlineData: { mimeType: "application/pdf", data: turn.pdfBase64 } });
-            uParts.push({ text: String(turn.question || "") });
-            contents.push({ role: "user", parts: uParts });
-            contents.push({ role: "model", parts: [{ text: String(turn.answer || "") }] });
+            messages.push({ role: "user", content: String(turn.question || "") });
+            messages.push({ role: "assistant", content: String(turn.answer || "") });
         }
 
-        const curParts = [];
-        if (pdfBase64 && mode === "pdf") {
-            curParts.push({ inlineData: { mimeType: "application/pdf", data: pdfBase64 } });
-            curParts.push({ text: `Answer this question based on the PDF:\n${question}` });
-        } else {
-            curParts.push({ text: question });
-        }
-        contents.push({ role: "user", parts: curParts });
+        // Add current question
+        messages.push({ role: "user", content: question });
 
-        const payload = {
-            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-            contents,
-            generationConfig: { temperature: 0.7, maxOutputTokens: 1000 },
-        };
+        // ── Call Groq API ─────────────────────────────────────────────────────────
+        console.log(`[EduBot] Calling Groq with ${messages.length} messages...`);
 
-        // Try every model — NO caching
-        for (const model of MODELS_TO_TRY) {
-            console.log(`[EduBot] Trying ${model}...`);
+        const res = await fetch(GROQ_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+                model: "llama-3.3-70b-versatile",
+                messages,
+                temperature: 0.7,
+                max_tokens: 1024,
+                top_p: 0.9,
+            }),
+        });
 
-            let res, data;
-            try {
-                res = await fetch(
-                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-                    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
+        const data = await res.json();
+
+        if (!res.ok) {
+            console.error("[EduBot] Groq error:", JSON.stringify(data));
+
+            const errType = data?.error?.type;
+            const errMsg = data?.error?.message || "";
+
+            if (errType === "rate_limit_exceeded" || res.status === 429) {
+                return NextResponse.json(
+                    { error: "Rate limit hit. Please wait a few seconds and try again." },
+                    { status: 429 }
                 );
-                data = await res.json();
-            } catch (fetchErr) {
-                console.warn(`[EduBot] Fetch error for ${model}:`, fetchErr.message);
-                continue;
+            }
+            if (res.status === 401) {
+                return NextResponse.json(
+                    { error: "Invalid GROQ_API_KEY. Check your .env.local file." },
+                    { status: 401 }
+                );
             }
 
-            if (res.ok) {
-                const answer = data?.candidates?.[0]?.content?.parts?.map(p => p.text).filter(Boolean).join("\n");
-                if (answer) {
-                    console.log(`[EduBot] ✓ Got answer from ${model}`);
-                    return NextResponse.json({ answer, model });
-                }
-            }
-
-            const errStatus = data?.error?.status;
-            console.warn(`[EduBot] ✗ ${model} → ${errStatus || res.status}`);
-
-            if (errStatus === "RESOURCE_EXHAUSTED") continue; // try next
-            if (errStatus === "NOT_FOUND") continue;          // try next
-            if (errStatus === "INVALID_ARGUMENT") {
-                return NextResponse.json({ error: "PDF too large. Try a smaller file." }, { status: 400 });
-            }
-            // Unknown error — still try next model
+            return NextResponse.json(
+                { error: errMsg || "AI error. Please try again." },
+                { status: 500 }
+            );
         }
 
-        return NextResponse.json({
-            error: "All free Gemini models are quota-exhausted right now. Quotas reset daily — try again in a few hours, or create a new API key at https://aistudio.google.com/app/apikey",
-        }, { status: 429 });
+        const answer = data?.choices?.[0]?.message?.content;
 
-    } catch (err) {
-        console.error("[EduBot] Unexpected error:", err);
-        return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+        if (!answer) {
+            return NextResponse.json(
+                { error: "No response from AI. Please try again." },
+                { status: 500 }
+            );
+        }
+
+        console.log(`[EduBot] ✓ Got answer (${answer.length} chars)`);
+        return NextResponse.json({ answer });
+
+    } catch (error) {
+        console.error("[EduBot] Unexpected error:", error);
+        return NextResponse.json(
+            { error: "Something went wrong. Please try again." },
+            { status: 500 }
+        );
     }
 }

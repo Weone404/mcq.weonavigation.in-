@@ -1,5 +1,12 @@
 import './globals.css';
-import AliaWidget from '../components/AliaWidget/page.jsx';
+import dynamic from 'next/dynamic';
+
+// ✅ Fix: dynamic import with ssr:false prevents hydration mismatch
+// AliaWidget uses useState, speechSynthesis etc — browser-only APIs
+const AliaWidget = dynamic(
+  () => import('../components/AliaWidget/page.jsx'),
+  { ssr: false }
+);
 
 export const metadata = {
   title: 'DGCA Prep | Pilot Exam Platform',

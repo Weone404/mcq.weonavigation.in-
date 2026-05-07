@@ -5,6 +5,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { askDoubt, formatAnswer, QUICK_QUESTIONS } from '../../lib/doubtApi';
 
+// ── Wrap question with a brevity instruction ──────────────────────────────────
+function withBrevity(question) {
+    return `Answer in exactly 1 to 2 lines. Be extremely concise and direct. No bullet points, no headers, no lists.\n\nQuestion: ${question}`;
+}
+
 // ── TTS helpers ───────────────────────────────────────────────────────────────
 function cleanForSpeech(text) {
     return text
@@ -84,12 +89,13 @@ export default function AliaWidget() {
         setLoading(true);
 
         try {
-            // ✅ Uses your /api/doubt Gemini route — no external API needed
-            const { answer } = await askDoubt(question, null, history, 'chat');
+            // ✅ Wrap question with brevity instruction — keeps answers to 3–4 lines
+            const { answer } = await askDoubt(withBrevity(question), null, history, 'chat');
 
             const botId = Date.now() + 1;
             const botMsg = { role: 'bot', text: answer, id: botId };
             setMessages(prev => [...prev, botMsg]);
+            // Store original question (not the wrapped one) in history
             setHistory(prev => [...prev, { question, answer }]);
 
             // 🔊 Auto-speak

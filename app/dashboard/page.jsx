@@ -77,8 +77,8 @@ const SUBJECTS = [
     color: '#1D4ED8',
     gradient: 'linear-gradient(135deg,#1D4ED8,#3B82F6)',
     parts: [
-      { label: 'Part I – Air Regulations', color: '#1D4ED8' },
-      { label: 'Part II – Human Factors', color: '#8B5CF6' },
+      { label: 'Part I – Air Regulations', color: '#1D4ED8', chapterIds: ['ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20', 'ch21', 'ch22'] },
+      { label: 'Part II – Human Factors', color: '#8B5CF6', chapterIds: ['ch23', 'ch24', 'ch25', 'ch26'] },
     ],
     chapterIds: [
       'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10',
@@ -95,11 +95,13 @@ const SUBJECTS = [
     icon: '🌦️',
     color: '#0EA5E9',
     gradient: 'linear-gradient(135deg,#0EA5E9,#38BDF8)',
-    parts: [],
-    chapterIds: [],
-    stats: 'Coming Soon',
+    parts: [
+      { label: 'Part I – Atmosphere & Weather', color: '#0EA5E9', chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06'] },
+      { label: 'Part II – Aviation Meteorology', color: '#0284C7', chapterIds: ['met07', 'met08', 'met09', 'met10'] },
+    ],
+    chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08', 'met09', 'met10'],
+    stats: '10 Chapters · 150+ MCQs',
     exam: 'ATPL / CPL',
-    comingSoon: true,
   },
   {
     id: 'navigation',
@@ -108,11 +110,14 @@ const SUBJECTS = [
     icon: '🗺️',
     color: '#10B981',
     gradient: 'linear-gradient(135deg,#10B981,#34D399)',
-    parts: [],
-    chapterIds: [],
-    stats: 'Coming Soon',
+    parts: [
+      { label: 'Part I – General Navigation', color: '#10B981', chapterIds: ['nav01', 'nav02', 'nav03', 'nav04', 'nav05', 'nav06'] },
+      { label: 'Part II – Radio Navigation', color: '#059669', chapterIds: ['nav07', 'nav08', 'nav09', 'nav10', 'nav11', 'nav12'] },
+    ],
+    chapterIds: ['nav01', 'nav02', 'nav03', 'nav04', 'nav05', 'nav06', 'nav07', 'nav08', 'nav09', 'nav10', 'nav11', 'nav12'],
+    stats: '12 Chapters · 180+ MCQs',
     exam: 'ATPL / CPL',
-    comingSoon: true,
+    // comingSoon: true,
   },
   {
     id: 'technical',
@@ -121,11 +126,14 @@ const SUBJECTS = [
     icon: '🔧',
     color: '#F59E0B',
     gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
-    parts: [],
-    chapterIds: [],
-    stats: 'Coming Soon',
+    parts: [
+      { label: 'Part I – Airframe & Systems', color: '#F59E0B', chapterIds: ['tech01', 'tech02', 'tech03', 'tech04', 'tech05', 'tech06'] },
+      { label: 'Part II – Powerplant', color: '#D97706', chapterIds: ['tech07', 'tech08', 'tech09', 'tech10', 'tech11'] },
+    ],
+    chapterIds: ['tech01', 'tech02', 'tech03', 'tech04', 'tech05', 'tech06', 'tech07', 'tech08', 'tech09', 'tech10', 'tech11'],
+    stats: '11 Chapters · 160+ MCQs',
     exam: 'AME / ATPL',
-    comingSoon: true,
+    // comingSoon: true,
   },
   {
     id: 'rtfm',
@@ -134,11 +142,14 @@ const SUBJECTS = [
     icon: '📻',
     color: '#EF4444',
     gradient: 'linear-gradient(135deg,#EF4444,#F87171)',
-    parts: [],
-    chapterIds: [],
-    stats: 'Coming Soon',
+    parts: [
+      { label: 'Part I – RTF Procedures', color: '#EF4444', chapterIds: ['rtf01', 'rtf02', 'rtf03', 'rtf04'] },
+      { label: 'Part II – Phraseology', color: '#DC2626', chapterIds: ['rtf05', 'rtf06', 'rtf07', 'rtf08'] },
+    ],
+    chapterIds: ['rtf01', 'rtf02', 'rtf03', 'rtf04', 'rtf05', 'rtf06', 'rtf07', 'rtf08'],
+    stats: '8 Chapters · 120+ MCQs',
     exam: 'RTR (Aero)',
-    comingSoon: true,
+    // comingSoon: true,
   },
   {
     id: 'mock',
@@ -151,7 +162,7 @@ const SUBJECTS = [
     chapterIds: [],
     stats: '50 Questions · 60 Mins',
     exam: 'All Exams',
-    isMock: true,
+    // isMock: true,
   },
 ];
 
@@ -288,7 +299,7 @@ function ComingSoonPage({ subject, onBack }) {
 // ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { icon: '🏠', label: 'Dashboard', id: 'home' },
-  { icon: '📚', label: 'Chapter Tests', id: 'tests' },
+  { icon: '📚', label: 'Subject Tests', id: 'tests' },
   { icon: '🤖', label: 'AI Doubt Chat', id: 'doubt' },
   { icon: '📈', label: 'My Progress', id: 'progress' },
   { icon: '📅', label: 'Live Classes', id: 'classes', badge: 'LIVE' },
@@ -302,7 +313,6 @@ const NAV_ITEMS = [
 function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }) {
   return (
     <>
-      {/* Mobile overlay */}
       {isMobile && isOpen && (
         <div
           onClick={onClose}
@@ -325,7 +335,6 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
         zIndex: 100,
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
-        // Mobile: slide in/out
         WebkitTransform: isMobile ? (isOpen ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)',
         transform: isMobile ? (isOpen ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)',
         WebkitTransition: 'transform .25s ease',
@@ -616,7 +625,7 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
 
       {/* Main grid */}
       <div style={{ display: 'grid', gridTemplateColumns: mainCols, gap: 18 }}>
-        {/* Chapter tests */}
+        {/* Subject tests */}
         <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, overflow: 'hidden' }}>
           <div style={{
             padding: '16px 18px', borderBottom: `1px solid ${C.border}`,
@@ -824,14 +833,10 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
   );
 }
 
-// ─── CHAPTER LIST ─────────────────────────────────────────────────────────────
-function AirRegChapterList({ allResults, onStartTest, onBack, isMobile }) {
+// ─── GENERIC SUBJECT CHAPTER LIST ─────────────────────────────────────────────
+// Works for ALL subjects — reads parts & chapterIds from the subject config
+function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest, onBack, isMobile }) {
   const [search, setSearch] = useState('');
-
-  const parts = [
-    { label: 'Part I – Air Regulations', color: C.primary, ids: ['ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20', 'ch21', 'ch22'] },
-    { label: 'Part II – Human Factors', color: C.purple, ids: ['ch23', 'ch24', 'ch25', 'ch26'] },
-  ];
 
   function getBest(chapterId) {
     const rs = allResults.filter(r => r.chapterId === chapterId);
@@ -839,10 +844,37 @@ function AirRegChapterList({ allResults, onStartTest, onBack, isMobile }) {
     return Math.max(...rs.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0));
   }
 
-  const filtered = chapters.filter(c => !search || c.title.toLowerCase().includes(search.toLowerCase()));
+  const filtered = subjectChapters.filter(c =>
+    !search || c.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Build groups from subject.parts (each part now carries its own chapterIds)
+  function getGroups() {
+    if (!subject.parts || subject.parts.length === 0) {
+      return [{ label: subject.title, color: subject.color, chapters: filtered }];
+    }
+    return subject.parts
+      .map(part => ({
+        label: part.label,
+        color: part.color,
+        chapters: filtered.filter(c => part.chapterIds && part.chapterIds.includes(c.id)),
+      }))
+      .filter(g => g.chapters.length > 0);
+  }
+
+  const groups = getGroups();
+
+  // Stats
+  const attempted = subjectChapters.filter(c => allResults.some(r => r.chapterId === c.id)).length;
+  const allPcts = allResults
+    .filter(r => subject.chapterIds.includes(r.chapterId) && r.total > 0)
+    .map(r => Math.round((r.score / r.total) * 100));
+  const avgScore = allPcts.length ? Math.round(allPcts.reduce((a, b) => a + b, 0) / allPcts.length) : null;
+  const bestScore = allPcts.length ? Math.max(...allPcts) : null;
 
   return (
     <div>
+      {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, gap: 12 }}>
         <button onClick={onBack} style={{
           width: 38, height: 38, borderRadius: 10, background: C.card,
@@ -850,12 +882,22 @@ function AirRegChapterList({ allResults, onStartTest, onBack, isMobile }) {
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
           WebkitAppearance: 'none', appearance: 'none',
         }}>←</button>
+        <div style={{
+          width: 40, height: 40, borderRadius: 11, flexShrink: 0,
+          background: subject.gradient,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
+        }}>{subject.icon}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h2 style={{ margin: 0, fontSize: isMobile ? 17 : 20, fontWeight: 800, color: C.text }}>📋 Air Regulations</h2>
-          <p style={{ margin: '2px 0 0', color: C.muted, fontSize: 12 }}>{chapters.length} chapters · Click to start MCQ test</p>
+          <h2 style={{ margin: 0, fontSize: isMobile ? 17 : 20, fontWeight: 800, color: C.text }}>
+            {subject.icon} {subject.title}
+          </h2>
+          <p style={{ margin: '2px 0 0', color: C.muted, fontSize: 12 }}>
+            {subjectChapters.length} chapters · Click to start MCQ test
+          </p>
         </div>
       </div>
 
+      {/* Search */}
       <div style={{
         display: 'flex', alignItems: 'center', background: C.card,
         borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, marginBottom: 18,
@@ -869,13 +911,13 @@ function AirRegChapterList({ allResults, onStartTest, onBack, isMobile }) {
         />
       </div>
 
-      {/* Stats */}
+      {/* Stats row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10, marginBottom: 22 }}>
         {[
-          { icon: '📚', val: chapters.length, label: 'Total Chapters' },
-          { icon: '✅', val: chapters.filter(c => allResults.some(r => r.chapterId === c.id)).length, label: 'Attempted' },
-          { icon: '🎯', val: (() => { const ps = allResults.filter(r => chapters.find(c => c.id === r.chapterId) && r.total > 0).map(r => Math.round((r.score / r.total) * 100)); return ps.length ? Math.round(ps.reduce((a, b) => a + b) / ps.length) + '%' : '—'; })(), label: 'Avg Score' },
-          { icon: '🏆', val: (() => { const ps = allResults.filter(r => chapters.find(c => c.id === r.chapterId) && r.total > 0).map(r => Math.round((r.score / r.total) * 100)); return ps.length ? Math.max(...ps) + '%' : '—'; })(), label: 'Best Score' },
+          { icon: '📚', val: subjectChapters.length, label: 'Total Chapters' },
+          { icon: '✅', val: attempted, label: 'Attempted' },
+          { icon: '🎯', val: avgScore !== null ? `${avgScore}%` : '—', label: 'Avg Score' },
+          { icon: '🏆', val: bestScore !== null ? `${bestScore}%` : '—', label: 'Best Score' },
         ].map(s => (
           <div key={s.label} style={{
             background: C.card, borderRadius: 12, padding: '10px 14px',
@@ -890,70 +932,84 @@ function AirRegChapterList({ allResults, onStartTest, onBack, isMobile }) {
         ))}
       </div>
 
-      {parts.map(part => {
-        const partChapters = filtered.filter(c => part.ids.includes(c.id));
-        if (!partChapters.length) return null;
-        return (
-          <div key={part.label} style={{ marginBottom: 28 }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}>
-              <div style={{ height: 3, width: 24, borderRadius: 99, background: part.color, flexShrink: 0 }} />
-              <span style={{ fontWeight: 800, fontSize: 14, color: part.color }}>{part.label}</span>
-              <div style={{ flex: 1, height: 1, background: C.border }} />
-              <span style={{ fontSize: 11, color: C.muted, flexShrink: 0 }}>{partChapters.length} ch.</span>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(260px,1fr))', gap: 12 }}>
-              {partChapters.map(ch => {
-                const best = getBest(ch.id);
-                const attempts = allResults.filter(r => r.chapterId === ch.id).length;
-                return (
-                  <div key={ch.id} onClick={() => onStartTest(ch.id)}
-                    style={{
-                      background: C.card, borderRadius: 14,
-                      border: `1px solid ${C.border}`, borderLeft: `4px solid ${part.color}`,
-                      padding: 16, cursor: 'pointer',
-                      WebkitTransition: 'transform .18s', transition: 'transform .18s',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = `0 6px 20px ${hexAlpha(part.color, 0.12)}`;
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = 'none';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{
-                          width: 40, height: 40, borderRadius: 10,
-                          background: hexAlpha(part.color, 0.08),
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
-                        }}>{ch.icon}</div>
-                        <div style={{
-                          width: 22, height: 22, borderRadius: 6, background: part.color,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          color: '#fff', fontSize: 9, fontWeight: 800,
-                        }}>{ch.id.replace('ch', '')}</div>
-                      </div>
-                      {best !== null
-                        ? <Badge label={`${best}%`} color={getScoreColor(best)} />
-                        : <span style={{ fontSize: 10, color: C.muted, background: C.bg, padding: '2px 8px', borderRadius: 20, display: 'inline-block' }}>New</span>}
-                    </div>
-                    <div style={{ fontWeight: 800, fontSize: 13, color: C.text, marginBottom: 3, lineHeight: 1.3 }}>{ch.title}</div>
-                    <div style={{ fontSize: 11, color: C.muted, marginBottom: 10 }}>{ch.part} · {attempts} attempt{attempts !== 1 ? 's' : ''}</div>
-                    <ProgressBar value={best ?? 0} color={part.color} height={4} />
-                    <div style={{ marginTop: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 11, color: best !== null ? getScoreColor(best) : C.muted, fontWeight: best !== null ? 700 : 400 }}>
-                        {best !== null ? `Best: ${best}%` : 'Not attempted'}
-                      </span>
-                      <span style={{ fontSize: 11, color: part.color, fontWeight: 700 }}>Start →</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+      {/* Chapter groups */}
+      {groups.map(group => (
+        <div key={group.label} style={{ marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}>
+            <div style={{ height: 3, width: 24, borderRadius: 99, background: group.color, flexShrink: 0 }} />
+            <span style={{ fontWeight: 800, fontSize: 14, color: group.color }}>{group.label}</span>
+            <div style={{ flex: 1, height: 1, background: C.border }} />
+            <span style={{ fontSize: 11, color: C.muted, flexShrink: 0 }}>{group.chapters.length} ch.</span>
           </div>
-        );
-      })}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(260px,1fr))',
+            gap: 12,
+          }}>
+            {group.chapters.map(ch => {
+              const best = getBest(ch.id);
+              const attempts = allResults.filter(r => r.chapterId === ch.id).length;
+              // Extract a short number from the chapter id (e.g. "ch01"→"1", "met03"→"3", "nav07"→"7")
+              const chNum = ch.id.replace(/^[a-z]+/i, '').replace(/^0+/, '') || ch.id;
+              return (
+                <div key={ch.id} onClick={() => onStartTest(ch.id)}
+                  style={{
+                    background: C.card, borderRadius: 14,
+                    border: `1px solid ${C.border}`, borderLeft: `4px solid ${group.color}`,
+                    padding: 16, cursor: 'pointer',
+                    WebkitTransition: 'transform .18s', transition: 'transform .18s',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = `0 6px 20px ${hexAlpha(group.color, 0.12)}`;
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{
+                        width: 40, height: 40, borderRadius: 10,
+                        background: hexAlpha(group.color, 0.08),
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
+                      }}>{ch.icon || subject.icon}</div>
+                      <div style={{
+                        width: 22, height: 22, borderRadius: 6, background: group.color,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: '#fff', fontSize: 9, fontWeight: 800,
+                      }}>{chNum}</div>
+                    </div>
+                    {best !== null
+                      ? <Badge label={`${best}%`} color={getScoreColor(best)} />
+                      : <span style={{
+                        fontSize: 10, color: C.muted, background: C.bg,
+                        padding: '2px 8px', borderRadius: 20, display: 'inline-block',
+                      }}>New</span>}
+                  </div>
+                  <div style={{ fontWeight: 800, fontSize: 13, color: C.text, marginBottom: 3, lineHeight: 1.3 }}>{ch.title}</div>
+                  <div style={{ fontSize: 11, color: C.muted, marginBottom: 10 }}>
+                    {ch.part || subject.title} · {attempts} attempt{attempts !== 1 ? 's' : ''}
+                  </div>
+                  <ProgressBar value={best ?? 0} color={group.color} height={4} />
+                  <div style={{ marginTop: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 11, color: best !== null ? getScoreColor(best) : C.muted, fontWeight: best !== null ? 700 : 400 }}>
+                      {best !== null ? `Best: ${best}%` : 'Not attempted'}
+                    </span>
+                    <span style={{ fontSize: 11, color: group.color, fontWeight: 700 }}>Start →</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', color: C.muted, padding: '48px 0', fontSize: 14 }}>
+          No chapters match "{search}"
+        </div>
+      )}
     </div>
   );
 }
@@ -1110,7 +1166,7 @@ function MockTestPage({ onBack, isMobile }) {
           <div style={{ height: '100%', width: `${((currentQ + 1) / pool.length) * 100}%`, background: C.primary, borderRadius: 99, transition: 'width .3s' }} />
         </div>
 
-        {/* Q dots — scrollable on mobile */}
+        {/* Q dots */}
         <div style={{
           display: 'flex', flexWrap: isMobile ? 'nowrap' : 'wrap',
           overflowX: isMobile ? 'auto' : 'visible',
@@ -1274,14 +1330,61 @@ function MockTestPage({ onBack, isMobile }) {
   );
 }
 
-// ─── CHAPTER TESTS PAGE ───────────────────────────────────────────────────────
+// ─── CHAPTER TESTS PAGE (router — now generic for all subjects) ───────────────
 function ChapterTestsPage({ allResults, onStartTest, isMobile }) {
   const [subView, setSubView] = useState('subjects');
-  const comingSoonSubject = SUBJECTS.find(s => s.id === subView && s.comingSoon);
-  if (comingSoonSubject) return <ComingSoonPage subject={comingSoonSubject} onBack={() => setSubView('subjects')} />;
-  if (subView === 'air_regulations') return <AirRegChapterList allResults={allResults} onStartTest={onStartTest} onBack={() => setSubView('subjects')} isMobile={isMobile} />;
-  if (subView === 'mock') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} />;
-  return <SubjectSelector allResults={allResults} onSelectSubject={id => setSubView(id)} onMockTest={() => setSubView('mock')} isMobile={isMobile} />;
+
+  const activeSubject = SUBJECTS.find(s => s.id === subView);
+
+  // Coming soon
+  if (activeSubject?.comingSoon) {
+    return <ComingSoonPage subject={activeSubject} onBack={() => setSubView('subjects')} />;
+  }
+
+  // Mock test
+  if (subView === 'mock') {
+    return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} />;
+  }
+
+  // Any subject with chapterIds — use the generic chapter list
+  if (activeSubject && activeSubject.chapterIds.length > 0) {
+    // Chapters that exist in the global chapters array
+    const known = chapters.filter(c => activeSubject.chapterIds.includes(c.id));
+    const knownIds = known.map(c => c.id);
+
+    // Build stub entries for chapters not yet in data (shows UI, 0 questions until added)
+    const stubs = activeSubject.chapterIds
+      .filter(id => !knownIds.includes(id))
+      .map((id, i) => ({
+        id,
+        title: `Chapter ${id.replace(/^[a-z]+/i, '').replace(/^0+/, '') || i + 1}`,
+        icon: activeSubject.icon,
+        part: activeSubject.title,
+        questionCount: 0,
+        color: activeSubject.color,
+      }));
+
+    return (
+      <SubjectChapterList
+        subject={activeSubject}
+        subjectChapters={[...known, ...stubs]}
+        allResults={allResults}
+        onStartTest={onStartTest}
+        onBack={() => setSubView('subjects')}
+        isMobile={isMobile}
+      />
+    );
+  }
+
+  // Default — subject selector grid
+  return (
+    <SubjectSelector
+      allResults={allResults}
+      onSelectSubject={id => setSubView(id)}
+      onMockTest={() => setSubView('mock')}
+      isMobile={isMobile}
+    />
+  );
 }
 
 // ─── PROGRESS PAGE ────────────────────────────────────────────────────────────
@@ -1396,7 +1499,6 @@ export default function DashboardPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Sidebar width: 220 on desktop, 0 on mobile/tablet (slides in as drawer)
   const sidebarWidth = isDesktop ? 220 : 0;
   const topBarHeight = 56;
   const bottomNavHeight = isMobile ? 56 : 0;
@@ -1448,7 +1550,6 @@ export default function DashboardPage() {
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-        /* Prevent layout shift when sidebar opens on mobile */
         body { overflow-x: hidden; }
       `}</style>
 
@@ -1481,7 +1582,6 @@ export default function DashboardPage() {
         }
       </main>
 
-      {/* Footer stats — hidden on mobile to save space */}
       {!isMobile && (
         <div style={{
           marginLeft: sidebarWidth,
@@ -1509,7 +1609,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Bottom nav for mobile */}
       {isMobile && <BottomNav active={page} onChange={handleNav} />}
     </div>
   );

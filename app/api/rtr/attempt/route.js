@@ -3,20 +3,13 @@ import dbConnect from '../../../../lib/mongoose';
 import RtrAttempt from '../../../../models/RtrAttempt';
 import { scoreSession } from '../../../../lib/rtr/scorer';
 import { getScenarioById } from '../../../../lib/rtr/scenarios';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/authOptions';
 
 export async function POST(req) {
     try {
         await dbConnect();
-        const session = await getServerSession(authOptions);
-
-        if (!session?.user?.id) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
 
         const body = await req.json();
-        const { scenarioId, mode, transcripts } = body;
+        const { scenarioId, mode, transcripts, userId, duration } = body;
 
         if (!scenarioId || !transcripts || !Array.isArray(transcripts)) {
             return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
@@ -27,11 +20,14 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Scenario not found' }, { status: 404 });
         }
 
-        const rawTranscripts = transcripts.map((t) => t.transcript || '');
+        const rawTranscripts = transcripts.map((t) =>
+            typeof t === 'string' ? t : (t.transcript || '')
+        );
+
         const scored = scoreSession(rawTranscripts, scenario);
 
         const attempt = await RtrAttempt.create({
-            userId: session.user.id,
+            userId: userId || 'guest',
             mode: mode || 'practice',
             scenarioId,
             callsign: scenario.callsign,
@@ -46,7 +42,7 @@ export async function POST(req) {
             percentage: scored.percentage,
             passed: scored.passed,
             examinerRemarks: scored.examinerRemarks,
-            duration: body.duration || 0,
+            duration: duration || 0,
         });
 
         return NextResponse.json({
@@ -54,6 +50,7 @@ export async function POST(req) {
             attemptId: attempt._id,
             result: scored,
         });
+
     } catch (err) {
         console.error('RTR attempt error:', err);
         return NextResponse.json({ error: 'Server error' }, { status: 500 });
@@ -63,19 +60,23 @@ export async function POST(req) {
 export async function GET(req) {
     try {
         await dbConnect();
-        const session = await getServerSession(authOptions);
 
-        if (!session?.user?.id) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        const { searchParams } = new URL(req.url);
+        const userId = searchParams.get('userId');
+
+        if (!userId) {
+            return NextResponse.json({ error: 'userId required' }, { status: 400 });
         }
 
-        const attempts = await RtrAttempt.find({ userId: session.user.id })
+        const attempts = await RtrAttempt.find({ userId })
             .sort({ createdAt: -1 })
             .limit(10)
             .lean();
 
         return NextResponse.json({ attempts });
+
     } catch (err) {
+        console.error('RTR GET error:', err);
         return NextResponse.json({ error: 'Server error' }, { status: 500 });
     }
 }

@@ -1,5 +1,5 @@
 'use client';
-
+import Link from 'next/link';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUser, clearUser, getStats, getResults } from '../../lib/storage';
@@ -61,10 +61,17 @@ function shuffleArray(arr) {
   return a;
 }
 
-function buildMockPool(count = 50) {
+function buildMockPool(count = 50, subjectChapterIds = null) {
   let pool = [];
-  Object.values(allQuestions).forEach(arr => pool.push(...arr));
-  return shuffleArray(pool).slice(0, count);
+  if (subjectChapterIds && subjectChapterIds.length > 0) {
+    subjectChapterIds.forEach(id => {
+      if (allQuestions[id]) pool.push(...allQuestions[id]);
+    });
+  } else {
+    Object.values(allQuestions).forEach(arr => pool.push(...arr));
+  }
+  if (pool.length === 0) return [];
+  return shuffleArray(pool).slice(0, Math.min(count, pool.length));
 }
 
 // ─── SUBJECTS CONFIG ───────────────────────────────────────────────────────────
@@ -117,7 +124,6 @@ const SUBJECTS = [
     chapterIds: ['nav01', 'nav02', 'nav03', 'nav04', 'nav05', 'nav06', 'nav07', 'nav08', 'nav09', 'nav10', 'nav11', 'nav12'],
     stats: '12 Chapters · 180+ MCQs',
     exam: 'ATPL / CPL',
-    // comingSoon: true,
   },
   {
     id: 'technical',
@@ -133,7 +139,6 @@ const SUBJECTS = [
     chapterIds: ['tech01', 'tech02', 'tech03', 'tech04', 'tech05', 'tech06', 'tech07', 'tech08', 'tech09', 'tech10', 'tech11'],
     stats: '11 Chapters · 160+ MCQs',
     exam: 'AME / ATPL',
-    // comingSoon: true,
   },
   {
     id: 'rtfm',
@@ -149,7 +154,6 @@ const SUBJECTS = [
     chapterIds: ['rtf01', 'rtf02', 'rtf03', 'rtf04', 'rtf05', 'rtf06', 'rtf07', 'rtf08'],
     stats: '8 Chapters · 120+ MCQs',
     exam: 'RTR (Aero)',
-    // comingSoon: true,
   },
   {
     id: 'mock',
@@ -160,11 +164,23 @@ const SUBJECTS = [
     gradient: 'linear-gradient(135deg,#8B5CF6,#A78BFA)',
     parts: [],
     chapterIds: [],
-    stats: '50 Questions · 60 Mins',
+    stats: '100 Questions · 120 Mins',
     exam: 'All Exams',
-    // isMock: true,
+    isMock: true,
   },
 ];
+
+const MOCK_ALL_OPTION = {
+  id: 'all',
+  title: 'All Subjects',
+  subtitle: 'Mixed questions from every chapter',
+  icon: '🎯',
+  color: '#8B5CF6',
+  gradient: 'linear-gradient(135deg,#8B5CF6,#A78BFA)',
+  chapterIds: [],
+  stats: '100 questions · all chapters combined',
+  exam: 'All Exams',
+};
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────────
 function getInitials(name) {
@@ -403,6 +419,7 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
                 display: 'flex', alignItems: 'center',
                 padding: '9px 12px', borderRadius: 10, border: 'none',
                 cursor: 'pointer', textAlign: 'left', marginBottom: 2,
+                // highlight mocktests nav item same as 'tests' when on mock page
                 background: active === item.id ? C.primary : 'transparent',
                 color: active === item.id ? '#fff' : '#8BA3C5',
                 WebkitTransition: 'all .15s', transition: 'all .15s',
@@ -547,6 +564,82 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
   );
 }
 
+// ─── RTR SIMULATOR CARD ───────────────────────────────────────────────────────
+function RTRSimulatorCard() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <Link href="/rtr" style={{ textDecoration: 'none' }}>
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          background: C.sidebar,
+          border: `1px solid ${hovered ? C.primary : '#1E3A5F'}`,
+          borderRadius: 14,
+          padding: '18px 18px 16px',
+          cursor: 'pointer',
+          WebkitTransition: 'border-color .2s, box-shadow .2s',
+          transition: 'border-color .2s, box-shadow .2s',
+          boxShadow: hovered ? `0 6px 24px ${hexAlpha(C.primary, 0.18)}` : 'none',
+          display: 'block',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+          <span style={{ fontSize: 24, lineHeight: 1 }}>🎧</span>
+          <div>
+            <div style={{
+              fontFamily: 'monospace',
+              fontWeight: 600,
+              fontSize: 14,
+              color: hovered ? '#93C5FD' : '#fff',
+              WebkitTransition: 'color .2s',
+              transition: 'color .2s',
+              lineHeight: 1.2,
+            }}>
+              RTR(A) Simulator
+            </div>
+            <div style={{
+              fontFamily: 'monospace',
+              fontSize: 11,
+              color: '#64748B',
+              marginTop: 2,
+            }}>
+              Part 2 · Practical Exam
+            </div>
+          </div>
+        </div>
+        <div style={{
+          fontFamily: 'monospace',
+          fontSize: 12,
+          color: '#8BA3C5',
+          lineHeight: 1.6,
+          marginBottom: 12,
+        }}>
+          Practice ATC radio telephony with voice recognition. 6 phases — startup to landing.
+        </div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {[
+            { label: 'Voice', bg: hexAlpha('#1D4ED8', 0.35), color: '#93C5FD' },
+            { label: 'ICAO Phraseology', bg: hexAlpha('#10B981', 0.25), color: '#6EE7B7' },
+            { label: 'AI Scoring', bg: hexAlpha('#8B5CF6', 0.3), color: '#C4B5FD' },
+          ].map(tag => (
+            <span key={tag.label} style={{
+              fontFamily: 'monospace',
+              fontSize: 10,
+              fontWeight: 700,
+              padding: '2px 8px',
+              borderRadius: 6,
+              background: tag.bg,
+              color: tag.color,
+              display: 'inline-block',
+            }}>{tag.label}</span>
+          ))}
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
 function HomePage({ user, stats, recentResults, allResults, loading, onNavigate, isMobile, isTablet }) {
   const badge = getBadge(stats);
@@ -668,6 +761,8 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
 
         {/* Right column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+          {/* Air Regulations Notes card */}
           <div onClick={() => onNavigate('resources')} style={{
             background: `linear-gradient(135deg,#1D4ED8,#7C3AED)`,
             borderRadius: 14, padding: '16px 18px', cursor: 'pointer',
@@ -681,6 +776,10 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
             }}>Open Notes →</div>
           </div>
 
+          {/* RTR(A) Simulator card */}
+          <RTRSimulatorCard />
+
+          {/* User profile card */}
           {user && (
             <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: 16 }}>
               <div style={{ fontWeight: 800, fontSize: 13, color: C.text, marginBottom: 12 }}>👤 Your Profile</div>
@@ -709,6 +808,7 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
             </div>
           )}
 
+          {/* Recent tests card */}
           <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, overflow: 'hidden', flex: 1 }}>
             <div style={{
               padding: '14px 16px', borderBottom: `1px solid ${C.border}`,
@@ -797,7 +897,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
                       ? <span style={{ background: hexAlpha('#ffffff', 0.3), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}>🎯 Full Paper</span>
                       : attempted > 0
                         ? <span style={{ background: hexAlpha('#ffffff', 0.3), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}>{attempted}/{subChapters.length} done</span>
-                        : <span style={{ background: hexAlpha('#ffffff', 0.2), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}>Not started</span>}
+                        : <span style={{ background: hexAlpha('#ffffff', 0.2), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}></span>}
                 </div>
                 <div style={{ color: '#fff', fontWeight: 800, fontSize: 17, marginTop: 12, marginBottom: 3 }}>{sub.title}</div>
                 <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{sub.subtitle}</div>
@@ -822,7 +922,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
                   fontWeight: 700, fontSize: 13, cursor: 'pointer',
                   WebkitAppearance: 'none', appearance: 'none',
                 }}>
-                  {sub.comingSoon ? '🚧 Coming Soon →' : sub.isMock ? '🎯 Start Mock Test →' : '📚 View Chapters →'}
+                  {sub.comingSoon ? '🚧 Coming Soon →' : sub.isMock ? '🎯 Choose Subject & Start →' : '📚 View Chapters →'}
                 </button>
               </div>
             </div>
@@ -834,7 +934,6 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
 }
 
 // ─── GENERIC SUBJECT CHAPTER LIST ─────────────────────────────────────────────
-// Works for ALL subjects — reads parts & chapterIds from the subject config
 function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest, onBack, isMobile }) {
   const [search, setSearch] = useState('');
 
@@ -848,7 +947,6 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
     !search || c.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Build groups from subject.parts (each part now carries its own chapterIds)
   function getGroups() {
     if (!subject.parts || subject.parts.length === 0) {
       return [{ label: subject.title, color: subject.color, chapters: filtered }];
@@ -864,7 +962,6 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
 
   const groups = getGroups();
 
-  // Stats
   const attempted = subjectChapters.filter(c => allResults.some(r => r.chapterId === c.id)).length;
   const allPcts = allResults
     .filter(r => subject.chapterIds.includes(r.chapterId) && r.total > 0)
@@ -874,7 +971,6 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
 
   return (
     <div>
-      {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, gap: 12 }}>
         <button onClick={onBack} style={{
           width: 38, height: 38, borderRadius: 10, background: C.card,
@@ -897,7 +993,6 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
         </div>
       </div>
 
-      {/* Search */}
       <div style={{
         display: 'flex', alignItems: 'center', background: C.card,
         borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, marginBottom: 18,
@@ -911,7 +1006,6 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
         />
       </div>
 
-      {/* Stats row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10, marginBottom: 22 }}>
         {[
           { icon: '📚', val: subjectChapters.length, label: 'Total Chapters' },
@@ -932,7 +1026,6 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
         ))}
       </div>
 
-      {/* Chapter groups */}
       {groups.map(group => (
         <div key={group.label} style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}>
@@ -949,7 +1042,6 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
             {group.chapters.map(ch => {
               const best = getBest(ch.id);
               const attempts = allResults.filter(r => r.chapterId === ch.id).length;
-              // Extract a short number from the chapter id (e.g. "ch01"→"1", "met03"→"3", "nav07"→"7")
               const chNum = ch.id.replace(/^[a-z]+/i, '').replace(/^0+/, '') || ch.id;
               return (
                 <div key={ch.id} onClick={() => onStartTest(ch.id)}
@@ -1014,25 +1106,162 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
   );
 }
 
+// ─── MOCK TEST SUBJECT SELECTOR ───────────────────────────────────────────────
+function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
+  const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
+
+  const options = [
+    ...SUBJECTS.filter(s => !s.isMock && !s.comingSoon),
+    MOCK_ALL_OPTION,
+  ];
+
+  return (
+    <div style={{ maxWidth: 800, margin: '0 auto' }}>
+      <button onClick={onBack} style={{
+        ...btnBase,
+        marginBottom: 20,
+        background: C.card,
+        border: `1px solid ${C.border}`,
+        borderRadius: 10,
+        padding: '7px 16px',
+        fontSize: 13,
+        color: C.text,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+      }}>← Back to Tests</button>
+
+      <div style={{
+        background: `linear-gradient(120deg,${C.sidebar} 0%,${C.purple} 100%)`,
+        borderRadius: 18,
+        padding: isMobile ? '20px 18px' : '24px 28px',
+        marginBottom: 24,
+      }}>
+        <div style={{ fontSize: isMobile ? 22 : 28, marginBottom: 8 }}>🎯</div>
+        <div style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? 18 : 22, marginBottom: 6 }}>
+          Mock Test — Choose a Subject
+        </div>
+        <div style={{ color: '#C4B5FD', fontSize: 13, lineHeight: 1.6 }}>
+          Select a subject below to generate a 100-question DGCA-style mock paper from that topic.
+          Choose "All Subjects" for a mixed paper covering every chapter.
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
+          {[['❓', '100 Questions'], ['⏱️', '120 Minutes'], ['💡', 'Instant Results'], ['🔀', 'Randomised']].map(([icon, label]) => (
+            <span key={label} style={{
+              background: hexAlpha('#ffffff', 0.15),
+              color: '#fff',
+              border: `1px solid ${hexAlpha('#ffffff', 0.2)}`,
+              padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, display: 'inline-block',
+            }}>{icon} {label}</span>
+          ))}
+        </div>
+      </div>
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(230px,1fr))',
+        gap: 14,
+      }}>
+        {options.map((sub) => {
+          const isAll = sub.id === 'all';
+          return (
+            <div
+              key={sub.id}
+              onClick={() => onSelectSubject(sub)}
+              style={{
+                background: C.card,
+                borderRadius: 16,
+                border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : `1px solid ${C.border}`,
+                overflow: 'hidden',
+                cursor: 'pointer',
+                WebkitTransition: 'transform .18s, box-shadow .18s',
+                transition: 'transform .18s, box-shadow .18s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-3px)';
+                e.currentTarget.style.boxShadow = `0 10px 28px ${hexAlpha(sub.color, 0.16)}`;
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = 'none';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <div style={{ background: sub.gradient, padding: '18px 18px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: 46, height: 46, borderRadius: 12,
+                    background: hexAlpha('#ffffff', 0.25),
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24,
+                  }}>{sub.icon}</div>
+                  <span style={{
+                    background: hexAlpha('#ffffff', 0.25),
+                    color: '#fff', fontSize: 10, fontWeight: 700,
+                    padding: '3px 10px', borderRadius: 20, display: 'inline-block',
+                  }}>{isAll ? '🎲 Mixed' : sub.exam}</span>
+                </div>
+                <div style={{ color: '#fff', fontWeight: 800, fontSize: 15, marginTop: 10, marginBottom: 2 }}>{sub.title}</div>
+                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 11 }}>{sub.subtitle}</div>
+              </div>
+              <div style={{ padding: '12px 18px 16px' }}>
+                <div style={{ fontSize: 11, color: C.muted, marginBottom: 12 }}>{sub.stats}</div>
+                <button
+                  onClick={e => { e.stopPropagation(); onSelectSubject(sub); }}
+                  style={{
+                    ...btnBase,
+                    width: '100%',
+                    padding: '9px 0',
+                    background: sub.gradient,
+                    borderRadius: 10,
+                    color: '#fff',
+                    fontWeight: 700,
+                    fontSize: 13,
+                  }}
+                >
+                  {isAll ? '🎯 Start Combined Test →' : `📝 Start ${sub.title} Test →`}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── MOCK TEST PAGE ───────────────────────────────────────────────────────────
 function MockTestPage({ onBack, isMobile }) {
-  const TOTAL_TIME = 3600;
-  const TOTAL_Q = 50;
+  const TOTAL_TIME = 7200;
+  const TOTAL_Q = 100;
 
-  const [pool, setPool] = useState(() => buildMockPool(TOTAL_Q));
-  const [screen, setScreen] = useState('intro');
+  const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
+
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [pool, setPool] = useState([]);
+  const [screen, setScreen] = useState('subjectSelect');
   const [answers, setAnswers] = useState({});
   const [currentQ, setCurrentQ] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const timerRef = useRef(null);
 
-  function resetMock() {
-    clearInterval(timerRef.current);
-    setPool(buildMockPool(TOTAL_Q));
+  function handleSubjectSelect(subject) {
+    const chapterIds = subject.id === 'all' ? null : subject.chapterIds;
+    const newPool = buildMockPool(TOTAL_Q, chapterIds);
+    setSelectedSubject(subject);
+    setPool(newPool);
     setAnswers({});
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
     setScreen('intro');
+  }
+
+  function resetMock() {
+    clearInterval(timerRef.current);
+    setSelectedSubject(null);
+    setPool([]);
+    setAnswers({});
+    setCurrentQ(0);
+    setTimeLeft(TOTAL_TIME);
+    setScreen('subjectSelect');
   }
 
   useEffect(() => {
@@ -1062,7 +1291,7 @@ function MockTestPage({ onBack, isMobile }) {
   const scorePct = pool.length ? Math.round((score / pool.length) * 100) : 0;
   const answered = Object.keys(answers).length;
   const notAnswered = pool.length - answered;
-  const wrong = pool.length - score - notAnswered;
+  const wrong = answered - score;
 
   function getDotState(i) {
     if (screen === 'finish') {
@@ -1074,30 +1303,72 @@ function MockTestPage({ onBack, isMobile }) {
     return 'default';
   }
 
-  const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
+  if (screen === 'subjectSelect') {
+    return (
+      <MockSubjectSelector
+        onSelectSubject={handleSubjectSelect}
+        onBack={onBack}
+        isMobile={isMobile}
+      />
+    );
+  }
 
   if (screen === 'intro') return (
     <div style={{ maxWidth: 520, margin: '0 auto', padding: isMobile ? '0 4px' : 0 }}>
-      <button onClick={onBack} style={{
+      <button onClick={() => setScreen('subjectSelect')} style={{
         ...btnBase, marginBottom: 18, background: C.card,
         border: `1px solid ${C.border}`, borderRadius: 10,
         padding: '7px 14px', fontSize: 13, color: C.text,
-      }}>← Back to Tests</button>
+      }}>← Change Subject</button>
+
       <div style={{
         background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
         padding: isMobile ? '24px 18px' : '32px 28px', textAlign: 'center',
       }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          background: hexAlpha(selectedSubject?.color || C.purple, 0.08),
+          border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`,
+          borderRadius: 20, padding: '5px 14px', marginBottom: 16,
+        }}>
+          <span style={{ fontSize: 16 }}>{selectedSubject?.icon}</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: selectedSubject?.color || C.purple }}>
+            {selectedSubject?.title || 'All Subjects'}
+          </span>
+        </div>
+
         <div style={{ fontSize: 48, marginBottom: 14 }}>🎯</div>
         <h2 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 900, color: C.text }}>DGCA Mock Test</h2>
-        <p style={{ color: C.muted, fontSize: 13, marginBottom: 20 }}>Full-length paper combining all Air Regulations & Human Factors topics.</p>
+        <p style={{ color: C.muted, fontSize: 13, marginBottom: 20 }}>
+          {selectedSubject?.id === 'all'
+            ? 'Full-length paper combining all subjects & chapters.'
+            : `100 questions from ${selectedSubject?.title} — DGCA exam style.`}
+        </p>
+
+        {pool.length < TOTAL_Q && (
+          <div style={{
+            background: hexAlpha(C.accent, 0.08),
+            border: `1px solid ${hexAlpha(C.accent, 0.25)}`,
+            borderRadius: 10, padding: '10px 14px', marginBottom: 16, fontSize: 12, color: C.text,
+          }}>
+            ⚠️ Only {pool.length} questions available for this subject. The test will use all of them.
+          </div>
+        )}
+
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
-          {[['❓', '50 Questions'], ['⏱️', '60 Minutes'], ['📚', 'All Chapters'], ['💡', 'Instant Results']].map(([icon, label]) => (
+          {[
+            ['❓', `${pool.length} Questions`],
+            ['⏱️', '120 Minutes'],
+            ['📚', selectedSubject?.id === 'all' ? 'All Chapters' : selectedSubject?.title],
+            ['💡', 'Instant Results'],
+          ].map(([icon, label]) => (
             <span key={label} style={{
               background: C.primaryLight, color: C.primary, border: `1px solid ${hexAlpha(C.primary, 0.19)}`,
               padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block',
             }}>{icon} {label}</span>
           ))}
         </div>
+
         <ul style={{ textAlign: 'left', listStyle: 'none', padding: 0, margin: '0 0 24px' }}>
           {[
             'Each question has 4 options — choose the best answer',
@@ -1108,16 +1379,28 @@ function MockTestPage({ onBack, isMobile }) {
             <li key={r} style={{ background: C.bg, borderRadius: 8, padding: '9px 13px', fontSize: 13, color: C.text, marginBottom: 7 }}>✔ {r}</li>
           ))}
         </ul>
-        <button onClick={() => setScreen('test')} style={{
-          ...btnBase, width: '100%', padding: '13px',
-          background: `linear-gradient(135deg,${C.primary},${C.purple})`,
-          borderRadius: 12, color: '#fff', fontSize: 15, fontWeight: 800,
-        }}>🚀 Start Mock Test →</button>
-        <button onClick={onBack} style={{
+
+        <button
+          onClick={() => pool.length > 0 ? setScreen('test') : null}
+          disabled={pool.length === 0}
+          style={{
+            ...btnBase, width: '100%', padding: '13px',
+            background: pool.length === 0
+              ? C.border
+              : `linear-gradient(135deg,${selectedSubject?.color || C.primary},${C.purple})`,
+            borderRadius: 12, color: pool.length === 0 ? C.muted : '#fff',
+            fontSize: 15, fontWeight: 800,
+            cursor: pool.length === 0 ? 'not-allowed' : 'pointer',
+          }}
+        >
+          {pool.length === 0 ? '⚠️ No questions available' : '🚀 Start Mock Test →'}
+        </button>
+
+        <button onClick={() => setScreen('subjectSelect')} style={{
           ...btnBase, marginTop: 10, width: '100%', padding: '11px',
           background: 'none', border: `1px solid ${C.border}`,
           borderRadius: 12, color: C.muted, fontSize: 13,
-        }}>← Back to Subjects</button>
+        }}>← Choose Different Subject</button>
       </div>
     </div>
   );
@@ -1128,7 +1411,6 @@ function MockTestPage({ onBack, isMobile }) {
     const isAnswered = selected !== undefined;
     return (
       <div>
-        {/* Sticky header */}
         <div style={{
           position: 'sticky', top: 56, zIndex: 80,
           background: 'rgba(255,255,255,0.97)',
@@ -1143,7 +1425,16 @@ function MockTestPage({ onBack, isMobile }) {
             borderRadius: 8, padding: '6px 12px', color: C.text, fontSize: 13, flexShrink: 0,
           }}>← Exit</button>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-            {!isMobile && <span style={{ fontWeight: 700, fontSize: 13, color: C.text }}>🎯 Mock Test</span>}
+            {!isMobile && (
+              <span style={{
+                fontSize: 11, fontWeight: 700,
+                background: hexAlpha(selectedSubject?.color || C.purple, 0.1),
+                color: selectedSubject?.color || C.purple,
+                padding: '3px 10px', borderRadius: 20, display: 'inline-flex', alignItems: 'center', gap: 4,
+              }}>
+                {selectedSubject?.icon} {selectedSubject?.title}
+              </span>
+            )}
             <span style={{ fontSize: 12, color: C.muted, whiteSpace: 'nowrap' }}>{answered}/{pool.length} answered</span>
           </div>
           <div style={{ position: 'relative', width: 50, height: 50, flexShrink: 0 }}>
@@ -1163,10 +1454,14 @@ function MockTestPage({ onBack, isMobile }) {
         </div>
 
         <div style={{ height: 3, background: C.border, borderRadius: 99, marginBottom: 16 }}>
-          <div style={{ height: '100%', width: `${((currentQ + 1) / pool.length) * 100}%`, background: C.primary, borderRadius: 99, transition: 'width .3s' }} />
+          <div style={{
+            height: '100%',
+            width: `${pool.length > 0 ? ((currentQ + 1) / pool.length) * 100 : 0}%`,
+            background: selectedSubject?.color || C.primary,
+            borderRadius: 99, transition: 'width .3s',
+          }} />
         </div>
 
-        {/* Q dots */}
         <div style={{
           display: 'flex', flexWrap: isMobile ? 'nowrap' : 'wrap',
           overflowX: isMobile ? 'auto' : 'visible',
@@ -1194,9 +1489,15 @@ function MockTestPage({ onBack, isMobile }) {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
             <span style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: .8 }}>Q {currentQ + 1} / {pool.length}</span>
-            {q && <span style={{ fontSize: 11, background: C.primaryLight, color: C.primary, padding: '2px 9px', borderRadius: 20, fontWeight: 700, display: 'inline-block' }}>
-              Ch {q.id?.split('_')[0]?.replace('ch', '') || '?'}
-            </span>}
+            {q && (
+              <span style={{
+                fontSize: 11, padding: '2px 9px', borderRadius: 20, fontWeight: 700, display: 'inline-block',
+                background: hexAlpha(selectedSubject?.color || C.primary, 0.1),
+                color: selectedSubject?.color || C.primary,
+              }}>
+                {selectedSubject?.icon} {selectedSubject?.title}
+              </span>
+            )}
           </div>
           <div style={{ fontSize: isMobile ? 15 : 16, fontWeight: 700, color: C.text, lineHeight: 1.6, marginBottom: 18 }}>{q?.question}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1273,12 +1574,25 @@ function MockTestPage({ onBack, isMobile }) {
         background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
         padding: isMobile ? '24px 18px' : '32px 28px', textAlign: 'center',
       }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          background: hexAlpha(selectedSubject?.color || C.purple, 0.08),
+          border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`,
+          borderRadius: 20, padding: '4px 12px', marginBottom: 14,
+        }}>
+          <span style={{ fontSize: 14 }}>{selectedSubject?.icon}</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: selectedSubject?.color || C.purple }}>
+            {selectedSubject?.title}
+          </span>
+        </div>
+
         <div style={{ fontSize: 48, marginBottom: 10 }}>{scorePct >= 80 ? '🏆' : scorePct >= 50 ? '✈️' : '📚'}</div>
         <h2 style={{ margin: '0 0 4px', fontWeight: 900, fontSize: 20, color: C.text }}>
           {scorePct >= 80 ? 'Excellent!' : scorePct >= 50 ? 'Good Effort!' : 'Keep Practicing!'}
         </h2>
         <div style={{ fontSize: 44, fontWeight: 900, color: getScoreColor(scorePct), lineHeight: 1 }}>{score}/{pool.length}</div>
         <div style={{ fontSize: 20, fontWeight: 700, color: getScoreColor(scorePct), marginBottom: 20 }}>{scorePct}%</div>
+
         <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
           {[
             { icon: '✓', val: score, label: 'Correct', bg: '#EFF6FF', co: C.primary, br: hexAlpha(C.primary, 0.25) },
@@ -1295,6 +1609,7 @@ function MockTestPage({ onBack, isMobile }) {
             </div>
           ))}
         </div>
+
         <div style={{
           display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '4px 4px',
           marginBottom: 20,
@@ -1313,46 +1628,61 @@ function MockTestPage({ onBack, isMobile }) {
             );
           })}
         </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 14, marginBottom: 20 }}>
+          {[
+            { color: C.primary, label: 'Correct' },
+            { color: C.red, label: 'Wrong' },
+            { color: hexAlpha(C.purple, 0.3), label: 'Skipped' },
+          ].map(l => (
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ width: 12, height: 12, borderRadius: 3, background: l.color, display: 'inline-block' }} />
+              <span style={{ fontSize: 11, color: C.muted }}>{l.label}</span>
+            </div>
+          ))}
+        </div>
+
         <button onClick={onBack} style={{
           width: '100%', padding: '12px',
           background: `linear-gradient(135deg,${C.primary},${C.purple})`,
           border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer',
           marginBottom: 10, WebkitAppearance: 'none', appearance: 'none',
         }}>Back to Tests</button>
+
         <button onClick={resetMock} style={{
           width: '100%', padding: '11px',
           background: 'none', border: `1px solid ${C.border}`,
           borderRadius: 12, color: C.muted, fontSize: 13, cursor: 'pointer',
           WebkitAppearance: 'none', appearance: 'none',
-        }}>🎲 Retry with New Questions</button>
+        }}>🔄 Try Another Subject</button>
       </div>
     </div>
   );
 }
 
-// ─── CHAPTER TESTS PAGE (router — now generic for all subjects) ───────────────
-function ChapterTestsPage({ allResults, onStartTest, isMobile }) {
-  const [subView, setSubView] = useState('subjects');
+// ─── CHAPTER TESTS PAGE ───────────────────────────────────────────────────────
+// ✅ FIX: accepts initialSubView prop so 'mocktests' nav item can open mock directly
+function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 'subjects' }) {
+  const [subView, setSubView] = useState(initialSubView);
+
+  // Keep in sync if parent re-navigates with a new initialSubView
+  useEffect(() => {
+    setSubView(initialSubView);
+  }, [initialSubView]);
 
   const activeSubject = SUBJECTS.find(s => s.id === subView);
 
-  // Coming soon
   if (activeSubject?.comingSoon) {
     return <ComingSoonPage subject={activeSubject} onBack={() => setSubView('subjects')} />;
   }
 
-  // Mock test
   if (subView === 'mock') {
     return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} />;
   }
 
-  // Any subject with chapterIds — use the generic chapter list
   if (activeSubject && activeSubject.chapterIds.length > 0) {
-    // Chapters that exist in the global chapters array
     const known = chapters.filter(c => activeSubject.chapterIds.includes(c.id));
     const knownIds = known.map(c => c.id);
-
-    // Build stub entries for chapters not yet in data (shows UI, 0 questions until added)
     const stubs = activeSubject.chapterIds
       .filter(id => !knownIds.includes(id))
       .map((id, i) => ({
@@ -1376,7 +1706,6 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile }) {
     );
   }
 
-  // Default — subject selector grid
   return (
     <SubjectSelector
       allResults={allResults}
@@ -1394,6 +1723,7 @@ function ProgressPage({ stats, allResults, loading, isMobile }) {
     const best = rs.length ? Math.max(...rs.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)) : null;
     return { ...ch, best, attempts: rs.length };
   });
+
   return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12, marginBottom: 20 }}>
@@ -1476,7 +1806,8 @@ export default function DashboardPage() {
   const [allResults, setAll] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState('home');
-  const [subPage, setSubPage] = useState('');
+  // ✅ FIX: subPage drives ChapterTestsPage's initialSubView
+  const [subPage, setSubPage] = useState('subjects');
 
   useEffect(() => {
     const u = getUser();
@@ -1494,8 +1825,21 @@ export default function DashboardPage() {
     if (newPage === 'results') { router.push('/results'); return; }
     if (newPage === 'leaderboard') { router.push('/leaderboard'); return; }
     if (chapterId) { router.push(`/test/${chapterId}`); return; }
+
+    // ✅ FIX: 'mocktests' sidebar item → go to tests page with mock sub-view
+    if (newPage === 'mocktests') {
+      setPage('tests');
+      setSubPage('mock');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     setPage(newPage);
-    setSubPage('');
+    // Reset subPage to 'subjects' for normal test navigation,
+    // but keep it untouched for any other page (progress, resources, etc.)
+    if (newPage === 'tests') {
+      setSubPage('subjects');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -1503,10 +1847,21 @@ export default function DashboardPage() {
   const topBarHeight = 56;
   const bottomNavHeight = isMobile ? 56 : 0;
 
+  // ✅ FIX: determine which nav item should appear "active" in sidebar
+  // When we're on the tests page showing the mock sub-view, highlight 'mocktests'
+  const activeNavItem = (page === 'tests' && subPage === 'mock') ? 'mocktests' : page;
+
   function renderPage() {
     switch (page) {
       case 'tests':
-        return <ChapterTestsPage allResults={allResults} onStartTest={id => router.push(`/test/${id}`)} isMobile={isMobile} />;
+        return (
+          <ChapterTestsPage
+            allResults={allResults}
+            onStartTest={id => router.push(`/test/${id}`)}
+            isMobile={isMobile}
+            initialSubView={subPage}  // ✅ FIX: pass subPage as initialSubView
+          />
+        );
       case 'progress':
         return <ProgressPage stats={stats} allResults={allResults} loading={loading} isMobile={isMobile} />;
       case 'resources':
@@ -1515,7 +1870,6 @@ export default function DashboardPage() {
       case 'classes':
         return <LecturesPage user={user} />;
       case 'practice':
-      case 'mocktests':
         return <Placeholder page={page} />;
       case 'doubt':
         return <div style={{ minHeight: 500 }}><DoubtChat studentId={user?.id} /></div>;
@@ -1553,8 +1907,9 @@ export default function DashboardPage() {
         body { overflow-x: hidden; }
       `}</style>
 
+      {/* ✅ FIX: pass activeNavItem so 'Mock Tests' highlights correctly */}
       <Sidebar
-        active={page}
+        active={activeNavItem}
         onChange={handleNav}
         onLogout={handleLogout}
         user={user}
@@ -1609,7 +1964,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {isMobile && <BottomNav active={page} onChange={handleNav} />}
+      {isMobile && <BottomNav active={activeNavItem} onChange={handleNav} />}
     </div>
   );
 }

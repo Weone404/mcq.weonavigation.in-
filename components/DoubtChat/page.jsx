@@ -57,7 +57,7 @@ export default function DoubtChat({ compact = false }) {
     const [messages, setMessages] = useState([
         {
             role: "assistant",
-            text: "👋 Hello! I'm **EduBot**, your DGCA study assistant.\n\nAsk me any aviation question and I'll answer — and read it out loud for you!",
+            text: "👋 Hello! I'm your **captain** here, your DGCA study assistant.\n\nAsk me any aviation question and I'll answer — and read it out loud for you!",
             id: Date.now(),
         },
     ]);

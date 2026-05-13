@@ -86,13 +86,15 @@ const SUBJECTS = [
     parts: [
       { label: 'Part I – Air Regulations', color: '#1D4ED8', chapterIds: ['ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20', 'ch21', 'ch22'] },
       { label: 'Part II – Human Factors', color: '#8B5CF6', chapterIds: ['ch23', 'ch24', 'ch25', 'ch26'] },
+      { label: 'Part III – QB Extra', color: '#0EA5E9', chapterIds: ['qb01', 'qb02', 'qb03', 'qb04', 'qb05', 'qb06', 'qb07', 'qb08', 'qb09', 'qb10', 'qb11', 'qb12', 'qb13'] },
     ],
     chapterIds: [
       'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10',
       'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20',
       'ch21', 'ch22', 'ch23', 'ch24', 'ch25', 'ch26',
+      'qb01', 'qb02', 'qb03', 'qb04', 'qb05', 'qb06', 'qb07', 'qb08', 'qb09', 'qb10', 'qb11', 'qb12', 'qb13',
     ],
-    stats: '26 Chapters · 200+ MCQs',
+    stats: '39 Chapters · 500+ MCQs',
     exam: 'ATPL / CPL / DGCA',
   },
   {
@@ -102,13 +104,11 @@ const SUBJECTS = [
     icon: '🌦️',
     color: '#0EA5E9',
     gradient: 'linear-gradient(135deg,#0EA5E9,#38BDF8)',
-    parts: [
-      { label: 'Part I – Atmosphere & Weather', color: '#0EA5E9', chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06'] },
-      { label: 'Part II – Aviation Meteorology', color: '#0284C7', chapterIds: ['met07', 'met08', 'met09', 'met10'] },
-    ],
-    chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08', 'met09', 'met10'],
+    parts: [],
+    chapterIds: [],
     stats: '10 Chapters · 150+ MCQs',
     exam: 'ATPL / CPL',
+    // comingSoon: true,
   },
   {
     id: 'navigation',
@@ -118,11 +118,14 @@ const SUBJECTS = [
     color: '#10B981',
     gradient: 'linear-gradient(135deg,#10B981,#34D399)',
     parts: [
-      { label: 'Part I – General Navigation', color: '#10B981', chapterIds: ['nav01', 'nav02', 'nav03', 'nav04', 'nav05', 'nav06'] },
-      { label: 'Part II – Radio Navigation', color: '#059669', chapterIds: ['nav07', 'nav08', 'nav09', 'nav10', 'nav11', 'nav12'] },
+      { label: 'Part I – General Navigation', color: '#10B981', chapterIds: ['gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10'] },
+      { label: 'Part II – Radio Navigation', color: '#059669', chapterIds: ['rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10'] },
     ],
-    chapterIds: ['nav01', 'nav02', 'nav03', 'nav04', 'nav05', 'nav06', 'nav07', 'nav08', 'nav09', 'nav10', 'nav11', 'nav12'],
-    stats: '12 Chapters · 180+ MCQs',
+    chapterIds: [
+      'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10',
+      'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+    ],
+    stats: '20 Chapters · 400+ MCQs',
     exam: 'ATPL / CPL',
   },
   {
@@ -133,11 +136,12 @@ const SUBJECTS = [
     color: '#F59E0B',
     gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
     parts: [
-      { label: 'Part I – Airframe & Systems', color: '#F59E0B', chapterIds: ['tech01', 'tech02', 'tech03', 'tech04', 'tech05', 'tech06'] },
-      { label: 'Part II – Powerplant', color: '#D97706', chapterIds: ['tech07', 'tech08', 'tech09', 'tech10', 'tech11'] },
+      { label: 'Part I – Aerodynamics & Structures', color: '#F59E0B', chapterIds: ['tg01', 'tg02'] },
+      { label: 'Part II – Engines & Propellers', color: '#D97706', chapterIds: ['tg03', 'tg04'] },
+      { label: 'Part III – Aircraft Systems', color: '#B45309', chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'] },
     ],
-    chapterIds: ['tech01', 'tech02', 'tech03', 'tech04', 'tech05', 'tech06', 'tech07', 'tech08', 'tech09', 'tech10', 'tech11'],
-    stats: '11 Chapters · 160+ MCQs',
+    chapterIds: ['tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08'],
+    stats: '8 Chapters · 200+ MCQs',
     exam: 'AME / ATPL',
   },
   {
@@ -147,13 +151,11 @@ const SUBJECTS = [
     icon: '📻',
     color: '#EF4444',
     gradient: 'linear-gradient(135deg,#EF4444,#F87171)',
-    parts: [
-      { label: 'Part I – RTF Procedures', color: '#EF4444', chapterIds: ['rtf01', 'rtf02', 'rtf03', 'rtf04'] },
-      { label: 'Part II – Phraseology', color: '#DC2626', chapterIds: ['rtf05', 'rtf06', 'rtf07', 'rtf08'] },
-    ],
-    chapterIds: ['rtf01', 'rtf02', 'rtf03', 'rtf04', 'rtf05', 'rtf06', 'rtf07', 'rtf08'],
+    parts: [],
+    chapterIds: [],
     stats: '8 Chapters · 120+ MCQs',
     exam: 'RTR (Aero)',
+    // comingSoon: true,
   },
   {
     id: 'mock',
@@ -177,7 +179,15 @@ const MOCK_ALL_OPTION = {
   icon: '🎯',
   color: '#8B5CF6',
   gradient: 'linear-gradient(135deg,#8B5CF6,#A78BFA)',
-  chapterIds: [],
+  chapterIds: [
+    'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10',
+    'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20',
+    'ch21', 'ch22', 'ch23', 'ch24', 'ch25', 'ch26',
+    'qb01', 'qb02', 'qb03', 'qb04', 'qb05', 'qb06', 'qb07', 'qb08', 'qb09', 'qb10', 'qb11', 'qb12', 'qb13',
+    'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10',
+    'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+    'tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08',
+  ],
   stats: '100 questions · all chapters combined',
   exam: 'All Exams',
 };
@@ -1111,7 +1121,7 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
 
   const options = [
-    ...SUBJECTS.filter(s => !s.isMock && !s.comingSoon),
+    ...SUBJECTS.filter(s => !s.isMock),
     MOCK_ALL_OPTION,
   ];
 
@@ -1164,20 +1174,23 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
       }}>
         {options.map((sub) => {
           const isAll = sub.id === 'all';
+          const isComingSoon = sub.comingSoon;
           return (
             <div
               key={sub.id}
-              onClick={() => onSelectSubject(sub)}
+              onClick={() => !isComingSoon && onSelectSubject(sub)}
               style={{
                 background: C.card,
                 borderRadius: 16,
                 border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : `1px solid ${C.border}`,
                 overflow: 'hidden',
-                cursor: 'pointer',
+                cursor: isComingSoon ? 'not-allowed' : 'pointer',
+                opacity: isComingSoon ? 0.55 : 1,
                 WebkitTransition: 'transform .18s, box-shadow .18s',
                 transition: 'transform .18s, box-shadow .18s',
               }}
               onMouseEnter={e => {
+                if (isComingSoon) return;
                 e.currentTarget.style.transform = 'translateY(-3px)';
                 e.currentTarget.style.boxShadow = `0 10px 28px ${hexAlpha(sub.color, 0.16)}`;
               }}
@@ -1197,27 +1210,33 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
                     background: hexAlpha('#ffffff', 0.25),
                     color: '#fff', fontSize: 10, fontWeight: 700,
                     padding: '3px 10px', borderRadius: 20, display: 'inline-block',
-                  }}>{isAll ? '🎲 Mixed' : sub.exam}</span>
+                  }}>
+                    {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎲 Mixed' : sub.exam}
+                  </span>
                 </div>
                 <div style={{ color: '#fff', fontWeight: 800, fontSize: 15, marginTop: 10, marginBottom: 2 }}>{sub.title}</div>
                 <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 11 }}>{sub.subtitle}</div>
               </div>
               <div style={{ padding: '12px 18px 16px' }}>
-                <div style={{ fontSize: 11, color: C.muted, marginBottom: 12 }}>{sub.stats}</div>
+                <div style={{ fontSize: 11, color: C.muted, marginBottom: 12 }}>
+                  {isComingSoon ? 'Questions being prepared by our content team' : sub.stats}
+                </div>
                 <button
-                  onClick={e => { e.stopPropagation(); onSelectSubject(sub); }}
+                  onClick={e => { e.stopPropagation(); if (!isComingSoon) onSelectSubject(sub); }}
+                  disabled={isComingSoon}
                   style={{
-                    ...btnBase,
+                    border: 'none', cursor: isComingSoon ? 'not-allowed' : 'pointer',
+                    WebkitAppearance: 'none', appearance: 'none',
                     width: '100%',
                     padding: '9px 0',
-                    background: sub.gradient,
+                    background: isComingSoon ? C.border : sub.gradient,
                     borderRadius: 10,
-                    color: '#fff',
+                    color: isComingSoon ? C.muted : '#fff',
                     fontWeight: 700,
                     fontSize: 13,
                   }}
                 >
-                  {isAll ? '🎯 Start Combined Test →' : `📝 Start ${sub.title} Test →`}
+                  {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎯 Start Combined Test →' : `📝 Start ${sub.title} Test →`}
                 </button>
               </div>
             </div>
@@ -1275,9 +1294,14 @@ function MockTestPage({ onBack, isMobile }) {
     return () => clearInterval(timerRef.current);
   }, [screen]);
 
+  // REPLACE WITH:
+  const answeringRef = useRef(false);
   function handleAnswer(idx) {
     if (answers[currentQ] !== undefined) return;
+    if (answeringRef.current) return;
+    answeringRef.current = true;
     setAnswers(prev => ({ ...prev, [currentQ]: idx }));
+    setTimeout(() => { answeringRef.current = false; }, 400);
   }
   function submit() { clearInterval(timerRef.current); setScreen('finish'); }
 
@@ -1293,13 +1317,14 @@ function MockTestPage({ onBack, isMobile }) {
   const notAnswered = pool.length - answered;
   const wrong = answered - score;
 
+  // REPLACE WITH:
   function getDotState(i) {
     if (screen === 'finish') {
       if (answers[i] === undefined) return 'unanswered';
       return answers[i] === pool[i]?.correct ? 'correct' : 'wrong';
     }
     if (i === currentQ) return 'active';
-    if (answers[i] !== undefined) return answers[i] === pool[i]?.correct ? 'correct' : 'wrong';
+    if (answers[i] !== undefined) return 'answered';
     return 'default';
   }
 
@@ -1469,9 +1494,10 @@ function MockTestPage({ onBack, isMobile }) {
         }}>
           {pool.map((_, i) => {
             const ds = getDotState(i);
-            const bg = ds === 'correct' ? C.primary : ds === 'wrong' ? C.red : ds === 'active' ? C.primaryLight : C.card;
-            const co = ds === 'correct' || ds === 'wrong' ? '#fff' : ds === 'active' ? C.primary : C.muted;
-            const br = ds === 'active' ? `2px solid ${C.primary}` : `1px solid ${C.border}`;
+            // REPLACE WITH:
+            const bg = ds === 'answered' ? hexAlpha(C.primary, 0.18) : ds === 'correct' ? C.primary : ds === 'wrong' ? C.red : ds === 'active' ? C.primaryLight : C.card;
+            const co = ds === 'answered' ? C.primary : ds === 'correct' || ds === 'wrong' ? '#fff' : ds === 'active' ? C.primary : C.muted;
+            const br = ds === 'active' ? `2px solid ${C.primary}` : ds === 'answered' ? `1px solid ${hexAlpha(C.primary, 0.3)}` : `1px solid ${C.border}`;
             return (
               <button key={i} onClick={() => setCurrentQ(i)} style={{
                 ...btnBase,
@@ -1501,48 +1527,37 @@ function MockTestPage({ onBack, isMobile }) {
           </div>
           <div style={{ fontSize: isMobile ? 15 : 16, fontWeight: 700, color: C.text, lineHeight: 1.6, marginBottom: 18 }}>{q?.question}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            // FIND this line:
             {q?.options.map((opt, idx) => {
-              let bg = C.bg, border = `1px solid ${C.border}`, color = C.text;
-              if (isAnswered) {
-                if (idx === q.correct) { bg = '#EFF6FF'; border = `1px solid ${C.primary}`; color = C.primary; }
-                else if (idx === selected && selected !== q.correct) { bg = '#FEF2F2'; border = `1px solid ${C.red}`; color = C.red; }
-                else { bg = C.bg; color = C.muted; }
-              }
+              const isSelected = selected === idx;
               return (
-                <button key={idx} onClick={() => handleAnswer(idx)} disabled={isAnswered}
+                <button key={idx}
+                  onClick={() => { if (answers[currentQ] === undefined) handleAnswer(idx); }}
                   style={{
                     ...btnBase, display: 'flex', alignItems: 'center',
-                    background: bg, border, borderRadius: 10, padding: '11px 14px',
-                    cursor: isAnswered ? 'default' : 'pointer', textAlign: 'left', color, fontSize: 13,
-                    fontWeight: isAnswered && idx === q.correct ? 700 : 400,
+                    background: isSelected ? C.primaryLight : C.bg,
+                    border: isSelected ? `1px solid ${C.primary}` : `1px solid ${C.border}`,
+                    borderRadius: 10, padding: '11px 14px',
+                    cursor: isAnswered ? 'default' : 'pointer',
+                    textAlign: 'left', color: C.text, fontSize: 13, fontWeight: 400,
                     transition: 'all .15s',
+                    WebkitTapHighlightColor: 'transparent',
+                    userSelect: 'none', WebkitUserSelect: 'none',
                   }}>
                   <span style={{
                     width: 28, height: 28, borderRadius: 7,
-                    background: isAnswered && idx === q.correct ? C.primary
-                      : isAnswered && idx === selected && selected !== q.correct ? C.red
-                        : hexAlpha(C.primary, 0.08),
+                    background: isSelected ? C.primary : hexAlpha(C.primary, 0.08),
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: 11, fontWeight: 800,
-                    color: isAnswered && (idx === q.correct || (idx === selected && selected !== q.correct)) ? '#fff' : C.primary,
+                    color: isSelected ? '#fff' : C.primary,
                     flexShrink: 0, marginRight: 10,
                   }}>{['A', 'B', 'C', 'D'][idx]}</span>
                   <span style={{ flex: 1 }}>{opt}</span>
-                  {isAnswered && idx === q.correct && <span style={{ fontSize: 11, fontWeight: 700, color: C.primary, flexShrink: 0, marginLeft: 6 }}>✓</span>}
-                  {isAnswered && idx === selected && selected !== q.correct && <span style={{ fontSize: 11, fontWeight: 700, color: C.red, flexShrink: 0, marginLeft: 6 }}>✗</span>}
                 </button>
               );
             })}
           </div>
-          {isAnswered && (
-            <div style={{
-              marginTop: 10, background: '#EFF6FF',
-              border: `1px solid ${hexAlpha(C.primary, 0.19)}`, borderRadius: 10, padding: '12px 14px',
-            }}>
-              <div style={{ fontWeight: 700, fontSize: 12, color: C.primary, marginBottom: 3 }}>💡 Explanation</div>
-              <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>{q?.explanation}</div>
-            </div>
-          )}
+
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
@@ -1809,6 +1824,7 @@ export default function DashboardPage() {
   // ✅ FIX: subPage drives ChapterTestsPage's initialSubView
   const [subPage, setSubPage] = useState('subjects');
 
+
   useEffect(() => {
     const u = getUser();
     if (!u) { router.replace('/login'); return; }
@@ -1818,6 +1834,24 @@ export default function DashboardPage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [router]);
+
+  function handleLogout() { clearUser(); router.replace('/login'); }
+  useEffect(() => {
+    const u = getUser();
+    if (!u) { router.replace('/login'); return; }
+    setUserState(u);
+    Promise.all([getStats(u.email), getResults(u.email)])
+      .then(([s, r]) => { setStats(s); setAll(r); setRecent(r.slice(0, 5)); })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [router]);
+
+  // ✅ NEW — hide AliaWidget during mock test
+  useEffect(() => {
+    const isMockActive = page === 'tests' && subPage === 'mock';
+    document.body.setAttribute('data-hide-widget', isMockActive ? 'true' : 'false');
+    return () => document.body.removeAttribute('data-hide-widget');
+  }, [page, subPage]);
 
   function handleLogout() { clearUser(); router.replace('/login'); }
 

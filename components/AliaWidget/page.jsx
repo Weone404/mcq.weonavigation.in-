@@ -46,6 +46,7 @@ function stopSpeaking() {
 // ── Widget ────────────────────────────────────────────────────────────────────
 export default function AliaWidget() {
     const [open, setOpen] = useState(false);
+    const [hidden, setHidden] = useState(false);  // ✅ hide on mock test
     const [messages, setMessages] = useState([
         { role: 'bot', text: "Hi! I'm **EduBot** ✈️\nAsk me anything about DGCA aviation!", id: 1 }
     ]);
@@ -59,6 +60,32 @@ export default function AliaWidget() {
 
     const msgsRef = useRef(null);
     const inputRef = useRef(null);
+
+    // ✅ Watch body attribute set by DashboardPage when mock test is active
+    useEffect(() => {
+        function check() {
+            const shouldHide = document.body.getAttribute('data-hide-widget') === 'true';
+            setHidden(shouldHide);
+            // Close the panel too if we're hiding
+            if (shouldHide) {
+                setOpen(false);
+                stopSpeaking();
+                setSpeakingId(null);
+            }
+        }
+
+        // Run once on mount
+        check();
+
+        // Watch for future attribute changes
+        const observer = new MutationObserver(check);
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['data-hide-widget'],
+        });
+
+        return () => observer.disconnect();
+    }, []);
 
     // Scroll to bottom
     useEffect(() => {
@@ -74,6 +101,9 @@ export default function AliaWidget() {
 
     // Clear unread when opened
     useEffect(() => { if (open) setUnread(0); }, [open]);
+
+    // ✅ Don't render anything while hidden
+    if (hidden) return null;
 
     async function sendMessage(q) {
         const question = String(q || input).trim();

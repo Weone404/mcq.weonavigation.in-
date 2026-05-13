@@ -1,8 +1,7 @@
 {
-  "/dashboard/page": "app/dashboard/page.js",
-  "/rtr/page": "app/rtr/page.js",
-  "/rtr/practice/page": "app/rtr/practice/page.js",
+  "/page": "app/page.js",
   "/login/page": "app/login/page.js",
-  "/teacher/page": "app/teacher/page.js",
-  "/api/doubt/route": "app/api/doubt/route.js"
+  "/dashboard/page": "app/dashboard/page.js",
+  "/api/stats/route": "app/api/stats/route.js",
+  "/api/results/route": "app/api/results/route.js"
 }

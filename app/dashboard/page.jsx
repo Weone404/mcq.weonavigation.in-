@@ -1230,7 +1230,7 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
 
 // ─── MOCK TEST PAGE ───────────────────────────────────────────────────────────
 function MockTestPage({ onBack, isMobile }) {
-  const TOTAL_TIME = 7200;
+  const TOTAL_TIME = 6000;
   const TOTAL_Q = 100;
 
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
@@ -1358,7 +1358,7 @@ function MockTestPage({ onBack, isMobile }) {
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
           {[
             ['❓', `${pool.length} Questions`],
-            ['⏱️', '120 Minutes'],
+            ['⏱️', '100 Minutes'],
             ['📚', selectedSubject?.id === 'all' ? 'All Chapters' : selectedSubject?.title],
             ['💡', 'Instant Results'],
           ].map(([icon, label]) => (

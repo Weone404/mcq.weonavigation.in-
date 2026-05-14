@@ -1296,12 +1296,20 @@ function MockTestPage({ onBack, isMobile }) {
 
   // REPLACE WITH:
   const answeringRef = useRef(false);
+  // NEW — toggle on second click
   function handleAnswer(idx) {
-    if (answers[currentQ] !== undefined) return;
     if (answeringRef.current) return;
     answeringRef.current = true;
-    setAnswers(prev => ({ ...prev, [currentQ]: idx }));
-    setTimeout(() => { answeringRef.current = false; }, 400);
+    setAnswers(prev => {
+      const updated = { ...prev };
+      if (updated[currentQ] === idx) {
+        delete updated[currentQ];   // same option clicked again → deselect
+      } else {
+        updated[currentQ] = idx;    // new selection
+      }
+      return updated;
+    });
+    setTimeout(() => { answeringRef.current = false; }, 150);
   }
   function submit() { clearInterval(timerRef.current); setScreen('finish'); }
 
@@ -1532,13 +1540,14 @@ function MockTestPage({ onBack, isMobile }) {
               const isSelected = selected === idx;
               return (
                 <button key={idx}
-                  onClick={() => { if (answers[currentQ] === undefined) handleAnswer(idx); }}
+                  // NEW
+                  onClick={() => handleAnswer(idx)}
                   style={{
                     ...btnBase, display: 'flex', alignItems: 'center',
                     background: isSelected ? C.primaryLight : C.bg,
                     border: isSelected ? `1px solid ${C.primary}` : `1px solid ${C.border}`,
                     borderRadius: 10, padding: '11px 14px',
-                    cursor: isAnswered ? 'default' : 'pointer',
+                    cursor: 'pointer',
                     textAlign: 'left', color: C.text, fontSize: 13, fontWeight: 400,
                     transition: 'all .15s',
                     WebkitTapHighlightColor: 'transparent',

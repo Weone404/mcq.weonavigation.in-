@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getUser, clearUser } from '../../lib/storage';
 
@@ -41,9 +41,11 @@ const Skeleton = ({ w = '100%', h = 16, r = 8 }) => (
 
 const medals = ['🥇', '🥈', '🥉'];
 const getAccuracyColor = (pct) => pct >= 80 ? C.green : pct >= 50 ? C.accent : C.red;
+
 function getInitials(name) {
     return name ? name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2) : '??';
 }
+
 function formatDate(iso) {
     return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
@@ -72,7 +74,12 @@ function Sidebar({ user, onLogout, onNav }) {
             <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid #1E3A5F' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <div style={{ width: 38, height: 38, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                        <img src="/Logo.webp" alt="Logo" style={{ width: 28, height: 28, objectFit: 'contain' }} onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<span style="font-size:20px">✈️</span>'; }} />
+                        <img
+                            src="/Logo.webp"
+                            alt="Logo"
+                            style={{ width: 28, height: 28, objectFit: 'contain' }}
+                            onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<span style="font-size:20px">✈️</span>'; }}
+                        />
                     </div>
                     <div>
                         <div style={{ color: '#fff', fontWeight: 800, fontSize: 14, lineHeight: 1.1 }}>DGCA</div>
@@ -97,20 +104,24 @@ function Sidebar({ user, onLogout, onNav }) {
             <nav style={{ padding: '10px 10px', flex: 1 }}>
                 <div style={{ color: '#4B6785', fontSize: 9, fontWeight: 700, letterSpacing: 1.2, padding: '8px 10px 4px', textTransform: 'uppercase' }}>Main Menu</div>
                 {NAV_ITEMS.map(item => (
-                    <button key={item.id} onClick={() => onNav(item.id)} style={{
-                        width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px',
-                        borderRadius: 10, border: 'none', cursor: 'pointer', textAlign: 'left', marginBottom: 2,
-                        background: item.id === 'leaderboard' ? C.primary : 'transparent',
-                        color: item.id === 'leaderboard' ? '#fff' : '#8BA3C5',
-                        transition: 'all .15s', appearance: 'none',
-                    }}>
+                    <button
+                        key={item.id}
+                        onClick={() => onNav(item.id)}
+                        style={{
+                            width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                            padding: '9px 12px', borderRadius: 10, border: 'none', cursor: 'pointer',
+                            textAlign: 'left', marginBottom: 2,
+                            background: item.id === 'leaderboard' ? C.primary : 'transparent',
+                            color: item.id === 'leaderboard' ? '#fff' : '#8BA3C5',
+                            transition: 'all .15s', appearance: 'none',
+                        }}
+                    >
                         <span style={{ fontSize: 15 }}>{item.icon}</span>
                         <span style={{ fontSize: 13, fontWeight: item.id === 'leaderboard' ? 700 : 400 }}>{item.label}</span>
                     </button>
                 ))}
             </nav>
 
-            {/* Go Premium card */}
             <div style={{ margin: '12px', borderRadius: 14, background: 'linear-gradient(135deg,#1D4ED8,#7C3AED)', padding: '14px 16px' }}>
                 <div style={{ color: C.accent, fontSize: 11, fontWeight: 800, marginBottom: 4 }}>👑 Go Premium</div>
                 <div style={{ color: '#CBD5E1', fontSize: 11, lineHeight: 1.5, marginBottom: 10 }}>Unlock advanced mock tests &amp; detailed analytics.</div>
@@ -118,7 +129,10 @@ function Sidebar({ user, onLogout, onNav }) {
             </div>
 
             <div style={{ padding: '10px 14px', borderTop: '1px solid #1E3A5F' }}>
-                <button onClick={onLogout} style={{ width: '100%', background: C.red + '18', border: `1px solid ${C.red}50`, borderRadius: 10, padding: '8px 0', color: C.red, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                <button
+                    onClick={onLogout}
+                    style={{ width: '100%', background: C.red + '18', border: `1px solid ${C.red}50`, borderRadius: 10, padding: '8px 0', color: C.red, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
                     🚪 Logout
                 </button>
             </div>
@@ -127,10 +141,14 @@ function Sidebar({ user, onLogout, onNav }) {
 }
 
 // ─── TOP BAR ──────────────────────────────────────────────────────────────────
-function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefresh, loading }) {
+function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefresh }) {
     return (
         <div style={{ position: 'fixed', top: 0, left: 220, right: 0, height: 64, background: '#fff', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', padding: '0 28px', gap: 16, zIndex: 90 }}>
-            <button onClick={onBack} style={{ width: 32, height: 32, borderRadius: 8, background: C.bg, border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 14, appearance: 'none', flexShrink: 0 }}>←</button>
+            <button
+                onClick={onBack}
+                style={{ width: 32, height: 32, borderRadius: 8, background: C.bg, border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 14, appearance: 'none', flexShrink: 0 }}
+            >←</button>
+
             <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 18, fontWeight: 800, color: C.text }}>🏆 Mock Test Leaderboard</div>
                 <div style={{ fontSize: 11, color: C.muted }}>
@@ -138,7 +156,6 @@ function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefre
                 </div>
             </div>
 
-            {/* Search */}
             <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, gap: 8 }}>
                 <span style={{ color: C.muted, fontSize: 14 }}>🔍</span>
                 <input
@@ -152,16 +169,17 @@ function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefre
                 )}
             </div>
 
-            {/* Notification bell */}
             <div style={{ position: 'relative', width: 38, height: 38, borderRadius: 10, background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: `1px solid ${C.border}`, flexShrink: 0, fontSize: 16 }}>
                 🔔
                 <span style={{ position: 'absolute', top: 6, right: 6, width: 8, height: 8, background: C.red, borderRadius: '50%', border: '2px solid #fff' }} />
             </div>
 
-            {/* Refresh */}
-            <button onClick={onRefresh} style={{ width: 34, height: 34, borderRadius: 8, background: C.bg, border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 16, appearance: 'none', flexShrink: 0 }} title="Refresh">🔄</button>
+            <button
+                onClick={onRefresh}
+                style={{ width: 34, height: 34, borderRadius: 8, background: C.bg, border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 16, appearance: 'none', flexShrink: 0 }}
+                title="Refresh"
+            >🔄</button>
 
-            {/* User */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }}>
                 <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>
                     {getInitials(user?.name)}
@@ -172,7 +190,9 @@ function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefre
                 </div>
             </div>
 
-            <button onClick={onLogout} style={{ background: C.red, color: '#fff', border: 'none', borderRadius: 8, padding: '8px 16px', fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Logout</button>
+            <button onClick={onLogout} style={{ background: C.red, color: '#fff', border: 'none', borderRadius: 8, padding: '8px 16px', fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>
+                Logout
+            </button>
         </div>
     );
 }
@@ -276,7 +296,6 @@ function LeaderboardTable({ board, user, loading }) {
                 </div>
             </div>
 
-            {/* Table header */}
             <div style={{ padding: '8px 22px', background: C.bg, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 14 }}>
                 <div style={{ width: 36, fontSize: 11, color: C.muted, fontWeight: 700, flexShrink: 0 }}>Rank</div>
                 <div style={{ width: 42, flexShrink: 0 }} />
@@ -292,21 +311,30 @@ function LeaderboardTable({ board, user, loading }) {
                     return (
                         <div
                             key={`${entry.email}-${entry.subject}`}
-                            style={{ padding: '14px 22px', borderTop: i > 0 ? `1px solid ${C.border}` : 'none', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'background .2s', background: isYou ? C.primaryLight : 'transparent' }}
+                            style={{
+                                padding: '14px 22px',
+                                borderTop: i > 0 ? `1px solid ${C.border}` : 'none',
+                                display: 'flex', alignItems: 'center', gap: 14,
+                                cursor: 'pointer', transition: 'background .2s',
+                                background: isYou ? C.primaryLight : 'transparent',
+                            }}
                             onMouseEnter={e => { if (!isYou) e.currentTarget.style.background = C.bg; }}
                             onMouseLeave={e => { if (!isYou) e.currentTarget.style.background = 'transparent'; }}
                         >
-                            {/* Rank badge */}
-                            <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: isYou ? `linear-gradient(135deg,${C.primary},${C.purple})` : rank <= 3 ? 'transparent' : C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: rank <= 3 ? 20 : 12, fontWeight: 700, color: isYou ? '#fff' : C.text }}>
+                            <div style={{
+                                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                                background: isYou ? `linear-gradient(135deg,${C.primary},${C.purple})` : rank <= 3 ? 'transparent' : C.bg,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: rank <= 3 ? 20 : 12, fontWeight: 700,
+                                color: isYou ? '#fff' : C.text,
+                            }}>
                                 {rank <= 3 ? medals[rank - 1] : `#${rank}`}
                             </div>
 
-                            {/* Avatar */}
                             <div style={{ width: 42, height: 42, borderRadius: 21, flexShrink: 0, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 14 }}>
                                 {getInitials(entry.name)}
                             </div>
 
-                            {/* Name + meta */}
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div style={{ fontWeight: 700, fontSize: 14, color: C.text, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.name}</span>
@@ -318,12 +346,10 @@ function LeaderboardTable({ board, user, loading }) {
                                 </div>
                             </div>
 
-                            {/* Score */}
                             <div style={{ width: 90, textAlign: 'right', flexShrink: 0 }}>
                                 <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{entry.score}/{entry.total}</div>
                             </div>
 
-                            {/* Accuracy + bar */}
                             <div style={{ width: 100, flexShrink: 0 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                                     <span style={{ fontSize: 14, fontWeight: 800, color: getAccuracyColor(entry.accuracy) }}>{entry.accuracy}%</span>
@@ -338,10 +364,11 @@ function LeaderboardTable({ board, user, loading }) {
     );
 }
 
-// ─── ROOT PAGE ────────────────────────────────────────────────────────────────
-export default function MockLeaderboardPage() {
+// ─── INNER PAGE (uses useSearchParams — must be inside Suspense) ───────────────
+function LeaderboardInner() {
     const router = useRouter();
-    const searchParams = useSearchParams();
+    const searchParams = useSearchParams();          // ← safe inside Suspense
+
     const [user, setUser] = useState(null);
     const [board, setBoard] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -358,7 +385,9 @@ export default function MockLeaderboardPage() {
     const fetchBoard = useCallback(async (subject) => {
         setLoading(true);
         try {
-            const url = subject === 'all' ? '/api/mock-leaderboard' : `/api/mock-leaderboard?subject=${subject}`;
+            const url = subject === 'all'
+                ? '/api/mock-leaderboard'
+                : `/api/mock-leaderboard?subject=${subject}`;
             const res = await fetch(url);
             const data = await res.json();
             if (data.success) {
@@ -377,10 +406,10 @@ export default function MockLeaderboardPage() {
     }, [user, activeSubject, fetchBoard]);
 
     const handleLogout = useCallback(() => { clearUser(); router.replace('/login'); }, [router]);
+
     const handleNav = useCallback((page) => {
-        if (page === 'dashboard') router.push('/dashboard');
-        else if (page === 'tests') router.push('/dashboard');
-        else if (page === 'progress') router.push('/dashboard');
+        if (page === 'dashboard' || page === 'tests' || page === 'progress')
+            router.push('/dashboard');
     }, [router]);
 
     const filteredBoard = search.trim()
@@ -394,20 +423,18 @@ export default function MockLeaderboardPage() {
         ? Math.round(board.reduce((s, e) => s + e.accuracy, 0) / board.length)
         : 0;
 
-    const activeTab = SUBJECT_TABS.find(t => t.id === activeSubject) || SUBJECT_TABS[0];
-
     if (!user) return null;
 
     return (
         <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif", background: C.bg, minHeight: '100vh' }}>
             <style>{`
-        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-        *{box-sizing:border-box;margin:0}
-        button:hover{opacity:.9}
-        ::-webkit-scrollbar{width:5px;height:5px}
-        ::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:99px}
-        body{overflow-x:hidden}
-      `}</style>
+                @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+                * { box-sizing: border-box; margin: 0; }
+                button:hover { opacity: .9; }
+                ::-webkit-scrollbar { width: 5px; height: 5px; }
+                ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 99px; }
+                body { overflow-x: hidden; }
+            `}</style>
 
             <Sidebar user={user} onLogout={handleLogout} onNav={handleNav} />
 
@@ -440,10 +467,16 @@ export default function MockLeaderboardPage() {
                                 {loading ? 'Loading rankings...' : `${board.length} students · ranked by best accuracy`}
                             </div>
                             <div style={{ display: 'flex', gap: 10 }}>
-                                <button onClick={() => router.push('/dashboard')} style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                                <button
+                                    onClick={() => router.push('/dashboard')}
+                                    style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+                                >
                                     📝 Take Mock Test
                                 </button>
-                                <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,.15)', color: '#fff', border: '1px solid rgba(255,255,255,.3)', borderRadius: 10, padding: '10px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                                <button
+                                    onClick={() => router.push('/dashboard')}
+                                    style={{ background: 'rgba(255,255,255,.15)', color: '#fff', border: '1px solid rgba(255,255,255,.3)', borderRadius: 10, padding: '10px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+                                >
                                     📊 Dashboard
                                 </button>
                             </div>
@@ -465,7 +498,11 @@ export default function MockLeaderboardPage() {
                     {/* Stats row */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 24 }}>
                         {loading
-                            ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.card, borderRadius: 16, padding: 20, border: `1px solid ${C.border}` }}><Skeleton h={48} /></div>)
+                            ? Array(4).fill(0).map((_, i) => (
+                                <div key={i} style={{ background: C.card, borderRadius: 16, padding: 20, border: `1px solid ${C.border}` }}>
+                                    <Skeleton h={48} />
+                                </div>
+                            ))
                             : <>
                                 <StatCard icon="👥" label="Total Students" value={board.length} color={C.primary} />
                                 <StatCard icon="🥇" label="Top Accuracy" value={board[0] ? `${board[0].accuracy}%` : '—'} color={C.accent} />
@@ -480,14 +517,18 @@ export default function MockLeaderboardPage() {
                         {SUBJECT_TABS.map(tab => {
                             const isActive = activeSubject === tab.id;
                             return (
-                                <button key={tab.id} onClick={() => setActiveSubject(tab.id)} style={{
-                                    padding: '8px 16px', borderRadius: 24,
-                                    border: isActive ? `2px solid ${tab.color}` : `1px solid ${C.border}`,
-                                    background: isActive ? tab.color + '18' : C.card,
-                                    color: isActive ? tab.color : C.muted,
-                                    fontWeight: isActive ? 700 : 400, fontSize: 13, cursor: 'pointer', appearance: 'none',
-                                    display: 'flex', alignItems: 'center', gap: 6, transition: 'all .15s',
-                                }}>
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveSubject(tab.id)}
+                                    style={{
+                                        padding: '8px 16px', borderRadius: 24, cursor: 'pointer', appearance: 'none',
+                                        border: isActive ? `2px solid ${tab.color}` : `1px solid ${C.border}`,
+                                        background: isActive ? tab.color + '18' : C.card,
+                                        color: isActive ? tab.color : C.muted,
+                                        fontWeight: isActive ? 700 : 400, fontSize: 13,
+                                        display: 'flex', alignItems: 'center', gap: 6, transition: 'all .15s',
+                                    }}
+                                >
                                     <span>{tab.icon}</span>
                                     <span>{tab.label}</span>
                                     {isActive && !loading && (
@@ -511,14 +552,18 @@ export default function MockLeaderboardPage() {
                     {/* Your position callout (if not in top 10) */}
                     {!loading && userEntry && userRank > 10 && (
                         <div style={{
-                            marginTop: 16, background: C.primaryLight, border: `1px solid ${C.primary}40`,
-                            borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14,
+                            marginTop: 16, background: C.primaryLight,
+                            border: `1px solid ${C.primary}40`,
+                            borderRadius: 12, padding: '14px 20px',
+                            display: 'flex', alignItems: 'center', gap: 14,
                         }}>
                             <div style={{ width: 40, height: 40, borderRadius: 20, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 14, flexShrink: 0 }}>
                                 {getInitials(user.name)}
                             </div>
                             <div style={{ flex: 1 }}>
-                                <div style={{ fontWeight: 700, fontSize: 14, color: C.text }}>{user.name} <Badge label="You" color={C.green} /></div>
+                                <div style={{ fontWeight: 700, fontSize: 14, color: C.text }}>
+                                    {user.name} <Badge label="You" color={C.green} />
+                                </div>
                                 <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>
                                     Rank #{userRank} · {userEntry.accuracy}% accuracy · {userEntry.score}/{userEntry.total} correct
                                 </div>
@@ -533,7 +578,7 @@ export default function MockLeaderboardPage() {
                 </div>
 
                 {/* Footer */}
-                <div style={{ marginLeft: 0, background: C.sidebar, padding: '16px 32px', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ background: C.sidebar, padding: '16px 32px', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 8 }}>
                     {[
                         ['🏆', 'Rankings', 'Compete'],
                         ['🎯', 'Accuracy', 'Score'],
@@ -551,5 +596,23 @@ export default function MockLeaderboardPage() {
                 </div>
             </main>
         </div>
+    );
+}
+
+// ─── ROOT EXPORT — wraps LeaderboardInner in Suspense ────────────────────────
+// This is required because useSearchParams() opts the component out of static
+// rendering. Without Suspense, Next.js throws a prerender error at build time.
+export default function MockLeaderboardPage() {
+    return (
+        <Suspense fallback={
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#F0F4FF', fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
+                <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 40, marginBottom: 12 }}>🏆</div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: '#0F172A' }}>Loading Leaderboard…</div>
+                </div>
+            </div>
+        }>
+            <LeaderboardInner />
+        </Suspense>
     );
 }

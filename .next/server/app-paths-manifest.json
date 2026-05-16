@@ -3,5 +3,6 @@
   "/test/[chapterId]/page": "app/test/[chapterId]/page.js",
   "/leaderboard/page": "app/leaderboard/page.js",
   "/results/page": "app/results/page.js",
-  "/api/doubt/route": "app/api/doubt/route.js"
+  "/api/stats/route": "app/api/stats/route.js",
+  "/api/results/route": "app/api/results/route.js"
 }

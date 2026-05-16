@@ -7,6 +7,7 @@ import { chapters, questions as allQuestions } from '../../data/questions';
 import LecturesPage from './LecturesPage.jsx';
 import ResourcesPage from './ResourcesPage.jsx';
 import DoubtChat from '../../components/DoubtChat/page.jsx';
+import StudentProfilePage from './Studentprofilepage.jsx'
 
 // ─── COLOUR TOKENS ─────────────────────────────────────────────────────────────
 const C = {
@@ -51,6 +52,35 @@ function useBreakpoint() {
   return bp;
 }
 
+// ─── ANIMATED COUNTER HOOK ────────────────────────────────────────────────────
+function useCountUp(target, duration = 1200) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!target || isNaN(Number(target))) { setValue(target); return; }
+    const num = Number(target);
+    const start = Date.now();
+    const raf = () => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(eased * num));
+      if (progress < 1) requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+  }, [target, duration]);
+  return value;
+}
+
+// ─── FADE-IN HOOK ─────────────────────────────────────────────────────────────
+function useFadeIn(delay = 0) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
+  return visible;
+}
+
 // ─── SHUFFLE HELPER ────────────────────────────────────────────────────────────
 function shuffleArray(arr) {
   const a = [...arr];
@@ -93,11 +123,7 @@ export const SUBJECTS = [
           'ch21', 'ch22',
         ],
       },
-      {
-        label: 'Part II – Human Factors',
-        color: '#8B5CF6',
-        chapterIds: ['ch23', 'ch24', 'ch25', 'ch26'],
-      },
+      { label: 'Part II – Human Factors', color: '#8B5CF6', chapterIds: ['ch23', 'ch24', 'ch25', 'ch26'] },
       {
         label: 'Part III – QB Extra',
         color: '#0EA5E9',
@@ -125,11 +151,7 @@ export const SUBJECTS = [
     color: '#0EA5E9',
     gradient: 'linear-gradient(135deg,#0EA5E9,#38BDF8)',
     parts: [
-      {
-        label: 'Meteorology',
-        color: '#0EA5E9',
-        chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08'],
-      },
+      { label: 'Meteorology', color: '#0EA5E9', chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08'] },
     ],
     chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08'],
     stats: '8 Chapters · 150+ MCQs',
@@ -143,16 +165,8 @@ export const SUBJECTS = [
     color: '#10B981',
     gradient: 'linear-gradient(135deg,#10B981,#34D399)',
     parts: [
-      {
-        label: 'Part I – General Navigation',
-        color: '#10B981',
-        chapterIds: ['gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10'],
-      },
-      {
-        label: 'Part II – Radio Navigation',
-        color: '#059669',
-        chapterIds: ['rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10'],
-      },
+      { label: 'Part I – General Navigation', color: '#10B981', chapterIds: ['gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10'] },
+      { label: 'Part II – Radio Navigation', color: '#059669', chapterIds: ['rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10'] },
     ],
     chapterIds: [
       'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10',
@@ -267,15 +281,20 @@ function formatDate(iso) {
 }
 
 // ─── TINY UI ──────────────────────────────────────────────────────────────────
-const ProgressBar = ({ value, color = C.primary, height = 6 }) => (
+const ProgressBar = ({ value, color = C.primary, height = 6, animated = false }) => (
   <div style={{ background: C.border, borderRadius: 99, height, overflow: 'hidden', width: '100%' }}>
     <div style={{
       width: `${Math.min(value || 0, 100)}%`,
       height: '100%',
-      background: color,
+      background: animated
+        ? `linear-gradient(90deg, ${color}, ${color}cc, ${color})`
+        : color,
+      backgroundSize: animated ? '200% 100%' : undefined,
       borderRadius: 99,
-      WebkitTransition: 'width .6s ease',
-      transition: 'width .6s ease',
+      WebkitTransition: 'width .8s cubic-bezier(.4,0,.2,1)',
+      transition: 'width .8s cubic-bezier(.4,0,.2,1)',
+      WebkitAnimation: animated ? 'barShimmer 2s infinite' : undefined,
+      animation: animated ? 'barShimmer 2s infinite' : undefined,
     }} />
   </div>
 );
@@ -290,36 +309,55 @@ const Badge = ({ label, color = C.primary }) => (
     borderRadius: 99,
     letterSpacing: 0.3,
     display: 'inline-block',
+    WebkitAnimation: 'fadeIn .3s ease',
+    animation: 'fadeIn .3s ease',
   }}>{label}</span>
 );
 
-const StatCard = ({ icon, label, value, color = C.primary }) => (
-  <div style={{
-    background: C.card,
-    borderRadius: 16,
-    padding: '16px 18px',
-    border: `1px solid ${C.border}`,
-    display: 'flex',
-    alignItems: 'center',
-  }}>
+// ─── ANIMATED STAT CARD ────────────────────────────────────────────────────────
+const StatCard = ({ icon, label, value, color = C.primary, delay = 0 }) => {
+  const visible = useFadeIn(delay);
+  const isNum = !isNaN(Number(String(value).replace('%', '')));
+  const numPart = isNum ? Number(String(value).replace('%', '')) : 0;
+  const suffix = String(value).includes('%') ? '%' : '';
+  const counted = useCountUp(isNum ? numPart : 0, 1000);
+
+  return (
     <div style={{
-      width: 44,
-      height: 44,
-      borderRadius: 12,
-      background: hexAlpha(color, 0.08),
+      background: C.card,
+      borderRadius: 16,
+      padding: '16px 18px',
+      border: `1px solid ${C.border}`,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 20,
-      flexShrink: 0,
-      marginRight: 12,
-    }}>{icon}</div>
-    <div>
-      <div style={{ fontSize: 22, fontWeight: 800, color: C.text, lineHeight: 1 }}>{value}</div>
-      <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>{label}</div>
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'translateY(0)' : 'translateY(16px)',
+      WebkitTransition: 'opacity .5s ease, transform .5s ease',
+      transition: 'opacity .5s ease, transform .5s ease',
+    }}>
+      <div style={{
+        width: 44,
+        height: 44,
+        borderRadius: 12,
+        background: hexAlpha(color, 0.08),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 20,
+        flexShrink: 0,
+        marginRight: 12,
+        WebkitAnimation: 'iconPop .5s ease',
+        animation: 'iconPop .5s ease',
+      }}>{icon}</div>
+      <div>
+        <div style={{ fontSize: 22, fontWeight: 800, color, lineHeight: 1 }}>
+          {isNum ? `${counted}${suffix}` : value}
+        </div>
+        <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>{label}</div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Skeleton = ({ w = '100%', h = 16, r = 8 }) => (
   <div style={{
@@ -333,17 +371,24 @@ const Skeleton = ({ w = '100%', h = 16, r = 8 }) => (
 
 // ─── COMING SOON PLACEHOLDER ──────────────────────────────────────────────────
 function ComingSoonPage({ subject, onBack }) {
+  const visible = useFadeIn(0);
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       minHeight: 480, background: C.card, borderRadius: 20, border: `1px solid ${C.border}`,
       padding: '48px 24px', textAlign: 'center',
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'scale(1)' : 'scale(.97)',
+      WebkitTransition: 'opacity .4s ease, transform .4s ease',
+      transition: 'opacity .4s ease, transform .4s ease',
     }}>
       <div style={{
         width: 80, height: 80, borderRadius: 20, marginBottom: 20,
         background: subject.gradient,
         display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 38,
         boxShadow: `0 8px 32px ${hexAlpha(subject.color, 0.25)}`,
+        WebkitAnimation: 'float 3s ease-in-out infinite',
+        animation: 'float 3s ease-in-out infinite',
       }}>{subject.icon}</div>
       <div style={{ fontSize: 24, fontWeight: 900, color: C.text, marginBottom: 8 }}>{subject.title}</div>
       <div style={{ fontSize: 14, color: C.muted, marginBottom: 24, maxWidth: 360, lineHeight: 1.7 }}>
@@ -363,12 +408,17 @@ function ComingSoonPage({ subject, onBack }) {
         background: subject.gradient, color: '#fff', border: 'none', borderRadius: 12,
         padding: '12px 28px', fontWeight: 700, fontSize: 14, cursor: 'pointer',
         WebkitAppearance: 'none', appearance: 'none',
-      }}>← Back to Subjects</button>
+        WebkitTransition: 'transform .15s, box-shadow .15s',
+        transition: 'transform .15s, box-shadow .15s',
+      }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 6px 18px ${hexAlpha(subject.color, 0.3)}`; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+      >← Back to Subjects</button>
     </div>
   );
 }
 
-// ─── MOCK LEADERBOARD WIDGET (inline — no separate file needed) ───────────────
+// ─── MOCK LEADERBOARD WIDGET ──────────────────────────────────────────────────
 const MOCK_LB_SUBJECT_TABS = [
   { id: 'all', label: 'All', icon: '🎯', color: C.purple },
   { id: 'air_regulations', label: 'Air Regs', icon: '📋', color: C.primary },
@@ -422,11 +472,15 @@ function MiniPodium({ top3, user }) {
         <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>Best accuracy in mock tests</div>
       </div>
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10 }}>
-        {order.map(({ e, rank, h }) => {
+        {order.map(({ e, rank, h }, idx) => {
           const isYou = e.email === user?.email;
           const color = podiumColors[rank];
           return (
-            <div key={e.email} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: 100 }}>
+            <div key={e.email} style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: 100,
+              WebkitAnimation: `slideUp .5s ease ${idx * 0.12}s both`,
+              animation: `slideUp .5s ease ${idx * 0.12}s both`,
+            }}>
               {isYou && (
                 <span style={{ background: hexAlpha(C.green, 0.15), color: C.green, fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 20, marginBottom: 3, display: 'inline-block' }}>You</span>
               )}
@@ -437,7 +491,12 @@ function MiniPodium({ top3, user }) {
                 color: '#fff', fontWeight: 800, fontSize: 13, marginBottom: 6,
                 border: `2px solid ${isYou ? C.green : '#fff'}`,
                 boxShadow: `0 3px 10px ${hexAlpha(color, 0.3)}`,
-              }}>
+                WebkitTransition: 'transform .2s',
+                transition: 'transform .2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+              >
                 {getInitials(e.name)}
               </div>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: 1 }}>
@@ -481,7 +540,7 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
   if (board.length === 0) {
     return (
       <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: '36px 20px', textAlign: 'center' }}>
-        <div style={{ fontSize: 36, marginBottom: 10 }}>🏆</div>
+        <div style={{ fontSize: 36, marginBottom: 10, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>🏆</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 4 }}>No mock test scores yet!</div>
         <div style={{ fontSize: 12, color: C.muted }}>Complete a mock test to appear on the leaderboard.</div>
       </div>
@@ -496,7 +555,7 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
         <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>All Rankings</div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <span style={{ fontSize: 11, color: C.muted }}>{board.length} pilots</span>
-          <div style={{ width: 7, height: 7, borderRadius: '50%', background: C.green }} />
+          <div style={{ width: 7, height: 7, borderRadius: '50%', background: C.green, WebkitAnimation: 'pulse 2s ease-in-out infinite', animation: 'pulse 2s ease-in-out infinite' }} />
         </div>
       </div>
 
@@ -517,10 +576,13 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
               padding: '12px 18px', borderTop: `1px solid ${C.border}`,
               display: 'flex', alignItems: 'center', gap: 10,
               background: isYou ? C.primaryLight : 'transparent',
-              transition: 'background .15s',
+              WebkitTransition: 'background .15s, transform .15s',
+              transition: 'background .15s, transform .15s',
+              WebkitAnimation: `slideInRow .35s ease ${i * 0.05}s both`,
+              animation: `slideInRow .35s ease ${i * 0.05}s both`,
             }}
-            onMouseEnter={e => { if (!isYou) e.currentTarget.style.background = C.bg; }}
-            onMouseLeave={e => { if (!isYou) e.currentTarget.style.background = 'transparent'; }}
+            onMouseEnter={e => { if (!isYou) { e.currentTarget.style.background = C.bg; e.currentTarget.style.transform = 'translateX(3px)'; } }}
+            onMouseLeave={e => { if (!isYou) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'none'; } }}
           >
             <div style={{
               width: 32, height: 32, borderRadius: 8, flexShrink: 0,
@@ -567,7 +629,12 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
             background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
             padding: '8px 20px', fontSize: 12, fontWeight: 700, color: C.primary,
             cursor: 'pointer', width: '100%', WebkitAppearance: 'none', appearance: 'none',
-          }}>
+            WebkitTransition: 'background .15s, color .15s',
+            transition: 'background .15s, color .15s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = C.primaryLight; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
+          >
             View all {board.length} pilots →
           </button>
         </div>
@@ -617,7 +684,6 @@ function MockLeaderboardWidget({ user, onViewFull }) {
 
   return (
     <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
-      {/* Section header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
         <div>
           <div style={{ fontSize: 18, fontWeight: 800, color: C.text }}>🏆 Mock Test Leaderboard</div>
@@ -629,7 +695,10 @@ function MockLeaderboardWidget({ user, onViewFull }) {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: 9, padding: '6px 10px', gap: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: 9, padding: '6px 10px', gap: 6, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
+            onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(C.primary, 0.25)}`; }}
+            onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
+          >
             <span style={{ color: C.muted, fontSize: 13 }}>🔍</span>
             <input
               value={search}
@@ -646,7 +715,12 @@ function MockLeaderboardWidget({ user, onViewFull }) {
             border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center',
             justifyContent: 'center', cursor: 'pointer', fontSize: 14, flexShrink: 0,
             WebkitAppearance: 'none', appearance: 'none',
-          }}>🔄</button>
+            WebkitTransition: 'transform .2s',
+            transition: 'transform .2s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'rotate(180deg)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'rotate(0deg)'; }}
+          >🔄</button>
           {onViewFull && (
             <button onClick={onViewFull} style={{
               height: 32, borderRadius: 8, background: C.primary,
@@ -658,7 +732,6 @@ function MockLeaderboardWidget({ user, onViewFull }) {
         </div>
       </div>
 
-      {/* Hero stats strip */}
       <div style={{
         background: `linear-gradient(120deg,${C.sidebar} 0%,${C.primary} 100%)`,
         borderRadius: 14, padding: '18px 22px', marginBottom: 16,
@@ -690,7 +763,6 @@ function MockLeaderboardWidget({ user, onViewFull }) {
         </div>
       </div>
 
-      {/* Subject tabs */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
         {MOCK_LB_SUBJECT_TABS.map(tab => {
           const isActive = activeSubject === tab.id;
@@ -701,8 +773,11 @@ function MockLeaderboardWidget({ user, onViewFull }) {
               background: isActive ? hexAlpha(tab.color, 0.1) : C.card,
               color: isActive ? tab.color : C.muted,
               fontWeight: isActive ? 700 : 400, fontSize: 12, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 5, transition: 'all .15s',
+              display: 'flex', alignItems: 'center', gap: 5,
+              WebkitTransition: 'all .2s',
+              transition: 'all .2s',
               WebkitAppearance: 'none', appearance: 'none',
+              transform: isActive ? 'scale(1.04)' : 'scale(1)',
             }}>
               <span>{tab.icon}</span>
               <span>{tab.label}</span>
@@ -716,21 +791,20 @@ function MockLeaderboardWidget({ user, onViewFull }) {
         })}
       </div>
 
-      {/* Podium */}
       {!loading && !search && top3.length >= 2 && (
         <MiniPodium top3={top3} user={user} />
       )}
 
-      {/* Rankings table */}
       <LbRankingsTable board={filteredBoard} user={user} loading={loading} onViewFull={onViewFull} />
 
-      {/* Your position callout if outside top 10 */}
       {!loading && userEntry && userRank > 10 && (
         <div style={{
           marginTop: 12, background: C.primaryLight,
           border: `1px solid ${hexAlpha(C.primary, 0.25)}`,
           borderRadius: 12, padding: '12px 16px',
           display: 'flex', alignItems: 'center', gap: 12,
+          WebkitAnimation: 'slideUp .4s ease',
+          animation: 'slideUp .4s ease',
         }}>
           <div style={{
             width: 38, height: 38, borderRadius: 19,
@@ -770,13 +844,14 @@ const NAV_ITEMS = [
   { icon: '🏆', label: 'Leaderboard', id: 'leaderboard' },
   { icon: '🥇', label: 'Mock Leaderboard', id: 'mockleaderboard' },
   { icon: '📁', label: 'Resources', id: 'resources' },
+  { icon: '👤', label: 'My Profile', id: 'profile' },
 ];
 
 function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }) {
   return (
     <>
       {isMobile && isOpen && (
-        <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99, WebkitTapHighlightColor: 'transparent' }} />
+        <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99, WebkitTapHighlightColor: 'transparent', WebkitAnimation: 'fadeIn .2s ease', animation: 'fadeIn .2s ease' }} />
       )}
       <div style={{
         width: 220, minHeight: '100vh', background: C.sidebar,
@@ -785,7 +860,8 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
         WebkitOverflowScrolling: 'touch',
         WebkitTransform: isMobile ? (isOpen ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)',
         transform: isMobile ? (isOpen ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)',
-        WebkitTransition: 'transform .25s ease', transition: 'transform .25s ease',
+        WebkitTransition: 'transform .28s cubic-bezier(.4,0,.2,1)',
+        transition: 'transform .28s cubic-bezier(.4,0,.2,1)',
         boxShadow: isMobile && isOpen ? '4px 0 24px rgba(0,0,0,0.3)' : 'none',
       }}>
         <div style={{ padding: '20px 16px 14px', borderBottom: '1px solid #1E3A5F' }}>
@@ -824,7 +900,7 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
 
         <nav style={{ padding: '8px 10px', flex: 1 }}>
           <div style={{ color: '#4B6785', fontSize: 9, fontWeight: 700, letterSpacing: 1.2, padding: '8px 10px 4px', textTransform: 'uppercase' }}>Main Menu</div>
-          {NAV_ITEMS.map(item => (
+          {NAV_ITEMS.map((item, idx) => (
             <button key={item.id}
               onClick={() => { onChange(item.id); if (isMobile) onClose(); }}
               style={{
@@ -833,13 +909,19 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
                 cursor: 'pointer', textAlign: 'left', marginBottom: 2,
                 background: active === item.id ? C.primary : 'transparent',
                 color: active === item.id ? '#fff' : '#8BA3C5',
-                WebkitTransition: 'all .15s', transition: 'all .15s',
+                WebkitTransition: 'all .18s',
+                transition: 'all .18s',
                 WebkitAppearance: 'none', appearance: 'none',
-              }}>
+                WebkitAnimation: `slideInNav .3s ease ${idx * 0.04}s both`,
+                animation: `slideInNav .3s ease ${idx * 0.04}s both`,
+              }}
+              onMouseEnter={e => { if (active !== item.id) { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#CBD5E1'; e.currentTarget.style.paddingLeft = '16px'; } }}
+              onMouseLeave={e => { if (active !== item.id) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#8BA3C5'; e.currentTarget.style.paddingLeft = '12px'; } }}
+            >
               <span style={{ fontSize: 15, marginRight: 10 }}>{item.icon}</span>
               <span style={{ fontSize: 13, fontWeight: active === item.id ? 700 : 400 }}>{item.label}</span>
               {item.badge && (
-                <span style={{ marginLeft: 'auto', background: C.red, color: '#fff', fontSize: 8, fontWeight: 800, padding: '2px 5px', borderRadius: 4, display: 'inline-block' }}>{item.badge}</span>
+                <span style={{ marginLeft: 'auto', background: C.red, color: '#fff', fontSize: 8, fontWeight: 800, padding: '2px 5px', borderRadius: 4, display: 'inline-block', WebkitAnimation: 'pulse 2s ease-in-out infinite', animation: 'pulse 2s ease-in-out infinite' }}>{item.badge}</span>
               )}
             </button>
           ))}
@@ -848,7 +930,14 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
         <div style={{ margin: '10px', borderRadius: 12, background: `linear-gradient(135deg,${C.primary},${C.purple})`, padding: '12px 14px' }}>
           <div style={{ color: C.accent, fontSize: 11, fontWeight: 800, marginBottom: 4 }}>👑 Go Premium</div>
           <div style={{ color: '#CBD5E1', fontSize: 11, lineHeight: 1.5, marginBottom: 8 }}>Unlock all mock tests & 1-on-1 mentoring.</div>
-          <button style={{ background: '#fff', color: C.primary, border: 'none', borderRadius: 8, padding: '7px 14px', fontSize: 11, fontWeight: 700, cursor: 'pointer', width: '100%', WebkitAppearance: 'none', appearance: 'none' }}>Upgrade Now →</button>
+          <button style={{
+            background: '#fff', color: C.primary, border: 'none', borderRadius: 8, padding: '7px 14px', fontSize: 11, fontWeight: 700, cursor: 'pointer', width: '100%', WebkitAppearance: 'none', appearance: 'none',
+            WebkitTransition: 'transform .15s',
+            transition: 'transform .15s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+          >Upgrade Now →</button>
         </div>
 
         <div style={{ padding: '10px 14px', borderTop: '1px solid #1E3A5F' }}>
@@ -857,7 +946,12 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
             border: `1px solid ${hexAlpha(C.red, 0.3)}`, borderRadius: 10,
             padding: '8px 0', color: C.red, fontSize: 12, fontWeight: 700, cursor: 'pointer',
             WebkitAppearance: 'none', appearance: 'none',
-          }}>🚪 Logout</button>
+            WebkitTransition: 'background .15s',
+            transition: 'background .15s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = hexAlpha(C.red, 0.18); }}
+            onMouseLeave={e => { e.currentTarget.style.background = hexAlpha(C.red, 0.1); }}
+          >🚪 Logout</button>
         </div>
       </div>
     </>
@@ -879,6 +973,8 @@ function BottomNav({ active, onChange }) {
       position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 90,
       background: C.sidebar, borderTop: '1px solid #1E3A5F',
       display: 'flex', paddingBottom: 'env(safe-area-inset-bottom)',
+      WebkitAnimation: 'slideUp .35s ease',
+      animation: 'slideUp .35s ease',
     }}>
       {BOTTOM_NAV.map(item => (
         <button key={item.id} onClick={() => onChange(item.id)} style={{
@@ -887,6 +983,9 @@ function BottomNav({ active, onChange }) {
           padding: '8px 4px', background: 'transparent', border: 'none',
           cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
           color: active === item.id ? C.accent : '#8BA3C5',
+          WebkitTransition: 'color .18s, transform .18s',
+          transition: 'color .18s, transform .18s',
+          transform: active === item.id ? 'translateY(-2px)' : 'none',
         }}>
           <span style={{ fontSize: 20, marginBottom: 2 }}>{item.icon}</span>
           <span style={{ fontSize: 9, fontWeight: active === item.id ? 700 : 400 }}>{item.label}</span>
@@ -920,7 +1019,12 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           cursor: 'pointer', flexShrink: 0, fontSize: 18,
           WebkitAppearance: 'none', appearance: 'none',
-        }}>☰</button>
+          WebkitTransition: 'transform .15s',
+          transition: 'transform .15s',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'rotate(90deg)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'rotate(0deg)'; }}
+        >☰</button>
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: isMobile ? 15 : 17, fontWeight: 800, color: C.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
@@ -933,7 +1037,10 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
         )}
       </div>
       {!isMobile && (
-        <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '7px 12px', border: `1px solid ${C.border}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '7px 12px', border: `1px solid ${C.border}`, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
+          onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(C.primary, 0.25)}`; }}
+          onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
+        >
           <span style={{ color: C.muted, marginRight: 8 }}>🔍</span>
           <input placeholder="Search anything..." style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: 160 }} />
         </div>
@@ -943,7 +1050,12 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         cursor: 'pointer', border: `1px solid ${C.border}`, fontSize: 17,
         WebkitAppearance: 'none', appearance: 'none', flexShrink: 0,
-      }}>🏆</button>
+        WebkitTransition: 'transform .2s',
+        transition: 'transform .2s',
+      }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.15) rotate(-5deg)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1) rotate(0deg)'; }}
+      >🏆</button>
       {user && (
         <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', flexShrink: 0 }}>
           <div style={{
@@ -951,7 +1063,12 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
             background: `linear-gradient(135deg,${C.primary},${C.purple})`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: '#fff', fontWeight: 700, fontSize: 12,
-          }}>{getInitials(user.name)}</div>
+            WebkitTransition: 'transform .2s',
+            transition: 'transform .2s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+          >{getInitials(user.name)}</div>
         </div>
       )}
     </div>
@@ -970,14 +1087,19 @@ function RTRSimulatorCard() {
           background: C.sidebar,
           border: `1px solid ${hovered ? C.primary : '#1E3A5F'}`,
           borderRadius: 14, padding: '18px 18px 16px', cursor: 'pointer',
-          WebkitTransition: 'border-color .2s, box-shadow .2s',
-          transition: 'border-color .2s, box-shadow .2s',
-          boxShadow: hovered ? `0 6px 24px ${hexAlpha(C.primary, 0.18)}` : 'none',
+          WebkitTransition: 'border-color .2s, box-shadow .2s, transform .2s',
+          transition: 'border-color .2s, box-shadow .2s, transform .2s',
+          boxShadow: hovered ? `0 8px 28px ${hexAlpha(C.primary, 0.22)}` : 'none',
+          transform: hovered ? 'translateY(-3px)' : 'none',
           display: 'block',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-          <span style={{ fontSize: 24, lineHeight: 1 }}>🎧</span>
+          <span style={{
+            fontSize: 24, lineHeight: 1,
+            WebkitAnimation: hovered ? 'headphoneBounce .6s ease infinite alternate' : 'none',
+            animation: hovered ? 'headphoneBounce .6s ease infinite alternate' : 'none',
+          }}>🎧</span>
           <div>
             <div style={{ fontFamily: 'monospace', fontWeight: 600, fontSize: 14, color: hovered ? '#93C5FD' : '#fff', WebkitTransition: 'color .2s', transition: 'color .2s', lineHeight: 1.2 }}>
               RTR(A) Simulator
@@ -1005,6 +1127,7 @@ function RTRSimulatorCard() {
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
 function HomePage({ user, stats, recentResults, allResults, loading, onNavigate, isMobile, isTablet }) {
   const badge = getBadge(stats);
+  const visible = useFadeIn(0);
   const statCards = [
     { icon: '📋', value: stats.testsAttempted, label: 'Tests Attempted', color: C.primary },
     { icon: '🎯', value: `${stats.avgScore}%`, label: 'Avg Accuracy', color: C.green },
@@ -1015,14 +1138,31 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
   const mainCols = (isMobile || isTablet) ? '1fr' : '1fr 340px';
 
   return (
-    <div>
+    <div style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'none' : 'translateY(12px)',
+      WebkitTransition: 'opacity .5s ease, transform .5s ease',
+      transition: 'opacity .5s ease, transform .5s ease',
+    }}>
       {/* Hero */}
       <div style={{
         background: `linear-gradient(120deg,${C.sidebar} 0%,${C.primary} 100%)`,
         borderRadius: 18, padding: isMobile ? '22px 18px' : '26px 28px', marginBottom: 20,
         display: 'flex', flexDirection: isMobile ? 'column' : 'row',
         justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'center', gap: 16,
+        overflow: 'hidden',
+        position: 'relative',
       }}>
+        {/* subtle animated plane */}
+        <div style={{
+          position: 'absolute', right: isMobile ? -20 : 160, top: '50%',
+          WebkitTransform: 'translateY(-50%)',
+          transform: 'translateY(-50%)',
+          fontSize: 80, opacity: 0.04,
+          WebkitAnimation: 'planeDrift 8s ease-in-out infinite',
+          animation: 'planeDrift 8s ease-in-out infinite',
+          pointerEvents: 'none',
+        }}>✈️</div>
         <div>
           <div style={{ color: '#93C5FD', fontSize: 13, fontWeight: 600, marginBottom: 5 }}>Welcome back, Pilot 👋</div>
           <div style={{ color: '#fff', fontSize: isMobile ? 20 : 24, fontWeight: 800, lineHeight: 1.2, marginBottom: 8 }}>
@@ -1032,13 +1172,31 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
             {loading ? 'Loading…' : `${stats.testsAttempted} tests done · ${stats.avgScore}% avg accuracy`}
           </div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <button onClick={() => onNavigate('tests')} style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>📚 Start Test</button>
-            <button onClick={() => onNavigate('resources')} style={{ background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.3)}`, borderRadius: 10, padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>📁 Study Notes</button>
+            <button onClick={() => onNavigate('tests')} style={{
+              background: C.accent, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
+              WebkitTransition: 'transform .15s, box-shadow .15s',
+              transition: 'transform .15s, box-shadow .15s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 6px 18px ${hexAlpha(C.accent, 0.45)}`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+            >📚 Start Test</button>
+            <button onClick={() => onNavigate('resources')} style={{
+              background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.3)}`, borderRadius: 10, padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
+              WebkitTransition: 'background .15s',
+              transition: 'background .15s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = hexAlpha('#ffffff', 0.25); }}
+              onMouseLeave={e => { e.currentTarget.style.background = hexAlpha('#ffffff', 0.15); }}
+            >📁 Study Notes</button>
           </div>
         </div>
         {!isMobile && (
           <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0 }}>
-            <div style={{ background: hexAlpha(badge.color, 0.15), border: `1px solid ${hexAlpha(badge.color, 0.31)}`, borderRadius: 12, padding: '10px 18px', textAlign: 'center', marginBottom: 6 }}>
+            <div style={{
+              background: hexAlpha(badge.color, 0.15), border: `1px solid ${hexAlpha(badge.color, 0.31)}`, borderRadius: 12, padding: '10px 18px', textAlign: 'center', marginBottom: 6,
+              WebkitAnimation: 'float 3s ease-in-out infinite',
+              animation: 'float 3s ease-in-out infinite',
+            }}>
               <div style={{ fontSize: 28 }}>{badge.icon}</div>
               <div style={{ color: '#fff', fontWeight: 800, fontSize: 13 }}>{badge.label}</div>
             </div>
@@ -1051,7 +1209,7 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
       <div style={{ display: 'grid', gridTemplateColumns: statCols, gap: 12, marginBottom: 20 }}>
         {loading
           ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.card, borderRadius: 14, padding: 16, border: `1px solid ${C.border}` }}><Skeleton h={40} /></div>)
-          : statCards.map((s, i) => <StatCard key={i} icon={s.icon} label={s.label} value={s.value} color={s.color} />)
+          : statCards.map((s, i) => <StatCard key={i} icon={s.icon} label={s.label} value={s.value} color={s.color} delay={i * 80} />)
         }
       </div>
 
@@ -1066,12 +1224,21 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
           <div style={{ padding: 14, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10 }}>
             {loading
               ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.bg, borderRadius: 10, padding: 14 }}><Skeleton h={12} /></div>)
-              : chapters.slice(0, isMobile ? 4 : 8).map(ch => {
+              : chapters.slice(0, isMobile ? 4 : 8).map((ch, idx) => {
                 const rs = allResults.filter(r => r.chapterId === ch.id);
                 const best = rs.length ? Math.max(...rs.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)) : null;
                 return (
                   <div key={ch.id} onClick={() => onNavigate('tests', ch.id)}
-                    style={{ background: C.bg, borderRadius: 12, padding: '12px 14px', cursor: 'pointer', border: `1px solid ${C.border}`, borderLeft: `4px solid ${ch.color || C.primary}` }}>
+                    style={{
+                      background: C.bg, borderRadius: 12, padding: '12px 14px', cursor: 'pointer', border: `1px solid ${C.border}`, borderLeft: `4px solid ${ch.color || C.primary}`,
+                      WebkitTransition: 'transform .18s, box-shadow .18s',
+                      transition: 'transform .18s, box-shadow .18s',
+                      WebkitAnimation: `fadeIn .4s ease ${idx * 0.06}s both`,
+                      animation: `fadeIn .4s ease ${idx * 0.06}s both`,
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 4px 14px ${hexAlpha(ch.color || C.primary, 0.14)}`; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+                  >
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                       <span style={{ fontSize: 18 }}>{ch.icon}</span>
                       <span style={{ fontSize: 11, color: C.muted }}>→</span>
@@ -1088,7 +1255,14 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
 
         {/* Right column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <div onClick={() => onNavigate('resources')} style={{ background: `linear-gradient(135deg,#1D4ED8,#7C3AED)`, borderRadius: 14, padding: '16px 18px', cursor: 'pointer' }}>
+          <div onClick={() => onNavigate('resources')} style={{
+            background: `linear-gradient(135deg,#1D4ED8,#7C3AED)`, borderRadius: 14, padding: '16px 18px', cursor: 'pointer',
+            WebkitTransition: 'transform .2s, box-shadow .2s',
+            transition: 'transform .2s, box-shadow .2s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 10px 28px rgba(29,78,216,0.3)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
             <div style={{ fontSize: 26, marginBottom: 6 }}>📖</div>
             <div style={{ color: '#fff', fontWeight: 800, fontSize: 14, marginBottom: 4 }}>Air Regulations Notes</div>
             <div style={{ color: '#CBD5E1', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>All 26 chapters · Definitions, rules, HF, procedures.</div>
@@ -1101,7 +1275,14 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
             <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: 16 }}>
               <div style={{ fontWeight: 800, fontSize: 13, color: C.text, marginBottom: 12 }}>👤 Your Profile</div>
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
-                <div style={{ width: 46, height: 46, borderRadius: 12, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 16, marginRight: 10, flexShrink: 0 }}>{getInitials(user.name)}</div>
+                <div style={{
+                  width: 46, height: 46, borderRadius: 12, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 16, marginRight: 10, flexShrink: 0,
+                  WebkitTransition: 'transform .2s',
+                  transition: 'transform .2s',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+                >{getInitials(user.name)}</div>
                 <div>
                   <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>{user.name}</div>
                   <div style={{ fontSize: 11, color: C.muted }}>{user.email}</div>
@@ -1128,11 +1309,20 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
               ? Array(3).fill(0).map((_, i) => <div key={i} style={{ padding: '10px 16px', borderTop: `1px solid ${C.border}` }}><Skeleton h={12} /></div>)
               : recentResults.length === 0
                 ? <div style={{ padding: '24px 16px', textAlign: 'center', color: C.muted, fontSize: 13 }}>No tests yet!</div>
-                : recentResults.map(r => {
+                : recentResults.map((r, idx) => {
                   const pct = r.total > 0 ? Math.round((r.score / r.total) * 100) : 0;
                   const ch = chapters.find(c => c.id === r.chapterId);
                   return (
-                    <div key={r.id} style={{ padding: '10px 16px', borderTop: `1px solid ${C.border}`, display: 'flex', alignItems: 'center' }}>
+                    <div key={r.id} style={{
+                      padding: '10px 16px', borderTop: `1px solid ${C.border}`, display: 'flex', alignItems: 'center',
+                      WebkitTransition: 'background .15s',
+                      transition: 'background .15s',
+                      WebkitAnimation: `slideInRow .3s ease ${idx * 0.07}s both`,
+                      animation: `slideInRow .3s ease ${idx * 0.07}s both`,
+                    }}
+                      onMouseEnter={e => { e.currentTarget.style.background = C.bg; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+                    >
                       <div style={{ width: 32, height: 32, borderRadius: 9, background: hexAlpha(ch?.color || C.primary, 0.13), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, marginRight: 10 }}>{ch?.icon ?? '📝'}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 12, fontWeight: 700, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ch?.title ?? r.chapterId}</div>
@@ -1151,14 +1341,15 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
 
 // ─── SUBJECT SELECTOR ──────────────────────────────────────────────────────────
 function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) {
+  const visible = useFadeIn(0);
   return (
-    <div>
+    <div style={{ opacity: visible ? 1 : 0, WebkitTransition: 'opacity .4s ease', transition: 'opacity .4s ease' }}>
       <div style={{ marginBottom: 22 }}>
         <h2 style={{ margin: 0, fontSize: isMobile ? 18 : 20, fontWeight: 800, color: C.text }}>Select a Subject</h2>
         <p style={{ margin: '5px 0 0', color: C.muted, fontSize: 13 }}>Choose a subject below to start chapter-wise tests.</p>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(300px,1fr))', gap: 16 }}>
-        {SUBJECTS.map(sub => {
+        {SUBJECTS.map((sub, idx) => {
           const subChapters = chapters.filter(c => sub.chapterIds.includes(c.id));
           const attempted = subChapters.filter(c => allResults.some(r => r.chapterId === c.id)).length;
           const allPcts = allResults.filter(r => sub.chapterIds.includes(r.chapterId) && r.total > 0).map(r => Math.round((r.score / r.total) * 100));
@@ -1167,8 +1358,14 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
           return (
             <div key={sub.id}
               onClick={() => sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
-              style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer', WebkitTransition: 'transform .2s', transition: 'transform .2s' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 10px 28px ${hexAlpha(sub.color, 0.14)}`; }}
+              style={{
+                background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer',
+                WebkitTransition: 'transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s',
+                transition: 'transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s',
+                WebkitAnimation: `fadeIn .4s ease ${idx * 0.08}s both`,
+                animation: `fadeIn .4s ease ${idx * 0.08}s both`,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = `0 12px 32px ${hexAlpha(sub.color, 0.18)}`; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
               <div style={{ background: sub.gradient, padding: '20px 20px 16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -1198,7 +1395,11 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
                     <ProgressBar value={avgPct} color={sub.color} height={5} />
                   </>
                 )}
-                <button style={{ marginTop: 12, width: '100%', padding: '10px 0', background: sub.gradient, color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>
+                <button style={{
+                  marginTop: 12, width: '100%', padding: '10px 0', background: sub.gradient, color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
+                  WebkitTransition: 'opacity .15s',
+                  transition: 'opacity .15s',
+                }}>
                   {sub.comingSoon ? '🚧 Coming Soon →' : sub.isMock ? '🎯 Choose Subject & Start →' : '📚 View Chapters →'}
                 </button>
               </div>
@@ -1213,6 +1414,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
 // ─── GENERIC SUBJECT CHAPTER LIST ─────────────────────────────────────────────
 function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest, onBack, isMobile }) {
   const [search, setSearch] = useState('');
+  const visible = useFadeIn(0);
 
   function getBest(chapterId) {
     const rs = allResults.filter(r => r.chapterId === chapterId);
@@ -1238,9 +1440,16 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
   const bestScore = allPcts.length ? Math.max(...allPcts) : null;
 
   return (
-    <div>
+    <div style={{ opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(10px)', WebkitTransition: 'opacity .4s ease, transform .4s ease', transition: 'opacity .4s ease, transform .4s ease' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, gap: 12 }}>
-        <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 10, background: C.card, border: `1px solid ${C.border}`, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, WebkitAppearance: 'none', appearance: 'none' }}>←</button>
+        <button onClick={onBack} style={{
+          width: 38, height: 38, borderRadius: 10, background: C.card, border: `1px solid ${C.border}`, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, WebkitAppearance: 'none', appearance: 'none',
+          WebkitTransition: 'transform .15s',
+          transition: 'transform .15s',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(-3px)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
+        >←</button>
         <div style={{ width: 40, height: 40, borderRadius: 11, flexShrink: 0, background: subject.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{subject.icon}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <h2 style={{ margin: 0, fontSize: isMobile ? 17 : 20, fontWeight: 800, color: C.text }}>{subject.icon} {subject.title}</h2>
@@ -1248,7 +1457,10 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', background: C.card, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, marginBottom: 18 }}>
+      <div style={{ display: 'flex', alignItems: 'center', background: C.card, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, marginBottom: 18, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
+        onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(subject.color, 0.25)}`; }}
+        onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
+      >
         <span style={{ color: C.muted, marginRight: 8 }}>🔍</span>
         <input placeholder="Search chapters…" value={search} onChange={e => setSearch(e.target.value)}
           style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: '100%' }} />
@@ -1260,8 +1472,12 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
           { icon: '✅', val: attempted, label: 'Attempted' },
           { icon: '🎯', val: avgScore !== null ? `${avgScore}%` : '—', label: 'Avg Score' },
           { icon: '🏆', val: bestScore !== null ? `${bestScore}%` : '—', label: 'Best Score' },
-        ].map(s => (
-          <div key={s.label} style={{ background: C.card, borderRadius: 12, padding: '10px 14px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
+        ].map((s, i) => (
+          <div key={s.label} style={{
+            background: C.card, borderRadius: 12, padding: '10px 14px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10,
+            WebkitAnimation: `fadeIn .4s ease ${i * 0.07}s both`,
+            animation: `fadeIn .4s ease ${i * 0.07}s both`,
+          }}>
             <span style={{ fontSize: 18 }}>{s.icon}</span>
             <div>
               <div style={{ fontWeight: 800, fontSize: 16, color: C.text, lineHeight: 1 }}>{s.val}</div>
@@ -1280,14 +1496,20 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
             <span style={{ fontSize: 11, color: C.muted, flexShrink: 0 }}>{group.chapters.length} ch.</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(260px,1fr))', gap: 12 }}>
-            {group.chapters.map(ch => {
+            {group.chapters.map((ch, idx) => {
               const best = getBest(ch.id);
               const attempts = allResults.filter(r => r.chapterId === ch.id).length;
               const chNum = ch.id.replace(/^[a-z]+/i, '').replace(/^0+/, '') || ch.id;
               return (
                 <div key={ch.id} onClick={() => onStartTest(ch.id)}
-                  style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, borderLeft: `4px solid ${group.color}`, padding: 16, cursor: 'pointer', WebkitTransition: 'transform .18s', transition: 'transform .18s' }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${hexAlpha(group.color, 0.12)}`; }}
+                  style={{
+                    background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, borderLeft: `4px solid ${group.color}`, padding: 16, cursor: 'pointer',
+                    WebkitTransition: 'transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s',
+                    transition: 'transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s',
+                    WebkitAnimation: `fadeIn .35s ease ${idx * 0.04}s both`,
+                    animation: `fadeIn .35s ease ${idx * 0.04}s both`,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${hexAlpha(group.color, 0.15)}`; }}
                   onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1325,10 +1547,14 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
 function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
   const options = [...SUBJECTS.filter(s => !s.isMock), MOCK_ALL_OPTION];
+  const visible = useFadeIn(0);
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto' }}>
-      <button onClick={onBack} style={{ ...btnBase, marginBottom: 20, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '7px 16px', fontSize: 13, color: C.text, display: 'flex', alignItems: 'center', gap: 6 }}>← Back to Tests</button>
+    <div style={{ maxWidth: 800, margin: '0 auto', opacity: visible ? 1 : 0, WebkitTransition: 'opacity .4s ease', transition: 'opacity .4s ease' }}>
+      <button onClick={onBack} style={{ ...btnBase, marginBottom: 20, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '7px 16px', fontSize: 13, color: C.text, display: 'flex', alignItems: 'center', gap: 6, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(-3px)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
+      >← Back to Tests</button>
 
       <div style={{ background: `linear-gradient(120deg,${C.sidebar} 0%,${C.purple} 100%)`, borderRadius: 18, padding: isMobile ? '20px 18px' : '24px 28px', marginBottom: 24 }}>
         <div style={{ fontSize: isMobile ? 22 : 28, marginBottom: 8 }}>🎯</div>
@@ -1345,13 +1571,19 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(230px,1fr))', gap: 14 }}>
-        {options.map(sub => {
+        {options.map((sub, idx) => {
           const isAll = sub.id === 'all';
           const isComingSoon = sub.comingSoon;
           return (
             <div key={sub.id} onClick={() => !isComingSoon && onSelectSubject(sub)}
-              style={{ background: C.card, borderRadius: 16, border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : `1px solid ${C.border}`, overflow: 'hidden', cursor: isComingSoon ? 'not-allowed' : 'pointer', opacity: isComingSoon ? 0.55 : 1, WebkitTransition: 'transform .18s, box-shadow .18s', transition: 'transform .18s, box-shadow .18s' }}
-              onMouseEnter={e => { if (isComingSoon) return; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 10px 28px ${hexAlpha(sub.color, 0.16)}`; }}
+              style={{
+                background: C.card, borderRadius: 16, border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : `1px solid ${C.border}`, overflow: 'hidden', cursor: isComingSoon ? 'not-allowed' : 'pointer', opacity: isComingSoon ? 0.55 : 1,
+                WebkitTransition: 'transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s',
+                transition: 'transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s',
+                WebkitAnimation: `fadeIn .4s ease ${idx * 0.07}s both`,
+                animation: `fadeIn .4s ease ${idx * 0.07}s both`,
+              }}
+              onMouseEnter={e => { if (isComingSoon) return; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 30px ${hexAlpha(sub.color, 0.18)}`; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
               <div style={{ background: sub.gradient, padding: '18px 18px 14px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -1368,7 +1600,7 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
                   {isComingSoon ? 'Questions being prepared by our content team' : sub.stats}
                 </div>
                 <button onClick={e => { e.stopPropagation(); if (!isComingSoon) onSelectSubject(sub); }} disabled={isComingSoon}
-                  style={{ ...btnBase, width: '100%', padding: '9px 0', background: isComingSoon ? C.border : sub.gradient, borderRadius: 10, color: isComingSoon ? C.muted : '#fff', fontWeight: 700, fontSize: 13, cursor: isComingSoon ? 'not-allowed' : 'pointer' }}>
+                  style={{ ...btnBase, width: '100%', padding: '9px 0', background: isComingSoon ? C.border : sub.gradient, borderRadius: 10, color: isComingSoon ? C.muted : '#fff', fontWeight: 700, fontSize: 13, cursor: isComingSoon ? 'not-allowed' : 'pointer', WebkitTransition: 'opacity .15s', transition: 'opacity .15s' }}>
                   {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎯 Start Combined Test →' : `📝 Start ${sub.title} Test →`}
                 </button>
               </div>
@@ -1392,7 +1624,8 @@ function MockTestPage({ onBack, isMobile }) {
   const [answers, setAnswers] = useState({});
   const [currentQ, setCurrentQ] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
-  const [submitStatus, setSubmitStatus] = useState('idle'); // 'idle'|'saving'|'saved'|'error'
+  const [submitStatus, setSubmitStatus] = useState('idle');
+  const [lastAnswered, setLastAnswered] = useState(null);
   const timerRef = useRef(null);
 
   function handleSubjectSelect(subject) {
@@ -1441,7 +1674,8 @@ function MockTestPage({ onBack, isMobile }) {
       else updated[currentQ] = idx;
       return updated;
     });
-    setTimeout(() => { answeringRef.current = false; }, 150);
+    setLastAnswered(currentQ);
+    setTimeout(() => { answeringRef.current = false; setLastAnswered(null); }, 300);
   }
 
   async function submit() {
@@ -1512,49 +1746,62 @@ function MockTestPage({ onBack, isMobile }) {
 
   if (screen === 'subjectSelect') return <MockSubjectSelector onSelectSubject={handleSubjectSelect} onBack={onBack} isMobile={isMobile} />;
 
-  if (screen === 'intro') return (
-    <div style={{ maxWidth: 520, margin: '0 auto', padding: isMobile ? '0 4px' : 0 }}>
-      <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginBottom: 18, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '7px 14px', fontSize: 13, color: C.text }}>← Change Subject</button>
+  if (screen === 'intro') {
+    const visible = true;
+    return (
+      <div style={{ maxWidth: 520, margin: '0 auto', padding: isMobile ? '0 4px' : 0, WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>
+        <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginBottom: 18, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '7px 14px', fontSize: 13, color: C.text }}>← Change Subject</button>
 
-      <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, padding: isMobile ? '24px 18px' : '32px 28px', textAlign: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '5px 14px', marginBottom: 16 }}>
-          <span style={{ fontSize: 16 }}>{selectedSubject?.icon}</span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title || 'All Subjects'}</span>
-        </div>
-
-        <div style={{ fontSize: 48, marginBottom: 14 }}>🎯</div>
-        <h2 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 900, color: C.text }}>DGCA Mock Test</h2>
-        <p style={{ color: C.muted, fontSize: 13, marginBottom: 20 }}>
-          {selectedSubject?.id === 'all' ? 'Full-length paper combining all subjects & chapters.' : `100 questions from ${selectedSubject?.title} — DGCA exam style.`}
-        </p>
-
-        {pool.length < TOTAL_Q && (
-          <div style={{ background: hexAlpha(C.accent, 0.08), border: `1px solid ${hexAlpha(C.accent, 0.25)}`, borderRadius: 10, padding: '10px 14px', marginBottom: 16, fontSize: 12, color: C.text }}>
-            ⚠️ Only {pool.length} questions available for this subject. The test will use all of them.
+        <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, padding: isMobile ? '24px 18px' : '32px 28px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '5px 14px', marginBottom: 16 }}>
+            <span style={{ fontSize: 16 }}>{selectedSubject?.icon}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title || 'All Subjects'}</span>
           </div>
-        )}
 
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
-          {[['❓', `${pool.length} Questions`], ['⏱️', '100 Minutes'], ['📚', selectedSubject?.id === 'all' ? 'All Chapters' : selectedSubject?.title], ['💡', 'Instant Results']].map(([icon, label]) => (
-            <span key={label} style={{ background: C.primaryLight, color: C.primary, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>{icon} {label}</span>
-          ))}
+          <div style={{ fontSize: 48, marginBottom: 14, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>🎯</div>
+          <h2 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 900, color: C.text }}>DGCA Mock Test</h2>
+          <p style={{ color: C.muted, fontSize: 13, marginBottom: 20 }}>
+            {selectedSubject?.id === 'all' ? 'Full-length paper combining all subjects & chapters.' : `100 questions from ${selectedSubject?.title} — DGCA exam style.`}
+          </p>
+
+          {pool.length < TOTAL_Q && (
+            <div style={{ background: hexAlpha(C.accent, 0.08), border: `1px solid ${hexAlpha(C.accent, 0.25)}`, borderRadius: 10, padding: '10px 14px', marginBottom: 16, fontSize: 12, color: C.text }}>
+              ⚠️ Only {pool.length} questions available for this subject. The test will use all of them.
+            </div>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
+            {[['❓', `${pool.length} Questions`], ['⏱️', '100 Minutes'], ['📚', selectedSubject?.id === 'all' ? 'All Chapters' : selectedSubject?.title], ['💡', 'Instant Results']].map(([icon, label]) => (
+              <span key={label} style={{ background: C.primaryLight, color: C.primary, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>{icon} {label}</span>
+            ))}
+          </div>
+
+          <ul style={{ textAlign: 'left', listStyle: 'none', padding: 0, margin: '0 0 24px' }}>
+            {['Each question has 4 options — choose the best answer', 'Click the same option again to deselect', 'Test auto-submits when timer reaches zero', 'Score summary shown at the end'].map((r, i) => (
+              <li key={r} style={{ background: C.bg, borderRadius: 8, padding: '9px 13px', fontSize: 13, color: C.text, marginBottom: 7, WebkitAnimation: `fadeIn .35s ease ${i * 0.07}s both`, animation: `fadeIn .35s ease ${i * 0.07}s both` }}>✔ {r}</li>
+            ))}
+          </ul>
+
+          <button onClick={() => pool.length > 0 ? setScreen('test') : null} disabled={pool.length === 0}
+            style={{
+              ...btnBase, width: '100%', padding: '13px',
+              background: pool.length === 0 ? C.border : `linear-gradient(135deg,${selectedSubject?.color || C.primary},${C.purple})`,
+              borderRadius: 12, color: pool.length === 0 ? C.muted : '#fff', fontSize: 15, fontWeight: 800,
+              cursor: pool.length === 0 ? 'not-allowed' : 'pointer',
+              WebkitTransition: 'transform .15s, box-shadow .15s',
+              transition: 'transform .15s, box-shadow .15s',
+            }}
+            onMouseEnter={e => { if (pool.length > 0) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 8px 22px ${hexAlpha(selectedSubject?.color || C.primary, 0.35)}`; } }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            {pool.length === 0 ? '⚠️ No questions available' : '🚀 Start Mock Test →'}
+          </button>
+
+          <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginTop: 10, width: '100%', padding: '11px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 12, color: C.muted, fontSize: 13 }}>← Choose Different Subject</button>
         </div>
-
-        <ul style={{ textAlign: 'left', listStyle: 'none', padding: 0, margin: '0 0 24px' }}>
-          {['Each question has 4 options — choose the best answer', 'Click the same option again to deselect', 'Test auto-submits when timer reaches zero', 'Score summary shown at the end'].map(r => (
-            <li key={r} style={{ background: C.bg, borderRadius: 8, padding: '9px 13px', fontSize: 13, color: C.text, marginBottom: 7 }}>✔ {r}</li>
-          ))}
-        </ul>
-
-        <button onClick={() => pool.length > 0 ? setScreen('test') : null} disabled={pool.length === 0}
-          style={{ ...btnBase, width: '100%', padding: '13px', background: pool.length === 0 ? C.border : `linear-gradient(135deg,${selectedSubject?.color || C.primary},${C.purple})`, borderRadius: 12, color: pool.length === 0 ? C.muted : '#fff', fontSize: 15, fontWeight: 800, cursor: pool.length === 0 ? 'not-allowed' : 'pointer' }}>
-          {pool.length === 0 ? '⚠️ No questions available' : '🚀 Start Mock Test →'}
-        </button>
-
-        <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginTop: 10, width: '100%', padding: '11px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 12, color: C.muted, fontSize: 13 }}>← Choose Different Subject</button>
       </div>
-    </div>
-  );
+    );
+  }
 
   if (screen === 'test') {
     const q = pool[currentQ];
@@ -1572,15 +1819,16 @@ function MockTestPage({ onBack, isMobile }) {
             )}
             <span style={{ fontSize: 12, color: C.muted, whiteSpace: 'nowrap' }}>{answered}/{pool.length} answered</span>
           </div>
+          {/* Timer ring */}
           <div style={{ position: 'relative', width: 50, height: 50, flexShrink: 0 }}>
             <svg width="50" height="50" viewBox="0 0 52 52">
               <circle cx="26" cy="26" r="22" fill="none" stroke={C.border} strokeWidth="4" />
               <circle cx="26" cy="26" r="22" fill="none" stroke={tColor} strokeWidth="4" strokeLinecap="round"
                 strokeDasharray={circ} strokeDashoffset={circ * (1 - pct)}
                 transform="rotate(-90 26 26)"
-                style={{ WebkitTransition: 'stroke-dashoffset 1s linear,stroke .5s', transition: 'stroke-dashoffset 1s linear,stroke .5s' }} />
+                style={{ WebkitTransition: 'stroke-dashoffset 1s linear, stroke .5s', transition: 'stroke-dashoffset 1s linear, stroke .5s' }} />
             </svg>
-            <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', WebkitTransform: 'translate(-50%,-50%)', fontSize: 9, fontWeight: 800, color: tColor }}>
+            <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', WebkitTransform: 'translate(-50%,-50%)', fontSize: 9, fontWeight: 800, color: tColor, WebkitTransition: 'color .5s', transition: 'color .5s' }}>
               {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
             </span>
           </div>
@@ -1588,24 +1836,36 @@ function MockTestPage({ onBack, isMobile }) {
 
         {/* Progress bar */}
         <div style={{ height: 3, background: C.border, borderRadius: 99, marginBottom: 16 }}>
-          <div style={{ height: '100%', width: `${pool.length > 0 ? ((currentQ + 1) / pool.length) * 100 : 0}%`, background: selectedSubject?.color || C.primary, borderRadius: 99, transition: 'width .3s' }} />
+          <div style={{ height: '100%', width: `${pool.length > 0 ? ((currentQ + 1) / pool.length) * 100 : 0}%`, background: selectedSubject?.color || C.primary, borderRadius: 99, WebkitTransition: 'width .4s cubic-bezier(.4,0,.2,1)', transition: 'width .4s cubic-bezier(.4,0,.2,1)' }} />
         </div>
 
         {/* Question navigator dots */}
         <div style={{ display: 'flex', flexWrap: isMobile ? 'nowrap' : 'wrap', overflowX: isMobile ? 'auto' : 'visible', gap: 6, marginBottom: 16, paddingBottom: isMobile ? 6 : 0 }}>
           {pool.map((_, i) => {
             const ds = getDotState(i);
+            const isJustAnswered = lastAnswered === i;
             const bg = ds === 'answered' ? hexAlpha(C.primary, 0.18) : ds === 'correct' ? C.primary : ds === 'wrong' ? C.red : ds === 'active' ? C.primaryLight : C.card;
             const co = ds === 'answered' ? C.primary : ds === 'correct' || ds === 'wrong' ? '#fff' : ds === 'active' ? C.primary : C.muted;
             const br = ds === 'active' ? `2px solid ${C.primary}` : ds === 'answered' ? `1px solid ${hexAlpha(C.primary, 0.3)}` : `1px solid ${C.border}`;
             return (
-              <button key={i} onClick={() => setCurrentQ(i)} style={{ ...btnBase, width: 30, height: 30, borderRadius: 7, border: br, background: bg, color: co, fontSize: 10, fontWeight: 700, flexShrink: 0, transition: 'all .15s' }}>{i + 1}</button>
+              <button key={i} onClick={() => setCurrentQ(i)} style={{
+                ...btnBase, width: 30, height: 30, borderRadius: 7, border: br, background: bg, color: co, fontSize: 10, fontWeight: 700, flexShrink: 0,
+                WebkitTransition: 'all .15s',
+                transition: 'all .15s',
+                WebkitAnimation: isJustAnswered ? 'dotPop .25s ease' : undefined,
+                animation: isJustAnswered ? 'dotPop .25s ease' : undefined,
+                transform: ds === 'active' ? 'scale(1.1)' : 'scale(1)',
+              }}>{i + 1}</button>
             );
           })}
         </div>
 
         {/* Question card */}
-        <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: isMobile ? '18px 16px' : '22px 24px', marginBottom: 14 }}>
+        <div style={{
+          background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: isMobile ? '18px 16px' : '22px 24px', marginBottom: 14,
+          WebkitAnimation: 'slideInCard .25s ease',
+          animation: 'slideInCard .25s ease',
+        }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
             <span style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: .8 }}>Q {currentQ + 1} / {pool.length}</span>
             {q && (
@@ -1619,9 +1879,24 @@ function MockTestPage({ onBack, isMobile }) {
             {q?.options.map((opt, idx) => {
               const isSelected = selected === idx;
               return (
-                <button key={idx} onClick={() => handleAnswer(idx)} style={{ ...btnBase, display: 'flex', alignItems: 'center', background: isSelected ? C.primaryLight : C.bg, border: isSelected ? `1px solid ${C.primary}` : `1px solid ${C.border}`, borderRadius: 10, padding: '11px 14px', cursor: 'pointer', textAlign: 'left', color: C.text, fontSize: 13, fontWeight: 400, transition: 'all .15s', WebkitTapHighlightColor: 'transparent', userSelect: 'none', WebkitUserSelect: 'none' }}>
-                  <span style={{ width: 28, height: 28, borderRadius: 7, background: isSelected ? C.primary : hexAlpha(C.primary, 0.08), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, color: isSelected ? '#fff' : C.primary, flexShrink: 0, marginRight: 10 }}>{['A', 'B', 'C', 'D'][idx]}</span>
+                <button key={idx} onClick={() => handleAnswer(idx)} style={{
+                  ...btnBase, display: 'flex', alignItems: 'center',
+                  background: isSelected ? C.primaryLight : C.bg,
+                  border: isSelected ? `1px solid ${C.primary}` : `1px solid ${C.border}`,
+                  borderRadius: 10, padding: '11px 14px', cursor: 'pointer', textAlign: 'left', color: C.text, fontSize: 13, fontWeight: 400,
+                  WebkitTransition: 'all .18s',
+                  transition: 'all .18s',
+                  WebkitTapHighlightColor: 'transparent', userSelect: 'none', WebkitUserSelect: 'none',
+                  transform: isSelected ? 'translateX(4px)' : 'none',
+                  WebkitAnimation: `optionIn .2s ease ${idx * 0.05}s both`,
+                  animation: `optionIn .2s ease ${idx * 0.05}s both`,
+                }}
+                  onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = C.primaryLight; e.currentTarget.style.borderColor = hexAlpha(C.primary, 0.4); }}
+                  onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = C.bg; e.currentTarget.style.borderColor = C.border; }}
+                >
+                  <span style={{ width: 28, height: 28, borderRadius: 7, background: isSelected ? C.primary : hexAlpha(C.primary, 0.08), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, color: isSelected ? '#fff' : C.primary, flexShrink: 0, marginRight: 10, WebkitTransition: 'background .18s', transition: 'background .18s' }}>{['A', 'B', 'C', 'D'][idx]}</span>
                   <span style={{ flex: 1 }}>{opt}</span>
+                  {isSelected && <span style={{ marginLeft: 8, color: C.primary, fontSize: 14, WebkitAnimation: 'checkPop .2s ease', animation: 'checkPop .2s ease' }}>✓</span>}
                 </button>
               );
             })}
@@ -1631,11 +1906,20 @@ function MockTestPage({ onBack, isMobile }) {
         {/* Navigation buttons */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
           <button onClick={() => setCurrentQ(c => c - 1)} disabled={currentQ === 0}
-            style={{ ...btnBase, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '10px 16px', color: C.text, fontSize: 13, cursor: currentQ === 0 ? 'not-allowed' : 'pointer', opacity: currentQ === 0 ? .4 : 1 }}>← Prev</button>
+            style={{ ...btnBase, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '10px 16px', color: C.text, fontSize: 13, cursor: currentQ === 0 ? 'not-allowed' : 'pointer', opacity: currentQ === 0 ? .4 : 1, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+            onMouseEnter={e => { if (currentQ > 0) e.currentTarget.style.transform = 'translateX(-3px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
+          >← Prev</button>
           {!isMobile && <span style={{ fontSize: 12, color: C.muted }}>{answered}/{pool.length} answered</span>}
           {currentQ === pool.length - 1
-            ? <button onClick={submit} style={{ ...btnBase, background: `linear-gradient(135deg,${C.accent},#D97706)`, borderRadius: 10, padding: '10px 18px', color: '#fff', fontSize: 13, fontWeight: 700 }}>Submit ✓</button>
-            : <button onClick={() => setCurrentQ(c => c + 1)} style={{ ...btnBase, background: C.primaryLight, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, borderRadius: 10, padding: '10px 18px', color: C.primary, fontSize: 13, fontWeight: 700 }}>Next →</button>}
+            ? <button onClick={submit} style={{ ...btnBase, background: `linear-gradient(135deg,${C.accent},#D97706)`, borderRadius: 10, padding: '10px 18px', color: '#fff', fontSize: 13, fontWeight: 700, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+            >Submit ✓</button>
+            : <button onClick={() => setCurrentQ(c => c + 1)} style={{ ...btnBase, background: C.primaryLight, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, borderRadius: 10, padding: '10px 18px', color: C.primary, fontSize: 13, fontWeight: 700, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(3px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
+            >Next →</button>}
         </div>
       </div>
     );
@@ -1643,25 +1927,25 @@ function MockTestPage({ onBack, isMobile }) {
 
   // ── Screen: Finish / Results
   return (
-    <div style={{ maxWidth: 560, margin: '0 auto', padding: isMobile ? '0 4px' : 0 }}>
+    <div style={{ maxWidth: 560, margin: '0 auto', padding: isMobile ? '0 4px' : 0, WebkitAnimation: 'fadeIn .5s ease', animation: 'fadeIn .5s ease' }}>
       <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, padding: isMobile ? '24px 18px' : '32px 28px', textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '4px 12px', marginBottom: 14 }}>
           <span style={{ fontSize: 14 }}>{selectedSubject?.icon}</span>
           <span style={{ fontSize: 11, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title}</span>
         </div>
 
-        <div style={{ fontSize: 48, marginBottom: 10 }}>{scorePct >= 80 ? '🏆' : scorePct >= 50 ? '✈️' : '📚'}</div>
+        <div style={{ fontSize: 48, marginBottom: 10, WebkitAnimation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)', animation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)' }}>{scorePct >= 80 ? '🏆' : scorePct >= 50 ? '✈️' : '📚'}</div>
         <h2 style={{ margin: '0 0 4px', fontWeight: 900, fontSize: 20, color: C.text }}>{scorePct >= 80 ? 'Excellent!' : scorePct >= 50 ? 'Good Effort!' : 'Keep Practicing!'}</h2>
-        <div style={{ fontSize: 44, fontWeight: 900, color: getScoreColor(scorePct), lineHeight: 1 }}>{score}/{pool.length}</div>
+        <div style={{ fontSize: 44, fontWeight: 900, color: getScoreColor(scorePct), lineHeight: 1, WebkitAnimation: 'countUp .8s ease', animation: 'countUp .8s ease' }}>{score}/{pool.length}</div>
         <div style={{ fontSize: 20, fontWeight: 700, color: getScoreColor(scorePct), marginBottom: 16 }}>{scorePct}%</div>
 
         {/* Save status badge */}
         <div style={{ marginBottom: 20, minHeight: 32 }}>
           {submitStatus === 'saving' && (
-            <span style={{ background: hexAlpha(C.accent, 0.1), color: C.accent, border: `1px solid ${hexAlpha(C.accent, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>⏳ Saving to leaderboard…</span>
+            <span style={{ background: hexAlpha(C.accent, 0.1), color: C.accent, border: `1px solid ${hexAlpha(C.accent, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block', WebkitAnimation: 'pulse 1.5s ease-in-out infinite', animation: 'pulse 1.5s ease-in-out infinite' }}>⏳ Saving to leaderboard…</span>
           )}
           {submitStatus === 'saved' && (
-            <span style={{ background: hexAlpha(C.green, 0.1), color: C.green, border: `1px solid ${hexAlpha(C.green, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>✅ Score saved to leaderboard!</span>
+            <span style={{ background: hexAlpha(C.green, 0.1), color: C.green, border: `1px solid ${hexAlpha(C.green, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block', WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>✅ Score saved to leaderboard!</span>
           )}
           {submitStatus === 'error' && (
             <span style={{ background: hexAlpha(C.red, 0.1), color: C.red, border: `1px solid ${hexAlpha(C.red, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>⚠️ Could not save score. Check connection.</span>
@@ -1673,8 +1957,8 @@ function MockTestPage({ onBack, isMobile }) {
             { icon: '✓', val: score, label: 'Correct', bg: '#EFF6FF', co: C.primary, br: hexAlpha(C.primary, 0.25) },
             { icon: '✗', val: wrong, label: 'Wrong', bg: '#FEF2F2', co: C.red, br: hexAlpha(C.red, 0.25) },
             { icon: '–', val: notAnswered, label: 'Skipped', bg: '#F5F3FF', co: C.purple, br: hexAlpha(C.purple, 0.25) },
-          ].map(b => (
-            <div key={b.label} style={{ flex: 1, background: b.bg, border: `1px solid ${b.br}`, borderRadius: 12, padding: '12px 8px' }}>
+          ].map((b, i) => (
+            <div key={b.label} style={{ flex: 1, background: b.bg, border: `1px solid ${b.br}`, borderRadius: 12, padding: '12px 8px', WebkitAnimation: `fadeIn .4s ease ${i * 0.1}s both`, animation: `fadeIn .4s ease ${i * 0.1}s both` }}>
               <div style={{ fontSize: 18, color: b.co }}>{b.icon}</div>
               <div style={{ fontSize: 22, fontWeight: 900, color: C.text }}>{b.val}</div>
               <div style={{ fontSize: 10, color: C.muted }}>{b.label}</div>
@@ -1688,7 +1972,11 @@ function MockTestPage({ onBack, isMobile }) {
             const bg = ds === 'correct' ? C.primary : ds === 'wrong' ? C.red : ds === 'unanswered' ? hexAlpha(C.purple, 0.3) : C.bg;
             const co = ds === 'correct' || ds === 'wrong' ? '#fff' : ds === 'unanswered' ? C.purple : C.muted;
             return (
-              <span key={i} style={{ width: 26, height: 26, borderRadius: 6, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, background: bg, color: co, border: `1px solid ${C.border}` }}>{i + 1}</span>
+              <span key={i} style={{
+                width: 26, height: 26, borderRadius: 6, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, background: bg, color: co, border: `1px solid ${C.border}`,
+                WebkitAnimation: `dotReveal .3s ease ${i * 0.01}s both`,
+                animation: `dotReveal .3s ease ${i * 0.01}s both`,
+              }}>{i + 1}</span>
             );
           })}
         </div>
@@ -1702,11 +1990,18 @@ function MockTestPage({ onBack, isMobile }) {
           ))}
         </div>
 
-        <button onClick={onBack} style={{ width: '100%', padding: '12px', background: `linear-gradient(135deg,${C.primary},${C.purple})`, border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', marginBottom: 10, WebkitAppearance: 'none', appearance: 'none' }}>Back to Tests</button>
+        <button onClick={onBack} style={{
+          width: '100%', padding: '12px', background: `linear-gradient(135deg,${C.primary},${C.purple})`, border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', marginBottom: 10, WebkitAppearance: 'none', appearance: 'none',
+          WebkitTransition: 'transform .15s, box-shadow .15s',
+          transition: 'transform .15s, box-shadow .15s',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 8px 20px ${hexAlpha(C.primary, 0.3)}`; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+        >Back to Tests</button>
 
         {submitStatus === 'saved' && (
           <button onClick={() => { window.location.href = `/mock-leaderboard?subject=${selectedSubject?.id || 'all'}`; }}
-            style={{ width: '100%', padding: '11px', background: hexAlpha(C.green, 0.1), border: `1px solid ${hexAlpha(C.green, 0.3)}`, borderRadius: 12, color: C.green, fontSize: 13, fontWeight: 700, cursor: 'pointer', marginBottom: 10, WebkitAppearance: 'none', appearance: 'none' }}>
+            style={{ width: '100%', padding: '11px', background: hexAlpha(C.green, 0.1), border: `1px solid ${hexAlpha(C.green, 0.3)}`, borderRadius: 12, color: C.green, fontSize: 13, fontWeight: 700, cursor: 'pointer', marginBottom: 10, WebkitAppearance: 'none', appearance: 'none', WebkitAnimation: 'fadeIn .5s ease', animation: 'fadeIn .5s ease' }}>
             🏆 View Leaderboard →
           </button>
         )}
@@ -1752,6 +2047,7 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 
 
 // ─── PROGRESS PAGE ────────────────────────────────────────────────────────────
 function ProgressPage({ stats, allResults, loading, isMobile }) {
+  const visible = useFadeIn(0);
   const chapterStats = chapters.map(ch => {
     const rs = allResults.filter(r => r.chapterId === ch.id);
     const best = rs.length ? Math.max(...rs.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)) : null;
@@ -1759,14 +2055,14 @@ function ProgressPage({ stats, allResults, loading, isMobile }) {
   });
 
   return (
-    <div>
+    <div style={{ opacity: visible ? 1 : 0, WebkitTransition: 'opacity .4s ease', transition: 'opacity .4s ease' }}>
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12, marginBottom: 20 }}>
         {loading ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.card, borderRadius: 14, padding: 16, border: `1px solid ${C.border}` }}><Skeleton h={40} /></div>) : (
           <>
-            <StatCard icon="📊" label="Overall Avg" value={`${stats.avgScore}%`} color={C.primary} />
-            <StatCard icon="📋" label="Tests Done" value={stats.testsAttempted} color={C.green} />
-            <StatCard icon="🏆" label="Best Score" value={`${stats.bestScore}%`} color={C.accent} />
-            <StatCard icon="❓" label="Questions" value={stats.totalQuestions} color={C.purple} />
+            <StatCard icon="📊" label="Overall Avg" value={`${stats.avgScore}%`} color={C.primary} delay={0} />
+            <StatCard icon="📋" label="Tests Done" value={stats.testsAttempted} color={C.green} delay={80} />
+            <StatCard icon="🏆" label="Best Score" value={`${stats.bestScore}%`} color={C.accent} delay={160} />
+            <StatCard icon="❓" label="Questions" value={stats.totalQuestions} color={C.purple} delay={240} />
           </>
         )}
       </div>
@@ -1774,8 +2070,8 @@ function ProgressPage({ stats, allResults, loading, isMobile }) {
         <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: 20 }}>
           <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 16 }}>Chapter Progress</div>
           {loading ? Array(5).fill(0).map((_, i) => <div key={i} style={{ marginBottom: 14 }}><Skeleton h={10} /></div>) :
-            chapterStats.map(ch => (
-              <div key={ch.id} style={{ marginBottom: 16 }}>
+            chapterStats.map((ch, idx) => (
+              <div key={ch.id} style={{ marginBottom: 16, WebkitAnimation: `fadeIn .35s ease ${idx * 0.04}s both`, animation: `fadeIn .35s ease ${idx * 0.04}s both` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
                     <span style={{ fontSize: 14 }}>{ch.icon}</span>
@@ -1794,8 +2090,8 @@ function ProgressPage({ stats, allResults, loading, isMobile }) {
             { label: 'Accuracy Rate', value: stats.avgScore, color: C.primary, icon: '🎯' },
             { label: 'Best Performance', value: stats.bestScore, color: C.green, icon: '🏆' },
             { label: 'Completion Rate', value: Math.min(Math.round((stats.testsAttempted / Math.max(chapters.length, 1)) * 100), 100), color: C.accent, icon: '📋' },
-          ].map(item => (
-            <div key={item.label} style={{ marginBottom: 20 }}>
+          ].map((item, idx) => (
+            <div key={item.label} style={{ marginBottom: 20, WebkitAnimation: `fadeIn .4s ease ${idx * 0.1}s both`, animation: `fadeIn .4s ease ${idx * 0.1}s both` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                   <span>{item.icon}</span>
@@ -1816,8 +2112,8 @@ function Placeholder({ page }) {
   const icons = { classes: '📅', lectures: '🎬', practice: '✏️', mocktests: '📝' };
   const labels = { classes: 'Live Classes', lectures: 'Recorded Lectures', practice: 'Practice', mocktests: 'Mock Tests' };
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 360, color: C.muted, background: C.card, borderRadius: 18, border: `1px solid ${C.border}` }}>
-      <div style={{ fontSize: 48, marginBottom: 12 }}>{icons[page] || '📄'}</div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 360, color: C.muted, background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>
+      <div style={{ fontSize: 48, marginBottom: 12, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>{icons[page] || '📄'}</div>
       <div style={{ fontWeight: 800, fontSize: 17, color: C.text, marginBottom: 5 }}>{labels[page] || page}</div>
       <div style={{ fontSize: 13 }}>Coming soon in the full build.</div>
     </div>
@@ -1871,7 +2167,21 @@ export default function DashboardPage() {
   const activeNavItem = (page === 'tests' && subPage === 'mock') ? 'mocktests' : page;
 
   function renderPage() {
+
+
+
+
+
     switch (page) {
+      case 'profile':
+        return <StudentProfilePage
+          user={user}
+          stats={stats}
+          allResults={allResults}
+          onBack={() => handleNav('home')}
+          onNavigate={handleNav}
+          isMobile={isMobile}
+        />;
       case 'tests':
         return <ChapterTestsPage allResults={allResults} onStartTest={id => router.push(`/test/${id}`)} isMobile={isMobile} initialSubView={subPage} />;
       case 'progress':
@@ -1910,9 +2220,43 @@ export default function DashboardPage() {
       <style>{`
         @-webkit-keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         @keyframes shimmer          { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        @-webkit-keyframes fadeIn   { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+        @keyframes fadeIn           { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+        @-webkit-keyframes slideUp  { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+        @keyframes slideUp          { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+        @-webkit-keyframes slideInRow { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:none} }
+        @keyframes slideInRow       { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:none} }
+        @-webkit-keyframes slideInNav { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
+        @keyframes slideInNav       { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
+        @-webkit-keyframes slideInCard { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+        @keyframes slideInCard      { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+        @-webkit-keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @keyframes float            { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @-webkit-keyframes pulse    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.65;transform:scale(1.15)} }
+        @keyframes pulse            { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.65;transform:scale(1.15)} }
+        @-webkit-keyframes iconPop  { 0%{transform:scale(.7)} 70%{transform:scale(1.12)} 100%{transform:scale(1)} }
+        @keyframes iconPop          { 0%{transform:scale(.7)} 70%{transform:scale(1.12)} 100%{transform:scale(1)} }
+        @-webkit-keyframes bounceIn { 0%{transform:scale(.5);opacity:0} 60%{transform:scale(1.15);opacity:1} 100%{transform:scale(1)} }
+        @keyframes bounceIn         { 0%{transform:scale(.5);opacity:0} 60%{transform:scale(1.15);opacity:1} 100%{transform:scale(1)} }
+        @-webkit-keyframes dotPop   { 0%{transform:scale(1)} 40%{transform:scale(1.4)} 100%{transform:scale(1)} }
+        @keyframes dotPop           { 0%{transform:scale(1)} 40%{transform:scale(1.4)} 100%{transform:scale(1)} }
+        @-webkit-keyframes dotReveal { from{opacity:0;transform:scale(.6)} to{opacity:1;transform:scale(1)} }
+        @keyframes dotReveal        { from{opacity:0;transform:scale(.6)} to{opacity:1;transform:scale(1)} }
+        @-webkit-keyframes optionIn  { from{opacity:0;transform:translateX(-6px)} to{opacity:1;transform:none} }
+        @keyframes optionIn         { from{opacity:0;transform:translateX(-6px)} to{opacity:1;transform:none} }
+        @-webkit-keyframes checkPop { 0%{transform:scale(0)} 60%{transform:scale(1.3)} 100%{transform:scale(1)} }
+        @keyframes checkPop         { 0%{transform:scale(0)} 60%{transform:scale(1.3)} 100%{transform:scale(1)} }
+        @-webkit-keyframes barShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        @keyframes barShimmer       { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        @-webkit-keyframes planeDrift { 0%,100%{transform:translateY(-50%) translateX(0) rotate(-3deg)} 50%{transform:translateY(-50%) translateX(12px) rotate(3deg)} }
+        @keyframes planeDrift       { 0%,100%{transform:translateY(-50%) translateX(0) rotate(-3deg)} 50%{transform:translateY(-50%) translateX(12px) rotate(3deg)} }
+        @-webkit-keyframes headphoneBounce { from{transform:translateY(0)} to{transform:translateY(-4px)} }
+        @keyframes headphoneBounce  { from{transform:translateY(0)} to{transform:translateY(-4px)} }
+        @-webkit-keyframes countUp  { from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1)} }
+        @keyframes countUp          { from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1)} }
         * { -webkit-box-sizing:border-box; box-sizing:border-box; margin:0; }
-        button:hover { opacity:.9; }
-        input, button { -webkit-appearance:none; appearance:none; }
+        button:focus-visible { outline:2px solid #1D4ED8; outline-offset:2px; }
+        input,button { -webkit-appearance:none; appearance:none; }
         ::-webkit-scrollbar { width:5px; height:5px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:#CBD5E1; border-radius:99px; }

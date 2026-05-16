@@ -305,9 +305,17 @@ export default function StudentProfilePage({ user: propUser, stats: propStats, a
                 <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', border: `1px solid ${hexAlpha('#fff', 0.05)}`, pointerEvents: 'none' }} />
                 <div style={{ position: 'absolute', top: -70, right: -70, width: 280, height: 280, borderRadius: '50%', border: `1px solid ${hexAlpha('#fff', 0.04)}`, pointerEvents: 'none' }} />
 
-                {/* Back btn */}
+                {/* Back btn — BLACK text */}
                 {onBack && (
-                    <button onClick={onBack} style={{ background: hexAlpha('#fff', 0.1), border: `1px solid ${hexAlpha('#fff', 0.15)}`, borderRadius: 9, padding: '5px 12px', color: '#fff', fontSize: 12, cursor: 'pointer', marginBottom: 18, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <button onClick={onBack} style={{
+                        background: '#FFFFFF',
+                        border: `1px solid ${hexAlpha('#000', 0.12)}`,
+                        borderRadius: 9, padding: '5px 12px',
+                        color: '#000000',          // ← BLACK
+                        fontSize: 12, cursor: 'pointer', marginBottom: 18,
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        fontWeight: 600,
+                    }}>
                         ← Back
                     </button>
                 )}
@@ -352,7 +360,16 @@ export default function StudentProfilePage({ user: propUser, stats: propStats, a
                             <div style={{ color: '#fff', fontWeight: 800, fontSize: 12 }}>{badge.label}</div>
                             <div style={{ color: '#8BA3C5', fontSize: 10 }}>{badge.desc}</div>
                         </div>
-                        <button onClick={() => setEditOpen(true)} style={{ background: hexAlpha('#fff', 0.12), border: `1px solid ${hexAlpha('#fff', 0.2)}`, borderRadius: 9, padding: '8px 16px', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+
+                        {/* Edit Profile btn — BLACK text on WHITE bg */}
+                        <button onClick={() => setEditOpen(true)} style={{
+                            background: '#FFFFFF',
+                            border: `1px solid ${hexAlpha('#000', 0.12)}`,
+                            borderRadius: 9, padding: '8px 16px',
+                            color: '#000000',          // ← BLACK
+                            fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', gap: 6,
+                        }}>
                             ✏️ Edit Profile
                         </button>
                     </div>

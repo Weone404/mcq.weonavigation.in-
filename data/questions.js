@@ -1,5 +1,55 @@
 // ── CHAPTER METADATA ────────────────────────────────────────
 export const chapters = [
+
+
+  { id: 'met01', title: 'The Atmosphere & ICAO Standard Atmosphere', icon: '🌤️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met02', title: 'Temperature, Humidity & Stability', icon: '🌡️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met03', title: 'Pressure, Altimetry & Wind', icon: '💨', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met04', title: 'Clouds, Fog & Visibility', icon: '☁️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met05', title: 'Precipitation & Icing', icon: '🧊', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met06', title: 'Thunderstorms, Turbulence & Wind Shear', icon: '⛈️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met07', title: 'Aviation Weather Reports & Forecasts', icon: '📋', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met08', title: 'Weather Hazards & Tropical Meteorology', icon: '🌀', part: 'Meteorology', color: '#0EA5E9' },
+
+  // RADIO TELEPHONY
+  { id: 'rt01', title: 'RT Procedures – General & Phraseology', icon: '🎙️', part: 'Radio Telephony', color: '#8B5CF6' },
+  { id: 'rt02', title: 'RT – Departure, En-Route & Approach', icon: '📡', part: 'Radio Telephony', color: '#8B5CF6' },
+  { id: 'rt03', title: 'RT – Emergencies & Special Procedures', icon: '🚨', part: 'Radio Telephony', color: '#8B5CF6' },
+
+
+  // NAVIGATION – General Navigation
+  { id: 'gn01', title: 'Shape of the Earth & Coordinates', icon: '🌍', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn02', title: 'Great Circles, Rhumb Lines & Direction', icon: '🧭', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn03', title: 'Distance, Departure & Speed', icon: '📏', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn04', title: 'Maps, Charts & Projections', icon: '🗺️', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn05', title: 'Dead Reckoning & Triangle of Velocities', icon: '✈️', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn06', title: 'Altimetry & Pressure Systems', icon: '🌡️', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn07', title: 'Critical Point & Point of No Return', icon: '⛽', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn08', title: 'Radio Navigation Aids (VOR, NDB, DME, ILS)', icon: '📡', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn09', title: 'Speed, Temperature & Mach Number', icon: '💨', part: 'Part I – General Navigation', color: '#10B981' },
+  { id: 'gn10', title: 'Time, UTC & Sunrise/Sunset', icon: '🕐', part: 'Part I – General Navigation', color: '#10B981' },
+
+  // NAVIGATION – Radio Navigation
+  { id: 'rn01', title: 'Radio Propagation & Wave Theory', icon: '📻', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn02', title: 'ADF / NDB', icon: '🔊', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn03', title: 'ADF Track & Drift', icon: '🧲', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn04', title: 'VHF Direction Finding (VDF)', icon: '📶', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn05', title: 'VOR', icon: '🔵', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn06', title: 'VOR / RMI / ADF Combined', icon: '🎯', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn07', title: 'Holding, Radial Intercept & Bearing to Plot', icon: '🔄', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn08', title: 'ILS (Instrument Landing System)', icon: '🛬', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn09', title: 'DME & Radar (SSR)', icon: '📡', part: 'Part II – Radio Navigation', color: '#059669' },
+  { id: 'rn10', title: 'GNSS', icon: '🛰️', part: 'Part II – Radio Navigation', color: '#059669' },
+
+  // TECHNICAL GENERAL
+  { id: 'tg01', title: 'Aerodynamics & Flight Mechanics', icon: '✈️', part: 'Technical General', color: '#F59E0B' },
+  { id: 'tg02', title: 'Aircraft Structures & Construction', icon: '🏗️', part: 'Technical General', color: '#F59E0B' },
+  { id: 'tg03', title: 'Gas Turbine Engines', icon: '🔥', part: 'Technical General', color: '#D97706' },
+  { id: 'tg04', title: 'Piston Engines & Propellers', icon: '🔩', part: 'Technical General', color: '#D97706' },
+  { id: 'tg05', title: 'Aircraft Systems – Hydraulic & Pneumatic', icon: '⚙️', part: 'Technical General', color: '#B45309' },
+  { id: 'tg06', title: 'Aircraft Systems – Electrical & Electronics', icon: '⚡', part: 'Technical General', color: '#B45309' },
+  { id: 'tg07', title: 'Aircraft Systems – Environmental & Emergency', icon: '🛡️', part: 'Technical General', color: '#B45309' },
+  { id: 'tg08', title: 'Flight Performance & Weight', icon: '⚖️', part: 'Technical General', color: '#B45309' },
   // PART I – AIR REGULATIONS
   { id: 'ch01', title: 'Definitions & Abbreviations', icon: '📖', part: 'Part I – Air Regulations' },
   { id: 'ch02', title: 'International Organisations & Conventions', icon: '🌐', part: 'Part I – Air Regulations' },
@@ -46,6 +96,1054 @@ export const chapters = [
 
 // ── QUESTION BANK ───────────────────────────────────────────
 export const questions = {
+
+  met01: [
+    {
+      id: 'met01_01',
+      question: 'The ICAO standard atmosphere defines MSL temperature as:',
+      options: ['0°C', '15°C', '20°C', '25°C'],
+      correct: 1,
+      explanation: 'ICAO ISA at MSL: temperature = +15°C (288.15 K), pressure = 1013.25 hPa, density = 1.225 kg/m³, and lapse rate = 6.5°C/1000 m (1.98°C/1000 ft) up to the tropopause.'
+    },
+    {
+      id: 'met01_02',
+      question: 'The standard tropopause in ICAO ISA is located at approximately:',
+      options: ['25,000 ft', '36,090 ft (11 km)', '45,000 ft', '50,000 ft'],
+      correct: 1,
+      explanation: 'In ICAO ISA, the tropopause is at 11 km (36,090 ft / FL360). Above this level (the stratosphere), temperature remains constant at −56.5°C up to approximately 20 km.'
+    },
+    {
+      id: 'met01_03',
+      question: 'In the ISA, the temperature in the stratosphere (between 11 km and 20 km) is:',
+      options: ['Increasing with altitude', 'Decreasing with altitude', 'Constant at −56.5°C', 'Constant at −45°C'],
+      correct: 2,
+      explanation: 'Between the tropopause (11 km) and 20 km, ISA temperature is constant at −56.5°C (216.65 K). This is called the isothermal layer of the lower stratosphere.'
+    },
+    {
+      id: 'met01_04',
+      question: 'The four main layers of the atmosphere in ascending order are:',
+      options: ['Stratosphere, Troposphere, Mesosphere, Thermosphere', 'Troposphere, Stratosphere, Mesosphere, Thermosphere', 'Troposphere, Mesosphere, Stratosphere, Thermosphere', 'Thermosphere, Mesosphere, Stratosphere, Troposphere'],
+      correct: 1,
+      explanation: 'From surface upward: Troposphere (0–11 km) → Stratosphere (11–50 km) → Mesosphere (50–80 km) → Thermosphere (80–700 km). Most aviation activity occurs in the troposphere; SST and some business jets reach the lower stratosphere.'
+    },
+    {
+      id: 'met01_05',
+      question: 'The ISA lapse rate of 1.98°C per 1000 ft applies in the:',
+      options: ['Stratosphere only', 'Troposphere only', 'Both troposphere and stratosphere', 'Mesosphere only'],
+      correct: 1,
+      explanation: 'The ISA environmental lapse rate (ELR) of approximately 2°C/1000 ft (6.5°C/km) applies only in the TROPOSPHERE. Above the tropopause in the lower stratosphere, temperature is isothermal (constant).'
+    },
+    {
+      id: 'met01_06',
+      question: 'The height of the tropopause is greatest at:',
+      options: ['The poles', 'Mid-latitudes', 'The equator', 'It is constant worldwide'],
+      correct: 2,
+      explanation: 'The tropopause height varies with latitude and season. It is highest (~18 km / 60,000 ft) over the equator due to intense convection, and lowest (~8 km / 26,000 ft) over the poles.'
+    },
+    {
+      id: 'met01_07',
+      question: 'The jet stream is found at approximately:',
+      options: ['Surface to 5,000 ft', '5,000–15,000 ft', '25,000–45,000 ft near the tropopause', 'Above FL500'],
+      correct: 2,
+      explanation: 'The jet stream is a narrow band of strong westerly winds found near the tropopause, typically between FL250–FL450. Wind speeds can exceed 200 kt, significantly affecting flight times on transatlantic and transpacific routes.'
+    },
+    {
+      id: 'met01_08',
+      question: 'ISA temperature at FL200 (20,000 ft) is approximately:',
+      options: ['−5°C', '−25°C', '−24.6°C', '−40°C'],
+      correct: 2,
+      explanation: 'ISA temperature at FL200 = 15°C − (20,000 ft × 1.98°C/1000 ft) = 15 − 39.6 = −24.6°C ≈ −25°C. (Using 2°C/1000 ft gives 15 − 40 = −25°C.)'
+    },
+    {
+      id: 'met01_09',
+      question: 'Compared to ISA, if OAT is warmer than ISA at a given pressure level, density altitude is:',
+      options: ['Lower than pressure altitude', 'Higher than pressure altitude', 'Equal to pressure altitude', 'Unaffected by temperature'],
+      correct: 1,
+      explanation: 'Warmer-than-ISA air is less dense. Density altitude = Pressure altitude corrected for non-standard temperature. Warmer air means HIGHER density altitude — the air behaves as if the aircraft were at a higher altitude, reducing engine and aerodynamic performance.'
+    },
+    {
+      id: 'met01_10',
+      question: 'The percentage of water vapour in the atmosphere at MSL in the ISA is:',
+      options: ['Approximately 21%', 'Approximately 1%', '0% (ISA assumes dry air)', '78%'],
+      correct: 2,
+      explanation: 'ICAO ISA assumes completely DRY air (0% water vapour). Dry air composition at MSL: 78% nitrogen, 21% oxygen, 1% argon + other gases. In reality, water vapour content varies from near 0% to about 4%.'
+    },
+    {
+      id: 'met01_11',
+      question: 'Ozone concentration is highest in the:',
+      options: ['Troposphere', 'Lower stratosphere (ozonosphere)', 'Mesosphere', 'Thermosphere'],
+      correct: 1,
+      explanation: 'The ozone layer (ozonosphere) is concentrated in the stratosphere between approximately 15–35 km altitude. Ozone (O₃) absorbs harmful ultraviolet radiation from the Sun, making it essential for life on Earth.'
+    },
+    {
+      id: 'met01_12',
+      question: 'ISA pressure at MSL is 1013.25 hPa. At FL50 (5000 ft), the approximate pressure is:',
+      options: ['843 hPa', '944 hPa', '850 hPa', '900 hPa'],
+      correct: 1,
+      explanation: 'Using the approximate rule of 1 hPa per 30 ft near sea level, or the ISA pressure table: at 5000 ft, ISA pressure ≈ 843 hPa. (More precisely: 843.07 hPa at 5000 ft ISA.) The answer 843 hPa is most accurate; 944 hPa is incorrect.'
+    },
+  ],
+
+  // ── MET02: Temperature, Humidity & Stability ──
+  met02: [
+    {
+      id: 'met02_01',
+      question: 'The dry adiabatic lapse rate (DALR) is approximately:',
+      options: ['1°C per 1000 ft', '3°C per 1000 ft', '1.5°C per 1000 ft', '0.5°C per 1000 ft'],
+      correct: 1,
+      explanation: 'The Dry Adiabatic Lapse Rate (DALR) = 3°C per 1000 ft (9.8°C/km). This is the rate at which an unsaturated parcel of air cools as it rises adiabatically (without exchanging heat with its environment).'
+    },
+    {
+      id: 'met02_02',
+      question: 'The saturated adiabatic lapse rate (SALR) compared to DALR is:',
+      options: ['Equal to DALR at all temperatures', 'Greater than DALR', 'Less than DALR (closer to 1.5°C/1000 ft on average)', 'Variable but always greater than ELR'],
+      correct: 2,
+      explanation: 'SALR is LESS than DALR because as saturated air rises and cools, condensation releases latent heat of vaporisation, partially offsetting the cooling. SALR averages about 1.5°C/1000 ft but varies from ~1°C/1000 ft in warm humid air to ~2.5°C/1000 ft in cold air.'
+    },
+    {
+      id: 'met02_03',
+      question: 'Absolute instability exists when the Environmental Lapse Rate (ELR) is:',
+      options: ['Less than the SALR', 'Between the SALR and DALR', 'Greater than the DALR', 'Equal to the DALR'],
+      correct: 2,
+      explanation: 'Absolute Instability: ELR > DALR (> 3°C/1000 ft). Any parcel of air — dry or saturated — that is displaced upward will find itself warmer than its surroundings and continue to rise freely. Associated with strong convective activity.'
+    },
+    {
+      id: 'met02_04',
+      question: 'Conditional instability exists when:',
+      options: ['ELR < SALR', 'SALR < ELR < DALR', 'ELR > DALR', 'ELR = SALR'],
+      correct: 1,
+      explanation: 'Conditional Instability: SALR < ELR < DALR. The atmosphere is stable for unsaturated (dry) air but unstable for saturated (moist) air. Convection occurs only IF the air is lifted to its condensation level — hence "conditional."'
+    },
+    {
+      id: 'met02_05',
+      question: 'Absolute stability exists when the ELR is:',
+      options: ['Greater than the DALR', 'Greater than the SALR but less than DALR', 'Less than the SALR', 'Equal to the DALR'],
+      correct: 2,
+      explanation: 'Absolute Stability: ELR < SALR. Both dry and saturated parcels cool faster than the surrounding atmosphere when lifted — they are always colder (denser) than their surroundings and will sink back. Associated with stratiform clouds and stable weather.'
+    },
+    {
+      id: 'met02_06',
+      question: 'Relative humidity is defined as:',
+      options: ['The actual amount of water vapour in the air', 'The ratio of actual vapour pressure to saturation vapour pressure × 100%', 'The temperature at which dew forms', 'The amount of rainfall per unit area'],
+      correct: 1,
+      explanation: 'Relative Humidity (RH) = (Actual vapour pressure / Saturation vapour pressure) × 100%. When RH = 100%, the air is saturated. RH depends on both actual moisture content AND temperature (saturation vapour pressure increases with temperature).'
+    },
+    {
+      id: 'met02_07',
+      question: 'The dew point temperature is:',
+      options: ['The temperature at which ice forms', 'The temperature to which air must be cooled (at constant pressure) to reach saturation', 'Always 0°C in tropical regions', 'The temperature difference between surface and tropopause'],
+      correct: 1,
+      explanation: 'Dew point is the temperature to which air must be cooled at constant pressure and moisture content to reach saturation (RH = 100%). When air temperature equals dew point, condensation begins. Spread (temperature minus dew point) indicates how close air is to saturation.'
+    },
+    {
+      id: 'met02_08',
+      question: 'A temperature inversion is a condition where:',
+      options: ['Temperature decreases with altitude at a rate greater than DALR', 'Temperature increases with altitude', 'Temperature remains constant with altitude', 'The dew point increases with altitude'],
+      correct: 1,
+      explanation: 'A temperature inversion is when temperature INCREASES with altitude (opposite of normal). Inversions act as "lids" on convection, trap pollutants, cause poor visibility (smog), affect radio propagation, and mark the tops of radiation fog layers.'
+    },
+    {
+      id: 'met02_09',
+      question: 'The lifting condensation level (LCL) is:',
+      options: ['The level at which a rising parcel of dry air reaches saturation and cloud base forms', 'The tropopause height', 'The height at which icing begins', 'The cloud top level'],
+      correct: 0,
+      explanation: 'The LCL is the height at which a rising unsaturated parcel of air cools to its dew point and condensation begins — marking the cloud base of convective clouds. It can be estimated as: LCL (ft) ≈ 400 × (Surface temperature − Dew point).'
+    },
+    {
+      id: 'met02_10',
+      question: 'If surface temperature is 25°C and dew point is 13°C, the estimated cloud base is approximately:',
+      options: ['2,400 ft', '4,800 ft', '1,200 ft', '6,000 ft'],
+      correct: 1,
+      explanation: 'LCL ≈ 400 × (T − Td) = 400 × (25 − 13) = 400 × 12 = 4,800 ft. This is a useful approximation for cumulus cloud base in convective conditions.'
+    },
+    {
+      id: 'met02_11',
+      question: 'A thermal inversion occurring near the surface after a clear night is called a:',
+      options: ['Frontal inversion', 'Subsidence inversion', 'Radiation inversion', 'Turbulence inversion'],
+      correct: 2,
+      explanation: 'Radiation inversion: occurs near the surface on clear, calm nights when the ground radiates heat to space and cools rapidly. The surface air cools faster than air above, creating a shallow surface inversion — associated with radiation fog formation.'
+    },
+    {
+      id: 'met02_12',
+      question: 'Latent heat is:',
+      options: ['Heat that can be measured with a thermometer (sensible heat)', 'Heat released or absorbed during a change of state without temperature change', 'The heat generated by urban areas', 'The heat stored in ocean water'],
+      correct: 1,
+      explanation: 'Latent heat is the energy released or absorbed when water changes state (e.g., from liquid to vapour) WITHOUT a change in temperature. Condensation releases latent heat (warms the surrounding air); evaporation absorbs latent heat (cools the air). Latent heat drives convection and fuels thunderstorms.'
+    },
+  ],
+
+  // ── MET03: Pressure, Altimetry & Wind ──
+  met03: [
+    {
+      id: 'met03_01',
+      question: 'A trough of low pressure is an area of:',
+      options: ['High pressure extending from an anticyclone', 'Elongated low pressure extending from a depression centre', 'Circular high pressure system', 'Pressure ridge between two lows'],
+      correct: 1,
+      explanation: 'A trough is an elongated area of relatively low pressure extending from a depression (low) centre. Troughs are associated with unsettled weather, cloud and precipitation, similar to a frontal system.'
+    },
+    {
+      id: 'met03_02',
+      question: 'In the Northern Hemisphere, surface winds around a low pressure system circulate:',
+      options: ['Clockwise and outward', 'Anticlockwise and inward', 'Clockwise and inward', 'Anticlockwise and outward'],
+      correct: 1,
+      explanation: 'In the NH, the Coriolis force deflects air to the RIGHT. Around a LOW (cyclone), air flows ANTICLOCKWISE and INWARD toward the centre (converging). Around a HIGH (anticyclone), air flows CLOCKWISE and OUTWARD (diverging).'
+    },
+    {
+      id: 'met03_03',
+      question: 'The Coriolis force acts:',
+      options: ['To the left in the Northern Hemisphere', 'To the right in the Northern Hemisphere and to the left in the Southern Hemisphere', 'Only at the equator', 'Vertically upward'],
+      correct: 1,
+      explanation: 'The Coriolis force (an apparent force due to Earth\'s rotation) deflects moving air to the RIGHT in the Northern Hemisphere and to the LEFT in the Southern Hemisphere. It is zero at the equator and maximum at the poles.'
+    },
+    {
+      id: 'met03_04',
+      question: 'The geostrophic wind is a balance between:',
+      options: ['Pressure gradient force and friction', 'Pressure gradient force and Coriolis force', 'Coriolis force and friction', 'Thermal gradient and Coriolis force'],
+      correct: 1,
+      explanation: 'The geostrophic wind is a theoretical wind that results from the exact balance between the pressure gradient force (from high to low pressure) and the Coriolis force (deflecting to the right in NH). It flows parallel to the isobars.'
+    },
+    {
+      id: 'met03_05',
+      question: 'Near the surface, winds blow at an angle to the isobars (across them toward lower pressure) because of:',
+      options: ['The Coriolis force', 'Friction with the surface', 'The pressure gradient force', 'Thermal convection'],
+      correct: 1,
+      explanation: 'Near the surface, FRICTION slows the wind below the geostrophic speed. This reduces the Coriolis deflection, allowing the pressure gradient force to turn the wind slightly inward toward lower pressure — typically 10–30° across the isobars depending on terrain roughness.'
+    },
+    {
+      id: 'met03_06',
+      question: 'QNH is defined as:',
+      options: ['Atmospheric pressure at the aerodrome reference point', 'Atmospheric pressure corrected to mean sea level using ISA temperature', 'Standard pressure of 1013.25 hPa', 'Pressure at aircraft level'],
+      correct: 1,
+      explanation: 'QNH is the atmospheric pressure at the station corrected to Mean Sea Level (MSL) using ISA temperature assumptions. With QNH set on the altimeter sub-scale, the altimeter reads elevation above MSL when on the ground, and altitude above MSL in flight.'
+    },
+    {
+      id: 'met03_07',
+      question: 'From high to low pressure, look out below. This means:',
+      options: ['High QNH areas are safer to fly over', 'Flying into lower-QNH area with fixed altimeter setting, true altitude is lower than indicated', 'Wind speed increases flying toward low pressure', 'Aircraft descends automatically toward low pressure'],
+      correct: 1,
+      explanation: 'When flying from high QNH to low QNH without resetting the altimeter, the altimeter over-reads — it shows a higher altitude than the aircraft is actually at. True altitude is LESS than indicated. The mnemonic "high to low, look out below" captures this hazard.'
+    },
+    {
+      id: 'met03_08',
+      question: 'The Foehn effect refers to:',
+      options: ['Cooling of air on the windward side of mountains', 'Warming and drying of air on the lee side of mountains due to orographic lift', 'Sea breeze circulation on coastal areas', 'Turbulence generated by mountain waves'],
+      correct: 1,
+      explanation: 'The Foehn (or Föhn) effect: as moist air is forced over a mountain, it cools at the DALR then SALR (releasing latent heat via condensation). On the lee side, it descends at the DALR — ending up WARMER and DRIER than it was at the same height on the windward side.'
+    },
+    {
+      id: 'met03_09',
+      question: 'A pressure of 978 hPa is described as:',
+      options: ['High pressure', 'Normal pressure', 'Low pressure', 'Standard pressure'],
+      correct: 2,
+      explanation: 'Standard MSL pressure is 1013.25 hPa. Pressure significantly below this (978 hPa is 35 hPa below standard) indicates a depression (low pressure system). Deep lows over the North Atlantic may reach 960 hPa or lower.'
+    },
+    {
+      id: 'met03_10',
+      question: 'Mountain waves are most likely to develop when:',
+      options: ['Wind direction is parallel to the mountain ridge and speed is less than 15 kt', 'Wind is at approximately 90° to the ridge, speeds exceed 25 kt, and the atmosphere is stable', 'Unstable air crosses low hills in any direction', 'Temperature inversions are absent'],
+      correct: 1,
+      explanation: 'Mountain waves (lee waves) require: (1) Wind approximately perpendicular (±30°) to the ridge; (2) Wind speed exceeding ~25 kt, increasing with altitude; (3) Stable atmosphere (to allow wave propagation). Associated with severe turbulence, rotor zones, and lenticular clouds.'
+    },
+    {
+      id: 'met03_11',
+      question: 'The sea breeze develops during the day because:',
+      options: ['The sea heats faster than the land, creating lower pressure over the sea', 'The land heats faster than the sea, creating lower pressure over land, drawing cooler air from the sea', 'Coriolis force pushes air from sea to land', 'High pressure builds over the sea at night'],
+      correct: 1,
+      explanation: 'Sea breeze (day): land heats faster than sea → air over land rises and pressure drops → cooler, denser sea air flows onshore (sea breeze). At night, the process reverses (land breeze) as land cools faster than the sea.'
+    },
+    {
+      id: 'met03_12',
+      question: 'Wind shear is defined as:',
+      options: ['Change of wind direction only over a distance', 'Change of wind speed only over a distance', 'Change of wind speed and/or direction over a given distance (horizontal or vertical)', 'Turbulence caused by friction'],
+      correct: 2,
+      explanation: 'Wind shear is the rate of change of wind speed and/or direction over a given horizontal or vertical distance. Vertical wind shear is most hazardous during takeoff and landing (below 1500 ft AGL), where it can cause sudden changes in airspeed and lift.'
+    },
+  ],
+
+  // ── MET04: Clouds, Fog & Visibility ──
+  met04: [
+    {
+      id: 'met04_01',
+      question: 'The WMO classifies clouds into four families based on altitude. Which is correct?',
+      options: ['High (Ci), Middle (Alto), Low (Strato), Vertical (Cumulo)', 'High (Ci/Cs/Cc), Middle (As/Ac), Low (St/Sc/Ns), Vertical development (Cu/Cb)', 'Stratus, Cumulus, Cirrus, Nimbus', 'Layer, Heap, Veil, Wave'],
+      correct: 1,
+      explanation: 'WMO cloud families: HIGH (Cirrus, Cirrostratus, Cirrocumulus — above ~20,000 ft); MIDDLE (Altostratus, Altocumulus — 6,500–20,000 ft); LOW (Stratus, Stratocumulus, Nimbostratus — surface to 6,500 ft); VERTICAL DEVELOPMENT (Cumulus, Cumulonimbus — all levels).'
+    },
+    {
+      id: 'met04_02',
+      question: 'Cumulonimbus clouds are associated with:',
+      options: ['Light drizzle and stable conditions', 'Severe turbulence, heavy rain/hail, lightning, icing, and windshear', 'Smooth flying conditions above FL200', 'Only light precipitation'],
+      correct: 1,
+      explanation: 'Cumulonimbus (Cb) clouds are the most hazardous to aviation — associated with: severe turbulence (especially below and near the cloud), heavy rain/hail, lightning, severe icing, downbursts and windshear, and tornadoes. Cb should NEVER be penetrated.'
+    },
+    {
+      id: 'met04_03',
+      question: 'The cloud with the greatest horizontal extent and most continuous precipitation is:',
+      options: ['Cumulonimbus', 'Nimbostratus', 'Altostratus', 'Stratus'],
+      correct: 1,
+      explanation: 'Nimbostratus (Ns) is a thick, dark grey layer cloud producing continuous moderate to heavy rain or snow. It typically extends over thousands of square kilometres and can reach from near the surface to FL200 in frontal systems.'
+    },
+    {
+      id: 'met04_04',
+      question: 'Radiation fog forms most readily under conditions of:',
+      options: ['Strong winds, overcast sky, high humidity', 'Light winds, clear sky, high relative humidity, and cold nights', 'Strong winds and heavy cloud cover', 'Daytime heating in summer'],
+      correct: 1,
+      explanation: 'Radiation fog formation requires: (1) Clear sky (for effective radiation cooling); (2) High relative humidity; (3) Light winds (2–8 kt — calm winds prevent mixing, strong winds dissipate fog); (4) Long nights (especially autumn/winter). It forms just after midnight and dissipates after sunrise.'
+    },
+    {
+      id: 'met04_05',
+      question: 'Advection fog forms when:',
+      options: ['Cold air moves over a warm sea surface', 'Warm moist air moves over a cold surface and is cooled to its dew point', 'Air descends in anticyclones', 'Radiation cooling occurs overnight'],
+      correct: 1,
+      explanation: 'Advection fog forms when WARM MOIST AIR moves horizontally over a COLD SURFACE and is cooled to its dew point. Common over cold ocean currents (e.g., Grand Banks) and when warm air moves inland over cold ground in spring.'
+    },
+    {
+      id: 'met04_06',
+      question: 'Hill fog (upslope fog) forms when:',
+      options: ['Fog from valleys rises to cover hills', 'Moist air is forced to rise over hills, cools adiabatically to dew point, and cloud/fog forms', 'Hills radiate more heat than valleys', 'Wind pushes valley fog up slopes'],
+      correct: 1,
+      explanation: 'Hill fog (orographic fog) forms when moist air is forced up a hillside or mountain slope, cools adiabatically, and reaches its dew point. The resulting cloud envelops the terrain — appearing as fog on the hill but as low cloud from a distance.'
+    },
+    {
+      id: 'met04_07',
+      question: 'The cloud type that appears as white mares\' tails and is composed of ice crystals is:',
+      options: ['Altocumulus', 'Cirrus', 'Cirrostratus', 'Altostratus'],
+      correct: 1,
+      explanation: 'Cirrus (Ci) appears as wispy white "mares\' tails" composed entirely of ice crystals. Found above 20,000 ft. A veil of cirrostratus may follow, producing a halo around the sun or moon, often indicating an approaching warm front.'
+    },
+    {
+      id: 'met04_08',
+      question: 'CAVOK means:',
+      options: ['Cloud and Visibility are both zero', 'Ceiling And Visibility OK — visibility ≥10 km, no cloud below 5000 ft or MSA, and no significant weather', 'Cloud Above Visual Obstructions Knows', 'Ceiling Above Visible Operational Levels Known'],
+      correct: 1,
+      explanation: 'CAVOK (Ceiling And Visibility OK) in a METAR/TAF requires ALL of: (1) Visibility ≥ 10 km; (2) No CB or TCU at any height, no cloud below 5000 ft or Minimum Sector Altitude (whichever is higher); (3) No significant weather (thunderstorm, precipitation, fog, etc.).'
+    },
+    {
+      id: 'met04_09',
+      question: 'Lenticular clouds (ACSL/CCSL) indicate:',
+      options: ['Approaching cold front', 'Standing mountain waves and severe turbulence in rotor zones below', 'Stable, smooth flying conditions', 'Tropical cyclone formation'],
+      correct: 1,
+      explanation: 'Lenticular (lens-shaped) clouds — Altocumulus Standing Lenticular (ACSL) or Cirrocumulus Standing Lenticular (CCSL) — form in the crests of mountain waves. They indicate active standing waves and severe turbulence, especially in the rotor zone below wave crests.'
+    },
+    {
+      id: 'met04_10',
+      question: 'In a METAR, "FEW" cloud means:',
+      options: ['1–2 oktas (eighths) of sky covered', '3–4 oktas of sky covered', '5–7 oktas of sky covered', '8 oktas (overcast)'],
+      correct: 0,
+      explanation: 'METAR cloud amounts: FEW = 1–2 oktas (1/8 to 2/8 sky cover); SCT (Scattered) = 3–4 oktas; BKN (Broken) = 5–7 oktas; OVC (Overcast) = 8 oktas (full coverage). FEW is not reported below the MSA threshold in CAVOK conditions.'
+    },
+    {
+      id: 'met04_11',
+      question: 'Precipitation fog can form over land when:',
+      options: ['Snow falls through sub-zero air', 'Rain falls through a layer of cold air that is already saturated or near saturation', 'Drizzle falls from stratus clouds', 'Orographic lifting causes condensation'],
+      correct: 1,
+      explanation: 'Precipitation fog (frontal fog) forms when rain falls from warm air above a frontal surface into cooler air below that is near saturation. The falling rain evaporates into the cold air, raising its humidity to saturation and causing fog ahead of a warm front.'
+    },
+    {
+      id: 'met04_12',
+      question: 'Prevailing visibility in a METAR is defined as:',
+      options: ['The maximum visibility in any direction', 'The visibility that is equalled or exceeded over at least half of the horizon', 'The vertical visibility through fog', 'The visibility along the runway centreline'],
+      correct: 1,
+      explanation: 'Prevailing visibility is the greatest visibility value that is equalled or exceeded around at least HALF of the horizon circle. It does not need to be continuous. If visibility varies significantly around the horizon, it may be reported as two or more directional values.'
+    },
+  ],
+
+  // ── MET05: Precipitation & Icing ──
+  met05: [
+    {
+      id: 'met05_01',
+      question: 'Clear ice (glaze ice) on aircraft forms most rapidly when:',
+      options: ['Flying through cirrus clouds at −40°C', 'Flying through supercooled large water droplets at temperatures between 0°C and −10°C', 'Flying through dry snow at temperatures below −20°C', 'At temperatures below −40°C in any cloud'],
+      correct: 1,
+      explanation: 'Clear (glaze) ice forms when large supercooled water droplets freeze slowly on contact with the aircraft — most commonly between 0°C and −10°C. The water spreads before freezing, forming a dense, clear, hard layer that is the most hazardous type of structural icing due to its weight and difficulty to remove.'
+    },
+    {
+      id: 'met05_02',
+      question: 'Rime ice forms:',
+      options: ['From large supercooled droplets at temperatures near 0°C', 'From small supercooled droplets that freeze immediately on contact, forming opaque white ice, typically at temperatures below −10°C', 'Only inside cumulonimbus clouds', 'Only in clear air at high altitudes'],
+      correct: 1,
+      explanation: 'Rime ice forms when small supercooled water droplets freeze immediately on contact before they can flow along the surface. It appears white, opaque and brittle. Most common in stratiform clouds at temperatures between −10°C and −20°C. Less dense and easier to shed than clear ice.'
+    },
+    {
+      id: 'met05_03',
+      question: 'Mixed ice is:',
+      options: ['Ice that forms only in cumulonimbus clouds', 'A combination of clear and rime ice resulting in rough, irregular accretion', 'Ice mixed with rain and snow on the runway', 'Ice formed inside fuel tanks'],
+      correct: 1,
+      explanation: 'Mixed ice is a combination of clear and rime ice that forms when conditions alternate between large and small droplets, or temperatures fluctuate near the boundary between clear and rime ice formation. Results in rough, irregular, hard accretion that significantly disrupts airflow.'
+    },
+    {
+      id: 'met05_04',
+      question: 'The most hazardous condition for structural icing is:',
+      options: ['Thin cirrus at FL350', 'Supercooled large droplet (SLD) icing in freezing rain or freezing drizzle', 'Dry snow at −30°C', 'Clear air icing above FL400'],
+      correct: 1,
+      explanation: 'Supercooled Large Droplet (SLD) icing (freezing rain or freezing drizzle) is the most hazardous structural icing condition. Large droplets impact further back on the wing behind the protected zone, forming clear ice ridges that severely degrade lift and increase drag.'
+    },
+    {
+      id: 'met05_05',
+      question: 'Carburetor icing is most likely when ambient conditions are:',
+      options: ['Below −30°C with no visible moisture', 'Temperature +30°C and relative humidity 30%', 'Temperature 5–20°C with high relative humidity', 'Temperature −10°C and clear sky'],
+      correct: 2,
+      explanation: 'Carburettor icing is most likely at temperatures between approximately −5°C and +30°C with high relative humidity (above 70%). The venturi effect in the carburettor causes evaporative cooling of 20–30°C, allowing ice to form even when ambient temperatures are well above 0°C.'
+    },
+    {
+      id: 'met05_06',
+      question: 'Freezing rain occurs when:',
+      options: ['Rain falls and temperature is below 0°C throughout', 'Rain falls through a warm layer aloft, then through a shallow sub-zero layer near the surface, and remains supercooled until it hits a surface', 'Snow melts at altitude and refreezes before landing', 'Rain freezes inside cumulonimbus clouds'],
+      correct: 1,
+      explanation: 'Freezing rain: occurs in a warm sector or near a warm front. Rain falls from warmer air above (above 0°C layer), passes through a shallow sub-zero layer near the surface, and arrives as supercooled liquid that freezes on contact with surfaces below 0°C. Creates severe icing hazard.'
+    },
+    {
+      id: 'met05_07',
+      question: 'Hail is most commonly associated with:',
+      options: ['Nimbostratus clouds', 'Frontal stratus in winter', 'Large cumulonimbus clouds with strong updrafts', 'High cirrus clouds'],
+      correct: 2,
+      explanation: 'Hail forms inside CUMULONIMBUS clouds when ice pellets are carried up and down in strong updrafts and downdrafts, accreting supercooled water droplets in each cycle until heavy enough to fall. Large Cb with strong updrafts (>100 ft/sec) produce larger hailstones.'
+    },
+    {
+      id: 'met05_08',
+      question: 'Engine intake icing is most critical for:',
+      options: ['Turboprop engines during descent', 'Turbofan engines only at altitude', 'Piston engines with carburetors and turbine engines during ground operations', 'Jet engines at cruise altitude'],
+      correct: 2,
+      explanation: 'Engine intake icing: (1) PISTON carburettor engines — vulnerable in humid air above 0°C; (2) TURBINE engines — intake lip icing at low power (ground idle, approach) can break off and cause compressor damage. Turboprops with pitot-type intakes are particularly vulnerable.'
+    },
+  ],
+
+  // ── MET06: Thunderstorms, Turbulence & Wind Shear ──
+  met06: [
+    {
+      id: 'met06_01',
+      question: 'The three stages of a thunderstorm cell development are:',
+      options: ['Growth, Mature, Dissipating', 'Cumulus, Cumulonimbus, Dissipating', 'Developing, Active, Inactive', 'Convective, Frontal, Orographic'],
+      correct: 0,
+      explanation: 'A thunderstorm cell develops through three stages: (1) CUMULUS (developing) stage — strong updrafts only; (2) MATURE stage — updrafts AND downdrafts, most hazardous, lightning, hail, tornadoes; (3) DISSIPATING stage — downdrafts dominate, precipitation decreases.'
+    },
+    {
+      id: 'met06_02',
+      question: 'The most hazardous stage of a thunderstorm for aircraft is:',
+      options: ['Developing (cumulus) stage', 'Mature stage', 'Dissipating stage', 'All stages are equally dangerous'],
+      correct: 1,
+      explanation: 'The MATURE stage is most hazardous: both updrafts and downdrafts coexist (severe turbulence), heaviest precipitation, lightning, hail, lowest cloud tops, microbursts, windshear, and severe icing. An aircraft can be torn apart by the turbulence in a mature Cb.'
+    },
+    {
+      id: 'met06_03',
+      question: 'SIGMET information covers which types of significant meteorological phenomena?',
+      options: ['Routine weather at aerodromes only', 'Severe turbulence, severe icing, tropical cyclones, severe mountain wave, sandstorm/duststorm, volcanic ash', 'Only icing and turbulence above FL100', 'Meteorological conditions below 3000 ft AGL'],
+      correct: 1,
+      explanation: 'SIGMETs (Significant Meteorological Information) are issued for phenomena hazardous to ALL aircraft: severe/extreme turbulence (including CAT), severe icing, tropical cyclones, severe mountain wave (marked by CAT or rotor), sandstorm/duststorm, and volcanic ash and radioactive cloud.'
+    },
+    {
+      id: 'met06_04',
+      question: 'Clear Air Turbulence (CAT) is most commonly associated with:',
+      options: ['Ground level friction turbulence', 'Wind shear near the jet stream, often at or just below the tropopause', 'Thunderstorms at low altitude', 'Coastal sea breezes'],
+      correct: 1,
+      explanation: 'CAT occurs in clear air (no clouds), typically in the vicinity of the jet stream and areas of strong wind shear near the tropopause. It gives no radar or visual warning. Most severe on the polar (lower pressure) side of the jet core.'
+    },
+    {
+      id: 'met06_05',
+      question: 'Low-level windshear (LLWS) is most hazardous because:',
+      options: ['It causes structural damage to the aircraft', 'During takeoff/approach, a sudden change from headwind to tailwind reduces lift at a critical phase when altitude and airspeed margins are minimal', 'It only occurs in thunderstorm conditions', 'It always gives visible warning (dark clouds)'],
+      correct: 1,
+      explanation: 'LLWS below 1500 ft AGL is hazardous because: (1) Airspeed/lift changes suddenly; (2) Altitude and airspeed margins are minimal during TO/approach; (3) Recovery time is limited. Encountering a tailwind shear reduces IAS, lift, and climb performance — potentially catastrophic below decision height.'
+    },
+    {
+      id: 'met06_06',
+      question: 'A microburst is characterised by:',
+      options: ['Large-scale horizontal wind associated with cyclones', 'An intense small-scale downdraft that produces a divergent wind pattern at the surface — producing headwind followed rapidly by tailwind', 'Rotating windstorm below cumulonimbus', 'Sustained strong winds above FL200'],
+      correct: 1,
+      explanation: 'A microburst is a concentrated downdraft that hits the surface and spreads outward. An aircraft flying through it encounters: first a HEADWIND (increasing performance) then a rapid TAILWIND (decreasing performance + downdraft). This sequence is extremely dangerous during take-off and landing.'
+    },
+    {
+      id: 'met06_07',
+      question: 'Mountain wave turbulence (rotor turbulence) is most severe:',
+      options: ['At cloud top level', 'In the lenticular cloud itself', 'Below the wave crests in the rotor zone (roughly at or below the mountain-top level)', 'On the windward side of the mountains'],
+      correct: 2,
+      explanation: 'The rotor zone is a highly turbulent area below the wave crests, typically near and below mountain-top level on the lee side. Rotors contain severe to extreme turbulence with violent vertical currents and possible roll-upset. The rotor cloud (Arc-shaped roll cloud) marks the rotor zone.'
+    },
+    {
+      id: 'met06_08',
+      question: 'When approaching a squall line of thunderstorms, the safest option is:',
+      options: ['Penetrate at the highest available altitude', 'Fly along the line to find a gap and fly through at low altitude', 'Avoid the entire squall line by at least 20 NM, or divert by 50+ NM if possible', 'Accelerate to maximum speed and fly through quickly'],
+      correct: 2,
+      explanation: 'Squall lines should NEVER be penetrated. They may have no safe gaps. The recommended action is to avoid the squall line by at least 20 NM and individual Cb cells by 20+ NM, or divert to fly around the entire system. Airborne weather radar is essential for thunderstorm avoidance.'
+    },
+    {
+      id: 'met06_09',
+      question: 'Mechanical turbulence is caused by:',
+      options: ['Convective heating of the surface', 'Windflow disturbed by obstacles such as buildings, trees, hills, and surface roughness', 'Jet stream wind shear', 'Mountain waves'],
+      correct: 1,
+      explanation: 'Mechanical (or frictional) turbulence results from wind flowing over rough or irregular surfaces — buildings, trees, uneven terrain. It creates eddies and gusts in the boundary layer, typically below 2,000 ft AGL. Intensity increases with wind speed and surface roughness.'
+    },
+    {
+      id: 'met06_10',
+      question: 'Turbulence intensity "MODERATE" is defined as causing:',
+      options: ['Slight erratic attitude changes with no difficulty controlling the aircraft', 'Significant changes in attitude, altitude, or airspeed — occupants feel strain against seat belts, unsecured objects displaced', 'Momentary loss of control with extreme pitching, negative g', 'Aircraft structural failure'],
+      correct: 1,
+      explanation: 'Moderate turbulence: significant but not extreme. Attitude, altitude, and airspeed change appreciably. Occupants feel definite strain against seat belts; unsecured objects move. Flying is possible but control requires effort. Severe turbulence: momentary loss of control, violent jolts, structural damage possible.'
+    },
+  ],
+
+  // ── MET07: Aviation Weather Reports & Forecasts ──
+  met07: [
+    {
+      id: 'met07_01',
+      question: 'A METAR is:',
+      options: ['A meteorological terminal aerodrome forecast for the next 24 hours', 'A routine aerodrome meteorological observation/report issued at set intervals (hourly or half-hourly)', 'A significant meteorological warning for en-route aircraft', 'A pilot weather report'],
+      correct: 1,
+      explanation: 'A METAR (Meteorological Aerodrome Report) is a routine observation of actual weather conditions at an aerodrome, issued at fixed intervals (usually every 30 or 60 minutes). It includes: wind, visibility, weather, cloud, temperature/dew point, QNH, and remarks.'
+    },
+    {
+      id: 'met07_02',
+      question: 'A TAF covers a validity period of:',
+      options: ['1 hour only', '3 hours only', 'Up to 30 hours (standard 9 or 24 hours)', 'Exactly 6 hours'],
+      correct: 2,
+      explanation: 'A TAF (Terminal Aerodrome Forecast) is issued for aerodromes with regular commercial traffic. Standard TAFs are valid for 9 or 24 hours; long-range TAFs can extend to 30 hours. They are updated at least every 3 hours (for 9-hr TAFs) or 6 hours (for 24-hr TAFs).'
+    },
+    {
+      id: 'met07_03',
+      question: 'In a METAR, the wind group "24018G30KT" means:',
+      options: ['Wind from 240° at 18 kt maximum, gusting 30 kt', 'Wind from 240° at 18 kt with gusts to 30 kt', 'Wind from 240°T at 18 kt ground level, 30 kt at altitude', 'Gust factor 12 kt, mean wind 18 kt from 240°'],
+      correct: 1,
+      explanation: 'METAR wind code: 240 = direction (from 240°M), 18 = mean speed in knots, G = gust, 30KT = gust speed. So: wind FROM 240°, mean 18 kt, GUSTING to 30 kt. Gusts are reported when the peak speed is ≥10 kt above the mean speed.'
+    },
+    {
+      id: 'met07_04',
+      question: 'A SPECI is:',
+      options: ['A monthly weather summary for an aerodrome', 'A special (non-routine) aerodrome observation issued when significant meteorological changes occur', 'A severe weather SIGMET', 'A pilot report of special weather phenomena'],
+      correct: 1,
+      explanation: 'SPECI (Special Aerodrome Meteorological Observation) is issued when significant meteorological changes occur between routine METAR intervals — such as: wind shifting beyond threshold, visibility falling below limits, wind shear occurrence, CB development, or rapid pressure changes.'
+    },
+    {
+      id: 'met07_05',
+      question: 'A PIREP (Pilot Report) contains:',
+      options: ['Forecast weather from the met office for the next flight', 'Actual weather encountered by a pilot in flight, reported to ATC for dissemination to other pilots', 'ATC radar observations of weather', 'Ground-based meteorological observations'],
+      correct: 1,
+      explanation: 'PIREP (Pilot Report / Aircraft Meteorological Data Relay — AMDAR) reports actual in-flight weather conditions observed by pilots: turbulence level, icing type and intensity, cloud tops, wind at altitude, and any other significant phenomena. They are invaluable for supplementing model forecasts.'
+    },
+    {
+      id: 'met07_06',
+      question: 'In a TAF, the change group "TEMPO" indicates:',
+      options: ['A permanent change in conditions for more than 60% of the period', 'Temporary fluctuations in conditions lasting less than one hour each and occurring for less than half of the period', 'Temperature forecast in the TAF', 'A trend forecast over the full period'],
+      correct: 1,
+      explanation: 'TEMPO (Temporary) in a TAF indicates expected temporary fluctuations that: (1) Last less than 60 minutes each occurrence; (2) Occur for less than HALF of the indicated period. During TEMPO periods, conditions may temporarily deteriorate to the described values.'
+    },
+    {
+      id: 'met07_07',
+      question: 'The change group "BECMG" in a TAF means:',
+      options: ['Becoming — a gradual change expected to reach and remain at the new conditions within the stated period', 'Temporary deterioration below minima', 'Probability of 40% for the described conditions', 'Forecast issued by special authority'],
+      correct: 0,
+      explanation: 'BECMG (Becoming) indicates conditions are expected to change and REMAIN at the new value. The change will occur gradually at some point within the stated 2-hour window. Once the BECMG period ends, the new conditions persist until the next change group.'
+    },
+    {
+      id: 'met07_08',
+      question: 'A SIGWX (Significant Weather) chart typically shows:',
+      options: ['Surface pressure systems only', 'High-level turbulence, icing, tropopause heights, jet streams, and areas of cumulonimbus', 'Only terminal weather forecasts', 'Low-level surface observations'],
+      correct: 1,
+      explanation: 'SIGWX (Significant Weather) charts — available as LOW, MID, and HIGH level charts — show: areas of significant turbulence (moderate/severe), icing (moderate/severe), CB and embedded CB, jet stream axes and cores, tropopause heights, and tropical cyclones.'
+    },
+    {
+      id: 'met07_09',
+      question: 'In a METAR, "TS" indicates:',
+      options: ['Temperature and Sea level pressure', 'Thunderstorm at or near the aerodrome', 'Turbulence and Sandstorm', 'Thin stratus cloud'],
+      correct: 1,
+      explanation: '"TS" in the weather group of a METAR = THUNDERSTORM at or near the aerodrome. Combined with precipitation: TSRA = thunderstorm with rain; TSGR = thunderstorm with hail; TSGS = thunderstorm with small hail/snow pellets.'
+    },
+    {
+      id: 'met07_10',
+      question: 'QNH in a METAR is:',
+      options: ['Altimeter setting in hectopascals rounded down to the nearest whole hPa', 'The actual pressure at the aerodrome reference point', 'Always 1013.25 hPa', 'The pressure used to set flight levels'],
+      correct: 0,
+      explanation: 'QNH in a METAR is the local altimeter setting — the pressure corrected to MSL using ISA temperature — expressed in whole hectopascals (rounded to the nearest whole number, or down by ICAO convention). It allows pilots to set the altimeter to read correct altitude above MSL.'
+    },
+    {
+      id: 'met07_11',
+      question: 'ATIS (Automatic Terminal Information Service) is updated:',
+      options: ['Every 15 minutes automatically', 'Whenever any element of the METAR changes significantly, and at least once per hour', 'Only when visibility drops below 5 km', 'Every 6 hours with the TAF'],
+      correct: 1,
+      explanation: 'ATIS is updated whenever a new METAR is issued (at least every 30–60 minutes) or whenever any significant change in conditions occurs. Each update is identified by a new phonetic letter (Alpha, Bravo, etc.). Pilots report the received ATIS identifier on first contact with ATC.'
+    },
+    {
+      id: 'met07_12',
+      question: 'A NOTAM with type "C" (NOTAMC) is:',
+      options: ['A snowflake NOTAM about icy runways', 'A checklist NOTAM summarising all current NOTAMs in one document', 'A classified NOTAM for military use only', 'A NOTAM about communications facilities'],
+      correct: 1,
+      explanation: 'NOTAM series C (NOTAMC) is a checklist NOTAM — a cumulative list of all currently valid NOTAMs. Issued regularly to help pilots quickly identify which series A and B NOTAMs remain active, simplifying pre-flight briefing.'
+    },
+  ],
+
+  // ── MET08: Weather Hazards & Tropical Meteorology ──
+  met08: [
+    {
+      id: 'met08_01',
+      question: 'A tropical cyclone is classified as a hurricane/typhoon when sustained winds reach:',
+      options: ['34 kt (Force 8)', '48 kt (Force 10)', '64 kt (Force 12) or more', '50 kt (Force 11)'],
+      correct: 2,
+      explanation: 'Beaufort Scale classification: Tropical Depression < 34 kt; Tropical Storm 34–63 kt; Hurricane/Typhoon ≥ 64 kt (≥ 74 mph / ≥ 119 km/h). Flight into or near tropical cyclones is strictly prohibited — extreme turbulence, hail, lightning, and structural loads exceed aircraft limits.'
+    },
+    {
+      id: 'met08_02',
+      question: 'The Inter-Tropical Convergence Zone (ITCZ) is:',
+      options: ['A subtropical high-pressure belt', 'A near-equatorial belt where trade winds from both hemispheres converge, causing convective activity, towering Cb, and heavy rain', 'A cold front that circles the globe at 30° latitude', 'The boundary between polar and tropical air masses'],
+      correct: 1,
+      explanation: 'The ITCZ is a band of low pressure near the equator where NE and SE trade winds converge. The convergence of these wind belts forces air upward, creating towering Cb, heavy rain, and frequent thunderstorms. The ITCZ migrates seasonally with the thermal equator.'
+    },
+    {
+      id: 'met08_03',
+      question: 'Windshear on final approach in the presence of a downburst typically involves:',
+      options: ['A sudden increase in headwind followed by loss of headwind/gain of tailwind with a downdraft', 'Steady increase in headwind throughout approach', 'Only turbulence with no speed change', 'Windshear only above 5000 ft AGL'],
+      correct: 0,
+      explanation: 'Downburst windshear sequence: (1) Aircraft enters the outflow — encounters INCREASING HEADWIND → lift increases, aircraft goes high; (2) Aircraft crosses the core — DOWNDRAFT pushes aircraft down; (3) Aircraft exits the outflow — TAILWIND shear, loss of airspeed and lift at minimum altitude.'
+    },
+    {
+      id: 'met08_04',
+      question: 'St. Elmo\'s fire is:',
+      options: ['A type of volcanic lightning', 'Coronal discharge visible on sharp extremities (nose, propellers, windshield) in electrically charged cloud, indicating conditions conducive to lightning', 'A search light reflection off clouds', 'A fire hazard from static discharge during refuelling'],
+      correct: 1,
+      explanation: 'St. Elmo\'s fire is a coronal electric discharge visible as a blue-green glow on aircraft extremities (nose, propeller tips, antenna, windshield) when flying in charged cloud, heavy precipitation, or near thunderstorms. It indicates strong electrostatic charging — a precursor warning of potential lightning strike.'
+    },
+    {
+      id: 'met08_05',
+      question: 'A warm front brings:',
+      options: ['Rapid clearing after passage, cumulus clouds, good visibility, and gusty winds', 'Gradual deterioration — extensive cloud sequence (Ci → Cs → As → Ns), rain, and poor visibility; conditions improve slowly after passage', 'Strong convective activity and line squalls', 'Fog only, no precipitation'],
+      correct: 1,
+      explanation: 'Warm front approach: cloud sequence from the front (hundreds of miles ahead): Cirrus → Cirrostratus → Altostratus → Nimbostratus. Rain/drizzle, poor visibility, freezing level lowering. After warm front passage: temperature rises, pressure levels off, moderate/poor visibility (fog/haze in warm sector).'
+    },
+    {
+      id: 'met08_06',
+      question: 'An occlusion (occluded front) forms when:',
+      options: ['Two warm air masses collide', 'A cold front overtakes a warm front, lifting the warm sector off the surface', 'A tropical cyclone makes landfall', 'An anticyclone moves over a depression'],
+      correct: 1,
+      explanation: 'Occlusion: the cold front moves faster than the warm front and eventually overtakes it. The warm air is completely lifted off the surface. A cold occlusion has coldest air behind the cold front; a warm occlusion has coldest air ahead of the warm front.'
+    },
+    {
+      id: 'met08_07',
+      question: 'The "anvil" top of a cumulonimbus indicates:',
+      options: ['The base of the cloud reaching the surface', 'The top of the cloud has reached the tropopause and spread horizontally due to wind shear and stable stratosphere', 'A dissipating cloud cell', 'Moderate icing zone'],
+      correct: 1,
+      explanation: 'The Cb anvil (incus) forms when strong updrafts carry ice crystals to the tropopause. The stable stratosphere prevents further vertical development — the cloud spreads horizontally downwind, forming the characteristic anvil shape. Anvil cirrus can extend hundreds of miles downwind, containing CAT.'
+    },
+    {
+      id: 'met08_08',
+      question: 'Orographic (terrain-forced) precipitation occurs on:',
+      options: ['The lee (downwind) side of mountains', 'The windward side of mountains where moist air is lifted, cools, and condenses', 'Both sides equally', 'Only at mountain peaks'],
+      correct: 1,
+      explanation: 'Orographic precipitation is heaviest on the WINDWARD side where moist air is forced upward, cools to its dew point, and condenses into cloud and precipitation. The lee side receives dry, warm Foehn air — a rain shadow effect.'
+    },
+    {
+      id: 'met08_09',
+      question: 'Volcanic ash is dangerous to aircraft because:',
+      options: ['It is only a visibility hazard', 'Fine ash particles melt in jet engine hot sections (melting point ~1100°C, below turbine temperatures), re-solidify on turbine blades, and can cause engine flameout; also abrades windscreens and blocks pitot-static ports', 'It only affects piston engines', 'Effects are limited to altitudes above FL400'],
+      correct: 1,
+      explanation: 'Volcanic ash hazards: (1) Ingested into jet engines — melts on hot turbine blades, reducing clearances and causing flameout; (2) Abrades/sandblasts windscreens and leading edges; (3) Blocks fuel system filters, pitot tubes, and static ports; (4) Not visible on weather radar. SIGMET is issued for all volcanic ash clouds.'
+    },
+    {
+      id: 'met08_10',
+      question: 'ISA deviation (ISA +/−) is the difference between:',
+      options: ['QNH and 1013.25 hPa', 'Actual Outside Air Temperature (OAT) and the ISA temperature at the same pressure altitude', 'TAS and IAS at the same altitude', 'Dew point and actual temperature'],
+      correct: 1,
+      explanation: 'ISA deviation = Actual OAT − ISA temperature at the same pressure altitude. At FL350: ISA = 15 − (35×2) = −55°C. If OAT = −45°C, then ISA deviation = −45 − (−55) = +10°C (ISA+10). Performance calculations use ISA deviation to assess non-standard temperature effects on engine and aircraft performance.'
+    },
+    {
+      id: 'met08_11',
+      question: 'Monsoon winds in South Asia are characterised by:',
+      options: ['Steady westerly winds at FL200–FL250 year-round', 'Seasonal reversal of surface winds — southwest in summer (wet) and northeast in winter (dry), driven by differential heating of land and ocean', 'Trade winds from the northeast throughout the year', 'Uniform dry easterly winds throughout the year'],
+      correct: 1,
+      explanation: 'The Indian (South Asian) Monsoon is driven by differential heating of the Asian continent and Indian Ocean. Summer (June–September): SW monsoon — warm moist air flows from ocean over land → heavy rainfall. Winter (Nov–Feb): NE monsoon — dry, cooler air flows offshore → dry season.'
+    },
+    {
+      id: 'met08_12',
+      question: 'CAT (Clear Air Turbulence) WARNING intensity levels are:',
+      options: ['Light, Moderate, Severe, Extreme', 'MOD, SEV only', 'MILD and SEVERE only', 'Slight, Moderate, Rough, Very Rough'],
+      correct: 0,
+      explanation: 'Turbulence intensity levels used in aviation: Light, Moderate, Severe, and Extreme. For SIGMETs and pilot reports: MOD TRB (moderate turbulence) and SEV TRB (severe turbulence) are the threshold levels for official reporting. Extreme turbulence implies structural damage is possible.'
+    },
+  ],
+
+  // ══════════════════════════════════════════════════════════
+  // RADIO TELEPHONY (RT)
+  // ══════════════════════════════════════════════════════════
+
+  // ── RT01: RT Procedures – General & Phraseology ──
+  rt01: [
+    {
+      id: 'rt01_01',
+      question: 'In the ICAO phonetic alphabet, the letter "A" is:',
+      options: ['Alfa', 'Alpha', 'Able', 'Arrow'],
+      correct: 0,
+      explanation: 'ICAO phonetic alphabet letter A = ALFA (spelled without "ph" to avoid mispronunciation). The full alphabet: Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliett, Kilo, Lima, Mike, November, Oscar, Papa, Quebec, Romeo, Sierra, Tango, Uniform, Victor, Whiskey, X-ray, Yankee, Zulu.'
+    },
+    {
+      id: 'rt01_02',
+      question: 'How is the number "9000" transmitted in RT?',
+      options: ['Nine thousand', 'Niner zero zero zero', 'Nine niner thousand', 'Niner thousand'],
+      correct: 3,
+      explanation: 'Numbers in RT: thousands are expressed as the number of thousands followed by "thousand" where a decimal is not required. 9000 = "NINER THOUSAND." Numbers with hundreds: 3500 = "THREE THOUSAND FIVE HUNDRED." Altitudes and FLs: FL250 = "Flight Level Two Five Zero."'
+    },
+    {
+      id: 'rt01_03',
+      question: 'The RT transmission technique requires that after pressing the PTT, the pilot should:',
+      options: ['Start speaking immediately', 'Wait 1–2 seconds before speaking to allow the transmitter to become fully operational', 'Count to 3 before speaking', 'Say "break break" first'],
+      correct: 1,
+      explanation: 'After pressing the Push-To-Talk (PTT) switch, wait 1–2 seconds before speaking. This allows the transmitter to fully energise and ensures the first words of the transmission are not cut off. Common error: "PAPA... TWO... LIMA... GOLF..." — first letters lost.'
+    },
+    {
+      id: 'rt01_04',
+      question: 'The word "CORRECTION" in RT phraseology is used to:',
+      options: ['Request ATC to correct their clearance', 'Indicate an error in a transmission and that the correct version follows', 'Correct an altimeter setting', 'Acknowledge an ATC correction'],
+      correct: 1,
+      explanation: '"CORRECTION" is used when an error has been made in a radio transmission. The speaker says "CORRECTION" then repeats the correct information from the beginning of the erroneous group. It signals to the recipient that the preceding information should be disregarded.'
+    },
+    {
+      id: 'rt01_05',
+      question: 'What does "STANDBY" mean in RT phraseology?',
+      options: ['Maintain current altitude and heading', 'I must pause for a few moments — please wait and I will call you', 'Your transmission is received', 'Cleared to the requested level'],
+      correct: 1,
+      explanation: '"STANDBY" informs a station that their call has been heard but cannot be answered at the moment — please wait for a callback. It does NOT convey any clearance or permission. The controller or pilot will call back when available.'
+    },
+    {
+      id: 'rt01_06',
+      question: 'What is the correct phraseology when a pilot does NOT understand a clearance?',
+      options: ['"Say again all after...," "Confirm," or "I say again"', '"Say again" or "Request clarification"', '"Negative," "Unable"', '"Wilco" until confirmed'],
+      correct: 1,
+      explanation: '"SAY AGAIN" is used to request a repetition of all or part of a message. "SAY AGAIN ALL AFTER (word)" or "SAY AGAIN ALL BEFORE (word)" specifies which portion is needed. If a complete repeat is needed: "SAY AGAIN ALL." "CONFIRM" is used to verify that information is correct.'
+    },
+    {
+      id: 'rt01_07',
+      question: 'The standard way to read back an ATC clearance containing a runway, level, and altimeter setting is:',
+      options: ['Acknowledge with "Wilco" only', 'Read back all items verbatim including runway designation, levels, altimeter setting, and callsign', 'Read back only the callsign', 'Read back only if uncertain'],
+      correct: 1,
+      explanation: 'ICAO PANS-ATM requires MANDATORY read-back (verbatim) of: ATC route clearances, SID/STAR designators, runway clearances (including conditional), direction of turn, heading, speed instructions, SSR codes, altimeter settings, level instructions, and transition levels/altitudes.'
+    },
+    {
+      id: 'rt01_08',
+      question: '"BREAK BREAK" in RT indicates:',
+      options: ['Emergency on guard frequency', 'Separation between messages to different stations within a single transmission (when directed to several aircraft)', 'Transmission complete', 'Urgent request for frequency change'],
+      correct: 1,
+      explanation: '"BREAK BREAK" is used to separate messages directed to different aircraft within a single transmission, especially in busy environments. It clearly delineates which part of the message applies to which call sign. "BREAK" alone separates distinct parts of a single message to the same station.'
+    },
+    {
+      id: 'rt01_09',
+      question: 'The RT readability scale: "Readability 3" means:',
+      options: ['Unreadable', 'Readable now and then', 'Readable but with difficulty', 'Readable'],
+      correct: 2,
+      explanation: 'ICAO RT Readability Scale: 1 = Unreadable; 2 = Readable now and then; 3 = Readable but with difficulty; 4 = Readable; 5 = Perfectly readable. A readability check response: "Reading you 4" (readable), "Reading you 5" (perfectly readable).'
+    },
+    {
+      id: 'rt01_10',
+      question: 'When initiating a call to a station for the first time on a frequency, the correct format is:',
+      options: ['Your callsign only', 'Station callsign, your callsign, and brief request', 'Your callsign and altitude only', 'Just state your request without preamble'],
+      correct: 1,
+      explanation: 'Standard first call format: [Station callsign], [Your callsign], [your message/request]. Example: "MUMBAI APPROACH, INDIGO 234, PASSING FLIGHT LEVEL 150 INBOUND." This identifies who you are calling, who is calling, and what you want.'
+    },
+    {
+      id: 'rt01_11',
+      question: 'In RT, the phrase "REPORT PASSING" means:',
+      options: ['Report when you have passed a specific point or altitude', 'Report the current passing traffic', 'Report the passing weather', 'Report when the runway is clear after landing'],
+      correct: 0,
+      explanation: '"REPORT PASSING [point/altitude]" instructs the pilot to transmit a position/altitude report at the moment they pass the specified fix or altitude. Example: "REPORT PASSING DAMAN VOR" or "REPORT PASSING FLIGHT LEVEL 150."'
+    },
+    {
+      id: 'rt01_12',
+      question: 'The callsign suffix "HEAVY" is transmitted by:',
+      options: ['Any aircraft above 136,000 kg MTOW', 'All wide-body aircraft', 'Aircraft in the ICAO HEAVY wake turbulence category (MTOW > 136,000 kg) on initial contact with ATC', 'Only B747 and A380 aircraft'],
+      correct: 2,
+      explanation: '"HEAVY" is appended to the callsign by ICAO Heavy category aircraft (MTOW > 136,000 kg) on FIRST contact with each ATC frequency. Example: "SPEEDBIRD 9 HEAVY." This alerts ATC and other pilots to apply increased wake turbulence separation. "SUPER" applies to the A380 and AN-225.'
+    },
+    {
+      id: 'rt01_13',
+      question: 'What is the ICAO phonetic for the letter "W"?',
+      options: ['Willy', 'Whiskey', 'William', 'Walter'],
+      correct: 1,
+      explanation: 'W = WHISKEY. Key phonetics to remember: J = JULIETT (two t\'s), K = KILO, Q = QUEBEC, X = X-RAY, Y = YANKEE, Z = ZULU. NATO phonetics and ICAO phonetics are identical, used worldwide for unambiguous letter-by-letter spelling.'
+    },
+    {
+      id: 'rt01_14',
+      question: 'The phrase "NEGATIVE" in RT means:',
+      options: ['I cannot comply', 'That is not correct / permission is not granted / that is not so', 'I do not understand', 'Transmission received'],
+      correct: 1,
+      explanation: '"NEGATIVE" means: "No" / "That is not correct" / "Permission not granted." It is used instead of the word "No" in RT. Compare with "UNABLE" which means the pilot cannot comply with an instruction for operational or safety reasons.'
+    },
+    {
+      id: 'rt01_15',
+      question: '"GO AHEAD" in RT phraseology means:',
+      options: ['Cleared to take off', 'Proceed on your course', 'Proceed with your message', 'Cleared to land'],
+      correct: 2,
+      explanation: '"GO AHEAD" means "Proceed with your message" — the station you are calling is ready to receive your transmission. It is a response to an initial call that established contact, indicating readiness to hear the full message.'
+    },
+    {
+      id: 'rt01_16',
+      question: 'What does "OVER" mean at the end of an RT transmission?',
+      options: ['My transmission is complete and no response is required', 'My transmission is complete and a response is expected', 'Emergency transmission follows', 'Frequency change required'],
+      correct: 1,
+      explanation: '"OVER" signals the end of your transmission and INVITES a response from the other station. It was used historically in two-way simplex radio. Modern aviation RT omits "OVER" and "OUT" in most contexts — the transmission simply ends and a response is implicit. "OUT" = transmission ends, no reply expected.'
+    },
+    {
+      id: 'rt01_17',
+      question: 'How is the frequency "128.450 MHz" transmitted in RT?',
+      options: ['One two eight decimal four five', 'One two eight point four five zero', 'One two eight decimal four five zero', 'One two eight four five'],
+      correct: 2,
+      explanation: 'Frequency transmission: state the complete frequency replacing the decimal point with "DECIMAL." 128.450 = "ONE TWO EIGHT DECIMAL FOUR FIVE ZERO." Never abbreviate — "128.45" could be confused with "128.4" or "128.45" if poorly spoken.'
+    },
+    {
+      id: 'rt01_18',
+      question: 'The phrase "UNABLE" in RT means:',
+      options: ['I did not receive your last transmission', 'I cannot comply with your instruction', 'My aircraft is unserviceable', 'I am not at the cleared level'],
+      correct: 1,
+      explanation: '"UNABLE" is the standard phrase meaning "I cannot comply with your instruction or request." The pilot should then state the reason or what they can do instead. Example: "UNABLE FL370, REQUEST FL350" — the pilot cannot reach the cleared level and requests an alternative.'
+    },
+    {
+      id: 'rt01_19',
+      question: 'Abbreviated callsigns can be used after:',
+      options: ['Any time at the pilot\'s discretion', 'After ATC has established communication and used the abbreviated form first', 'Only when the frequency is congested', 'Never — full callsigns must always be used'],
+      correct: 1,
+      explanation: 'Abbreviated callsigns: ATC may shorten a callsign after initial contact is established (e.g., "INDIGO 234" becomes "IK 234" or "IG 234"). The pilot may then use the same abbreviated form. The pilot must NEVER abbreviate first — wait for ATC to establish the shortened callsign.'
+    },
+    {
+      id: 'rt01_20',
+      question: 'When an instruction requires the pilot to read back, what must the read-back include?',
+      options: ['Only the clearance details', 'Only the pilot\'s callsign', 'The instruction/clearance AND the aircraft callsign (callsign at the end)', 'The flight number and destination only'],
+      correct: 2,
+      explanation: 'A proper read-back includes: (1) The CLEARANCE/INSTRUCTION verbatim; (2) The AIRCRAFT CALLSIGN at the end. The callsign at the end confirms who has accepted the clearance. Example: "DESCEND FLIGHT LEVEL 280, INDIGO 234."'
+    },
+    {
+      id: 'rt01_21',
+      question: 'The R/T term "EXPEDITE" requests the pilot to:',
+      options: ['Climb as fast as possible', 'Carry out the instruction quickly', 'Expedite clearance from ATC directly', 'Report departure time immediately'],
+      correct: 1,
+      explanation: '"EXPEDITE" is an instruction from ATC requesting the pilot to carry out an instruction QUICKLY — for example, "EXPEDITE DESCENT TO FLIGHT LEVEL 100" means descend as rapidly as operationally possible to FL100. It conveys urgency without declaring an emergency.'
+    },
+    {
+      id: 'rt01_22',
+      question: 'What is the phonetic pronunciation of the number "9" in RT?',
+      options: ['Nine', 'Niner', 'Novem', 'Neun'],
+      correct: 1,
+      explanation: '"9" is pronounced "NINER" in aviation RT (and military communications) to distinguish it from the German word "Nein" (No) and the English word "Nine" which could be confused with other numerals in poor communications. Similarly, "5" = "FIFE" to distinguish from "fire."'
+    },
+    {
+      id: 'rt01_23',
+      question: 'What is the RT phrase used when a pilot wants to verify if a clearance is correct?',
+      options: ['"Say again"', '"Confirm [item/instruction]"', '"Roger"', '"Affirm"'],
+      correct: 1,
+      explanation: '"CONFIRM [item]" is used to request verification that an item is correct. Example: "CONFIRM CLEARED FOR ILS RUNWAY 27L?" — the pilot is asking ATC to verify the stated clearance. "AFFIRM" simply means "Yes." "SAY AGAIN" requests the entire message to be repeated.'
+    },
+    {
+      id: 'rt01_24',
+      question: 'Position in a holding pattern during which direction of turns is a right-hand pattern are:',
+      options: ['All turns are made to the left', 'All turns are made to the right', 'Outbound turn to the left, inbound turn to the right', 'Outbound to the right, inbound to the left'],
+      correct: 1,
+      explanation: 'A right-hand holding pattern means ALL turns are made to the RIGHT (clockwise). The outbound leg is flown on a heading 180° opposite to the inbound (published) track, and both the outbound turn and the inbound turn are to the right.'
+    },
+    {
+      id: 'rt01_25',
+      question: 'The standard squawk code assigned to VFR flights when no ATC-assigned code has been given is:',
+      options: ['7500', '7600', '7700', '7000'],
+      correct: 3,
+      explanation: 'Squawk 7000 is the standard conspicuity code for VFR flights in airspace where no ATC transponder code has been assigned. Special codes: 7500 = hijacking; 7600 = communications failure (NORDO); 7700 = general emergency. Code 2000 is used for inbound flights from uncontrolled airspace.'
+    },
+  ],
+
+  // ── RT02: RT – Departure, En-Route & Approach ──
+  rt02: [
+    {
+      id: 'rt02_01',
+      question: 'The correct format for a position report on an airways flight is:',
+      options: ['Callsign only', 'Callsign, position, time, level, next position and ETA, and the position after that', 'Callsign, level, heading, TAS', 'Callsign, QNH, and speed'],
+      correct: 1,
+      explanation: 'Standard position report (ICAO PANS-ATM format): Callsign → Position → Time → Level → Next position and ETA → The position after (if required). This gives ATC full situational awareness and enables separation planning.'
+    },
+    {
+      id: 'rt02_02',
+      question: 'When should a pilot contact Approach Control?',
+      options: ['Only after leaving the departure aerodrome frequency', 'As instructed by the previous controller or when entering the TMA/CTR', 'Only on 121.5 MHz', 'Only when the weather is below VMC'],
+      correct: 1,
+      explanation: 'A pilot contacts Approach Control when instructed by the previous controller (e.g., Area/Radar) or when entering the Terminal Maneuvering Area (TMA) or Control Zone (CTR) if instructions require it. Initial call includes: callsign, level, and position/intention.'
+    },
+    {
+      id: 'rt02_03',
+      question: 'What does "SPEED 250 KNOTS" as an ATC instruction mean?',
+      options: ['Cruise at minimum speed of 250 kt', 'Maintain indicated airspeed of 250 kt', 'Maximum speed is 250 kt IAS', 'Increase speed to at least 250 kt TAS'],
+      correct: 1,
+      explanation: 'ATC speed instructions are in knots IAS unless otherwise specified. "MAINTAIN SPEED 250 KNOTS" = fly at 250 kt IAS. If a range is given: "MAINTAIN SPEED BETWEEN 230 AND 250 KNOTS." Speed instructions are used for sequencing and spacing. The pilot must comply and read back.'
+    },
+    {
+      id: 'rt02_04',
+      question: 'When ATC issues "CLIMB TO FLIGHT LEVEL 350," the pilot reads back:',
+      options: ['"Roger, FL350"', '"Climb FL350, [callsign]"', '"Climbing FL350, [callsign]"', '"Wilco FL350"'],
+      correct: 1,
+      explanation: 'Correct read-back format for a climb instruction: "[INSTRUCTION], [CALLSIGN]." = "CLIMB TO FLIGHT LEVEL THREE FIVE ZERO, INDIGO TWO THREE FOUR." Including "climbing" (present participle) is acceptable in practice but "climb to FL350" restates the instruction as issued. Callsign at the end confirms acceptance.'
+    },
+    {
+      id: 'rt02_05',
+      question: 'The phrase "RESUME NORMAL NAVIGATION" is issued by ATC to mean:',
+      options: ['Fly a radar vector', 'Cancel all current ATC instructions — revert to your flight planned route', 'Descend to normal cruise level', 'Resume contact approach procedures'],
+      correct: 1,
+      explanation: '"RESUME NORMAL NAVIGATION" cancels any radar vectors or diversions from the filed route, instructing the pilot to revert to the flight-planned track and navigate independently. The pilot should confirm they understand their next waypoint and route.'
+    },
+    {
+      id: 'rt02_06',
+      question: 'If instructed to "CONTACT [station] [frequency]," the pilot should:',
+      options: ['Acknowledge and continue on the current frequency', 'Immediately change to the new frequency without acknowledgement', 'Read back the frequency and callsign, then change frequency', 'Change frequency only after completing the current message'],
+      correct: 2,
+      explanation: 'Frequency change: read back the new frequency and your callsign, then switch. Example: "CONTACT DELHI RADAR ONE TWO SIX DECIMAL FOUR, INDIGO TWO THREE FOUR." Read back confirms you received the correct frequency. Then switch, check in with the new unit.'
+    },
+    {
+      id: 'rt02_07',
+      question: 'What is a "WILCO" response used for in RT?',
+      options: ['To acknowledge receipt of a message only', 'To confirm you have received and WILL COMPLY with the instruction', 'To request repetition of a clearance', 'To indicate the transmission is complete'],
+      correct: 1,
+      explanation: '"WILCO" (from "will comply") confirms: (1) Message received; (2) Understood; AND (3) WILL BE COMPLIED WITH. It combines "ROGER" (received) + compliance. When reading back a clearance, "WILCO" alone is insufficient — the clearance itself must be read back.'
+    },
+    {
+      id: 'rt02_08',
+      question: 'ATC issues "MAINTAIN FLIGHT LEVEL 350." The word "MAINTAIN" in this context means:',
+      options: ['Climb to and maintain FL350', 'Continue at the current level of FL350 — do not descend or climb without further clearance', 'Maintain current speed at FL350', 'The minimum level is FL350'],
+      correct: 1,
+      explanation: '"MAINTAIN [level]" means continue at (or achieve and remain at) the specified level. If already at FL350, it confirms to stay there. If climbing or descending to FL350, complete the level change then stay there. No altitude deviation is permitted without further clearance.'
+    },
+    {
+      id: 'rt02_09',
+      question: '"REPORT AIRBORNE" is requested when ATC wants the pilot to:',
+      options: ['Report taking off before ATC clearance expires', 'Notify ATC immediately after becoming airborne', 'Report maintaining airspeed above minimum', 'Report when above transition altitude'],
+      correct: 1,
+      explanation: '"REPORT AIRBORNE" is a departure reporting instruction. The pilot reports immediately after the aircraft becomes airborne: "[CALLSIGN] AIRBORNE [TIME] [optional: runway/destination]." ATC uses this to confirm departure, close the departure sequence, and initiate en-route handling.'
+    },
+    {
+      id: 'rt02_10',
+      question: 'What is the correct procedure when a pilot cannot comply with a speed restriction?',
+      options: ['Comply with the restriction regardless', 'Declare an emergency', 'Inform ATC "UNABLE [restriction], REQUEST [alternative]"', 'Silently maintain a different speed and inform ATC later'],
+      correct: 2,
+      explanation: 'If unable to comply: immediately inform ATC — "UNABLE SPEED 250, MINIMUM CLEAN SPEED 280" (for example). ATC will issue an amended instruction. Silently ignoring an ATC instruction is a serious violation and safety risk. Deviations must always be communicated promptly.'
+    },
+    {
+      id: 'rt02_11',
+      question: 'An approach clearance "CLEARED ILS RUNWAY 27L" authorises the pilot to:',
+      options: ['Descend on the ILS glide slope to the runway threshold and land', 'Conduct the ILS approach to the published minimums — landing authorisation is separate', 'Conduct a visual approach to runway 27L only', 'Line up on runway 27L immediately'],
+      correct: 1,
+      explanation: 'An approach clearance (CLEARED ILS RWY 27L) authorises the pilot to fly the ILS procedure. It does NOT authorise landing — a SEPARATE landing clearance is issued. If landing clearance is not received by the DH/MAP, a missed approach must be executed.'
+    },
+    {
+      id: 'rt02_12',
+      question: 'The phrase "DESCEND VIA SID/STAR" means:',
+      options: ['Fly the SID/STAR routing only, maintaining cleared altitude', 'Follow the lateral routing AND vertical profile (altitude constraints) of the SID/STAR as published', 'Descend immediately to the lowest SID/STAR altitude', 'Lateral guidance only from the STAR'],
+      correct: 1,
+      explanation: '"DESCEND VIA [STAR]" is a combined routing and descent clearance. It authorises the pilot to follow both the LATERAL TRACK and the VERTICAL PROFILE (altitude crossing restrictions) published on the STAR. It simplifies ATC instructions by incorporating all altitude restrictions in one clearance.'
+    },
+    {
+      id: 'rt02_13',
+      question: 'When the ATIS says "INFORMATION DELTA," on initial contact the pilot should say:',
+      options: ['"With information Delta"', '"ATIS Delta received"', '"Information Delta"', '"Have Delta"'],
+      correct: 0,
+      explanation: 'On first contact with ATC when ATIS is available, the pilot states "WITH INFORMATION [phonetic letter]" — confirming they have the current ATIS. Example: "MUMBAI APPROACH, INDIGO 234, PASSING FL150, INBOUND, WITH INFORMATION DELTA." ATC can then omit weather/altimeter info already broadcast on ATIS.'
+    },
+    {
+      id: 'rt02_14',
+      question: 'The phrase "SAY FLIGHT CONDITIONS" is a request for:',
+      options: ['ATC weather conditions at the aerodrome', 'Whether the flight is being conducted under IFR or VFR', 'Current aircraft performance data', 'The aircraft\'s fuel state'],
+      correct: 1,
+      explanation: '"SAY FLIGHT CONDITIONS" asks whether the flight is operating under IFR or VFR flight rules — this information helps ATC determine what separation services apply. Pilot responds: "IFR" or "VFR."'
+    },
+    {
+      id: 'rt02_15',
+      question: 'What does "TRAFFIC" in an ATC transmission indicate?',
+      options: ['ATC is advising of conflicting traffic for the pilot\'s information', 'A mandatory instruction to change heading for traffic avoidance', 'Busy airport reporting traffic congestion', 'The ATC computer-generated traffic alert only'],
+      correct: 0,
+      explanation: '"TRAFFIC" prefixes a traffic information call — it is ADVISORY only, not a mandatory heading instruction. Example: "TRAFFIC 2 O\'CLOCK 5 MILES OPPOSITE DIRECTION." The pilot acknowledges: "TRAFFIC IN SIGHT" (if seen) or "LOOKING OUT" (not yet seen). It does not require an immediate course change unless TCAS RA is issued.'
+    },
+  ],
+
+  // ── RT03: RT – Emergencies & Special Procedures ──
+  rt03: [
+    {
+      id: 'rt03_01',
+      question: 'The MAYDAY call structure (in order) is:',
+      options: ['MAYDAY × 3, callsign × 3, nature of emergency, POB, intentions', 'MAYDAY × 3, callsign, position, altitude, nature of distress, intentions, number of persons on board, any other useful information', 'Callsign, MAYDAY, frequency, position', 'MAYDAY, callsign, heading, fuel remaining'],
+      correct: 1,
+      explanation: 'ICAO MAYDAY distress call format: (1) MAYDAY MAYDAY MAYDAY; (2) Name of station addressed (if time permits); (3) Callsign (× 3); (4) Nature of distress; (5) Position; (6) Altitude/flight level; (7) Heading; (8) Speed; (9) Intentions; (10) Persons on board (POB); (11) Any other useful info. If time is critical, minimum info is: MAYDAY × 3, callsign, nature, position, intentions.'
+    },
+    {
+      id: 'rt03_02',
+      question: 'The urgency signal PAN PAN is transmitted when:',
+      options: ['Only if MAYDAY has already been declared', 'A very urgent message concerning the safety of a ship, aircraft, vehicle, or person — but not requiring immediate assistance', 'Any navigation difficulty including deviation from ATC clearance', 'Only for medical emergencies on board'],
+      correct: 1,
+      explanation: 'PAN PAN (spoken three times, French: "panne" = breakdown) is the URGENCY signal. Used for conditions that are serious but do NOT yet require immediate assistance — for example: medical emergency on board, aircraft system failure without immediate danger, or urgent navigation difficulty. Upgraded to MAYDAY if situation deteriorates.'
+    },
+    {
+      id: 'rt03_03',
+      question: 'On declaring a MAYDAY, the aircraft should initially transmit on:',
+      options: ['Assigned frequency or 121.5 MHz if unable to contact on assigned frequency', '121.5 MHz always — all other frequencies must be abandoned', '243.0 MHz military emergency only', 'Current ATIS frequency'],
+      correct: 0,
+      explanation: 'A distress call should first be transmitted on the CURRENTLY ASSIGNED FREQUENCY. If unable to establish contact, or if not operating on a controlled frequency, use 121.5 MHz (international distress frequency). 243.0 MHz is the military UHF distress frequency.'
+    },
+    {
+      id: 'rt03_04',
+      question: 'What action should ATC take on hearing a MAYDAY call on 121.5 MHz?',
+      options: ['Ignore it if not in their area of responsibility', 'Acknowledge, alert SAR services, provide assistance, maintain continuous watch on 121.5 until handed off', 'Only act if the distress aircraft is in their FIR', 'Transfer the aircraft to the nearest approach control immediately'],
+      correct: 1,
+      explanation: 'Upon receiving MAYDAY: ATC must: (1) Acknowledge; (2) Alert SAR/RCC; (3) Provide any assistance possible; (4) Maintain watch on 121.5 MHz; (5) Provide priority handling; (6) Advise other traffic on frequency; (7) Coordinate with adjacent units. ALL ATC units monitoring 121.5 should respond.'
+    },
+    {
+      id: 'rt03_05',
+      question: 'When communication failure is suspected and the pilot squawks 7600, ATC should:',
+      options: ['Contact the pilot on 121.5 MHz only', 'Attempt contact on other frequencies, transmit in blind on last assigned frequency, request IDENT, provide separation', 'Clear the airspace and wait for the aircraft to land', 'Immediately declare DETRESFA'],
+      correct: 1,
+      explanation: 'NORDO (7600) procedure for ATC: (1) Transmit in blind on last assigned frequency; (2) Try alternative frequencies; (3) Ask IDENT on transponder; (4) Contact other aircraft to try relay; (5) Provide separation as required; (6) Advise destination aerodrome. If aircraft is in VMC, it will land at nearest suitable aerodrome.'
+    },
+    {
+      id: 'rt03_06',
+      question: 'SECURITE (spoken three times) precedes what type of message?',
+      options: ['A distress message', 'An urgency message about aircraft safety', 'A safety/navigational warning message to all stations', 'A weather observation report'],
+      correct: 2,
+      explanation: '"SECURITE SECURITE SECURITE" (French: security/safety) precedes a NAVIGATIONAL WARNING or SAFETY message of interest to all receiving stations — for example: unlighted hazard to navigation, dangerous debris on runway, unlit obstacle recently identified, or urgent met warning. Not a distress or urgency situation for the transmitting station.'
+    },
+    {
+      id: 'rt03_07',
+      question: 'The phrase used to cancel a MAYDAY is:',
+      options: ['"MAYDAY CANCEL, MAYDAY CANCEL, MAYDAY CANCEL, [callsign]"', '"CANCEL DISTRESS [callsign] [time]"', '"SEELONCE FEENEE [callsign]"', '"NORMAL [callsign] all distress traffic cancelled"'],
+      correct: 2,
+      explanation: '"SEELONCE FEENEE" (French phonetic of "silence fini" = silence finished) is the phrase used to indicate that distress silence is lifted and normal communications may resume. It is transmitted by the authority controlling distress traffic. Before this: "SEELONCE DISTRESS" imposes silence on the frequency.'
+    },
+    {
+      id: 'rt03_08',
+      question: 'When hijacking is detected by the crew and they are unable to make a voice transmission, the pilot should:',
+      options: ['Squawk 7700 and declare MAYDAY', 'Squawk 7500 and if possible respond to ATC queries with YES/NO while making no voice hijack calls', 'Squawk 7600 and request escort', 'Continue on the current flight plan without indication'],
+      correct: 1,
+      explanation: 'Hijacking: squawk 7500. If the hijacker is unaware of the transponder: the pilot sets 7500 silently. When ATC asks "confirm squawking 7500," the pilot simply does not respond verbally (or answers normally — ATC will interpret this). ATC will co-ordinate with military and police. The pilot should not alert the hijacker by making obvious radio calls.'
+    },
+    {
+      id: 'rt03_09',
+      question: 'In a communication failure when IFR in IMC, the pilot should:',
+      options: ['Continue to destination regardless', 'Land immediately at the nearest airport', 'Follow the ICAO lost communication procedure: maintain the last assigned altitude or MEA, follow expected/planned route, arrive at ETA and attempt approach', 'Climb to FL500 to be above all traffic'],
+      correct: 2,
+      explanation: 'ICAO lost comms procedure (IMC/IFR): Squawk 7600. Maintain highest of: last assigned altitude, minimum IFR altitude, or expected altitude. Follow cleared route then expected route. At destination: arrive at last known ETA or FPL ETA; hold if no clearance received; commence approach at ETA or begin approach immediately if none of the above apply.'
+    },
+    {
+      id: 'rt03_10',
+      question: 'What is the VHF guard frequency monitored by all ATC facilities and long-haul aircraft?',
+      options: ['118.0 MHz', '119.0 MHz', '121.5 MHz', '123.45 MHz'],
+      correct: 2,
+      explanation: '121.5 MHz is the international aeronautical VHF distress and calling frequency. All ATC facilities maintain a continuous listening watch on this frequency. Airlines and long-haul aircraft monitor 121.5 on a second receiver. It is the first frequency to use in an emergency when unable to contact assigned ATC.'
+    },
+    {
+      id: 'rt03_11',
+      question: '"TRANSMITTING BLIND" means:',
+      options: ['Transmitting on a frequency without knowing if anyone can hear', 'Transmitting without visual reference to the aircraft', 'Transmitting during night-time operations only', 'Transmitting without full transmit power'],
+      correct: 0,
+      explanation: '"TRANSMITTING BLIND" (or "TRANSMITTING IN THE BLIND") is used when a station transmits without certainty that anyone can hear it — often due to communication failure or suspected equipment malfunction. ATC may transmit in the blind to a NORDO aircraft: "INDIGO 234, IF YOU HEAR THIS TRANSMISSION SQUAWK IDENT."'
+    },
+    {
+      id: 'rt03_12',
+      question: 'The phrase "SILENCE MAYDAY" (or SEELONCE MAYDAY) is used by:',
+      options: ['The distress aircraft to request quiet on the frequency', 'The station controlling distress traffic to impose radio silence on all other stations on the frequency', 'All aircraft to acknowledge the MAYDAY', 'ATC to cancel the emergency'],
+      correct: 1,
+      explanation: '"SEELONCE MAYDAY" (French phonetic: "silence mayday") is transmitted by the station controlling the distress traffic to impose silence on ALL other stations on the frequency. This clears the channel for distress communications. Other stations must immediately cease all non-distress transmissions.'
+    },
+    {
+      id: 'rt03_13',
+      question: 'Which of the following is the correct format for an en-route MAYDAY call?',
+      options: ['"MAYDAY, INDIGO 234, ENGINE FAILURE, DESCENDING FLIGHT LEVEL 280"', '"MAYDAY MAYDAY MAYDAY, INDIGO TWO THREE FOUR MAYDAY, ENGINE FAILURE, POSITION 5 MILES WEST BHOPAL RADIAL 280 DEG VOR, FL350 DESCENDING, HEADING 090, SPEED 250, INTENTIONS DIVERT NAGPUR, SOULS 189"', '"MAYDAY, engine failure, 189 people"', '"MAYDAY, INDIGO 234, request immediate descent"'],
+      correct: 1,
+      explanation: 'The complete MAYDAY format should include: distress signal × 3, callsign × 3, nature of distress, position, level, heading, speed, intentions, POB, and any other information. The longer format in option B includes all essential elements. In genuine emergencies, priority is given to the most critical information first — at minimum: MAYDAY × 3, callsign, nature, intentions.'
+    },
+  ],
 
   // ── CH01: Definitions & Abbreviations ──
   ch01: [
@@ -1373,3 +2471,4 @@ export const questions = {
     { id: 'tg08_14', question: 'A propulsive efficiency calculation: forward velocity 200 mph, jet velocity 1000 mph. Propulsive efficiency is:', options: ['33%', '65%', '75%', '40%'], correct: 0, explanation: 'η = 2V/(V + Vj) = 2 × 200 / (200 + 1000) = 400 / 1200 = 0.333 = 33%. Low forward speed relative to jet velocity = poor propulsive efficiency. This is why pure jets are inefficient at low speeds.' },
   ],
 };
+

@@ -1,173 +1,1042 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { chapters, questions as allQuestions } from '../../data/questions';
 
-const TEACHER_PASSWORD = 'dgca@teacher2024';
+const TEACHER_PASSWORD = 'dgca@teacher2026';
 const TEACHER_AUTH_KEY = 'dgca_teacher_authed';
+const LIVE_POLL_MS = 15_000; // student banner polls every 15 s
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatDate(iso) {
     return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
-
-function getScoreColor(pct) {
-    if (pct >= 80) return '#00c864';
-    if (pct >= 60) return '#f59e0b';
-    return '#ef4444';
+function formatDateTime(iso) {
+    return new Date(iso).toLocaleString('en-IN', {
+        weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+    });
 }
-
-function getAttColor(pct) {
-    if (pct >= 80) return '#16a34a';
-    if (pct >= 60) return '#f59e0b';
-    return '#ef4444';
-}
-
-function getChapterTitle(chapterId) {
-    return chapters.find(ch => ch.id === chapterId)?.title || chapterId;
-}
-
-function getQuestionData(chapterId, questionId) {
-    return allQuestions[chapterId]?.find(q => q.id === questionId) || null;
-}
-
-function initials(name) {
-    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-}
-
+function getScoreColor(pct) { return pct >= 80 ? '#00c864' : pct >= 60 ? '#f59e0b' : '#ef4444'; }
+function getAttColor(pct) { return pct >= 80 ? '#16a34a' : pct >= 60 ? '#f59e0b' : '#ef4444'; }
+function getChapterTitle(id) { return chapters.find(ch => ch.id === id)?.title || id; }
+function getQuestionData(chId, qId) { return allQuestions[chId]?.find(q => q.id === qId) || null; }
+function initials(name) { return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2); }
 function avatarColors(i) {
     const list = [['#dbeafe', '#2563eb'], ['#dcfce7', '#16a34a'], ['#fef3c7', '#b45309'], ['#f3e8ff', '#7c3aed'], ['#ffe4e6', '#be123c']];
     return list[i % list.length];
 }
 
-// ─── Attendance Sub-components ────────────────────────────────────────────────
+// ─── Animated Counter ─────────────────────────────────────────────────────────
+function AnimatedCounter({ value, suffix = '' }) {
+    const [display, setDisplay] = useState(0);
+    const prevRef = useRef(0);
+    useEffect(() => {
+        const start = prevRef.current, end = parseFloat(value) || 0;
+        if (start === end) return;
+        const t0 = performance.now();
+        const tick = now => {
+            const p = Math.min((now - t0) / 700, 1), e = 1 - Math.pow(1 - p, 4);
+            setDisplay(Math.round(start + (end - start) * e));
+            if (p < 1) requestAnimationFrame(tick); else prevRef.current = end;
+        };
+        requestAnimationFrame(tick);
+    }, [value]);
+    return <>{display}{suffix}</>;
+}
 
-function AttMarkTab({ students }) {
-    const today = new Date().toISOString().split('T')[0];
-    const [date, setDate] = useState(today);
-    const [batch, setBatch] = useState('Batch A — Morning');
-    const [rollStatus, setRollStatus] = useState({});
-    const [notes, setNotes] = useState({});
-    const [saving, setSaving] = useState(false);
-    const [saveMsg, setSaveMsg] = useState('');
+function Counter({ value, color }) {
+    const [display, setDisplay] = useState(0);
+    const prev = useRef(0);
+    useEffect(() => {
+        const start = prev.current, end = value;
+        if (start === end) return;
+        const t0 = performance.now();
+        const frame = now => {
+            const p = Math.min((now - t0) / 500, 1), e = 1 - Math.pow(1 - p, 3);
+            setDisplay(Math.round(start + (end - start) * e));
+            if (p < 1) requestAnimationFrame(frame); else prev.current = end;
+        };
+        requestAnimationFrame(frame);
+    }, [value]);
+    return <span style={{ color }}>{display}</span>;
+}
 
-    const setStatus = (email, status) => setRollStatus(prev => ({ ...prev, [email]: status }));
-    const setNote = (email, note) => setNotes(prev => ({ ...prev, [email]: note }));
+function Ring({ pct, color, size = 52, stroke = 4 }) {
+    const r = (size - stroke) / 2, circ = 2 * Math.PI * r, dash = circ * pct / 100;
+    return (
+        <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+            <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e2e8f0" strokeWidth={stroke} />
+            <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={stroke}
+                strokeDasharray={`${dash} ${circ}`} strokeLinecap="round"
+                style={{ transition: 'stroke-dasharray 0.6s cubic-bezier(0.16,1,0.3,1)' }} />
+        </svg>
+    );
+}
 
-    const markAll = (status) => {
-        const next = {};
-        students.forEach(s => { next[s.email] = status; });
-        setRollStatus(next);
-    };
+// ═══════════════════════════════════════════════════════════════════════════════
+// LIVE CLASS BUTTON  — export for student dashboard
+// Usage: import { LiveClassButton } from '@/app/teacher/page';
+//        <LiveClassButton />   (place above chapter grid on student dashboard)
+// Polls /api/live-link every 15 s. Auto-appears / disappears.
+// ═══════════════════════════════════════════════════════════════════════════════
+export function LiveClassButton() {
+    const [liveData, setLiveData] = useState(null);
+    const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const prevUrl = useRef(null);
+    const timerRef = useRef(null);
 
-    const marked = Object.keys(rollStatus).length;
-    const presentCount = Object.values(rollStatus).filter(v => v === 'present').length;
-    const absentCount = Object.values(rollStatus).filter(v => v === 'absent').length;
-    const lateCount = Object.values(rollStatus).filter(v => v === 'late').length;
-
-    async function saveAttendance() {
-        setSaving(true);
-        setSaveMsg('');
+    async function fetchLiveLink() {
         try {
-            const records = students.map(s => ({
-                email: s.email,
-                name: s.name,
-                status: rollStatus[s.email] || 'absent',
-                note: notes[s.email] || '',
-            }));
-            const res = await fetch('/api/teacher/attendance', {
+            const res = await fetch('/api/live-link', { cache: 'no-store' });
+            const data = await res.json();
+            if (data?.url) {
+                if (prevUrl.current !== data.url) {
+                    setVisible(false);
+                    setTimeout(() => setVisible(true), 60);
+                }
+                setLiveData(data);
+                prevUrl.current = data.url;
+            } else {
+                setLiveData(null); setVisible(false); prevUrl.current = null;
+            }
+        } catch { /* silent — never break student UI */ }
+        finally { setLoading(false); }
+    }
+
+    useEffect(() => {
+        fetchLiveLink();
+        timerRef.current = setInterval(fetchLiveLink, LIVE_POLL_MS);
+        return () => clearInterval(timerRef.current);
+    }, []);
+
+    if (loading || !liveData?.url) return null;
+
+    return (
+        <div className={`lcb-wrap${visible ? ' lcb-in' : ''}`}>
+            <div className="lcb-glow" />
+            <div className="lcb-content">
+                <div className="lcb-indicator">
+                    <span className="lcb-ring" />
+                    <span className="lcb-dot" />
+                </div>
+                <div className="lcb-text">
+                    <span className="lcb-badge">● LIVE NOW</span>
+                    <span className="lcb-label">{liveData.label || 'Live Class in Progress'}</span>
+                    {liveData.setAt && (
+                        <span className="lcb-since">
+                            Started {new Date(liveData.setAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                    )}
+                </div>
+                <button className="lcb-btn" onClick={() => window.open(liveData.url, '_blank', 'noopener,noreferrer')}>
+                    <span className="lcb-btn-icon">📹</span>
+                    Join Live Class
+                    <span className="lcb-btn-arrow">→</span>
+                </button>
+            </div>
+            <style jsx>{`
+        .lcb-wrap{position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(135deg,#1a0a0a,#2d0a0a);border:1.5px solid rgba(239,68,68,.4);padding:1.1rem 1.4rem;display:flex;align-items:center;box-shadow:0 0 0 1px rgba(239,68,68,.1),0 8px 32px rgba(239,68,68,.2),0 2px 8px rgba(0,0,0,.3);opacity:0;transform:translateY(-8px) scale(.98);transition:opacity .45s cubic-bezier(0.16,1,0.3,1),transform .45s cubic-bezier(0.16,1,0.3,1);margin-bottom:1.25rem;cursor:default}
+        .lcb-in{opacity:1;transform:none}
+        .lcb-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(239,68,68,.15) 0%,transparent 60%);animation:glowShift 4s ease-in-out infinite alternate;pointer-events:none}
+        @keyframes glowShift{from{transform:translateX(-10%) scaleX(.9);opacity:.7}to{transform:translateX(10%) scaleX(1.1);opacity:1}}
+        .lcb-content{position:relative;z-index:1;display:flex;align-items:center;gap:1rem;width:100%;flex-wrap:wrap}
+        .lcb-indicator{position:relative;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .lcb-dot{width:12px;height:12px;background:#ef4444;border-radius:50%;z-index:1;box-shadow:0 0 8px rgba(239,68,68,.8)}
+        .lcb-ring{position:absolute;width:32px;height:32px;border-radius:50%;border:2px solid rgba(239,68,68,.6);animation:liveRing 2s ease-out infinite}
+        @keyframes liveRing{0%{transform:scale(.5);opacity:1}80%,100%{transform:scale(1.5);opacity:0}}
+        .lcb-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+        .lcb-badge{font-size:10px;font-weight:800;color:#ef4444;letter-spacing:.1em;text-transform:uppercase;animation:badgeFade 2s ease-in-out infinite}
+        @keyframes badgeFade{0%,100%{opacity:1}50%{opacity:.5}}
+        .lcb-label{font-size:.95rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .lcb-since{font-size:.73rem;color:rgba(255,255,255,.45)}
+        .lcb-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.3rem;border-radius:13px;border:none;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-size:.9rem;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0;box-shadow:0 4px 16px rgba(239,68,68,.45);transition:transform .2s cubic-bezier(0.16,1,0.3,1),box-shadow .2s;animation:btnPulse 2.5s ease-in-out infinite}
+        .lcb-btn:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 8px 24px rgba(239,68,68,.6);animation:none}
+        .lcb-btn:active{transform:translateY(0) scale(.98)}
+        @keyframes btnPulse{0%,100%{box-shadow:0 4px 16px rgba(239,68,68,.45)}50%{box-shadow:0 4px 24px rgba(239,68,68,.75)}}
+        .lcb-btn-icon{font-size:1rem}
+        .lcb-btn-arrow{font-size:.8rem;opacity:.8;transition:transform .2s;display:inline-block}
+        .lcb-btn:hover .lcb-btn-arrow{transform:translateX(4px);opacity:1}
+        @media(max-width:500px){.lcb-wrap{padding:1rem}.lcb-btn{width:100%;justify-content:center}}
+      `}</style>
+        </div>
+    );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// QUICK LIVE LINK PANEL  — teacher side inside Schedule tab
+// ═══════════════════════════════════════════════════════════════════════════════
+function QuickLiveLinkPanel() {
+    const [link, setLink] = useState('');
+    const [label, setLabel] = useState('');
+    const [saving, setSaving] = useState(false);
+    const [clearing, setClearing] = useState(false);
+    const [currentLive, setCurrentLive] = useState(null);
+    const [loadingCurrent, setLoadingCurrent] = useState(true);
+    const [msg, setMsg] = useState({ text: '', type: '' });
+    const [copied, setCopied] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => { setTimeout(() => setMounted(true), 20); }, []);
+
+    useEffect(() => {
+        fetch('/api/live-link')
+            .then(r => r.ok ? r.json() : null)
+            .then(d => { if (d?.url) setCurrentLive(d); })
+            .catch(() => { })
+            .finally(() => setLoadingCurrent(false));
+    }, []);
+
+    function flash(text, type = 'ok') {
+        setMsg({ text, type });
+        setTimeout(() => setMsg({ text: '', type: '' }), 4000);
+    }
+    function isValidUrl(s) { try { new URL(s); return true; } catch { return false; } }
+
+    async function handleGoLive() {
+        if (!link.trim()) { flash('Please paste a meeting link first.', 'err'); return; }
+        if (!isValidUrl(link.trim())) { flash("Doesn't look like a valid URL — include https://", 'err'); return; }
+        setSaving(true);
+        try {
+            const res = await fetch('/api/teacher/live-link', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: link.trim(), label: label.trim() || 'Live Class' }),
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.error || 'Failed to set live link.');
+            setCurrentLive(data.liveLink);
+            setLink(''); setLabel('');
+            flash('✓ Link is now live! Students can see the Join button on their dashboard.', 'ok');
+        } catch (err) { flash(err.message, 'err'); }
+        finally { setSaving(false); }
+    }
+
+    async function handleClearLive() {
+        setClearing(true);
+        try {
+            const res = await fetch('/api/teacher/live-link', { method: 'DELETE', headers: { 'Content-Type': 'application/json' } });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.error || 'Failed to clear live link.');
+            setCurrentLive(null);
+            flash('Live class ended. The Join button has been removed from the student dashboard.', 'ok');
+        } catch (err) { flash(err.message, 'err'); }
+        finally { setClearing(false); }
+    }
+
+    function copyLink() {
+        if (!currentLive?.url) return;
+        navigator.clipboard.writeText(currentLive.url).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+    }
+
+    return (
+        <div className={`qlp-wrap${mounted ? ' qlp-in' : ''}`}>
+
+            {/* ── Live Status Banner ── */}
+            {!loadingCurrent && currentLive?.url && (
+                <div className="qlp-live-banner qlp-banner-in">
+                    <div className="qlp-live-dot-wrap">
+                        <span className="qlp-live-ring" />
+                        <span className="qlp-live-dot" />
+                    </div>
+                    <div className="qlp-live-info">
+                        <div className="qlp-live-title">
+                            <span className="qlp-live-badge">● LIVE</span>
+                            <strong>{currentLive.label || 'Live Class'}</strong>
+                        </div>
+                        <div className="qlp-live-url">{currentLive.url}</div>
+                        {currentLive.setAt && (
+                            <div className="qlp-live-since">
+                                Started {new Date(currentLive.setAt).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' })}
+                            </div>
+                        )}
+                    </div>
+                    <div className="qlp-live-actions">
+                        <a href={currentLive.url} target="_blank" rel="noopener noreferrer" className="qlp-join-btn">🔴 Join Now</a>
+                        <button className="qlp-copy-btn" onClick={copyLink}>{copied ? '✓ Copied' : '📋 Copy'}</button>
+                        <button className={`qlp-end-btn${clearing ? ' qlp-btn-busy' : ''}`} onClick={handleClearLive} disabled={clearing}>
+                            {clearing ? <span className="qlp-spinner" /> : '⏹ End Live'}
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {!loadingCurrent && !currentLive?.url && (
+                <div className="qlp-offline-notice">
+                    <span className="qlp-offline-dot" /> No live class running — students see no Join button right now.
+                </div>
+            )}
+
+            {msg.text && <div className={`qlp-msg qlp-msg-${msg.type} qlp-msg-in`}>{msg.text}</div>}
+
+            {/* ── Input Card ── */}
+            <div className="qlp-card">
+                <div className="qlp-card-header">
+                    <div className="qlp-card-icon">⚡</div>
+                    <div>
+                        <h3>Quick Live Link</h3>
+                        <p>Paste any meeting URL (Google Meet, Zoom, Teams, Jitsi…) and go live instantly. Students will see a pulsing <strong>Join Live Class</strong> button the moment you submit.</p>
+                    </div>
+                </div>
+                <div className="qlp-form">
+                    <div className="qlp-field">
+                        <label>Session Label <span className="qlp-optional">(optional)</span></label>
+                        <input type="text" placeholder="e.g. Air Navigation – Live Doubt Session" value={label} onChange={e => setLabel(e.target.value)} />
+                    </div>
+                    <div className="qlp-link-row">
+                        <div className="qlp-link-input-wrap">
+                            <span className="qlp-link-prefix">🔗</span>
+                            <input className="qlp-link-input" type="url" placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                                value={link} onChange={e => setLink(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleGoLive()}
+                                spellCheck={false} autoComplete="off" />
+                            {link && <button className="qlp-clear-input" onClick={() => setLink('')}>×</button>}
+                        </div>
+                        <button className={`qlp-go-live-btn${saving ? ' qlp-btn-busy' : ''}`} onClick={handleGoLive} disabled={saving || !link.trim()}>
+                            {saving ? <><span className="qlp-spinner" /> Going live…</> : <><span className="qlp-live-pulse-icon" />Go Live</>}
+                        </button>
+                    </div>
+                    <div className="qlp-how-it-works">
+                        <span className="qlp-how-step">1️⃣ Paste your link</span>
+                        <span className="qlp-how-arrow">→</span>
+                        <span className="qlp-how-step">2️⃣ Hit Go Live</span>
+                        <span className="qlp-how-arrow">→</span>
+                        <span className="qlp-how-step">3️⃣ Students see <span className="qlp-how-badge">🔴 Join Live Class</span></span>
+                        <span className="qlp-how-arrow">→</span>
+                        <span className="qlp-how-step">4️⃣ Hit End Live when done</span>
+                    </div>
+                </div>
+            </div>
+
+            <style jsx>{`
+        .qlp-wrap{opacity:0;transform:translateY(12px);transition:opacity .4s cubic-bezier(0.16,1,0.3,1),transform .4s cubic-bezier(0.16,1,0.3,1);margin-bottom:1.5rem;display:flex;flex-direction:column;gap:.85rem}
+        .qlp-in{opacity:1;transform:none}
+        .qlp-live-banner{background:linear-gradient(135deg,#fff1f2,#fff8f8);border:1.5px solid #fca5a5;border-radius:20px;padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;box-shadow:0 8px 30px rgba(239,68,68,.1)}
+        .qlp-banner-in{animation:bannerIn .5s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes bannerIn{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+        .qlp-live-dot-wrap{position:relative;width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+        .qlp-live-dot{width:12px;height:12px;background:#ef4444;border-radius:50%;position:absolute;z-index:1}
+        .qlp-live-ring{position:absolute;width:28px;height:28px;border-radius:50%;border:2px solid #ef4444;animation:livePulse 1.8s ease-in-out infinite}
+        @keyframes livePulse{0%{transform:scale(.6);opacity:1}80%,100%{transform:scale(1.4);opacity:0}}
+        .qlp-live-info{flex:1;min-width:0}
+        .qlp-live-title{display:flex;align-items:center;gap:.6rem;margin-bottom:4px;flex-wrap:wrap}
+        .qlp-live-badge{font-size:10px;font-weight:800;color:#ef4444;background:#fee2e2;border:1px solid #fca5a5;border-radius:20px;padding:2px 9px;letter-spacing:.06em;animation:badgePulse 2s ease-in-out infinite}
+        @keyframes badgePulse{0%,100%{opacity:1}50%{opacity:.6}}
+        .qlp-live-title strong{font-size:.95rem;color:#0f172a}
+        .qlp-live-url{font-size:.78rem;color:#64748b;word-break:break-all;margin-bottom:3px}
+        .qlp-live-since{font-size:.74rem;color:#94a3b8}
+        .qlp-live-actions{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+        .qlp-join-btn{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:.5rem 1rem;border-radius:11px;text-decoration:none;font-size:.82rem;font-weight:700;transition:opacity .2s,transform .15s;box-shadow:0 4px 14px rgba(239,68,68,.3)}
+        .qlp-join-btn:hover{opacity:.88;transform:translateY(-2px)}
+        .qlp-copy-btn{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;padding:.45rem .9rem;border-radius:10px;font-size:.8rem;font-weight:700;cursor:pointer;transition:background .2s}
+        .qlp-copy-btn:hover{background:#fee2e2}
+        .qlp-end-btn{background:#fff;color:#475569;border:1px solid #e2e8f0;padding:.45rem .9rem;border-radius:10px;font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s}
+        .qlp-end-btn:hover:not(:disabled){background:#f1f5f9;color:#0f172a;border-color:#cbd5e1}
+        .qlp-end-btn:disabled{opacity:.5;cursor:not-allowed}
+        .qlp-offline-notice{display:flex;align-items:center;gap:.55rem;font-size:.84rem;color:#94a3b8;padding:.65rem 1rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px}
+        .qlp-offline-dot{width:8px;height:8px;background:#cbd5e1;border-radius:50%;flex-shrink:0}
+        .qlp-msg{padding:.75rem 1rem;border-radius:12px;font-size:.87rem;font-weight:600}
+        .qlp-msg-ok{background:#f0fdf4;color:#15803d;border:1px solid #86efac}
+        .qlp-msg-err{background:#fff1f2;color:#b91c1c;border:1px solid #fca5a5}
+        .qlp-msg-in{animation:msgIn .3s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes msgIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+        .qlp-card{background:#fff;border:1px solid #dbeafe;border-radius:20px;padding:1.5rem;box-shadow:0 12px 32px rgba(15,23,42,.05)}
+        .qlp-card-header{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:1.25rem;padding-bottom:1.1rem;border-bottom:1px solid #f1f5f9}
+        .qlp-card-icon{font-size:2rem;flex-shrink:0;line-height:1}
+        .qlp-card-header h3{margin:0 0 4px;font-size:1rem;color:#0f172a}
+        .qlp-card-header p{margin:0;font-size:.82rem;color:#64748b;line-height:1.5}
+        .qlp-card-header strong{color:#ef4444}
+        .qlp-form{display:flex;flex-direction:column;gap:.9rem}
+        .qlp-field{display:flex;flex-direction:column;gap:5px}
+        .qlp-field label{font-size:.82rem;font-weight:700;color:#374151}
+        .qlp-optional{font-weight:400;color:#94a3b8}
+        .qlp-field input{border:1px solid #dbeafe;border-radius:12px;padding:.65rem .9rem;background:#f8fafc;color:#0f172a;font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s,background .2s;font-family:inherit}
+        .qlp-field input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(59,130,246,.15);background:#fff}
+        .qlp-link-row{display:flex;gap:.75rem;align-items:center}
+        .qlp-link-input-wrap{position:relative;flex:1}
+        .qlp-link-prefix{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);font-size:.9rem;pointer-events:none}
+        .qlp-link-input{width:100%;border:1.5px solid #dbeafe;border-radius:13px;padding:.75rem 2.4rem .75rem 2.5rem;background:#f8fafc;color:#0f172a;font-size:.9rem;outline:none;box-sizing:border-box;transition:border-color .2s,box-shadow .2s,background .2s;font-family:monospace;letter-spacing:-.01em}
+        .qlp-link-input:focus{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.12);background:#fff}
+        .qlp-link-input::placeholder{font-family:inherit;letter-spacing:0;color:#cbd5e1}
+        .qlp-clear-input{position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:#94a3b8;line-height:1;padding:0;transition:color .2s,transform .2s}
+        .qlp-clear-input:hover{color:#475569;transform:translateY(-50%) scale(1.2)}
+        .qlp-go-live-btn{padding:.75rem 1.4rem;border:none;border-radius:13px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:800;font-size:.92rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0;box-shadow:0 6px 20px rgba(239,68,68,.3);transition:all .25s cubic-bezier(0.16,1,0.3,1)}
+        .qlp-go-live-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 28px rgba(239,68,68,.42)}
+        .qlp-go-live-btn:active{transform:translateY(0)}
+        .qlp-go-live-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+        .qlp-btn-busy{background:linear-gradient(135deg,#f97316,#ea580c)!important}
+        .qlp-live-pulse-icon::before{content:'🔴';margin-right:2px;animation:iconPulse 1.2s ease-in-out infinite;display:inline-block}
+        @keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+        .qlp-spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;flex-shrink:0}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .qlp-how-it-works{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;padding:.7rem .9rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px}
+        .qlp-how-step{font-size:.76rem;color:#64748b}
+        .qlp-how-arrow{font-size:.7rem;color:#cbd5e1}
+        .qlp-how-badge{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;background:#fee2e2;color:#b91c1c;font-size:.72rem;font-weight:700;border:1px solid #fca5a5}
+        @media(max-width:640px){.qlp-link-row{flex-direction:column;align-items:stretch}.qlp-go-live-btn{justify-content:center}.qlp-live-banner{flex-direction:column;gap:.9rem}.qlp-live-actions{width:100%}.qlp-how-it-works{display:none}}
+      `}</style>
+        </div>
+    );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SCHEDULE MEETING TAB
+// ═══════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
+// SCHEDULE MEETING TAB  — paste Meet link + date/time → saves to MongoDB
+// Students see it automatically on their dashboard with live/gray button
+// ═══════════════════════════════════════════════════════════════════════════════
+function ScheduleMeetingTab() {
+    const today = new Date().toISOString().split('T')[0];
+    const [form, setForm] = useState({
+        title: '',
+        description: '',
+        date: today,
+        time: '10:00',
+        duration: '60',
+        meetLink: '',
+        batch: 'All Batches',
+    });
+    const [errors, setErrors] = useState({});
+    const [saving, setSaving] = useState(false);
+    const [successEvent, setSuccess] = useState(null);
+    const [saveErr, setSaveErr] = useState('');
+    const [classes, setClasses] = useState([]);
+    const [loadingList, setLoadingList] = useState(true);
+    const [deletingId, setDeletingId] = useState(null);
+    const [copied, setCopied] = useState(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => { setTimeout(() => setMounted(true), 20); }, []);
+
+    // fetch existing classes on mount
+    useEffect(() => {
+        fetch('/api/classes')
+            .then(r => r.json())
+            .then(d => { if (d.success) setClasses(d.events); })
+            .catch(() => { })
+            .finally(() => setLoadingList(false));
+    }, []);
+
+    function setField(k, v) {
+        setForm(p => ({ ...p, [k]: v }));
+        setErrors(p => ({ ...p, [k]: '' }));
+    }
+
+    function validate() {
+        const errs = {};
+        if (!form.title.trim()) errs.title = 'Class title is required.';
+        if (!form.meetLink.trim()) errs.meetLink = 'Meeting link is required.';
+        else {
+            try { new URL(form.meetLink); }
+            catch { errs.meetLink = 'Enter a valid URL starting with https://'; }
+        }
+        if (!form.date) errs.date = 'Date is required.';
+        if (!form.time) errs.time = 'Time is required.';
+        return errs;
+    }
+
+    async function handleSubmit() {
+        const errs = validate();
+        setErrors(errs);
+        if (Object.keys(errs).length > 0) return;
+
+        setSaving(true); setSaveErr(''); setSuccess(null);
+        try {
+            const res = await fetch('/api/classes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ date, batch, records }),
+                body: JSON.stringify(form),
             });
-            if (!res.ok) throw new Error('Failed to save');
-            setSaveMsg('Attendance saved successfully!');
-        } catch {
-            setSaveMsg('Error saving attendance. Please try again.');
+            const data = await res.json();
+            if (!data.success) throw new Error(data.error || 'Failed to save class.');
+
+            setSuccess(data.event);
+            setClasses(prev => [data.event, ...prev]);
+            setForm({ title: '', description: '', date: today, time: '10:00', duration: '60', meetLink: '', batch: 'All Batches' });
+        } catch (err) {
+            setSaveErr(err.message);
         } finally {
             setSaving(false);
         }
     }
 
+    async function handleDelete(id) {
+        setDeletingId(id);
+        try {
+            const res = await fetch('/api/classes', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id }),
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.error || 'Failed to delete.');
+            setClasses(prev => prev.filter(c => (c._id?.toString() || c.id) !== id));
+        } catch (err) {
+            setSaveErr(err.message);
+        } finally {
+            setDeletingId(null);
+        }
+    }
+
+    function copyLink(link, id) {
+        navigator.clipboard.writeText(link).then(() => {
+            setCopied(id);
+            setTimeout(() => setCopied(null), 2000);
+        });
+    }
+
+    // ── Live status helpers ────────────────────────────────────────────────────
+    function isLive(start, end) {
+        const now = Date.now();
+        return new Date(start) <= now && now <= new Date(end);
+    }
+    function countdown(start) {
+        const diff = new Date(start) - Date.now();
+        if (diff <= 0) return null;
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        if (h > 24) return `in ${Math.floor(h / 24)}d ${h % 24}h`;
+        if (h > 0) return `in ${h}h ${m}m`;
+        return `in ${m}m`;
+    }
+    function fmtDateTime(iso) {
+        return new Date(iso).toLocaleString('en-IN', {
+            weekday: 'short', day: 'numeric', month: 'short',
+            hour: '2-digit', minute: '2-digit',
+        });
+    }
+
+    const C = {
+        primary: '#1D4ED8', purple: '#8B5CF6', green: '#10B981',
+        red: '#EF4444', accent: '#F59E0B',
+        text: '#0F172A', muted: '#64748B', border: '#E2E8F0',
+        bg: '#F0F4FF', card: '#FFFFFF', primaryLight: '#EFF6FF',
+        sidebar: '#0A1628',
+    };
+
     return (
-        <div>
-            <div className="att-controls">
-                <select value={batch} onChange={e => setBatch(e.target.value)}>
-                    <option>Batch A — Morning</option>
-                    <option>Batch B — Evening</option>
-                    <option>Batch C — Weekend</option>
-                </select>
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} />
-                <div className="att-controls-right">
-                    <button className="att-btn att-btn-outline" onClick={() => markAll('present')}>✓ All Present</button>
-                    <button className="att-btn att-btn-primary" onClick={saveAttendance} disabled={saving}>
-                        {saving ? 'Saving…' : 'Save Attendance'}
+        <div style={{
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'none' : 'translateY(14px)',
+            transition: 'opacity .4s ease, transform .4s ease',
+            fontFamily: "'DM Sans','Segoe UI',sans-serif",
+        }}>
+
+            {/* ── HOW IT WORKS banner ── */}
+            <div style={{
+                background: `linear-gradient(135deg, ${C.sidebar}, ${C.primary})`,
+                borderRadius: 16, padding: '18px 22px', marginBottom: 20,
+                display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap',
+            }}>
+                <div style={{ fontSize: 36 }}>📅</div>
+                <div style={{ flex: 1 }}>
+                    <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginBottom: 4 }}>
+                        Schedule a Live Class
+                    </div>
+                    <div style={{ color: '#93C5FD', fontSize: 13, lineHeight: 1.6 }}>
+                        Paste your Google Meet link below with date and time. Students will see it on their dashboard with a live button that turns red exactly when the class starts.
+                    </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    {[['🔗', 'Paste link'], ['📅', 'Set time'], ['🔴', 'Auto live button']].map(([icon, label]) => (
+                        <span key={label} style={{
+                            background: 'rgba(255,255,255,.15)', color: '#fff',
+                            fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20,
+                        }}>{icon} {label}</span>
+                    ))}
+                </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 18 }}>
+
+                {/* ── LEFT: Form ── */}
+                <div style={{
+                    background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
+                    padding: '22px', boxShadow: '0 8px 30px rgba(15,23,42,.06)',
+                }}>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 18 }}>
+                        ➕ Add New Class
+                    </div>
+
+                    {/* Success */}
+                    {successEvent && (
+                        <div style={{
+                            background: '#F0FDF4', border: '1px solid #86EFAC', borderRadius: 12,
+                            padding: '14px 16px', marginBottom: 16,
+                            animation: 'fadeIn .3s ease',
+                        }}>
+                            <div style={{ fontWeight: 700, color: '#15803D', marginBottom: 6 }}>✅ Class scheduled!</div>
+                            <div style={{ fontSize: 13, color: '#166534' }}>{successEvent.title}</div>
+                            <div style={{ fontSize: 12, color: '#15803D', marginTop: 4 }}>
+                                Students can now see this class on their dashboard.
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Error */}
+                    {saveErr && (
+                        <div style={{
+                            background: '#FEF2F2', border: '1px solid #FCA5A5', borderRadius: 12,
+                            padding: '12px 14px', marginBottom: 16, fontSize: 13, color: '#B91C1C', fontWeight: 600,
+                        }}>⚠️ {saveErr}</div>
+                    )}
+
+                    {/* Class Title */}
+                    <div style={{ marginBottom: 14 }}>
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>
+                            Class Title *
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Air Regulations – Chapter 3 Live"
+                            value={form.title}
+                            onChange={e => setField('title', e.target.value)}
+                            style={{
+                                width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
+                                border: `1px solid ${errors.title ? '#FCA5A5' : C.border}`,
+                                background: errors.title ? '#FFF1F2' : C.bg,
+                                color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit',
+                            }}
+                        />
+                        {errors.title && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.title}</div>}
+                    </div>
+
+                    {/* Meet Link */}
+                    <div style={{ marginBottom: 14 }}>
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>
+                            🔗 Google Meet / Zoom Link *
+                        </label>
+                        <input
+                            type="url"
+                            placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                            value={form.meetLink}
+                            onChange={e => setField('meetLink', e.target.value)}
+                            style={{
+                                width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
+                                border: `1px solid ${errors.meetLink ? '#FCA5A5' : C.border}`,
+                                background: errors.meetLink ? '#FFF1F2' : C.bg,
+                                color: C.primary, fontSize: 13, outline: 'none', fontFamily: 'monospace',
+                            }}
+                        />
+                        {errors.meetLink && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.meetLink}</div>}
+                    </div>
+
+                    {/* Date + Time */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                        <div>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Date *</label>
+                            <input
+                                type="date"
+                                value={form.date}
+                                min={today}
+                                onChange={e => setField('date', e.target.value)}
+                                style={{
+                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
+                                    border: `1px solid ${errors.date ? '#FCA5A5' : C.border}`,
+                                    background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit',
+                                }}
+                            />
+                            {errors.date && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.date}</div>}
+                        </div>
+                        <div>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Start Time *</label>
+                            <input
+                                type="time"
+                                value={form.time}
+                                onChange={e => setField('time', e.target.value)}
+                                style={{
+                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
+                                    border: `1px solid ${errors.time ? '#FCA5A5' : C.border}`,
+                                    background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit',
+                                }}
+                            />
+                            {errors.time && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.time}</div>}
+                        </div>
+                    </div>
+
+                    {/* Duration + Batch */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                        <div>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Duration</label>
+                            <select
+                                value={form.duration}
+                                onChange={e => setField('duration', e.target.value)}
+                                style={{
+                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
+                                    border: `1px solid ${C.border}`, background: C.bg, color: C.text,
+                                    fontSize: 13, outline: 'none', fontFamily: 'inherit',
+                                }}
+                            >
+                                <option value="30">30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60">1 hour</option>
+                                <option value="90">1.5 hours</option>
+                                <option value="120">2 hours</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Batch</label>
+                            <select
+                                value={form.batch}
+                                onChange={e => setField('batch', e.target.value)}
+                                style={{
+                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
+                                    border: `1px solid ${C.border}`, background: C.bg, color: C.text,
+                                    fontSize: 13, outline: 'none', fontFamily: 'inherit',
+                                }}
+                            >
+                                <option>All Batches</option>
+                                <option>Batch A — Morning</option>
+                                <option>Batch B — Evening</option>
+                                <option>Batch C — Weekend</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Description */}
+                    <div style={{ marginBottom: 18 }}>
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>
+                            Description <span style={{ fontWeight: 400, color: C.muted }}>(optional)</span>
+                        </label>
+                        <textarea
+                            rows={2}
+                            placeholder="Topics covered, what to prepare, etc."
+                            value={form.description}
+                            onChange={e => setField('description', e.target.value)}
+                            style={{
+                                width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
+                                border: `1px solid ${C.border}`, background: C.bg, color: C.text,
+                                fontSize: 13, outline: 'none', fontFamily: 'inherit', resize: 'vertical',
+                            }}
+                        />
+                    </div>
+
+                    {/* Preview */}
+                    {form.title && form.date && form.time && (
+                        <div style={{
+                            background: C.primaryLight, border: `1px solid #BFDBFE`,
+                            borderRadius: 12, padding: '12px 14px', marginBottom: 16,
+                        }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: C.primary, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>Preview</div>
+                            <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 2 }}>{form.title}</div>
+                            <div style={{ fontSize: 12, color: C.muted }}>
+                                🗓 {new Date(`${form.date}T${form.time}`).toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}
+                                &nbsp;·&nbsp; ⏱ {form.duration} min &nbsp;·&nbsp; 👥 {form.batch}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Submit */}
+                    <button
+                        onClick={handleSubmit}
+                        disabled={saving}
+                        style={{
+                            width: '100%', padding: '12px', borderRadius: 12, border: 'none',
+                            background: saving ? C.muted : `linear-gradient(135deg, ${C.primary}, ${C.purple})`,
+                            color: '#fff', fontWeight: 800, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                            transition: 'transform .15s, box-shadow .15s',
+                        }}
+                        onMouseEnter={e => { if (!saving) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 8px 20px rgba(29,78,216,.3)`; } }}
+                        onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+                    >
+                        {saving ? '⏳ Saving…' : '📅 Schedule Class'}
                     </button>
                 </div>
+
+                {/* ── RIGHT: Upcoming Classes list ── */}
+                <div style={{
+                    background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
+                    padding: '22px', boxShadow: '0 8px 30px rgba(15,23,42,.06)',
+                    display: 'flex', flexDirection: 'column', gap: 12,
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>📋 Upcoming Classes</div>
+                        <span style={{
+                            fontSize: 12, color: C.muted, background: C.bg,
+                            padding: '3px 10px', borderRadius: 20, border: `1px solid ${C.border}`,
+                        }}>{classes.length} scheduled</span>
+                    </div>
+
+                    {loadingList ? (
+                        <div style={{ padding: '24px 0', textAlign: 'center', color: C.muted, fontSize: 13 }}>
+                            Loading…
+                        </div>
+                    ) : classes.length === 0 ? (
+                        <div style={{
+                            padding: '36px 20px', textAlign: 'center',
+                            border: `1.5px dashed ${C.border}`, borderRadius: 14, background: C.bg,
+                        }}>
+                            <div style={{ fontSize: 36, marginBottom: 10 }}>📅</div>
+                            <div style={{ fontWeight: 700, color: C.text, marginBottom: 4 }}>No classes scheduled</div>
+                            <div style={{ fontSize: 12, color: C.muted }}>Add your first class using the form.</div>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto', maxHeight: 560 }}>
+                            {classes.map(cls => {
+                                const id = cls._id?.toString() || cls.id;
+                                const live = isLive(cls.startDateTime, cls.endDateTime);
+                                const timer = countdown(cls.startDateTime);
+                                return (
+                                    <div key={id} style={{
+                                        background: live ? '#FFF1F1' : C.bg,
+                                        border: `1px solid ${live ? '#FCA5A5' : C.border}`,
+                                        borderRadius: 14, padding: '14px 16px',
+                                        transition: 'box-shadow .2s',
+                                    }}>
+                                        {/* Top row — badges + delete */}
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                                                {live && (
+                                                    <span style={{
+                                                        background: C.red, color: '#fff', fontSize: 10, fontWeight: 800,
+                                                        padding: '2px 9px', borderRadius: 20,
+                                                    }}>🔴 LIVE NOW</span>
+                                                )}
+                                                {!live && timer && (
+                                                    <span style={{
+                                                        background: C.primaryLight, color: C.primary, fontSize: 10,
+                                                        fontWeight: 700, padding: '2px 9px', borderRadius: 20,
+                                                    }}>⏰ {timer}</span>
+                                                )}
+                                                <span style={{
+                                                    background: C.bg, color: C.muted, fontSize: 10,
+                                                    fontWeight: 600, padding: '2px 9px', borderRadius: 20,
+                                                    border: `1px solid ${C.border}`,
+                                                }}>{cls.batch}</span>
+                                            </div>
+                                            <button
+                                                onClick={() => handleDelete(id)}
+                                                disabled={deletingId === id}
+                                                style={{
+                                                    width: 26, height: 26, borderRadius: '50%', border: '1px solid #FECACA',
+                                                    background: '#FFF1F2', color: '#B91C1C', cursor: 'pointer',
+                                                    fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    transition: 'transform .15s',
+                                                }}
+                                                title="Cancel class"
+                                            >✕</button>
+                                        </div>
+
+                                        {/* Title */}
+                                        <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 4 }}>
+                                            {cls.title}
+                                        </div>
+
+                                        {/* Time */}
+                                        <div style={{ fontSize: 12, color: C.muted, marginBottom: 6 }}>
+                                            🕐 {fmtDateTime(cls.startDateTime)}
+                                            {cls.endDateTime && ` → ${new Date(cls.endDateTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`}
+                                        </div>
+
+                                        {/* Description */}
+                                        {cls.description && (
+                                            <div style={{ fontSize: 11, color: C.muted, marginBottom: 8, lineHeight: 1.4 }}>
+                                                {cls.description}
+                                            </div>
+                                        )}
+
+                                        {/* Actions */}
+                                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+                                            {/* LIVE button — red clickable if live, gray disabled if not */}
+                                            {live ? (
+                                                <a
+                                                    href={cls.meetLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{
+                                                        background: `linear-gradient(135deg, ${C.red}, #DC2626)`,
+                                                        color: '#fff', padding: '7px 14px', borderRadius: 9,
+                                                        fontWeight: 700, fontSize: 12, textDecoration: 'none',
+                                                        display: 'inline-flex', alignItems: 'center', gap: 5,
+                                                        boxShadow: `0 4px 14px rgba(239,68,68,.4)`,
+                                                    }}
+                                                >
+                                                    🔴 Join Live Now
+                                                </a>
+                                            ) : (
+                                                <button
+                                                    disabled
+                                                    style={{
+                                                        background: '#E2E8F0', color: '#94A3B8', padding: '7px 14px',
+                                                        borderRadius: 9, fontWeight: 700, fontSize: 12, border: 'none',
+                                                        cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: 5,
+                                                    }}
+                                                    title="Join button activates when class starts"
+                                                >
+                                                    ⚫ Join Live {timer ? `(${timer})` : ''}
+                                                </button>
+                                            )}
+
+                                            {/* Copy link */}
+                                            <button
+                                                onClick={() => copyLink(cls.meetLink, id)}
+                                                style={{
+                                                    background: C.primaryLight, color: C.primary, padding: '7px 12px',
+                                                    borderRadius: 9, fontWeight: 700, fontSize: 12,
+                                                    border: `1px solid #BFDBFE`, cursor: 'pointer',
+                                                }}
+                                            >
+                                                {copied === id ? '✓ Copied!' : '📋 Copy Link'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {saveMsg && (
-                <div className={`save-msg ${saveMsg.includes('Error') ? 'save-msg-err' : 'save-msg-ok'}`}>{saveMsg}</div>
+            <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+      `}</style>
+        </div>
+    );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MANAGE STUDENTS TAB
+// ═══════════════════════════════════════════════════════════════════════════════
+function ManageStudentsTab({ students, onStudentsChange }) {
+    const [search, setSearch] = useState('');
+    const [confirmRemove, setConfirmRemove] = useState(null);
+    const [removing, setRemoving] = useState(null);
+    const [removeMsg, setRemoveMsg] = useState('');
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [addForm, setAddForm] = useState({ name: '', email: '', phone: '', batch: 'Batch A — Morning' });
+    const [addErrors, setAddErrors] = useState({});
+    const [adding, setAdding] = useState(false);
+    const [addMsg, setAddMsg] = useState('');
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => { setTimeout(() => setMounted(true), 10); }, []);
+
+    const filtered = students.filter(s =>
+        s.name.toLowerCase().includes(search.toLowerCase()) ||
+        s.email.toLowerCase().includes(search.toLowerCase())
+    );
+
+    function validateAdd() {
+        const errs = {};
+        if (!addForm.name.trim()) errs.name = 'Name is required';
+        if (!addForm.email.trim()) errs.email = 'Email is required';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addForm.email)) errs.email = 'Invalid email format';
+        else if (students.find(s => s.email.toLowerCase() === addForm.email.toLowerCase())) errs.email = 'Student with this email already exists';
+        if (!addForm.phone.trim()) errs.phone = 'Phone is required';
+        else if (!/^\d{10}$/.test(addForm.phone.replace(/\s/g, ''))) errs.phone = 'Enter a valid 10-digit phone number';
+        return errs;
+    }
+
+    async function handleAddStudent() {
+        const errs = validateAdd(); setAddErrors(errs);
+        if (Object.keys(errs).length > 0) return;
+        setAdding(true); setAddMsg('');
+        try {
+            const res = await fetch('/api/teacher/students/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(addForm) });
+            if (!res.ok) { const body = await res.json().catch(() => ({})); throw new Error(body.error || 'Failed to add student'); }
+            const data = await res.json();
+            setAddMsg(`✓ ${addForm.name} added successfully!`);
+            setAddForm({ name: '', email: '', phone: '', batch: 'Batch A — Morning' });
+            setShowAddForm(false);
+            onStudentsChange(data.students);
+        } catch (err) { setAddMsg(`✗ ${err.message}`); }
+        finally { setAdding(false); }
+    }
+
+    async function handleRemoveStudent(email) {
+        setRemoving(email); setRemoveMsg('');
+        try {
+            const res = await fetch('/api/teacher/students/remove', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+            if (!res.ok) { const body = await res.json().catch(() => ({})); throw new Error(body.error || 'Failed to remove student'); }
+            const data = await res.json();
+            setRemoveMsg('Student removed successfully.'); setConfirmRemove(null);
+            onStudentsChange(data.students);
+        } catch (err) { setRemoveMsg(`Error: ${err.message}`); }
+        finally { setRemoving(null); }
+    }
+
+    const studentToRemove = students.find(s => s.email === confirmRemove);
+
+    return (
+        <div className={`tab-content${mounted ? ' tab-content-in' : ''}`}>
+            <div className="manage-topbar">
+                <div className="manage-search-wrap">
+                    <span className="manage-search-icon">🔍</span>
+                    <input className="manage-search" placeholder="Search by name or email…" value={search} onChange={e => setSearch(e.target.value)} />
+                    {search && <button className="manage-search-clear" onClick={() => setSearch('')}>×</button>}
+                </div>
+                <button className="manage-add-btn btn-ripple" onClick={() => { setShowAddForm(true); setAddMsg(''); setAddErrors({}); }}>+ Add Student</button>
+            </div>
+
+            {removeMsg && <div className={`save-msg ${removeMsg.startsWith('Error') ? 'save-msg-err' : 'save-msg-ok'} msg-slide-in`}>{removeMsg}</div>}
+            {addMsg && <div className={`save-msg ${addMsg.startsWith('✗') ? 'save-msg-err' : 'save-msg-ok'} msg-slide-in`}>{addMsg}</div>}
+
+            {showAddForm && (
+                <div className="modal-backdrop modal-backdrop-in" onClick={e => { if (e.target === e.currentTarget) setShowAddForm(false); }}>
+                    <div className="modal-card modal-card-in">
+                        <div className="modal-header"><h2>Add New Student</h2><button className="modal-close" onClick={() => setShowAddForm(false)}>×</button></div>
+                        <div className="modal-body">
+                            {['name', 'email', 'phone'].map((field, fi) => (
+                                <div key={field} className="form-group" style={{ animationDelay: `${fi * 60}ms` }}>
+                                    <label>{field === 'name' ? 'Full Name *' : field === 'email' ? 'Email Address *' : 'Phone Number *'}</label>
+                                    <input type={field === 'email' ? 'email' : 'text'} placeholder={field === 'name' ? 'e.g. Arjun Sharma' : field === 'email' ? 'e.g. arjun@email.com' : '10-digit mobile number'} value={addForm[field]} onChange={e => setAddForm(p => ({ ...p, [field]: e.target.value }))} className={addErrors[field] ? 'input-err' : ''} />
+                                    {addErrors[field] && <span className="field-err field-err-in">{addErrors[field]}</span>}
+                                </div>
+                            ))}
+                            <div className="form-group" style={{ animationDelay: '180ms' }}>
+                                <label>Batch</label>
+                                <select value={addForm.batch} onChange={e => setAddForm(p => ({ ...p, batch: e.target.value }))}>
+                                    <option>Batch A — Morning</option><option>Batch B — Evening</option><option>Batch C — Weekend</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="modal-cancel-btn" onClick={() => setShowAddForm(false)}>Cancel</button>
+                            <button className="modal-save-btn btn-ripple" onClick={handleAddStudent} disabled={adding}>{adding ? <span className="btn-spinner" /> : 'Add Student'}</button>
+                        </div>
+                    </div>
+                </div>
             )}
 
-            <div className="att-stat-row">
-                <div className="att-stat-card"><span style={{ color: '#16a34a' }}>{presentCount}</span><small>Present</small></div>
-                <div className="att-stat-card"><span style={{ color: '#ef4444' }}>{absentCount}</span><small>Absent</small></div>
-                <div className="att-stat-card"><span style={{ color: '#b45309' }}>{lateCount}</span><small>Late</small></div>
-                <div className="att-stat-card"><span style={{ color: '#2563eb' }}>{marked}/{students.length}</span><small>Marked</small></div>
-            </div>
-
-            <div className="teacher-panel">
-                <div className="panel-header">
-                    <h2>Roll Call — {new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</h2>
-                    <span>{students.length} students · {marked} marked</span>
+            {confirmRemove && (
+                <div className="modal-backdrop modal-backdrop-in" onClick={e => { if (e.target === e.currentTarget) setConfirmRemove(null); }}>
+                    <div className="modal-card modal-card-sm modal-card-in">
+                        <div className="modal-header"><h2>Remove Student</h2><button className="modal-close" onClick={() => setConfirmRemove(null)}>×</button></div>
+                        <div className="modal-body">
+                            <div className="remove-confirm-body">
+                                <div className="remove-icon shake-icon">⚠️</div>
+                                <p>Are you sure you want to remove <strong>{studentToRemove?.name}</strong>?</p>
+                                <p className="remove-warning">Their test history and attendance records will be retained but they will no longer appear in the dashboard.</p>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="modal-cancel-btn" onClick={() => setConfirmRemove(null)}>Cancel</button>
+                            <button className="modal-remove-btn btn-ripple" onClick={() => handleRemoveStudent(confirmRemove)} disabled={removing === confirmRemove}>{removing === confirmRemove ? <span className="btn-spinner" /> : 'Yes, Remove'}</button>
+                        </div>
+                    </div>
                 </div>
+            )}
+
+            <div className="teacher-panel panel-slide-up">
+                <div className="panel-header"><h2>Enrolled Students</h2><span>{filtered.length} of {students.length} students</span></div>
                 <div className="teacher-table-wrap">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Student</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Note</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>#</th><th>Student</th><th>Email</th><th>Phone</th><th>Batch</th><th>Joined</th><th>Tests</th><th>Action</th></tr></thead>
                         <tbody>
-                            {students.map((s, i) => {
-                                const st = rollStatus[s.email] || '';
+                            {filtered.length === 0 ? (
+                                <tr><td colSpan={8}><div className="empty-state empty-state-in">{search ? `No students found matching "${search}".` : 'No students enrolled yet.'}</div></td></tr>
+                            ) : filtered.map((s, i) => {
                                 const [bg, fg] = avatarColors(i);
                                 return (
-                                    <tr key={s.email}>
-                                        <td style={{ color: '#64748b', fontSize: '0.8rem' }}>{i + 1}</td>
-                                        <td>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                <div className="att-avatar" style={{ background: bg, color: fg }}>{initials(s.name)}</div>
-                                                {s.name}
-                                            </div>
-                                        </td>
-                                        <td style={{ color: '#64748b', fontSize: '0.82rem' }}>{s.email}</td>
-                                        <td>
-                                            <div style={{ display: 'flex', gap: 4 }}>
-                                                {['present', 'absent', 'late'].map(status => (
-                                                    <button
-                                                        key={status}
-                                                        onClick={() => setStatus(s.email, status)}
-                                                        className={`status-btn status-${status}${st === status ? ' status-active' : ''}`}
-                                                    >
-                                                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input
-                                                placeholder="Optional note"
-                                                value={notes[s.email] || ''}
-                                                onChange={e => setNote(s.email, e.target.value)}
-                                                className="note-input"
-                                            />
-                                        </td>
+                                    <tr key={s.email} className="table-row-anim" style={{ animationDelay: `${i * 40}ms` }}>
+                                        <td style={{ color: '#64748b', fontSize: '.8rem' }}>{i + 1}</td>
+                                        <td><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><div className="att-avatar avatar-pop" style={{ background: bg, color: fg }}>{initials(s.name)}</div><span style={{ fontWeight: 600, color: '#0f172a' }}>{s.name}</span></div></td>
+                                        <td style={{ color: '#64748b', fontSize: '.82rem' }}>{s.email}</td>
+                                        <td style={{ color: '#64748b', fontSize: '.82rem' }}>+91 {s.phone}</td>
+                                        <td><span className="batch-chip">{s.batch || 'Batch A — Morning'}</span></td>
+                                        <td style={{ color: '#64748b', fontSize: '.82rem' }}>{formatDate(s.joinedAt)}</td>
+                                        <td style={{ fontWeight: 700, color: '#0f172a' }}>{s.testsAttempted}</td>
+                                        <td><button className="remove-btn" onClick={() => { setConfirmRemove(s.email); setRemoveMsg(''); }} disabled={removing === s.email}>{removing === s.email ? <span className="btn-spinner btn-spinner-sm" /> : 'Remove'}</button></td>
                                     </tr>
                                 );
                             })}
@@ -175,114 +1044,308 @@ function AttMarkTab({ students }) {
                     </table>
                 </div>
             </div>
+
+            <div className="batch-summary-row">
+                {['Batch A — Morning', 'Batch B — Evening', 'Batch C — Weekend'].map((batch, i) => {
+                    const count = students.filter(s => (s.batch || 'Batch A — Morning') === batch).length;
+                    const colors = [['#dbeafe', '#2563eb'], ['#dcfce7', '#16a34a'], ['#f3e8ff', '#7c3aed']];
+                    const [bg, fg] = colors[i];
+                    return (
+                        <div key={batch} className="batch-card batch-card-hover" style={{ borderColor: bg, animationDelay: `${i * 80}ms` }}>
+                            <div className="batch-card-count" style={{ color: fg }}><AnimatedCounter value={count} /></div>
+                            <div className="batch-card-label">{batch}</div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ATTENDANCE TABS
+// ═══════════════════════════════════════════════════════════════════════════════
+function AttMarkTab({ students = [] }) {
+    const today = new Date().toISOString().split('T')[0];
+    const [date, setDate] = useState(today);
+    const [batch, setBatch] = useState('Batch A — Morning');
+    const [rollStatus, setRollStatus] = useState({});
+    const [notes, setNotes] = useState({});
+    const [saving, setSaving] = useState(false);
+    const [saved, setSaved] = useState(false);
+    const [saveErr, setSaveErr] = useState('');
+    const [mounted, setMounted] = useState(false);
+    const [loadingRecord, setLoadingRecord] = useState(false);
+    const [isFutureDate, setIsFutureDate] = useState(false);
+
+    useEffect(() => { const t = setTimeout(() => setMounted(true), 30); return () => clearTimeout(t); }, []);
+    useEffect(() => {
+        const sel = new Date(date), tod = new Date(today);
+        sel.setHours(0, 0, 0, 0); tod.setHours(0, 0, 0, 0);
+        if (sel > tod) { setIsFutureDate(true); setRollStatus({}); setNotes({}); return; }
+        setIsFutureDate(false); setLoadingRecord(true); setRollStatus({}); setNotes({});
+        fetch(`/api/teacher/attendance/day?date=${date}&batch=${encodeURIComponent(batch)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(data => {
+                if (data?.records?.length > 0) {
+                    const statusMap = {}, noteMap = {};
+                    data.records.forEach(r => { if (r.status) statusMap[r.email] = r.status; if (r.note) noteMap[r.email] = r.note; });
+                    setRollStatus(statusMap); setNotes(noteMap);
+                }
+            }).catch(() => { }).finally(() => setLoadingRecord(false));
+    }, [date, batch]);
+
+    const setStatus = (email, status) => setRollStatus(prev => ({ ...prev, [email]: prev[email] === status ? '' : status }));
+    const setNote = (email, note) => setNotes(prev => ({ ...prev, [email]: note }));
+    const markAll = (status) => { const next = {}; students.forEach(s => { next[s.email] = status; }); setRollStatus(next); };
+
+    const marked = Object.values(rollStatus).filter(Boolean).length;
+    const present = Object.values(rollStatus).filter(v => v === 'present').length;
+    const absent = Object.values(rollStatus).filter(v => v === 'absent').length;
+    const late = Object.values(rollStatus).filter(v => v === 'late').length;
+    const total = students.length;
+    const donePct = total > 0 ? Math.round((marked / total) * 100) : 0;
+    const presPct = total > 0 ? Math.round((present / total) * 100) : 0;
+
+    async function saveAttendance() {
+        if (isFutureDate) return;
+        setSaving(true); setSaveErr(''); setSaved(false);
+        try {
+            const records = students.map(s => ({ email: s.email, name: s.name, status: rollStatus[s.email] || 'absent', note: notes[s.email] || '' }));
+            const res = await fetch('/api/teacher/attendance', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ date, batch, records }) });
+            if (!res.ok) throw new Error('Failed to save');
+            setSaved(true); setTimeout(() => setSaved(false), 3000);
+        } catch { setSaveErr('Could not save. Please try again.'); }
+        finally { setSaving(false); }
+    }
+
+    const rowBg = { present: '#f0fdf4', absent: '#fff1f2', late: '#fffbeb', '': '#ffffff' };
+    const rowBorder = { present: '#86efac', absent: '#fca5a5', late: '#fde68a', '': '#e2e8f0' };
+
+    return (
+        <div className={`att-wrap${mounted ? ' att-in' : ''}`}>
+            <div className="att-controls-bar">
+                <div className="att-ctrl-left">
+                    <div className="ctrl-group"><label className="ctrl-label">Batch</label>
+                        <select className="ctrl-select" value={batch} onChange={e => setBatch(e.target.value)}>
+                            <option>Batch A — Morning</option><option>Batch B — Evening</option><option>Batch C — Weekend</option>
+                        </select></div>
+                    <div className="ctrl-group"><label className="ctrl-label">Date</label>
+                        <input className="ctrl-select" type="date" value={date} onChange={e => setDate(e.target.value)} /></div>
+                </div>
+                <div className="att-ctrl-right">
+                    {loadingRecord && <div className="ctrl-loading"><span className="ctrl-spinner" /> Loading…</div>}
+                    <button className="btn-all-present" onClick={() => markAll('present')} disabled={isFutureDate || loadingRecord}><span>✓</span> Mark All Present</button>
+                    <button className={`btn-save${saving ? ' btn-saving' : ''}${saved ? ' btn-saved' : ''}`} onClick={saveAttendance} disabled={saving || isFutureDate || loadingRecord}>
+                        {saving && <span className="spin-ring" />}{saved ? '✓ Saved!' : saving ? 'Saving…' : 'Save Attendance'}
+                    </button>
+                </div>
+            </div>
+
+            {isFutureDate && <div className="att-toast att-toast-warn"><span>📅</span> You cannot mark or save attendance for a future date.</div>}
+            {saveErr && <div className="att-toast att-toast-err"><span>⚠</span> {saveErr}</div>}
+            {saved && <div className="att-toast att-toast-ok"><span>✓</span> Attendance saved successfully for {total} students!</div>}
+
+            <div className="att-mark-stat-row">
+                {[
+                    { label: 'Present', count: present, color: '#16a34a', bg: '#f0fdf4', border: '#86efac', icon: '✓' },
+                    { label: 'Absent', count: absent, color: '#dc2626', bg: '#fff1f2', border: '#fca5a5', icon: '✗' },
+                    { label: 'Late', count: late, color: '#d97706', bg: '#fffbeb', border: '#fde68a', icon: '◷' },
+                    { label: 'Unmarked', count: total - marked, color: '#6366f1', bg: '#eef2ff', border: '#c7d2fe', icon: '○' },
+                ].map((s, i) => (
+                    <div key={s.label} className="att-mark-stat-card" style={{ background: s.bg, borderColor: s.border, animationDelay: `${i * 70}ms` }}>
+                        <div className="att-mark-stat-icon" style={{ color: s.color }}>{s.icon}</div>
+                        <div className="att-mark-stat-num"><Counter value={s.count} color={s.color} /></div>
+                        <div className="att-mark-stat-label" style={{ color: s.color }}>{s.label}</div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="att-progress-section">
+                <div className="att-progress-header">
+                    <div className="att-progress-meta"><Ring pct={donePct} color="#2563eb" /><div><div className="att-progress-title">Roll call progress</div><div className="att-progress-sub"><Counter value={marked} color="#2563eb" /> of {total} marked</div></div></div>
+                    <div className="att-progress-meta"><Ring pct={presPct} color="#16a34a" /><div><div className="att-progress-title">Attendance rate</div><div className="att-progress-sub" style={{ color: '#16a34a' }}><Counter value={presPct} color="#16a34a" />% present</div></div></div>
+                </div>
+                <div className="att-prog-bar-wrap">
+                    <div className="att-prog-bar-track">
+                        <div className="att-prog-bar-fill att-prog-green" style={{ width: `${presPct}%` }} />
+                        <div className="att-prog-bar-fill att-prog-yellow" style={{ width: `${total > 0 ? Math.round(late / total * 100) : 0}%`, left: `${presPct}%` }} />
+                        <div className="att-prog-bar-fill att-prog-red" style={{ width: `${total > 0 ? Math.round(absent / total * 100) : 0}%`, left: `${presPct + (total > 0 ? Math.round(late / total * 100) : 0)}%` }} />
+                    </div>
+                    <div className="att-prog-legend">
+                        {[['#16a34a', 'Present'], ['#d97706', 'Late'], ['#dc2626', 'Absent'], ['#e2e8f0', 'Unmarked']].map(([c, l]) => (
+                            <span key={l}><span className="att-prog-dot" style={{ background: c }} />{l}</span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <div className="roll-header">
+                <div className="roll-title">Roll Call<span className="roll-date">{new Date(date + 'T00:00:00').toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
+                <div className="roll-badge">{total} students</div>
+            </div>
+            <div className="roll-list">
+                {students.map((s, i) => {
+                    const st = rollStatus[s.email] || '', [bg, fg] = avatarColors(i);
+                    return (
+                        <div key={s.email} className={`roll-row${st ? ' roll-row-marked' : ''}`} style={{ background: rowBg[st], borderColor: rowBorder[st], animationDelay: `${i * 45}ms` }}>
+                            <div className="roll-left">
+                                <span className="roll-idx">{i + 1}</span>
+                                <div className="roll-avatar" style={{ background: bg, color: fg }}>{initials(s.name)}</div>
+                                <div className="roll-info"><span className="roll-name">{s.name}</span><span className="roll-email">{s.email}</span></div>
+                            </div>
+                            <div className="roll-status-group">
+                                {[
+                                    { key: 'present', label: 'Present', color: '#16a34a', activeBg: '#dcfce7', activeBorder: '#86efac' },
+                                    { key: 'absent', label: 'Absent', color: '#dc2626', activeBg: '#fee2e2', activeBorder: '#fca5a5' },
+                                    { key: 'late', label: 'Late', color: '#d97706', activeBg: '#fef3c7', activeBorder: '#fde68a' },
+                                ].map(({ key, label, color, activeBg, activeBorder }) => {
+                                    const active = st === key;
+                                    return <button key={key} onClick={() => setStatus(s.email, key)} className={`roll-status-pill${active ? ' roll-status-pill-active' : ''}`} style={active ? { background: activeBg, borderColor: activeBorder, color } : {}}>{active && <span className="roll-pill-check">✓</span>}{label}</button>;
+                                })}
+                            </div>
+                            <input className="roll-note" placeholder="Add note…" value={notes[s.email] || ''} onChange={e => setNote(s.email, e.target.value)} />
+                            <div className={`roll-dot${st ? ` roll-dot-${st}` : ''}`} />
+                        </div>
+                    );
+                })}
+                {students.length === 0 && <div className="roll-empty">No students in this batch.</div>}
+            </div>
+
+            {total > 0 && (
+                <div className="roll-bottom-save">
+                    <span className="roll-bottom-save-info">{marked} of {total} students marked</span>
+                    <button className={`btn-save btn-save-lg${saving ? ' btn-saving' : ''}${saved ? ' btn-saved' : ''}`} onClick={saveAttendance} disabled={saving}>
+                        {saving && <span className="spin-ring" />}{saved ? '✓ Saved!' : saving ? 'Saving…' : 'Save Attendance'}
+                    </button>
+                </div>
+            )}
+            <style jsx>{`
+        .att-wrap{opacity:0;transform:translateY(16px);transition:opacity .4s cubic-bezier(0.16,1,0.3,1),transform .4s cubic-bezier(0.16,1,0.3,1)}
+        .att-in{opacity:1;transform:none}
+        .att-controls-bar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem;justify-content:space-between;background:#fff;border:1px solid #dbeafe;border-radius:18px;padding:1.1rem 1.4rem;margin-bottom:1.25rem;box-shadow:0 4px 20px rgba(15,23,42,.04)}
+        .att-ctrl-left{display:flex;gap:1rem;flex-wrap:wrap}.att-ctrl-right{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+        .ctrl-group{display:flex;flex-direction:column;gap:4px}
+        .ctrl-label{font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
+        .ctrl-select{border:1px solid #dbeafe;background:#f8fafc;color:#0f172a;border-radius:11px;padding:.55rem .9rem;font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s}
+        .ctrl-select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+        .btn-all-present{padding:.6rem 1.1rem;border-radius:11px;border:1px solid #a7f3d0;background:#f0fdf4;color:#15803d;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s cubic-bezier(0.16,1,0.3,1)}
+        .btn-all-present:hover{background:#dcfce7;transform:translateY(-1px);box-shadow:0 4px 12px rgba(22,163,74,.2)}
+        .btn-save{padding:.65rem 1.35rem;border-radius:11px;border:none;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-size:.88rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .25s cubic-bezier(0.16,1,0.3,1);box-shadow:0 4px 14px rgba(37,99,235,.28)}
+        .btn-save:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,99,235,.38)}
+        .btn-save:disabled{opacity:.7;cursor:not-allowed}
+        .btn-saved{background:linear-gradient(135deg,#16a34a,#15803d)!important;box-shadow:0 4px 14px rgba(22,163,74,.35)!important;animation:savePop .4s cubic-bezier(0.34,1.56,.64,1)}
+        @keyframes savePop{0%{transform:scale(.95)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+        .btn-save-lg{padding:.75rem 1.8rem;font-size:.92rem}
+        .spin-ring{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;flex-shrink:0}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .att-toast{display:flex;align-items:center;gap:.6rem;padding:.8rem 1.1rem;border-radius:13px;font-size:.88rem;font-weight:600;margin-bottom:1rem;animation:toastIn .35s cubic-bezier(0.16,1,0.3,1)}
+        @keyframes toastIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+        .att-toast-ok{background:#f0fdf4;color:#15803d;border:1px solid #86efac}
+        .att-toast-err{background:#fff1f2;color:#b91c1c;border:1px solid #fca5a5}
+        .att-toast-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+        .att-mark-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem}
+        .att-mark-stat-card{border:1px solid;border-radius:18px;padding:1.15rem 1.1rem;display:flex;flex-direction:column;align-items:center;gap:4px;animation:statIn .45s cubic-bezier(0.34,1.56,.64,1) both;transition:transform .2s,box-shadow .2s}
+        .att-mark-stat-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(15,23,42,.1)}
+        @keyframes statIn{from{opacity:0;transform:scale(.82) translateY(10px)}to{opacity:1;transform:none}}
+        .att-mark-stat-icon{font-size:1.4rem;line-height:1}.att-mark-stat-num{font-size:2rem;font-weight:800;line-height:1}.att-mark-stat-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+        .att-progress-section{background:#fff;border:1px solid #dbeafe;border-radius:18px;padding:1.2rem 1.4rem;margin-bottom:1.4rem;animation:panelUp .4s cubic-bezier(0.16,1,0.3,1) .15s both}
+        @keyframes panelUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+        .att-progress-header{display:flex;gap:2rem;margin-bottom:1rem;flex-wrap:wrap}.att-progress-meta{display:flex;align-items:center;gap:.75rem}
+        .att-progress-title{font-size:.82rem;font-weight:700;color:#0f172a}.att-progress-sub{font-size:1rem;font-weight:800;color:#2563eb;margin-top:1px}
+        .att-prog-bar-wrap{margin-top:.5rem}
+        .att-prog-bar-track{position:relative;height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+        .att-prog-bar-fill{position:absolute;top:0;height:100%;border-radius:99px;transition:width .7s cubic-bezier(0.16,1,0.3,1)}
+        .att-prog-green{background:#16a34a;left:0}.att-prog-yellow{background:#d97706}.att-prog-red{background:#dc2626}
+        .att-prog-legend{display:flex;gap:1rem;margin-top:.6rem;flex-wrap:wrap}
+        .att-prog-legend span{display:flex;align-items:center;gap:5px;font-size:.75rem;color:#64748b}
+        .att-prog-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+        .roll-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem}
+        .roll-title{font-size:1.2rem;font-weight:800;color:#0f172a;display:flex;flex-direction:column;gap:2px}
+        .roll-date{font-size:.82rem;font-weight:500;color:#64748b}
+        .roll-badge{background:#eff6ff;color:#2563eb;border:1px solid #dbeafe;border-radius:10px;padding:.3rem .8rem;font-size:.8rem;font-weight:700}
+        .roll-list{display:flex;flex-direction:column;gap:.55rem}
+        .roll-row{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;border:1px solid #e2e8f0;border-radius:16px;background:#fff;position:relative;overflow:hidden;transition:background .3s,border-color .3s,box-shadow .25s,transform .2s;animation:rowIn .38s cubic-bezier(0.16,1,0.3,1) both}
+        .roll-row:hover{box-shadow:0 4px 18px rgba(15,23,42,.08);transform:translateX(3px)}
+        @keyframes rowIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+        .roll-left{display:flex;align-items:center;gap:.6rem;flex:1;min-width:0}
+        .roll-idx{font-size:.75rem;color:#94a3b8;font-weight:600;min-width:18px;text-align:right}
+        .roll-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;transition:transform .2s}
+        .roll-row:hover .roll-avatar{transform:scale(1.12)}
+        .roll-info{display:flex;flex-direction:column;min-width:0}
+        .roll-name{font-size:.9rem;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .roll-email{font-size:.74rem;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .roll-status-group{display:flex;gap:5px;flex-shrink:0}
+        .roll-status-pill{border:1px solid #e2e8f0;border-radius:9px;padding:.32rem .7rem;font-size:.76rem;font-weight:700;background:#f8fafc;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:3px;transition:all .2s cubic-bezier(0.16,1,0.3,1)}
+        .roll-status-pill:hover{border-color:#cbd5e1;background:#f1f5f9;transform:scale(1.06)}
+        .roll-status-pill-active{transform:scale(1.07)!important;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+        .roll-pill-check{font-size:.7rem;animation:checkPop .3s cubic-bezier(0.34,1.56,.64,1)}
+        @keyframes checkPop{from{transform:scale(0)}to{transform:scale(1)}}
+        .roll-note{border:1px solid #e2e8f0;border-radius:9px;padding:.32rem .65rem;font-size:.76rem;width:100px;background:rgba(248,250,252,.8);color:#0f172a;outline:none;transition:border-color .2s,width .25s cubic-bezier(0.16,1,0.3,1),box-shadow .2s}
+        .roll-note:focus{border-color:#93c5fd;width:140px;box-shadow:0 0 0 3px rgba(147,197,253,.25);background:#fff}
+        .roll-note::placeholder{color:#cbd5e1}
+        .roll-dot{position:absolute;right:0;top:0;bottom:0;width:4px;border-radius:0 16px 16px 0;background:transparent;transition:background .3s}
+        .roll-dot-present{background:#16a34a}.roll-dot-absent{background:#dc2626}.roll-dot-late{background:#d97706}
+        .roll-empty{padding:2rem;text-align:center;color:#94a3b8;border:1px dashed #dbeafe;border-radius:16px;background:#f8fafc}
+        .roll-bottom-save{display:flex;align-items:center;justify-content:space-between;margin-top:1.25rem;padding:1rem 1.4rem;background:#fff;border:1px solid #dbeafe;border-radius:16px;box-shadow:0 4px 20px rgba(15,23,42,.06);animation:panelUp .4s cubic-bezier(0.16,1,0.3,1) both}
+        .roll-bottom-save-info{font-size:.88rem;color:#64748b;font-weight:600}
+        .ctrl-loading{display:flex;align-items:center;gap:6px;font-size:.82rem;color:#64748b}
+        .ctrl-spinner{width:12px;height:12px;border:2px solid #dbeafe;border-top-color:#2563eb;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+        @media(max-width:780px){.att-mark-stat-row{grid-template-columns:repeat(2,1fr)}.roll-row{flex-wrap:wrap;gap:.6rem}.roll-note{width:100%}.att-controls-bar{flex-direction:column;align-items:stretch}.att-ctrl-right{justify-content:flex-end}.att-progress-header{flex-direction:column;gap:.75rem}}
+        @media(max-width:500px){.roll-status-group{flex-wrap:wrap}}
+      `}</style>
         </div>
     );
 }
 
 function AttReportTab({ students }) {
     const [batch, setBatch] = useState('Batch A — Morning');
-    const [month, setMonth] = useState(() => {
-        const d = new Date();
-        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    });
+    const [month, setMonth] = useState(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; });
     const [report, setReport] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => { setTimeout(() => setMounted(true), 10); }, []);
     useEffect(() => { loadReport(); }, [batch, month]);
-
     async function loadReport() {
-        setLoading(true);
-        setError('');
+        setLoading(true); setError('');
         try {
             const res = await fetch(`/api/teacher/attendance/report?batch=${encodeURIComponent(batch)}&month=${month}`);
             if (!res.ok) throw new Error('Failed to load report');
-            const data = await res.json();
-            setReport(data.report);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+            const data = await res.json(); setReport(data.report);
+        } catch (err) { setError(err.message); }
+        finally { setLoading(false); }
     }
-
     const months = [];
-    for (let i = 0; i < 6; i++) {
-        const d = new Date();
-        d.setMonth(d.getMonth() - i);
-        const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        const label = d.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
-        months.push({ val, label });
-    }
-
+    for (let i = 0; i < 6; i++) { const d = new Date(); d.setMonth(d.getMonth() - i); months.push({ val: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`, label: d.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) }); }
     return (
-        <div>
+        <div className={`tab-content${mounted ? ' tab-content-in' : ''}`}>
             <div className="att-controls">
-                <select value={batch} onChange={e => setBatch(e.target.value)}>
-                    <option>Batch A — Morning</option>
-                    <option>Batch B — Evening</option>
-                    <option>Batch C — Weekend</option>
-                </select>
-                <select value={month} onChange={e => setMonth(e.target.value)}>
-                    {months.map(m => <option key={m.val} value={m.val}>{m.label}</option>)}
-                </select>
+                <select value={batch} onChange={e => setBatch(e.target.value)}><option>Batch A — Morning</option><option>Batch B — Evening</option><option>Batch C — Weekend</option></select>
+                <select value={month} onChange={e => setMonth(e.target.value)}>{months.map(m => <option key={m.val} value={m.val}>{m.label}</option>)}</select>
             </div>
-            {loading ? (
-                <div className="teacher-loading">Loading report…</div>
-            ) : error ? (
-                <div className="teacher-error-card">{error}</div>
-            ) : (
-                <div className="teacher-panel">
-                    <div className="panel-header">
-                        <h2>Monthly Attendance Report</h2>
-                        <span>{report.length} students</span>
-                    </div>
-                    <div className="teacher-table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Student</th>
-                                    <th>Present</th>
-                                    <th>Absent</th>
-                                    <th>Late</th>
-                                    <th>Attendance %</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {report.length === 0 ? (
-                                    <tr><td colSpan={5}><div className="empty-state">No attendance records for this period.</div></td></tr>
-                                ) : report.map((row, i) => {
-                                    const total = row.present + row.absent + row.late;
-                                    const pct = total > 0 ? Math.round((row.present / total) * 100) : 0;
-                                    const color = getAttColor(pct);
-                                    const [bg, fg] = avatarColors(i);
-                                    return (
-                                        <tr key={row.email}>
-                                            <td>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                    <div className="att-avatar" style={{ background: bg, color: fg }}>{initials(row.name)}</div>
-                                                    {row.name}
-                                                </div>
-                                            </td>
-                                            <td><span className="att-tag att-tag-present">{row.present}</span></td>
-                                            <td><span className="att-tag att-tag-absent">{row.absent}</span></td>
-                                            <td><span className="att-tag att-tag-late">{row.late}</span></td>
-                                            <td>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                    <div className="pct-bar-bg">
-                                                        <div className="pct-bar" style={{ width: `${pct}%`, background: color }} />
-                                                    </div>
-                                                    <span style={{ color, fontWeight: 700, fontSize: '0.88rem', minWidth: 36 }}>{pct}%</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            )}
+            {loading ? <div className="teacher-loading"><span className="loading-dots"><span /><span /><span /></span>Loading report…</div>
+                : error ? <div className="teacher-error-card">{error}</div>
+                    : (
+                        <div className="teacher-panel panel-slide-up">
+                            <div className="panel-header"><h2>Monthly Attendance Report</h2><span>{report.length} students</span></div>
+                            <div className="teacher-table-wrap">
+                                <table><thead><tr><th>Student</th><th>Present</th><th>Absent</th><th>Late</th><th>Attendance %</th></tr></thead>
+                                    <tbody>{report.length === 0 ? <tr><td colSpan={5}><div className="empty-state empty-state-in">No attendance records for this period.</div></td></tr>
+                                        : report.map((row, i) => {
+                                            const total = row.present + row.absent + row.late, pct = total > 0 ? Math.round((row.present / total) * 100) : 0, color = getAttColor(pct), [bg, fg] = avatarColors(i);
+                                            return <tr key={row.email} className="table-row-anim" style={{ animationDelay: `${i * 40}ms` }}>
+                                                <td><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><div className="att-avatar" style={{ background: bg, color: fg }}>{initials(row.name)}</div>{row.name}</div></td>
+                                                <td><span className="att-tag att-tag-present">{row.present}</span></td>
+                                                <td><span className="att-tag att-tag-absent">{row.absent}</span></td>
+                                                <td><span className="att-tag att-tag-late">{row.late}</span></td>
+                                                <td><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><div className="pct-bar-bg"><div className="pct-bar pct-bar-anim" style={{ '--pct': `${pct}%`, background: color }} /></div><span style={{ color, fontWeight: 700, fontSize: '.88rem', minWidth: 36 }}>{pct}%</span></div></td>
+                                            </tr>;
+                                        })}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
         </div>
     );
 }
@@ -291,134 +1354,78 @@ function AttStudentTab({ students }) {
     const [selectedEmail, setSelectedEmail] = useState(students[0]?.email || null);
     const [record, setRecord] = useState(null);
     const [loading, setLoading] = useState(false);
-
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => { setTimeout(() => setMounted(true), 10); }, []);
     useEffect(() => {
         if (!selectedEmail) return;
         setLoading(true);
-        fetch(`/api/teacher/attendance/student?email=${encodeURIComponent(selectedEmail)}`)
-            .then(r => r.json())
-            .then(d => setRecord(d))
-            .catch(() => setRecord(null))
-            .finally(() => setLoading(false));
+        fetch(`/api/teacher/attendance/student?email=${encodeURIComponent(selectedEmail)}`).then(r => r.json()).then(d => setRecord(d)).catch(() => setRecord(null)).finally(() => setLoading(false));
     }, [selectedEmail]);
 
     const selectedStudent = students.find(s => s.email === selectedEmail);
-
-    // Build calendar days for current month from record
     const calendarDays = () => {
         if (!record?.days) return [];
-        const now = new Date();
-        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        const result = [];
-        for (let d = 1; d <= daysInMonth; d++) {
-            const key = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-            result.push({ day: d, status: record.days[key] || 'x' });
-        }
+        const now = new Date(), daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(), result = [];
+        for (let d = 1; d <= daysInMonth; d++) { const key = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`; result.push({ day: d, status: record.days[key] || 'x' }); }
         return result;
     };
-
     const dayClass = { present: 'day-p', absent: 'day-a', late: 'day-l', x: 'day-x', holiday: 'day-h' };
-
     return (
-        <div className="teacher-grid">
-            <div className="teacher-panel">
+        <div className={`teacher-grid tab-content${mounted ? ' tab-content-in' : ''}`}>
+            <div className="teacher-panel panel-slide-up">
                 <div className="panel-header"><h2>Students</h2><span>{students.length} enrolled</span></div>
                 <div className="teacher-table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Name</th><th>Email</th><th></th></tr>
-                        </thead>
-                        <tbody>
-                            {students.map((s, i) => {
-                                const [bg, fg] = avatarColors(i);
-                                return (
-                                    <tr key={s.email} className={selectedEmail === s.email ? 'selected' : ''} onClick={() => setSelectedEmail(s.email)} style={{ cursor: 'pointer' }}>
-                                        <td>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                <div className="att-avatar" style={{ background: bg, color: fg }}>{initials(s.name)}</div>
-                                                {s.name}
-                                            </div>
-                                        </td>
-                                        <td style={{ color: '#64748b', fontSize: '0.82rem' }}>{s.email}</td>
-                                        <td><button type="button">View</button></td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
+                    <table><thead><tr><th>Name</th><th>Email</th><th></th></tr></thead>
+                        <tbody>{students.map((s, i) => {
+                            const [bg, fg] = avatarColors(i);
+                            return (
+                                <tr key={s.email} className={`table-row-anim${selectedEmail === s.email ? ' selected' : ''}`} style={{ animationDelay: `${i * 35}ms`, cursor: 'pointer' }} onClick={() => setSelectedEmail(s.email)}>
+                                    <td><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><div className="att-avatar" style={{ background: bg, color: fg }}>{initials(s.name)}</div>{s.name}</div></td>
+                                    <td style={{ color: '#64748b', fontSize: '.82rem' }}>{s.email}</td>
+                                    <td><button type="button">View</button></td>
+                                </tr>);
+                        })}</tbody>
                     </table>
                 </div>
             </div>
-
-            <div className="teacher-panel">
-                <div className="panel-header">
-                    <h2>Attendance Record</h2>
-                    <span>{selectedStudent?.email || 'Select a student'}</span>
-                </div>
-                {loading ? (
-                    <div className="teacher-loading">Loading…</div>
-                ) : !record ? (
-                    <div className="empty-state">Select a student to view their attendance record.</div>
-                ) : (
-                    <div className="student-detail-card">
-                        <div className="student-info-row">
-                            <div><strong>Name</strong><span>{selectedStudent?.name}</span></div>
-                            <div><strong>This Month</strong><span style={{ color: getAttColor(record.monthPct) }}>{record.monthPct}%</span></div>
-                        </div>
-                        <div className="student-metrics">
-                            <div><strong>Present</strong><span style={{ color: '#16a34a' }}>{record.present}</span></div>
-                            <div><strong>Absent</strong><span style={{ color: '#ef4444' }}>{record.absent}</span></div>
-                            <div><strong>Late</strong><span style={{ color: '#b45309' }}>{record.late}</span></div>
-                        </div>
-
-                        <div className="insight-block">
-                            <h3 style={{ marginBottom: '0.75rem' }}>
-                                {new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })} Calendar
-                            </h3>
-                            <div className="month-grid">
-                                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(l => (
-                                    <div key={l} className="day-label">{l}</div>
-                                ))}
-                                {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay() }).map((_, i) => (
-                                    <div key={`empty-${i}`} />
-                                ))}
-                                {calendarDays().map(({ day, status }) => (
-                                    <div key={day} className={`day-cell ${dayClass[status] || 'day-x'}`} title={status}>{day}</div>
-                                ))}
-                            </div>
-                            <div className="legend">
-                                {[['day-p', 'Present'], ['day-a', 'Absent'], ['day-l', 'Late'], ['day-h', 'Holiday'], ['day-x', 'No class']].map(([cls, label]) => (
-                                    <div key={cls} className="legend-item">
-                                        <div className={`legend-dot ${cls}`} />{label}
+            <div className="teacher-panel panel-slide-up" style={{ animationDelay: '80ms' }}>
+                <div className="panel-header"><h2>Attendance Record</h2><span>{selectedStudent?.email || 'Select a student'}</span></div>
+                {loading ? <div className="teacher-loading"><span className="loading-dots"><span /><span /><span /></span>Loading…</div>
+                    : !record ? <div className="empty-state empty-state-in">Select a student to view their attendance record.</div>
+                        : (
+                            <div className="student-detail-card detail-fade-in">
+                                <div className="student-info-row">
+                                    <div><strong>Name</strong><span>{selectedStudent?.name}</span></div>
+                                    <div><strong>This Month</strong><span style={{ color: getAttColor(record.monthPct) }}>{record.monthPct}%</span></div>
+                                </div>
+                                <div className="student-metrics">
+                                    <div><strong>Present</strong><span style={{ color: '#16a34a' }}>{record.present}</span></div>
+                                    <div><strong>Absent</strong><span style={{ color: '#ef4444' }}>{record.absent}</span></div>
+                                    <div><strong>Late</strong><span style={{ color: '#b45309' }}>{record.late}</span></div>
+                                </div>
+                                <div className="insight-block">
+                                    <h3 style={{ marginBottom: '.75rem' }}>{new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })} Calendar</h3>
+                                    <div className="month-grid">
+                                        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(l => <div key={l} className="day-label">{l}</div>)}
+                                        {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay() }).map((_, i) => <div key={`e${i}`} />)}
+                                        {calendarDays().map(({ day, status }, i) => <div key={day} className={`day-cell ${dayClass[status] || 'day-x'} day-cell-pop`} style={{ animationDelay: `${i * 15}ms` }} title={status}>{day}</div>)}
                                     </div>
-                                ))}
+                                    <div className="legend">{[['day-p', 'Present'], ['day-a', 'Absent'], ['day-l', 'Late'], ['day-h', 'Holiday'], ['day-x', 'No class']].map(([cls, label]) => <div key={cls} className="legend-item"><div className={`legend-dot ${cls}`} />{label}</div>)}</div>
+                                </div>
+                                <div className="results-section"><h3>Recent Sessions</h3><div className="results-list">
+                                    {(record.recent || []).length === 0 ? <div className="empty-state">No records yet.</div>
+                                        : (record.recent || []).map((r, i) => <div key={i} className="result-row result-row-anim" style={{ animationDelay: `${i * 50}ms` }}><div><strong>{r.batch}</strong><span>{formatDate(r.date)}</span></div><span className={`att-tag att-tag-${r.status}`}>{r.status}</span></div>)}
+                                </div></div>
                             </div>
-                        </div>
-
-                        <div className="results-section">
-                            <h3>Recent Sessions</h3>
-                            <div className="results-list">
-                                {(record.recent || []).length === 0 ? (
-                                    <div className="empty-state">No records yet.</div>
-                                ) : record.recent.map((r, i) => (
-                                    <div key={i} className="result-row">
-                                        <div>
-                                            <strong>{r.batch}</strong>
-                                            <span>{formatDate(r.date)}</span>
-                                        </div>
-                                        <span className={`att-tag att-tag-${r.status}`}>{r.status}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
+                        )}
             </div>
         </div>
     );
 }
 
-// ─── Main Teacher Page ────────────────────────────────────────────────────────
-
+// ═══════════════════════════════════════════════════════════════════════════════
+// MAIN TEACHER PAGE  (default export)
+// ═══════════════════════════════════════════════════════════════════════════════
 export default function TeacherPage() {
     const router = useRouter();
     const [authed, setAuthed] = useState(false);
@@ -428,137 +1435,109 @@ export default function TeacherPage() {
     const [students, setStudents] = useState([]);
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [summary, setSummary] = useState({ totalStudents: 0, totalTests: 0, avgAccuracy: 0 });
-    const [activeTab, setActiveTab] = useState('students'); // 'students' | 'attendance'
-    const [attSubTab, setAttSubTab] = useState('mark');    // 'mark' | 'report' | 'student'
+    const [activeTab, setActiveTab] = useState('students');
+    const [attSubTab, setAttSubTab] = useState('mark');
+    const [authCardVisible, setAuthCardVisible] = useState(false);
 
     useEffect(() => {
+        setTimeout(() => setAuthCardVisible(true), 50);
         if (typeof window === 'undefined') return;
-        if (localStorage.getItem(TEACHER_AUTH_KEY) === 'yes') {
-            setAuthed(true);
-            loadData();
-        }
+        if (localStorage.getItem(TEACHER_AUTH_KEY) === 'yes') { setAuthed(true); loadData(); }
     }, []);
 
     async function loadData() {
-        setLoading(true);
-        setError('');
+        setLoading(true); setError('');
         try {
             const res = await fetch('/api/teacher/students');
-            if (!res.ok) {
-                const body = await res.json().catch(() => ({}));
-                throw new Error(body.error || `Failed to fetch teacher data (${res.status})`);
-            }
+            if (!res.ok) { const body = await res.json().catch(() => ({})); throw new Error(body.error || `Failed to fetch teacher data (${res.status})`); }
             const data = await res.json();
-            setStudents(data.students);
-            setSummary(data.summary);
+            setStudents(data.students); setSummary(data.summary);
             if (data.students.length > 0) setSelectedEmail(data.students[0].email);
-        } catch (err) {
-            setError(err.message || 'Unable to load teacher dashboard data.');
-        } finally {
-            setLoading(false);
-        }
+        } catch (err) { setError(err.message || 'Unable to load teacher dashboard data.'); }
+        finally { setLoading(false); }
+    }
+
+    function handleStudentsChange(updatedStudents) {
+        setStudents(updatedStudents);
+        setSummary(prev => ({ ...prev, totalStudents: updatedStudents.length }));
+        if (updatedStudents.length > 0 && !updatedStudents.find(s => s.email === selectedEmail)) setSelectedEmail(updatedStudents[0].email);
     }
 
     function handleLogin() {
-        if (password.trim() === TEACHER_PASSWORD) {
-            localStorage.setItem(TEACHER_AUTH_KEY, 'yes');
-            setAuthed(true);
-            loadData();
-        } else {
-            setError('Teacher password is incorrect.');
-        }
+        if (password.trim() === TEACHER_PASSWORD) { localStorage.setItem(TEACHER_AUTH_KEY, 'yes'); setAuthed(true); loadData(); }
+        else setError('Teacher password is incorrect.');
     }
-
-    function handleLogout() {
-        localStorage.removeItem(TEACHER_AUTH_KEY);
-        router.push('/');
-    }
+    function handleLogout() { localStorage.removeItem(TEACHER_AUTH_KEY); router.push('/'); }
 
     const selectedStudent = students.find(s => s.email === selectedEmail);
-
     const selectedStudentChapterStats = selectedStudent ? selectedStudent.results.reduce((acc, result) => {
-        const chapter = result.chapterId;
-        const answers = Array.isArray(result.answers) ? result.answers : [];
+        const chapter = result.chapterId, answers = Array.isArray(result.answers) ? result.answers : [];
         if (!acc[chapter]) acc[chapter] = { correct: 0, total: 0 };
         acc[chapter].total += answers.length;
         acc[chapter].correct += answers.filter(a => a.isCorrect).length;
         return acc;
     }, {}) : {};
-
     const chapterStatus = selectedStudent ? Object.entries(selectedStudentChapterStats).map(([chapterId, stats]) => ({
-        chapterId,
-        title: getChapterTitle(chapterId),
-        accuracy: stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0,
+        chapterId, title: getChapterTitle(chapterId), accuracy: stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0
     })) : [];
-
     const clearTopics = chapterStatus.filter(c => c.accuracy >= 80);
     const weakTopics = chapterStatus.filter(c => c.accuracy < 60);
-
     const wrongQuestions = selectedStudent ? selectedStudent.results.flatMap(result => {
         const chapterTitle = getChapterTitle(result.chapterId);
         return (Array.isArray(result.answers) ? result.answers : []).filter(a => !a.isCorrect).map(a => {
             const question = getQuestionData(result.chapterId, a.questionId);
-            return {
-                chapterTitle,
-                question: question?.question || `Question ${a.questionId}`,
-                selected: question?.options?.[a.selected] || `Option ${a.selected + 1}`,
-                correct: question?.options?.[a.correct] || `Option ${a.correct + 1}`,
-                date: result.date,
-            };
+            return { chapterTitle, question: question?.question || `Question ${a.questionId}`, selected: question?.options?.[a.selected] || `Option ${a.selected + 1}`, correct: question?.options?.[a.correct] || `Option ${a.correct + 1}`, date: result.date };
         });
     }) : [];
 
-    // ── Auth Screen ──────────────────────────────────────────────────────────
+    // ── Login screen ──
     if (!authed) {
         return (
             <div className="teacher-auth-page">
-                <div className="teacher-auth-card">
+                <div className={`teacher-auth-card${authCardVisible ? ' auth-card-in' : ''}`}>
+                    <div className="auth-lock-icon">👩‍🏫</div>
                     <h1>Teacher Dashboard</h1>
                     <p>Enter the teacher password to view all student data.</p>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={e => { setPassword(e.target.value); setError(''); }}
-                        placeholder="Teacher password"
-                        onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                    />
-                    {error && <div className="teacher-error">{error}</div>}
-                    <button onClick={handleLogin}>Unlock Dashboard</button>
+                    <input type="password" value={password} onChange={e => { setPassword(e.target.value); setError(''); }} placeholder="Teacher password" onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+                    {error && <div className="teacher-error error-shake">{error}</div>}
+                    <button className="btn-ripple" onClick={handleLogin}>Unlock Dashboard</button>
                     <button className="teacher-back" onClick={() => router.push('/')}>← Back to App</button>
                 </div>
                 <style jsx>{`
-          .teacher-auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e0f2fe, #f8fafc); color: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; padding: 1rem; }
-          .teacher-auth-card { width: 100%; max-width: 420px; background: #ffffff; border: 1px solid #dbeafe; border-radius: 24px; padding: 2rem; text-align: center; box-shadow: 0 30px 80px rgba(15,23,42,0.08); }
-          .teacher-auth-card h1 { margin-bottom: 0.5rem; font-size: 1.9rem; color: #0f172a; }
-          .teacher-auth-card p { margin-bottom: 1.5rem; color: #475569; }
-          .teacher-auth-card input { width: 100%; padding: 0.95rem 1rem; border-radius: 14px; border: 1px solid #dbeafe; background: #f8fafc; color: #0f172a; margin-bottom: 1rem; outline: none; }
-          .teacher-auth-card input:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
-          .teacher-auth-card button { width: 100%; padding: 0.95rem 1rem; border: none; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 700; cursor: pointer; margin-bottom: 0.75rem; }
-          .teacher-back { background: transparent; border: 1px solid #dbeafe; color: #475569; }
-          .teacher-error { color: #ef4444; margin-bottom: 1rem; font-size: 0.95rem; }
+          .teacher-auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0f2fe,#f8fafc);color:#0f172a;font-family:'Segoe UI',system-ui,sans-serif;padding:1rem}
+          .teacher-auth-card{width:100%;max-width:420px;background:#fff;border:1px solid #dbeafe;border-radius:24px;padding:2rem;text-align:center;box-shadow:0 30px 80px rgba(15,23,42,.08);opacity:0;transform:translateY(28px) scale(.97);transition:opacity .5s cubic-bezier(0.16,1,0.3,1),transform .5s cubic-bezier(0.16,1,0.3,1)}
+          .auth-card-in{opacity:1!important;transform:none!important}
+          .auth-lock-icon{font-size:2.5rem;margin-bottom:.75rem;display:block;animation:iconBounce .6s .4s cubic-bezier(0.34,1.56,.64,1) both}
+          @keyframes iconBounce{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+          .teacher-auth-card h1{margin-bottom:.5rem;font-size:1.9rem;color:#0f172a}.teacher-auth-card p{margin-bottom:1.5rem;color:#475569}
+          .teacher-auth-card input{width:100%;padding:.95rem 1rem;border-radius:14px;border:1px solid #dbeafe;background:#f8fafc;color:#0f172a;margin-bottom:1rem;outline:none;box-sizing:border-box;transition:border-color .2s,box-shadow .2s}
+          .teacher-auth-card input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(59,130,246,.15)}
+          .teacher-auth-card button{width:100%;padding:.95rem 1rem;border:none;border-radius:14px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:700;cursor:pointer;margin-bottom:.75rem;transition:opacity .2s,transform .15s}
+          .teacher-auth-card button:hover{opacity:.9;transform:translateY(-1px)}.teacher-auth-card button:active{transform:translateY(0)}
+          .teacher-back{background:transparent!important;border:1px solid #dbeafe!important;color:#475569!important}
+          .teacher-error{color:#ef4444;margin-bottom:1rem;font-size:.95rem}
+          .error-shake{animation:shake .4s cubic-bezier(.36,.07,.19,.97)}
+          @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+          .btn-ripple{position:relative;overflow:hidden}.btn-ripple::after{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.35) 0%,transparent 70%);opacity:0;transition:opacity .3s}.btn-ripple:active::after{opacity:1}
         `}</style>
             </div>
         );
     }
 
-    // ── Dashboard ────────────────────────────────────────────────────────────
+    // ── Main dashboard ──
     return (
         <div className="teacher-page">
             <nav className="teacher-nav">
                 <div className="teacher-nav-brand">👩‍🏫 Teacher Dashboard</div>
                 <div className="teacher-nav-actions">
-                    <button
-                        className={`teacher-nav-btn${activeTab === 'students' ? ' teacher-nav-btn-active' : ''}`}
-                        onClick={() => setActiveTab('students')}
-                    >
-                        Students
-                    </button>
-                    <button
-                        className={`teacher-nav-btn${activeTab === 'attendance' ? ' teacher-nav-btn-active' : ''}`}
-                        onClick={() => setActiveTab('attendance')}
-                    >
-                        Attendance
-                    </button>
+                    {[
+                        { id: 'students', label: '📊 Students' },
+                        { id: 'attendance', label: '✅ Attendance' },
+                        { id: 'schedule', label: '📅 Schedule Meeting' },
+                        { id: 'manage', label: '👥 Manage Students' },
+                    ].map(({ id, label }) => (
+                        <button key={id} className={`teacher-nav-btn${activeTab === id ? ' teacher-nav-btn-active' : ''}`} onClick={() => setActiveTab(id)}>{label}</button>
+                    ))}
                     <button className="teacher-nav-btn" onClick={() => router.push('/')}>Home</button>
                     <button className="teacher-nav-btn logout" onClick={handleLogout}>Logout</button>
                 </div>
@@ -568,339 +1547,290 @@ export default function TeacherPage() {
 
                 {/* ── STUDENTS TAB ── */}
                 {activeTab === 'students' && (
-                    <>
-                        <header className="teacher-hero">
-                            <div>
-                                <h1>All Students & Test Performance</h1>
-                                <p>Live data from MongoDB for every student, including performance scores, results, and joined date.</p>
-                            </div>
+                    <div className="tab-content tab-content-in">
+                        <header className="teacher-hero hero-slide-in">
+                            <div><h1>All Students &amp; Test Performance</h1><p>Live data from MongoDB for every student, including performance scores, results, and joined date.</p></div>
                             <div className="teacher-summary">
-                                <div><span>{summary.totalStudents}</span><small>Students</small></div>
-                                <div><span>{summary.totalTests}</span><small>Total Tests</small></div>
-                                <div><span>{summary.avgAccuracy}%</span><small>Avg Accuracy</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '0ms' }}><span><AnimatedCounter value={summary.totalStudents} /></span><small>Students</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span><AnimatedCounter value={summary.totalTests} /></span><small>Total Tests</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '160ms' }}><span><AnimatedCounter value={summary.avgAccuracy} suffix="%" /></span><small>Avg Accuracy</small></div>
                             </div>
                         </header>
-
-                        {loading ? (
-                            <div className="teacher-loading">Loading student data from the database...</div>
-                        ) : error ? (
-                            <div className="teacher-error-card">{error}</div>
-                        ) : (
-                            <div className="teacher-grid">
-                                <section className="teacher-panel teacher-list-panel">
-                                    <div className="panel-header">
-                                        <h2>Students</h2>
-                                        <span>{students.length} records</span>
-                                    </div>
-                                    <div className="teacher-table-wrap">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Email</th>
-                                                    <th>Tests</th>
-                                                    <th>Avg</th>
-                                                    <th>Best</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {students.map(student => (
-                                                    <tr key={student.email} className={selectedEmail === student.email ? 'selected' : ''} onClick={() => setSelectedEmail(student.email)}>
-                                                        <td>{student.name}</td>
-                                                        <td>{student.email}</td>
-                                                        <td>{student.testsAttempted}</td>
-                                                        <td style={{ color: getScoreColor(student.avgScore) }}>{student.avgScore}%</td>
-                                                        <td style={{ color: getScoreColor(student.bestScore) }}>{student.bestScore}%</td>
-                                                        <td><button type="button">View</button></td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </section>
-
-                                <section className="teacher-panel teacher-detail-panel">
-                                    <div className="panel-header">
-                                        <h2>Student Details</h2>
-                                        <span>{selectedStudent ? selectedStudent.email : 'Select a student'}</span>
-                                    </div>
-                                    {selectedStudent ? (
-                                        <div className="student-detail-card">
-                                            <div className="student-info-row">
-                                                <div><strong>Name</strong><span>{selectedStudent.name}</span></div>
-                                                <div><strong>Phone</strong><span>+91 {selectedStudent.phone}</span></div>
+                        {loading ? <div className="teacher-loading"><span className="loading-dots"><span /><span /><span /></span>Loading student data from the database...</div>
+                            : error ? <div className="teacher-error-card">{error}</div>
+                                : (
+                                    <div className="teacher-grid">
+                                        <section className="teacher-panel teacher-list-panel panel-slide-up">
+                                            <div className="panel-header"><h2>Students</h2><span>{students.length} records</span></div>
+                                            <div className="teacher-table-wrap">
+                                                <table>
+                                                    <thead><tr><th>Name</th><th>Email</th><th>Tests</th><th>Avg</th><th>Best</th><th></th></tr></thead>
+                                                    <tbody>{students.map((student, i) => (
+                                                        <tr key={student.email} className={`table-row-anim${selectedEmail === student.email ? ' selected' : ''}`} style={{ animationDelay: `${i * 40}ms`, cursor: 'pointer' }} onClick={() => setSelectedEmail(student.email)}>
+                                                            <td>{student.name}</td><td>{student.email}</td><td>{student.testsAttempted}</td>
+                                                            <td style={{ color: getScoreColor(student.avgScore) }}>{student.avgScore}%</td>
+                                                            <td style={{ color: getScoreColor(student.bestScore) }}>{student.bestScore}%</td>
+                                                            <td><button type="button">View</button></td>
+                                                        </tr>
+                                                    ))}</tbody>
+                                                </table>
                                             </div>
-                                            <div className="student-info-row">
-                                                <div><strong>Joined</strong><span>{formatDate(selectedStudent.joinedAt)}</span></div>
-                                                <div><strong>Total Questions</strong><span>{selectedStudent.totalQuestions}</span></div>
-                                            </div>
-                                            <div className="student-metrics">
-                                                <div><strong>Tests</strong><span>{selectedStudent.testsAttempted}</span></div>
-                                                <div><strong>Avg Score</strong><span style={{ color: getScoreColor(selectedStudent.avgScore) }}>{selectedStudent.avgScore}%</span></div>
-                                                <div><strong>Best Score</strong><span style={{ color: getScoreColor(selectedStudent.bestScore) }}>{selectedStudent.bestScore}%</span></div>
-                                            </div>
-                                            <div className="student-insights">
-                                                <div className="insight-block">
-                                                    <h3>Clear Topics</h3>
-                                                    {clearTopics.length === 0 ? (
-                                                        <div className="empty-state">No strong topics yet.</div>
-                                                    ) : (
-                                                        <div className="topic-grid">
-                                                            {clearTopics.map(topic => (
-                                                                <div key={topic.chapterId} className="topic-chip clear">{topic.title}: {topic.accuracy}%</div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="insight-block">
-                                                    <h3>Topics to Review</h3>
-                                                    {weakTopics.length === 0 ? (
-                                                        <div className="empty-state">No weak topics yet.</div>
-                                                    ) : (
-                                                        <div className="topic-grid">
-                                                            {weakTopics.map(topic => (
-                                                                <div key={topic.chapterId} className="topic-chip weak">{topic.title}: {topic.accuracy}%</div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="results-section">
-                                                <h3>Recent Results</h3>
-                                                <div className="results-list">
-                                                    {selectedStudent.results.length === 0 ? (
-                                                        <div className="empty-state">No results found for this student.</div>
-                                                    ) : selectedStudent.results.map(result => (
-                                                        <div key={result.id} className="result-row">
-                                                            <div>
-                                                                <strong>{getChapterTitle(result.chapterId)}</strong>
-                                                                <span>{formatDate(result.date)}</span>
-                                                            </div>
-                                                            <div style={{ color: getScoreColor(result.pct) }}>{result.score}/{result.total} ({result.pct}%)</div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div className="wrong-questions-section">
-                                                <h3>Recent Wrong Questions</h3>
-                                                {wrongQuestions.length === 0 ? (
-                                                    <div className="empty-state">No wrong answers recorded yet.</div>
-                                                ) : (
-                                                    <div className="wrong-list">
-                                                        {wrongQuestions.slice(0, 6).map((item, index) => (
-                                                            <div key={`${item.question}-${index}`} className="wrong-row">
-                                                                <div>
-                                                                    <strong>{item.chapterTitle}</strong>
-                                                                    <p>{item.question}</p>
-                                                                </div>
-                                                                <div className="wrong-meta">
-                                                                    <span className="wrong-label">Selected: {item.selected}</span>
-                                                                    <span className="correct-label">Correct: {item.correct}</span>
-                                                                </div>
-                                                            </div>
-                                                        ))}
+                                        </section>
+                                        <section className="teacher-panel teacher-detail-panel panel-slide-up" style={{ animationDelay: '80ms' }}>
+                                            <div className="panel-header"><h2>Student Details</h2><span>{selectedStudent ? selectedStudent.email : 'Select a student'}</span></div>
+                                            {selectedStudent ? (
+                                                <div className="student-detail-card detail-fade-in" key={selectedEmail}>
+                                                    <div className="student-info-row"><div><strong>Name</strong><span>{selectedStudent.name}</span></div><div><strong>Phone</strong><span>+91 {selectedStudent.phone}</span></div></div>
+                                                    <div className="student-info-row"><div><strong>Joined</strong><span>{formatDate(selectedStudent.joinedAt)}</span></div><div><strong>Total Questions</strong><span>{selectedStudent.totalQuestions}</span></div></div>
+                                                    <div className="student-metrics"><div><strong>Tests</strong><span>{selectedStudent.testsAttempted}</span></div><div><strong>Avg Score</strong><span style={{ color: getScoreColor(selectedStudent.avgScore) }}>{selectedStudent.avgScore}%</span></div><div><strong>Best Score</strong><span style={{ color: getScoreColor(selectedStudent.bestScore) }}>{selectedStudent.bestScore}%</span></div></div>
+                                                    <div className="student-insights">
+                                                        <div className="insight-block"><h3>Clear Topics</h3>{clearTopics.length === 0 ? <div className="empty-state">No strong topics yet.</div> : <div className="topic-grid">{clearTopics.map((t, i) => <div key={t.chapterId} className="topic-chip clear chip-in" style={{ animationDelay: `${i * 50}ms` }}>{t.title}: {t.accuracy}%</div>)}</div>}</div>
+                                                        <div className="insight-block"><h3>Topics to Review</h3>{weakTopics.length === 0 ? <div className="empty-state">No weak topics yet.</div> : <div className="topic-grid">{weakTopics.map((t, i) => <div key={t.chapterId} className="topic-chip weak chip-in" style={{ animationDelay: `${i * 50}ms` }}>{t.title}: {t.accuracy}%</div>)}</div>}</div>
                                                     </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="empty-state">Select a student to review their performance details.</div>
-                                    )}
-                                </section>
-                            </div>
-                        )}
-                    </>
+                                                    <div className="results-section"><h3>Recent Results</h3><div className="results-list">{selectedStudent.results.length === 0 ? <div className="empty-state">No results found for this student.</div> : selectedStudent.results.map((result, i) => <div key={result.id} className="result-row result-row-anim" style={{ animationDelay: `${i * 50}ms` }}><div><strong>{getChapterTitle(result.chapterId)}</strong><span>{formatDate(result.date)}</span></div><div style={{ color: getScoreColor(result.pct) }}>{result.score}/{result.total} ({result.pct}%)</div></div>)}</div></div>
+                                                    <div className="wrong-questions-section"><h3>Recent Wrong Questions</h3>{wrongQuestions.length === 0 ? <div className="empty-state">No wrong answers recorded yet.</div> : <div className="wrong-list">{wrongQuestions.slice(0, 6).map((item, index) => <div key={`${item.question}-${index}`} className="wrong-row wrong-row-anim" style={{ animationDelay: `${index * 55}ms` }}><div><strong>{item.chapterTitle}</strong><p>{item.question}</p></div><div className="wrong-meta"><span className="wrong-label">Selected: {item.selected}</span><span className="correct-label">Correct: {item.correct}</span></div></div>)}</div>}</div>
+                                                </div>
+                                            ) : <div className="empty-state empty-state-in">Select a student to review their performance details.</div>}
+                                        </section>
+                                    </div>
+                                )}
+                    </div>
                 )}
 
                 {/* ── ATTENDANCE TAB ── */}
                 {activeTab === 'attendance' && (
-                    <>
-                        <header className="teacher-hero">
-                            <div>
-                                <h1>Attendance Management</h1>
-                                <p>Mark daily attendance, view monthly reports, and track individual student records from MongoDB.</p>
-                            </div>
+                    <div className="tab-content tab-content-in">
+                        <header className="teacher-hero hero-slide-in">
+                            <div><h1>Attendance Management</h1><p>Mark daily attendance, view monthly reports, and track individual student records.</p></div>
                             <div className="teacher-summary">
-                                <div><span>{summary.totalStudents}</span><small>Students</small></div>
-                                <div><span style={{ color: '#16a34a' }}>—</span><small>Present Today</small></div>
-                                <div><span style={{ color: '#ef4444' }}>—</span><small>Absent Today</small></div>
+                                <div className="stat-card-pop"><span><AnimatedCounter value={summary.totalStudents} /></span><small>Students</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span style={{ color: '#16a34a' }}>—</span><small>Present Today</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '160ms' }}><span style={{ color: '#ef4444' }}>—</span><small>Absent Today</small></div>
                             </div>
                         </header>
-
                         <div className="att-tabs">
                             {[['mark', 'Mark Attendance'], ['report', 'Monthly Report'], ['student', 'Student Records']].map(([id, label]) => (
-                                <button
-                                    key={id}
-                                    className={`att-tab${attSubTab === id ? ' att-tab-active' : ''}`}
-                                    onClick={() => setAttSubTab(id)}
-                                >
-                                    {label}
-                                </button>
+                                <button key={id} className={`att-tab${attSubTab === id ? ' att-tab-active' : ''}`} onClick={() => setAttSubTab(id)}>{label}</button>
                             ))}
                         </div>
+                        {loading ? <div className="teacher-loading"><span className="loading-dots"><span /><span /><span /></span>Loading student data…</div>
+                            : error ? <div className="teacher-error-card">{error}</div>
+                                : <>{attSubTab === 'mark' && <AttMarkTab students={students} />}{attSubTab === 'report' && <AttReportTab students={students} />}{attSubTab === 'student' && <AttStudentTab students={students} />}</>}
+                    </div>
+                )}
 
-                        {loading ? (
-                            <div className="teacher-loading">Loading student data…</div>
-                        ) : error ? (
-                            <div className="teacher-error-card">{error}</div>
-                        ) : (
-                            <>
-                                {attSubTab === 'mark' && <AttMarkTab students={students} />}
-                                {attSubTab === 'report' && <AttReportTab students={students} />}
-                                {attSubTab === 'student' && <AttStudentTab students={students} />}
-                            </>
-                        )}
-                    </>
+                {/* ── SCHEDULE MEETING TAB ── */}
+                {activeTab === 'schedule' && (
+                    <div className="tab-content tab-content-in">
+                        <header className="teacher-hero hero-slide-in">
+                            <div>
+                                <h1>📅 Schedule Live Classes</h1>
+                                <p>Paste a link to go live instantly, or create a Google Meet session for a future class. Students see the Join button the moment you go live.</p>
+                            </div>
+                            <div className="teacher-summary">
+                                <div className="stat-card-pop"><span>⚡</span><small>Instant Live Link</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span>📅</span><small>Google Calendar</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '160ms' }}><span>🎥</span><small>Google Meet</small></div>
+                            </div>
+                        </header>
+                        <ScheduleMeetingTab />
+                    </div>
+                )}
+
+                {/* ── MANAGE STUDENTS TAB ── */}
+                {activeTab === 'manage' && (
+                    <div className="tab-content tab-content-in">
+                        <header className="teacher-hero hero-slide-in">
+                            <div><h1>Manage Students</h1><p>Add new students when a batch starts, or remove students who have left.</p></div>
+                            <div className="teacher-summary">
+                                <div className="stat-card-pop"><span><AnimatedCounter value={students.length} /></span><small>Total Enrolled</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span><AnimatedCounter value={students.filter(s => (s.batch || 'Batch A — Morning') === 'Batch A — Morning').length} /></span><small>Morning Batch</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '160ms' }}><span><AnimatedCounter value={students.filter(s => s.batch === 'Batch B — Evening' || s.batch === 'Batch C — Weekend').length} /></span><small>Other Batches</small></div>
+                            </div>
+                        </header>
+                        {loading ? <div className="teacher-loading"><span className="loading-dots"><span /><span /><span /></span>Loading student data…</div>
+                            : error ? <div className="teacher-error-card">{error}</div>
+                                : <ManageStudentsTab students={students} onStudentsChange={handleStudentsChange} />}
+                    </div>
                 )}
             </div>
 
             <style jsx>{`
-        /* ── Base ── */
-        .teacher-page { min-height: 100vh; background: linear-gradient(180deg, #eff6ff 0%, #f8fbff 100%); color: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; }
-
-        /* ── Nav ── */
-        .teacher-nav { display: flex; align-items: center; justify-content: space-between; padding: 1.15rem 1.5rem; border-bottom: 1px solid #dbeafe; background: #ffffff; position: sticky; top: 0; z-index: 20; box-shadow: 0 10px 30px rgba(15,23,42,0.05); }
-        .teacher-nav-brand { font-weight: 700; letter-spacing: 0.02em; color: #0f172a; }
-        .teacher-nav-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-        .teacher-nav-btn { border: 1px solid #dbeafe; background: #eff6ff; color: #2563eb; border-radius: 10px; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
-        .teacher-nav-btn-active { background: linear-gradient(135deg, #2563eb, #1d4ed8) !important; color: #fff !important; border-color: #2563eb !important; }
-        .teacher-nav-btn.logout { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; border-color: #ef4444; }
-
-        /* ── Content ── */
-        .teacher-content { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
-        .teacher-hero { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1.75rem; }
-        .teacher-hero h1 { font-size: clamp(2rem, 2.8vw, 3rem); margin-bottom: 0.6rem; line-height: 1.05; color: #0f172a; }
-        .teacher-hero p { max-width: 680px; color: #475569; font-size: 1rem; }
-        .teacher-summary { display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr)); gap: 1rem; align-items: stretch; }
-        .teacher-summary div { background: #ffffff; border: 1px solid #dbeafe; border-radius: 18px; padding: 1.25rem 1.35rem; text-align: center; box-shadow: 0 18px 40px rgba(15,23,42,0.05); }
-        .teacher-summary span { display: block; font-size: 2rem; font-weight: 800; margin-bottom: 0.35rem; color: #0f172a; }
-        .teacher-summary small { color: #64748b; }
-        .teacher-loading, .teacher-error-card { padding: 2rem 1.5rem; background: #ffffff; border: 1px solid #dbeafe; border-radius: 18px; text-align: center; box-shadow: 0 18px 40px rgba(15,23,42,0.05); }
-        .teacher-error-card { color: #ef4444; }
-
-        /* ── Grid & Panel ── */
-        .teacher-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; }
-        .teacher-panel { background: #ffffff; border: 1px solid #dbeafe; border-radius: 20px; padding: 1.5rem; box-shadow: 0 18px 40px rgba(15,23,42,0.05); }
-        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-        .panel-header h2 { margin: 0; font-size: 1.05rem; color: #0f172a; }
-        .panel-header span { color: #64748b; font-size: 0.9rem; }
-
-        /* ── Table ── */
-        .teacher-table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th, td { padding: 0.95rem 0.85rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
-        th { color: #64748b; font-size: 0.84rem; text-transform: uppercase; letter-spacing: 0.04em; }
-        td button { padding: 0.5rem 0.9rem; border-radius: 10px; border: none; background: #eff6ff; color: #2563eb; cursor: pointer; }
-        tr:hover td { background: #f8fafc; }
-        tr.selected td { background: #dbeafe; }
-
-        /* ── Student Detail ── */
-        .student-detail-card { display: grid; gap: 1rem; }
-        .student-info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .student-info-row div { background: #f8fafc; border: 1px solid #dbeafe; border-radius: 16px; padding: 1rem; }
-        .student-info-row strong { display: block; color: #64748b; margin-bottom: 0.5rem; font-size: 0.82rem; }
-        .student-info-row span { font-size: 1rem; font-weight: 700; color: #0f172a; }
-        .student-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-        .student-metrics div { background: #f8fafc; border: 1px solid #dbeafe; border-radius: 16px; padding: 1rem; text-align: center; }
-        .student-metrics strong { display: block; color: #64748b; font-size: 0.82rem; margin-bottom: 0.5rem; }
-        .student-insights { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .insight-block { background: #ffffff; border: 1px solid #dbeafe; border-radius: 18px; padding: 1rem; }
-        .insight-block h3 { margin: 0 0 0.75rem; font-size: 1rem; color: #0f172a; }
-        .topic-grid { display: grid; gap: 0.75rem; }
-        .topic-chip { padding: 0.75rem 1rem; border-radius: 14px; background: #eff6ff; color: #2563eb; font-size: 0.9rem; }
-        .topic-chip.clear { border: 1px solid #a7f3d0; }
-        .topic-chip.weak { border: 1px solid #fecaca; }
-        .results-section h3 { margin: 0 0 0.75rem; font-size: 1rem; color: #0f172a; }
-        .results-list { display: grid; gap: 0.75rem; }
-        .result-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.95rem 1rem; border-radius: 16px; background: #f8fafc; border: 1px solid #e2e8f0; }
-        .result-row strong { display: block; font-size: 0.95rem; color: #0f172a; }
-        .result-row span { color: #64748b; font-size: 0.85rem; }
-        .wrong-questions-section { margin-top: 1rem; }
-        .wrong-questions-section h3 { margin: 0 0 0.75rem; font-size: 1rem; color: #0f172a; }
-        .wrong-list { display: grid; gap: 0.75rem; }
-        .wrong-row { background: #ffffff; border: 1px solid #dbeafe; border-radius: 16px; padding: 1rem; display: grid; gap: 0.5rem; }
-        .wrong-row p { margin: 0.25rem 0 0; color: #475569; font-size: 0.95rem; line-height: 1.4; }
-        .wrong-meta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-        .wrong-label { font-size: 0.85rem; color: #ef4444; }
-        .correct-label { font-size: 0.85rem; color: #16a34a; }
-        .empty-state { padding: 1.5rem; border-radius: 16px; border: 1px dashed #93c5fd; color: #64748b; text-align: center; background: #eff6ff; }
-
-        /* ── Attendance Tabs ── */
-        .att-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; background: #e2e8f0; border-radius: 14px; padding: 4px; }
-        .att-tab { flex: 1; text-align: center; padding: 0.55rem 0.5rem; border-radius: 10px; border: none; background: transparent; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #64748b; }
-        .att-tab-active { background: #ffffff; color: #2563eb; border: 1px solid #dbeafe; box-shadow: 0 2px 8px rgba(15,23,42,0.08); }
-
-        /* ── Attendance Controls ── */
-        .att-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; }
-        .att-controls select, .att-controls input[type="date"] { border: 1px solid #dbeafe; background: #ffffff; color: #0f172a; border-radius: 12px; padding: 0.65rem 1rem; font-size: 0.9rem; outline: none; cursor: pointer; }
-        .att-controls select:focus, .att-controls input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-        .att-controls-right { margin-left: auto; display: flex; gap: 0.75rem; }
-        .att-btn { border: none; border-radius: 12px; padding: 0.65rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
-        .att-btn-primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; }
-        .att-btn-outline { background: #eff6ff; border: 1px solid #dbeafe; color: #2563eb; }
-        .att-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        /* ── Attendance Stat Row ── */
-        .att-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
-        .att-stat-card { background: #ffffff; border: 1px solid #dbeafe; border-radius: 18px; padding: 1rem 1.25rem; text-align: center; box-shadow: 0 18px 40px rgba(15,23,42,0.05); }
-        .att-stat-card span { display: block; font-size: 1.75rem; font-weight: 800; margin-bottom: 0.2rem; }
-        .att-stat-card small { color: #64748b; font-size: 0.8rem; }
-
-        /* ── Status Buttons ── */
-        .status-btn { border: 1px solid transparent; border-radius: 8px; padding: 0.35rem 0.7rem; cursor: pointer; font-size: 0.78rem; font-weight: 600; background: #f1f5f9; color: #64748b; }
-        .status-present.status-active { background: #dcfce7; color: #15803d; border-color: #86efac; }
-        .status-absent.status-active { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
-        .status-late.status-active { background: #fef3c7; color: #b45309; border-color: #fde68a; }
-
-        /* ── Note Input ── */
-        .note-input { border: 1px solid #dbeafe; border-radius: 8px; padding: 0.3rem 0.6rem; font-size: 0.78rem; width: 110px; background: #f8fafc; color: #0f172a; outline: none; }
-        .note-input:focus { border-color: #2563eb; }
-
-        /* ── Attendance Tags ── */
-        .att-tag { display: inline-block; padding: 0.25rem 0.65rem; border-radius: 8px; font-size: 0.78rem; font-weight: 600; }
-        .att-tag-present { background: #dcfce7; color: #15803d; }
-        .att-tag-absent { background: #fee2e2; color: #b91c1c; }
-        .att-tag-late { background: #fef3c7; color: #b45309; }
-
-        /* ── Progress Bar ── */
-        .pct-bar-bg { background: #e2e8f0; border-radius: 99px; height: 6px; flex: 1; }
-        .pct-bar { height: 6px; border-radius: 99px; }
-
-        /* ── Avatar ── */
-        .att-avatar { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; }
-
-        /* ── Save Message ── */
-        .save-msg { padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; }
-        .save-msg-ok { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-        .save-msg-err { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
-
-        /* ── Calendar ── */
-        .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-        .day-label { text-align: center; font-size: 0.7rem; color: #64748b; font-weight: 600; padding: 2px; }
-        .day-cell { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; }
-        .day-p { background: #dcfce7; color: #15803d; }
-        .day-a { background: #fee2e2; color: #b91c1c; }
-        .day-l { background: #fef3c7; color: #b45309; }
-        .day-x { background: #f1f5f9; color: #cbd5e1; }
-        .day-h { background: #e0e7ff; color: #6366f1; }
-        .legend { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.75rem; }
-        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: #64748b; }
-        .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
-
-        /* ── Responsive ── */
-        @media (max-width: 980px) {
-          .teacher-grid { grid-template-columns: 1fr; }
-          .student-info-row { grid-template-columns: 1fr; }
-          .student-metrics { grid-template-columns: 1fr; }
-          .att-stat-row { grid-template-columns: repeat(2, 1fr); }
-          .teacher-summary { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 600px) {
-          .att-controls-right { margin-left: 0; }
-          .teacher-summary { grid-template-columns: 1fr; }
-          .att-stat-row { grid-template-columns: repeat(2, 1fr); }
-        }
+        .teacher-page{min-height:100vh;background:linear-gradient(180deg,#eff6ff 0%,#f8fbff 100%);color:#0f172a;font-family:'Segoe UI',system-ui,sans-serif}
+        .teacher-nav{display:flex;align-items:center;justify-content:space-between;padding:1.15rem 1.5rem;border-bottom:1px solid #dbeafe;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20;box-shadow:0 10px 30px rgba(15,23,42,.05);flex-wrap:wrap;gap:.5rem}
+        .teacher-nav-brand{font-weight:700;letter-spacing:.02em;color:#0f172a}
+        .teacher-nav-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+        .teacher-nav-btn{border:1px solid #dbeafe;background:#eff6ff;color:#2563eb;border-radius:10px;padding:.6rem 1rem;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s cubic-bezier(0.16,1,0.3,1)}
+        .teacher-nav-btn:hover{background:#dbeafe;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.15)}
+        .teacher-nav-btn-active{background:linear-gradient(135deg,#2563eb,#1d4ed8)!important;color:#fff!important;border-color:#2563eb!important;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+        .teacher-nav-btn.logout{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border-color:#ef4444}
+        .teacher-nav-btn.logout:hover{box-shadow:0 4px 12px rgba(239,68,68,.3)}
+        .teacher-content{max-width:1280px;margin:0 auto;padding:1.5rem}
+        .tab-content{opacity:0;transform:translateY(14px);transition:opacity .35s cubic-bezier(0.16,1,0.3,1),transform .35s cubic-bezier(0.16,1,0.3,1)}
+        .tab-content-in{opacity:1;transform:none}
+        .teacher-hero{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:1.75rem}
+        .hero-slide-in{animation:heroSlide .5s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes heroSlide{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+        .teacher-hero h1{font-size:clamp(1.6rem,2.8vw,2.6rem);margin-bottom:.6rem;line-height:1.05;color:#0f172a}
+        .teacher-hero p{max-width:680px;color:#475569;font-size:1rem}
+        .teacher-summary{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:1rem;align-items:stretch}
+        .teacher-summary div{background:#fff;border:1px solid #dbeafe;border-radius:18px;padding:1.25rem 1.35rem;text-align:center;box-shadow:0 18px 40px rgba(15,23,42,.05);transition:transform .2s,box-shadow .2s}
+        .teacher-summary div:hover{transform:translateY(-3px);box-shadow:0 24px 50px rgba(15,23,42,.1)}
+        .teacher-summary span{display:block;font-size:2rem;font-weight:800;margin-bottom:.35rem;color:#0f172a}
+        .teacher-summary small{color:#64748b}
+        .stat-card-pop{animation:statPop .5s cubic-bezier(0.34,1.56,.64,1) both}
+        @keyframes statPop{from{opacity:0;transform:scale(.85) translateY(10px)}to{opacity:1;transform:none}}
+        .teacher-loading,.teacher-error-card{padding:2rem 1.5rem;background:#fff;border:1px solid #dbeafe;border-radius:18px;text-align:center;box-shadow:0 18px 40px rgba(15,23,42,.05);display:flex;align-items:center;justify-content:center;gap:.75rem}
+        .teacher-error-card{color:#ef4444}
+        .loading-dots{display:inline-flex;gap:4px}
+        .loading-dots span{width:7px;height:7px;border-radius:50%;background:#2563eb;animation:dotBounce 1.2s infinite ease-in-out}
+        .loading-dots span:nth-child(1){animation-delay:0s}.loading-dots span:nth-child(2){animation-delay:.2s}.loading-dots span:nth-child(3){animation-delay:.4s}
+        @keyframes dotBounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+        .teacher-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:1.5rem}
+        .teacher-panel{background:#fff;border:1px solid #dbeafe;border-radius:20px;padding:1.5rem;box-shadow:0 18px 40px rgba(15,23,42,.05)}
+        .panel-slide-up{animation:panelUp .4s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes panelUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+        .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+        .panel-header h2{margin:0;font-size:1.05rem;color:#0f172a}.panel-header span{color:#64748b;font-size:.9rem}
+        .teacher-table-wrap{overflow-x:auto}
+        table{width:100%;border-collapse:collapse;min-width:500px}
+        th,td{padding:.95rem .85rem;text-align:left;border-bottom:1px solid #e2e8f0}
+        th{color:#64748b;font-size:.84rem;text-transform:uppercase;letter-spacing:.04em}
+        td button{padding:.5rem .9rem;border-radius:10px;border:none;background:#eff6ff;color:#2563eb;cursor:pointer;transition:background .2s,transform .15s}
+        td button:hover{background:#dbeafe;transform:scale(1.05)}
+        tr{transition:background .15s}
+        tr:hover td{background:#f8fafc}
+        tr.selected td{background:#dbeafe}
+        .table-row-anim{animation:rowSlide .35s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes rowSlide{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+        .student-detail-card{display:grid;gap:1rem}
+        .detail-fade-in{animation:detailIn .4s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes detailIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+        .student-info-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        .student-info-row div{background:#f8fafc;border:1px solid #dbeafe;border-radius:16px;padding:1rem;transition:box-shadow .2s}
+        .student-info-row div:hover{box-shadow:0 8px 20px rgba(15,23,42,.06)}
+        .student-info-row strong{display:block;color:#64748b;margin-bottom:.5rem;font-size:.82rem}
+        .student-info-row span{font-size:1rem;font-weight:700;color:#0f172a}
+        .student-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+        .student-metrics div{background:#f8fafc;border:1px solid #dbeafe;border-radius:16px;padding:1rem;text-align:center;transition:transform .2s,box-shadow .2s}
+        .student-metrics div:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,.07)}
+        .student-metrics strong{display:block;color:#64748b;font-size:.82rem;margin-bottom:.5rem}
+        .student-insights{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        .insight-block{background:#fff;border:1px solid #dbeafe;border-radius:18px;padding:1rem}
+        .insight-block h3{margin:0 0 .75rem;font-size:1rem;color:#0f172a}
+        .topic-grid{display:grid;gap:.75rem}
+        .topic-chip{padding:.75rem 1rem;border-radius:14px;background:#eff6ff;color:#2563eb;font-size:.9rem;transition:transform .2s}
+        .topic-chip:hover{transform:translateX(3px)}
+        .topic-chip.clear{border:1px solid #a7f3d0}.topic-chip.weak{border:1px solid #fecaca}
+        .chip-in{animation:chipIn .35s cubic-bezier(0.34,1.56,.64,1) both}
+        @keyframes chipIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+        .results-section h3{margin:0 0 .75rem;font-size:1rem;color:#0f172a}
+        .results-list{display:grid;gap:.75rem}
+        .result-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.95rem 1rem;border-radius:16px;background:#f8fafc;border:1px solid #e2e8f0;transition:transform .2s,box-shadow .2s}
+        .result-row:hover{transform:translateX(4px);box-shadow:0 4px 16px rgba(15,23,42,.07)}
+        .result-row-anim{animation:resultIn .35s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes resultIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+        .result-row strong{display:block;font-size:.95rem;color:#0f172a}.result-row span{color:#64748b;font-size:.85rem}
+        .wrong-questions-section{margin-top:1rem}
+        .wrong-questions-section h3{margin:0 0 .75rem;font-size:1rem;color:#0f172a}
+        .wrong-list{display:grid;gap:.75rem}
+        .wrong-row{background:#fff;border:1px solid #dbeafe;border-radius:16px;padding:1rem;display:grid;gap:.5rem;transition:transform .2s,box-shadow .2s}
+        .wrong-row:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,.08)}
+        .wrong-row-anim{animation:wrongIn .4s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes wrongIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+        .wrong-row p{margin:.25rem 0 0;color:#475569;font-size:.95rem;line-height:1.4}
+        .wrong-meta{display:flex;flex-wrap:wrap;gap:.75rem}
+        .wrong-label{font-size:.85rem;color:#ef4444}.correct-label{font-size:.85rem;color:#16a34a}
+        .empty-state{padding:1.5rem;border-radius:16px;border:1px dashed #93c5fd;color:#64748b;text-align:center;background:#eff6ff}
+        .empty-state-in{animation:fadeIn .3s ease both}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .att-tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;background:#e2e8f0;border-radius:14px;padding:4px}
+        .att-tab{flex:1;text-align:center;padding:.55rem .5rem;border-radius:10px;border:none;background:transparent;cursor:pointer;font-size:.85rem;font-weight:600;color:#64748b;transition:all .25s cubic-bezier(0.16,1,0.3,1)}
+        .att-tab:hover{color:#2563eb}
+        .att-tab-active{background:#fff;color:#2563eb;border:1px solid #dbeafe;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+        .att-controls{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-bottom:1.25rem}
+        .att-controls select,.att-controls input[type="date"]{border:1px solid #dbeafe;background:#fff;color:#0f172a;border-radius:12px;padding:.65rem 1rem;font-size:.9rem;outline:none;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+        .att-controls select:focus,.att-controls input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+        .att-tag{display:inline-block;padding:.25rem .65rem;border-radius:8px;font-size:.78rem;font-weight:600}
+        .att-tag-present{background:#dcfce7;color:#15803d}.att-tag-absent{background:#fee2e2;color:#b91c1c}.att-tag-late{background:#fef3c7;color:#b45309}
+        .pct-bar-bg{background:#e2e8f0;border-radius:99px;height:6px;flex:1;overflow:hidden}
+        .pct-bar{height:6px;border-radius:99px;width:0}
+        .pct-bar-anim{animation:barGrow .7s cubic-bezier(0.16,1,0.3,1) forwards;animation-delay:.2s}
+        @keyframes barGrow{from{width:0}to{width:var(--pct)}}
+        .att-avatar{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;transition:transform .2s}
+        .att-avatar:hover{transform:scale(1.1)}
+        .avatar-pop{animation:avatarPop .35s cubic-bezier(0.34,1.56,.64,1) both}
+        @keyframes avatarPop{from{transform:scale(0)}to{transform:scale(1)}}
+        .save-msg{padding:.75rem 1rem;border-radius:12px;font-size:.9rem;font-weight:600;margin-bottom:1rem}
+        .msg-slide-in{animation:msgSlide .35s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes msgSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+        .save-msg-ok{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+        .save-msg-err{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+        .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+        .day-label{text-align:center;font-size:.7rem;color:#64748b;font-weight:600;padding:2px}
+        .day-cell{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;transition:transform .15s}
+        .day-cell:hover{transform:scale(1.15);z-index:1}
+        .day-cell-pop{animation:dayPop .3s cubic-bezier(0.34,1.56,.64,1) both}
+        @keyframes dayPop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+        .day-p{background:#dcfce7;color:#15803d}.day-a{background:#fee2e2;color:#b91c1c}.day-l{background:#fef3c7;color:#b45309}.day-x{background:#f1f5f9;color:#cbd5e1}.day-h{background:#e0e7ff;color:#6366f1}
+        .legend{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.75rem}
+        .legend-item{display:flex;align-items:center;gap:5px;font-size:.75rem;color:#64748b}
+        .legend-dot{width:10px;height:10px;border-radius:3px}
+        .manage-topbar{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap}
+        .manage-search-wrap{position:relative;flex:1;min-width:220px}
+        .manage-search-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);font-size:.85rem;pointer-events:none}
+        .manage-search{width:100%;padding:.7rem 2.5rem;border:1px solid #dbeafe;border-radius:12px;background:#fff;color:#0f172a;font-size:.9rem;outline:none;box-sizing:border-box;transition:border-color .2s,box-shadow .2s}
+        .manage-search:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+        .manage-search-clear{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:#94a3b8;line-height:1;transition:color .2s,transform .2s}
+        .manage-search-clear:hover{color:#475569;transform:translateY(-50%) scale(1.2)}
+        .manage-add-btn{padding:.7rem 1.4rem;border:none;border-radius:12px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:700;font-size:.9rem;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s cubic-bezier(0.16,1,0.3,1);box-shadow:0 4px 12px rgba(37,99,235,.25)}
+        .manage-add-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(37,99,235,.35)}
+        .remove-btn{padding:.45rem .9rem;border-radius:10px;border:1px solid #fecaca;background:#fff1f2;color:#b91c1c;cursor:pointer;font-size:.8rem;font-weight:600;display:inline-flex;align-items:center;gap:4px;transition:all .2s}
+        .remove-btn:hover{background:#fee2e2;transform:scale(1.05)}.remove-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+        .batch-chip{display:inline-block;padding:.25rem .65rem;border-radius:8px;font-size:.75rem;font-weight:600;background:#eff6ff;color:#2563eb;border:1px solid #dbeafe}
+        .batch-summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.25rem}
+        .batch-card{background:#fff;border:2px solid;border-radius:20px;padding:1.25rem 1.5rem;text-align:center;box-shadow:0 18px 40px rgba(15,23,42,.05);animation:panelUp .4s cubic-bezier(0.16,1,0.3,1) both}
+        .batch-card-hover{transition:transform .2s,box-shadow .2s}.batch-card-hover:hover{transform:translateY(-4px);box-shadow:0 28px 56px rgba(15,23,42,.1)}
+        .batch-card-count{font-size:2.25rem;font-weight:800;margin-bottom:.35rem}.batch-card-label{font-size:.85rem;color:#64748b;font-weight:500}
+        .btn-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+        .btn-spinner-sm{width:11px;height:11px;border-color:rgba(185,28,28,.3);border-top-color:#b91c1c}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .btn-ripple{position:relative;overflow:hidden}.btn-ripple::after{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.3) 0%,transparent 70%);opacity:0;transition:opacity .3s}.btn-ripple:active::after{opacity:1}
+        .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px)}
+        .modal-backdrop-in{animation:backdropIn .25s ease both}
+        @keyframes backdropIn{from{opacity:0}to{opacity:1}}
+        .modal-card{background:#fff;border-radius:24px;width:100%;max-width:480px;box-shadow:0 40px 100px rgba(15,23,42,.18);border:1px solid #dbeafe;overflow:hidden}
+        .modal-card-in{animation:modalIn .35s cubic-bezier(0.34,1.56,.64,1) both}
+        @keyframes modalIn{from{opacity:0;transform:scale(.88) translateY(16px)}to{opacity:1;transform:none}}
+        .modal-card-sm{max-width:400px}
+        .modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid #e2e8f0}
+        .modal-header h2{margin:0;font-size:1.1rem;color:#0f172a}
+        .modal-close{background:#f1f5f9;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;color:#64748b;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s}
+        .modal-close:hover{background:#e2e8f0;transform:rotate(90deg)}
+        .modal-body{padding:1.5rem;display:grid;gap:1rem}
+        .modal-footer{padding:1rem 1.5rem;border-top:1px solid #e2e8f0;display:flex;gap:.75rem;justify-content:flex-end}
+        .form-group{display:grid;gap:.4rem;animation:formGroupIn .3s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes formGroupIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+        .form-group label{font-size:.85rem;font-weight:600;color:#374151}
+        .form-group input,.form-group select{padding:.75rem 1rem;border:1px solid #dbeafe;border-radius:12px;background:#f8fafc;color:#0f172a;font-size:.9rem;outline:none;width:100%;box-sizing:border-box;transition:border-color .2s,box-shadow .2s,background .2s}
+        .form-group input:focus,.form-group select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(59,130,246,.15);background:#fff}
+        .form-group input.input-err{border-color:#fca5a5;background:#fff1f2}
+        .field-err{font-size:.78rem;color:#b91c1c}
+        .field-err-in{animation:msgSlide .25s ease both}
+        .modal-cancel-btn{padding:.7rem 1.25rem;border:1px solid #dbeafe;border-radius:12px;background:#f8fafc;color:#64748b;font-weight:600;cursor:pointer;font-size:.9rem;transition:background .2s}
+        .modal-cancel-btn:hover{background:#e2e8f0}
+        .modal-save-btn{padding:.7rem 1.4rem;border:none;border-radius:12px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:700;cursor:pointer;font-size:.9rem;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+        .modal-save-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(37,99,235,.3)}.modal-save-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+        .modal-remove-btn{padding:.7rem 1.4rem;border:none;border-radius:12px;background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;font-weight:700;cursor:pointer;font-size:.9rem;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+        .modal-remove-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(239,68,68,.3)}.modal-remove-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+        .remove-confirm-body{text-align:center;padding:.5rem 0}
+        .remove-icon{font-size:2.5rem;margin-bottom:.75rem}
+        .shake-icon{animation:shakeIcon .6s .15s cubic-bezier(.36,.07,.19,.97) both}
+        @keyframes shakeIcon{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}40%{transform:rotate(10deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(6deg)}}
+        .remove-confirm-body p{margin:0 0 .5rem;color:#0f172a}
+        .remove-warning{font-size:.85rem;color:#64748b;line-height:1.5}
+        @media(max-width:980px){.teacher-grid{grid-template-columns:1fr}.student-info-row{grid-template-columns:1fr}.student-metrics{grid-template-columns:1fr}.teacher-summary{grid-template-columns:repeat(3,1fr)}.batch-summary-row{grid-template-columns:1fr}}
+        @media(max-width:600px){.teacher-summary{grid-template-columns:1fr}.batch-summary-row{grid-template-columns:1fr}}
       `}</style>
         </div>
     );

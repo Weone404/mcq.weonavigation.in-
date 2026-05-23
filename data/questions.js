@@ -1,15 +1,33 @@
 // ── CHAPTER METADATA ────────────────────────────────────────
 export const chapters = [
 
+  { id: 'met01', title: 'Atmosphere', icon: '🌍', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met02', title: 'Atmospheric Pressure', icon: '🔽', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met03', title: 'Temperature', icon: '🌡️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met04', title: 'Air Density', icon: '💨', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met05', title: 'Humidity', icon: '💧', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met06', title: 'Winds', icon: '🌬️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met07', title: 'Visibility and Fog', icon: '🌫️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met08', title: 'Vertical Motion and Clouds', icon: '☁️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met09', title: 'Stability', icon: '⚖️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met10', title: 'Optical Phenomena', icon: '🌈', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met11', title: 'Precipitation', icon: '🌧️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met12', title: 'Ice Accretion', icon: '🧊', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met13', title: 'Thunderstorm', icon: '⛈️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met14', title: 'Air Masses and Fronts and WDs', icon: '🗺️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met15', title: 'Jet Streams', icon: '✈️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met16', title: 'Clear Air Turbulence', icon: '〰️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met17', title: 'Mountain Waves', icon: '⛰️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met18', title: 'Tropical Systems', icon: '🌀', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met19', title: 'Climatology of India', icon: '🇮🇳', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met20', title: 'Met Services', icon: '📡', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met21', title: 'Station Model', icon: '🗂️', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met22', title: 'METAR, SPECI and TREND', icon: '📋', part: 'Meteorology', color: '#0EA5E9' },
+  { id: 'met23', title: 'TAF, ARFOR, ROFOR', icon: '📄', part: 'Meteorology', color: '#0EA5E9' },
 
-  { id: 'met01', title: 'The Atmosphere & ICAO Standard Atmosphere', icon: '🌤️', part: 'Meteorology', color: '#0EA5E9' },
-  { id: 'met02', title: 'Temperature, Humidity & Stability', icon: '🌡️', part: 'Meteorology', color: '#0EA5E9' },
-  { id: 'met03', title: 'Pressure, Altimetry & Wind', icon: '💨', part: 'Meteorology', color: '#0EA5E9' },
-  { id: 'met04', title: 'Clouds, Fog & Visibility', icon: '☁️', part: 'Meteorology', color: '#0EA5E9' },
-  { id: 'met05', title: 'Precipitation & Icing', icon: '🧊', part: 'Meteorology', color: '#0EA5E9' },
-  { id: 'met06', title: 'Thunderstorms, Turbulence & Wind Shear', icon: '⛈️', part: 'Meteorology', color: '#0EA5E9' },
-  { id: 'met07', title: 'Aviation Weather Reports & Forecasts', icon: '📋', part: 'Meteorology', color: '#0EA5E9' },
-  { id: 'met08', title: 'Weather Hazards & Tropical Meteorology', icon: '🌀', part: 'Meteorology', color: '#0EA5E9' },
+
+
+
 
   // RADIO TELEPHONY
   { id: 'rt01', title: 'RT Procedures – General & Phraseology', icon: '🎙️', part: 'Radio Telephony', color: '#8B5CF6' },
@@ -98,664 +116,324 @@ export const chapters = [
 export const questions = {
 
   met01: [
-    {
-      id: 'met01_01',
-      question: 'The ICAO standard atmosphere defines MSL temperature as:',
-      options: ['0°C', '15°C', '20°C', '25°C'],
-      correct: 1,
-      explanation: 'ICAO ISA at MSL: temperature = +15°C (288.15 K), pressure = 1013.25 hPa, density = 1.225 kg/m³, and lapse rate = 6.5°C/1000 m (1.98°C/1000 ft) up to the tropopause.'
-    },
-    {
-      id: 'met01_02',
-      question: 'The standard tropopause in ICAO ISA is located at approximately:',
-      options: ['25,000 ft', '36,090 ft (11 km)', '45,000 ft', '50,000 ft'],
-      correct: 1,
-      explanation: 'In ICAO ISA, the tropopause is at 11 km (36,090 ft / FL360). Above this level (the stratosphere), temperature remains constant at −56.5°C up to approximately 20 km.'
-    },
-    {
-      id: 'met01_03',
-      question: 'In the ISA, the temperature in the stratosphere (between 11 km and 20 km) is:',
-      options: ['Increasing with altitude', 'Decreasing with altitude', 'Constant at −56.5°C', 'Constant at −45°C'],
-      correct: 2,
-      explanation: 'Between the tropopause (11 km) and 20 km, ISA temperature is constant at −56.5°C (216.65 K). This is called the isothermal layer of the lower stratosphere.'
-    },
-    {
-      id: 'met01_04',
-      question: 'The four main layers of the atmosphere in ascending order are:',
-      options: ['Stratosphere, Troposphere, Mesosphere, Thermosphere', 'Troposphere, Stratosphere, Mesosphere, Thermosphere', 'Troposphere, Mesosphere, Stratosphere, Thermosphere', 'Thermosphere, Mesosphere, Stratosphere, Troposphere'],
-      correct: 1,
-      explanation: 'From surface upward: Troposphere (0–11 km) → Stratosphere (11–50 km) → Mesosphere (50–80 km) → Thermosphere (80–700 km). Most aviation activity occurs in the troposphere; SST and some business jets reach the lower stratosphere.'
-    },
-    {
-      id: 'met01_05',
-      question: 'The ISA lapse rate of 1.98°C per 1000 ft applies in the:',
-      options: ['Stratosphere only', 'Troposphere only', 'Both troposphere and stratosphere', 'Mesosphere only'],
-      correct: 1,
-      explanation: 'The ISA environmental lapse rate (ELR) of approximately 2°C/1000 ft (6.5°C/km) applies only in the TROPOSPHERE. Above the tropopause in the lower stratosphere, temperature is isothermal (constant).'
-    },
-    {
-      id: 'met01_06',
-      question: 'The height of the tropopause is greatest at:',
-      options: ['The poles', 'Mid-latitudes', 'The equator', 'It is constant worldwide'],
-      correct: 2,
-      explanation: 'The tropopause height varies with latitude and season. It is highest (~18 km / 60,000 ft) over the equator due to intense convection, and lowest (~8 km / 26,000 ft) over the poles.'
-    },
-    {
-      id: 'met01_07',
-      question: 'The jet stream is found at approximately:',
-      options: ['Surface to 5,000 ft', '5,000–15,000 ft', '25,000–45,000 ft near the tropopause', 'Above FL500'],
-      correct: 2,
-      explanation: 'The jet stream is a narrow band of strong westerly winds found near the tropopause, typically between FL250–FL450. Wind speeds can exceed 200 kt, significantly affecting flight times on transatlantic and transpacific routes.'
-    },
-    {
-      id: 'met01_08',
-      question: 'ISA temperature at FL200 (20,000 ft) is approximately:',
-      options: ['−5°C', '−25°C', '−24.6°C', '−40°C'],
-      correct: 2,
-      explanation: 'ISA temperature at FL200 = 15°C − (20,000 ft × 1.98°C/1000 ft) = 15 − 39.6 = −24.6°C ≈ −25°C. (Using 2°C/1000 ft gives 15 − 40 = −25°C.)'
-    },
-    {
-      id: 'met01_09',
-      question: 'Compared to ISA, if OAT is warmer than ISA at a given pressure level, density altitude is:',
-      options: ['Lower than pressure altitude', 'Higher than pressure altitude', 'Equal to pressure altitude', 'Unaffected by temperature'],
-      correct: 1,
-      explanation: 'Warmer-than-ISA air is less dense. Density altitude = Pressure altitude corrected for non-standard temperature. Warmer air means HIGHER density altitude — the air behaves as if the aircraft were at a higher altitude, reducing engine and aerodynamic performance.'
-    },
-    {
-      id: 'met01_10',
-      question: 'The percentage of water vapour in the atmosphere at MSL in the ISA is:',
-      options: ['Approximately 21%', 'Approximately 1%', '0% (ISA assumes dry air)', '78%'],
-      correct: 2,
-      explanation: 'ICAO ISA assumes completely DRY air (0% water vapour). Dry air composition at MSL: 78% nitrogen, 21% oxygen, 1% argon + other gases. In reality, water vapour content varies from near 0% to about 4%.'
-    },
-    {
-      id: 'met01_11',
-      question: 'Ozone concentration is highest in the:',
-      options: ['Troposphere', 'Lower stratosphere (ozonosphere)', 'Mesosphere', 'Thermosphere'],
-      correct: 1,
-      explanation: 'The ozone layer (ozonosphere) is concentrated in the stratosphere between approximately 15–35 km altitude. Ozone (O₃) absorbs harmful ultraviolet radiation from the Sun, making it essential for life on Earth.'
-    },
-    {
-      id: 'met01_12',
-      question: 'ISA pressure at MSL is 1013.25 hPa. At FL50 (5000 ft), the approximate pressure is:',
-      options: ['843 hPa', '944 hPa', '850 hPa', '900 hPa'],
-      correct: 1,
-      explanation: 'Using the approximate rule of 1 hPa per 30 ft near sea level, or the ISA pressure table: at 5000 ft, ISA pressure ≈ 843 hPa. (More precisely: 843.07 hPa at 5000 ft ISA.) The answer 843 hPa is most accurate; 944 hPa is incorrect.'
-    },
+    { id: 'met01_01', question: 'Lowest layer of atmosphere is', options: ['Troposphere', 'Tropopause', 'Stratosphere', 'Mesosphere'], correct: 0, explanation: 'Troposphere is the lowest layer of the atmosphere.' },
+    { id: 'met01_02', question: 'Height of Tropopause at equator is', options: ['10-12 km', '16-18 km', '12-14 km', '20-22 km'], correct: 1, explanation: 'Tropical tropopause averages around 16-18 km.' },
+    { id: 'met01_03', question: 'Height of Tropopause at Poles is', options: ['12-14 km', '12-13 km', '08-10 km', '06-08 km'], correct: 2, explanation: 'Polar tropopause averages around 8-10 km.' },
+    { id: 'met01_04', question: 'Most of atmospheric mass is contained in', options: ['Troposphere', 'Stratosphere', 'Heterosphere', 'Mesosphere'], correct: 0, explanation: 'About 75% of atmospheric mass lies in troposphere.' },
+    { id: 'met01_05', question: 'Stratosphere extends from Tropopause to', options: ['50 km', '60 km', '40 km', '80 km'], correct: 0, explanation: 'Stratosphere extends up to approximately 50 km.' },
+    { id: 'met01_06', question: 'In ISA atmosphere the tropopause occurs at a height of', options: ['8-10 km', '11 km', '16-18 km', '20 km'], correct: 1, explanation: 'ISA tropopause is fixed at 11 km (36,090 ft).' },
+    { id: 'met01_07', question: 'The temperature in ISA at 17 km is', options: ['-56.5 C', '-65.5 C', '-35.5 C', '-45.5 C'], correct: 0, explanation: 'ISA temperature is isothermal at -56.5 C from 11-20 km.' },
+    { id: 'met01_08', question: 'In ISA, the mean sea level temperature is', options: ['15 C', '10 C', '25 C', '20 C'], correct: 0, explanation: 'ISA MSL temperature is +15 C.' },
+    { id: 'met01_09', question: 'The rate of fall of temperatures with height is called', options: ['Isothermal rate', 'Inversion rate', 'Lapse rate', 'Adiabatic rate'], correct: 2, explanation: 'Decrease of temperature with height is called lapse rate.' },
+    { id: 'met01_10', question: 'Troposphere is generally', options: ['Stable', 'Unstable', 'Neutral', 'Isothermal'], correct: 1, explanation: 'Troposphere is generally unstable due to convection.' },
   ],
 
-  // ── MET02: Temperature, Humidity & Stability ──
+  // ── MET02: Atmospheric Pressure ──
   met02: [
-    {
-      id: 'met02_01',
-      question: 'The dry adiabatic lapse rate (DALR) is approximately:',
-      options: ['1°C per 1000 ft', '3°C per 1000 ft', '1.5°C per 1000 ft', '0.5°C per 1000 ft'],
-      correct: 1,
-      explanation: 'The Dry Adiabatic Lapse Rate (DALR) = 3°C per 1000 ft (9.8°C/km). This is the rate at which an unsaturated parcel of air cools as it rises adiabatically (without exchanging heat with its environment).'
-    },
-    {
-      id: 'met02_02',
-      question: 'The saturated adiabatic lapse rate (SALR) compared to DALR is:',
-      options: ['Equal to DALR at all temperatures', 'Greater than DALR', 'Less than DALR (closer to 1.5°C/1000 ft on average)', 'Variable but always greater than ELR'],
-      correct: 2,
-      explanation: 'SALR is LESS than DALR because as saturated air rises and cools, condensation releases latent heat of vaporisation, partially offsetting the cooling. SALR averages about 1.5°C/1000 ft but varies from ~1°C/1000 ft in warm humid air to ~2.5°C/1000 ft in cold air.'
-    },
-    {
-      id: 'met02_03',
-      question: 'Absolute instability exists when the Environmental Lapse Rate (ELR) is:',
-      options: ['Less than the SALR', 'Between the SALR and DALR', 'Greater than the DALR', 'Equal to the DALR'],
-      correct: 2,
-      explanation: 'Absolute Instability: ELR > DALR (> 3°C/1000 ft). Any parcel of air — dry or saturated — that is displaced upward will find itself warmer than its surroundings and continue to rise freely. Associated with strong convective activity.'
-    },
-    {
-      id: 'met02_04',
-      question: 'Conditional instability exists when:',
-      options: ['ELR < SALR', 'SALR < ELR < DALR', 'ELR > DALR', 'ELR = SALR'],
-      correct: 1,
-      explanation: 'Conditional Instability: SALR < ELR < DALR. The atmosphere is stable for unsaturated (dry) air but unstable for saturated (moist) air. Convection occurs only IF the air is lifted to its condensation level — hence "conditional."'
-    },
-    {
-      id: 'met02_05',
-      question: 'Absolute stability exists when the ELR is:',
-      options: ['Greater than the DALR', 'Greater than the SALR but less than DALR', 'Less than the SALR', 'Equal to the DALR'],
-      correct: 2,
-      explanation: 'Absolute Stability: ELR < SALR. Both dry and saturated parcels cool faster than the surrounding atmosphere when lifted — they are always colder (denser) than their surroundings and will sink back. Associated with stratiform clouds and stable weather.'
-    },
-    {
-      id: 'met02_06',
-      question: 'Relative humidity is defined as:',
-      options: ['The actual amount of water vapour in the air', 'The ratio of actual vapour pressure to saturation vapour pressure × 100%', 'The temperature at which dew forms', 'The amount of rainfall per unit area'],
-      correct: 1,
-      explanation: 'Relative Humidity (RH) = (Actual vapour pressure / Saturation vapour pressure) × 100%. When RH = 100%, the air is saturated. RH depends on both actual moisture content AND temperature (saturation vapour pressure increases with temperature).'
-    },
-    {
-      id: 'met02_07',
-      question: 'The dew point temperature is:',
-      options: ['The temperature at which ice forms', 'The temperature to which air must be cooled (at constant pressure) to reach saturation', 'Always 0°C in tropical regions', 'The temperature difference between surface and tropopause'],
-      correct: 1,
-      explanation: 'Dew point is the temperature to which air must be cooled at constant pressure and moisture content to reach saturation (RH = 100%). When air temperature equals dew point, condensation begins. Spread (temperature minus dew point) indicates how close air is to saturation.'
-    },
-    {
-      id: 'met02_08',
-      question: 'A temperature inversion is a condition where:',
-      options: ['Temperature decreases with altitude at a rate greater than DALR', 'Temperature increases with altitude', 'Temperature remains constant with altitude', 'The dew point increases with altitude'],
-      correct: 1,
-      explanation: 'A temperature inversion is when temperature INCREASES with altitude (opposite of normal). Inversions act as "lids" on convection, trap pollutants, cause poor visibility (smog), affect radio propagation, and mark the tops of radiation fog layers.'
-    },
-    {
-      id: 'met02_09',
-      question: 'The lifting condensation level (LCL) is:',
-      options: ['The level at which a rising parcel of dry air reaches saturation and cloud base forms', 'The tropopause height', 'The height at which icing begins', 'The cloud top level'],
-      correct: 0,
-      explanation: 'The LCL is the height at which a rising unsaturated parcel of air cools to its dew point and condensation begins — marking the cloud base of convective clouds. It can be estimated as: LCL (ft) ≈ 400 × (Surface temperature − Dew point).'
-    },
-    {
-      id: 'met02_10',
-      question: 'If surface temperature is 25°C and dew point is 13°C, the estimated cloud base is approximately:',
-      options: ['2,400 ft', '4,800 ft', '1,200 ft', '6,000 ft'],
-      correct: 1,
-      explanation: 'LCL ≈ 400 × (T − Td) = 400 × (25 − 13) = 400 × 12 = 4,800 ft. This is a useful approximation for cumulus cloud base in convective conditions.'
-    },
-    {
-      id: 'met02_11',
-      question: 'A thermal inversion occurring near the surface after a clear night is called a:',
-      options: ['Frontal inversion', 'Subsidence inversion', 'Radiation inversion', 'Turbulence inversion'],
-      correct: 2,
-      explanation: 'Radiation inversion: occurs near the surface on clear, calm nights when the ground radiates heat to space and cools rapidly. The surface air cools faster than air above, creating a shallow surface inversion — associated with radiation fog formation.'
-    },
-    {
-      id: 'met02_12',
-      question: 'Latent heat is:',
-      options: ['Heat that can be measured with a thermometer (sensible heat)', 'Heat released or absorbed during a change of state without temperature change', 'The heat generated by urban areas', 'The heat stored in ocean water'],
-      correct: 1,
-      explanation: 'Latent heat is the energy released or absorbed when water changes state (e.g., from liquid to vapour) WITHOUT a change in temperature. Condensation releases latent heat (warms the surrounding air); evaporation absorbs latent heat (cools the air). Latent heat drives convection and fuels thunderstorms.'
-    },
+    { id: 'met02_01', question: 'Winds in a low pressure', options: ['Converge', 'Diverge', 'Go straight', 'Are static'], correct: 0, explanation: 'Surface winds converge into a low pressure area.' },
+    { id: 'met02_02', question: 'Low pressure is associated with', options: ['Good Weather', 'Bad Weather', 'None', 'Calm weather'], correct: 1, explanation: 'Low pressure brings rising air, clouds and bad weather.' },
+    { id: 'met02_03', question: 'Flying from Low to High an altimeter would read', options: ['Over', 'Under', 'Constant', 'Zero'], correct: 1, explanation: 'From low to high pressure, altimeter under-reads (actual altitude is higher).' },
+    { id: 'met02_04', question: 'A region between two Lows and Two Highs is', options: ['Depression', 'Secondary Low', 'Col', 'Trough'], correct: 2, explanation: 'A col lies between two highs and two lows in saddle configuration.' },
+    { id: 'met02_05', question: 'Lines drawn through places of equal pressure are known as', options: ['Isobars', 'Isotherms', 'Isogonal', 'Isoclinal'], correct: 0, explanation: 'Isobars connect equal pressure points.' },
+    { id: 'met02_06', question: 'An increase of 1000 ft at MSL is associated with decrease of pressure of', options: ['100 hPa', '1000 hPa', '3 hPa', '33 hPa'], correct: 3, explanation: 'Near MSL pressure drops about 1 hPa per 30 ft, i.e. ~33 hPa per 1000 ft.' },
+    { id: 'met02_07', question: 'Altimeter always measures the height of aircraft above', options: ['MSL', 'datum level of 1013.2 hPa', 'datum level at which its sub-scale is set', 'ground level'], correct: 2, explanation: 'Altimeter reads height above the pressure level set on its subscale.' },
+    { id: 'met02_08', question: 'Atmospheric pressure is due to', options: ['Wind', 'Temperature', 'Gravity', 'Density'], correct: 2, explanation: 'Atmospheric pressure arises from the weight of air under gravity.' },
+    { id: 'met02_09', question: '500 hPa in ISA corresponds to the level', options: ['20,000 ft', '18,000 ft', '15,000 ft', '10,000 ft'], correct: 1, explanation: '500 hPa is at approximately 18,000 ft in ISA.' },
+    { id: 'met02_10', question: 'Steep Pressure gradient would mean', options: ['Contours far apart and weak wind', 'Contours far apart and strong wind', 'Isobars far apart and temperature low', 'Isobars closely packed and strong wind'], correct: 3, explanation: 'Closely packed isobars indicate steep gradient and strong winds.' },
   ],
 
-  // ── MET03: Pressure, Altimetry & Wind ──
+  // ── MET03: Temperature ──
   met03: [
-    {
-      id: 'met03_01',
-      question: 'A trough of low pressure is an area of:',
-      options: ['High pressure extending from an anticyclone', 'Elongated low pressure extending from a depression centre', 'Circular high pressure system', 'Pressure ridge between two lows'],
-      correct: 1,
-      explanation: 'A trough is an elongated area of relatively low pressure extending from a depression (low) centre. Troughs are associated with unsettled weather, cloud and precipitation, similar to a frontal system.'
-    },
-    {
-      id: 'met03_02',
-      question: 'In the Northern Hemisphere, surface winds around a low pressure system circulate:',
-      options: ['Clockwise and outward', 'Anticlockwise and inward', 'Clockwise and inward', 'Anticlockwise and outward'],
-      correct: 1,
-      explanation: 'In the NH, the Coriolis force deflects air to the RIGHT. Around a LOW (cyclone), air flows ANTICLOCKWISE and INWARD toward the centre (converging). Around a HIGH (anticyclone), air flows CLOCKWISE and OUTWARD (diverging).'
-    },
-    {
-      id: 'met03_03',
-      question: 'The Coriolis force acts:',
-      options: ['To the left in the Northern Hemisphere', 'To the right in the Northern Hemisphere and to the left in the Southern Hemisphere', 'Only at the equator', 'Vertically upward'],
-      correct: 1,
-      explanation: 'The Coriolis force (an apparent force due to Earth\'s rotation) deflects moving air to the RIGHT in the Northern Hemisphere and to the LEFT in the Southern Hemisphere. It is zero at the equator and maximum at the poles.'
-    },
-    {
-      id: 'met03_04',
-      question: 'The geostrophic wind is a balance between:',
-      options: ['Pressure gradient force and friction', 'Pressure gradient force and Coriolis force', 'Coriolis force and friction', 'Thermal gradient and Coriolis force'],
-      correct: 1,
-      explanation: 'The geostrophic wind is a theoretical wind that results from the exact balance between the pressure gradient force (from high to low pressure) and the Coriolis force (deflecting to the right in NH). It flows parallel to the isobars.'
-    },
-    {
-      id: 'met03_05',
-      question: 'Near the surface, winds blow at an angle to the isobars (across them toward lower pressure) because of:',
-      options: ['The Coriolis force', 'Friction with the surface', 'The pressure gradient force', 'Thermal convection'],
-      correct: 1,
-      explanation: 'Near the surface, FRICTION slows the wind below the geostrophic speed. This reduces the Coriolis deflection, allowing the pressure gradient force to turn the wind slightly inward toward lower pressure — typically 10–30° across the isobars depending on terrain roughness.'
-    },
-    {
-      id: 'met03_06',
-      question: 'QNH is defined as:',
-      options: ['Atmospheric pressure at the aerodrome reference point', 'Atmospheric pressure corrected to mean sea level using ISA temperature', 'Standard pressure of 1013.25 hPa', 'Pressure at aircraft level'],
-      correct: 1,
-      explanation: 'QNH is the atmospheric pressure at the station corrected to Mean Sea Level (MSL) using ISA temperature assumptions. With QNH set on the altimeter sub-scale, the altimeter reads elevation above MSL when on the ground, and altitude above MSL in flight.'
-    },
-    {
-      id: 'met03_07',
-      question: 'From high to low pressure, look out below. This means:',
-      options: ['High QNH areas are safer to fly over', 'Flying into lower-QNH area with fixed altimeter setting, true altitude is lower than indicated', 'Wind speed increases flying toward low pressure', 'Aircraft descends automatically toward low pressure'],
-      correct: 1,
-      explanation: 'When flying from high QNH to low QNH without resetting the altimeter, the altimeter over-reads — it shows a higher altitude than the aircraft is actually at. True altitude is LESS than indicated. The mnemonic "high to low, look out below" captures this hazard.'
-    },
-    {
-      id: 'met03_08',
-      question: 'The Foehn effect refers to:',
-      options: ['Cooling of air on the windward side of mountains', 'Warming and drying of air on the lee side of mountains due to orographic lift', 'Sea breeze circulation on coastal areas', 'Turbulence generated by mountain waves'],
-      correct: 1,
-      explanation: 'The Foehn (or Föhn) effect: as moist air is forced over a mountain, it cools at the DALR then SALR (releasing latent heat via condensation). On the lee side, it descends at the DALR — ending up WARMER and DRIER than it was at the same height on the windward side.'
-    },
-    {
-      id: 'met03_09',
-      question: 'A pressure of 978 hPa is described as:',
-      options: ['High pressure', 'Normal pressure', 'Low pressure', 'Standard pressure'],
-      correct: 2,
-      explanation: 'Standard MSL pressure is 1013.25 hPa. Pressure significantly below this (978 hPa is 35 hPa below standard) indicates a depression (low pressure system). Deep lows over the North Atlantic may reach 960 hPa or lower.'
-    },
-    {
-      id: 'met03_10',
-      question: 'Mountain waves are most likely to develop when:',
-      options: ['Wind direction is parallel to the mountain ridge and speed is less than 15 kt', 'Wind is at approximately 90° to the ridge, speeds exceed 25 kt, and the atmosphere is stable', 'Unstable air crosses low hills in any direction', 'Temperature inversions are absent'],
-      correct: 1,
-      explanation: 'Mountain waves (lee waves) require: (1) Wind approximately perpendicular (±30°) to the ridge; (2) Wind speed exceeding ~25 kt, increasing with altitude; (3) Stable atmosphere (to allow wave propagation). Associated with severe turbulence, rotor zones, and lenticular clouds.'
-    },
-    {
-      id: 'met03_11',
-      question: 'The sea breeze develops during the day because:',
-      options: ['The sea heats faster than the land, creating lower pressure over the sea', 'The land heats faster than the sea, creating lower pressure over land, drawing cooler air from the sea', 'Coriolis force pushes air from sea to land', 'High pressure builds over the sea at night'],
-      correct: 1,
-      explanation: 'Sea breeze (day): land heats faster than sea → air over land rises and pressure drops → cooler, denser sea air flows onshore (sea breeze). At night, the process reverses (land breeze) as land cools faster than the sea.'
-    },
-    {
-      id: 'met03_12',
-      question: 'Wind shear is defined as:',
-      options: ['Change of wind direction only over a distance', 'Change of wind speed only over a distance', 'Change of wind speed and/or direction over a given distance (horizontal or vertical)', 'Turbulence caused by friction'],
-      correct: 2,
-      explanation: 'Wind shear is the rate of change of wind speed and/or direction over a given horizontal or vertical distance. Vertical wind shear is most hazardous during takeoff and landing (below 1500 ft AGL), where it can cause sudden changes in airspeed and lift.'
-    },
+    { id: 'met03_01', question: 'Diurnal variation of temperature is greatest when wind is', options: ['Calm', 'Light', 'Strong', 'Gusty'], correct: 0, explanation: 'Calm wind allows maximum diurnal temperature range.' },
+    { id: 'met03_02', question: 'Diurnal variation of temperature is maximum over', options: ['Forest', 'Ocean', 'Land', 'Water'], correct: 2, explanation: 'Land has low specific heat causing max diurnal variation.' },
+    { id: 'met03_03', question: 'ALBEDO is', options: ['Radiation received by earth', 'Amount of heat', 'Reflecting power of earth', 'Absorbed radiation'], correct: 2, explanation: 'Albedo is the reflectivity (reflecting power) of a surface.' },
+    { id: 'met03_04', question: 'Minimum temperature is reached at', options: ['Sunrise', 'Midnight', '1/2-1 hour after dawn', 'Before dusk'], correct: 0, explanation: 'Minimum temperature occurs around sunrise.' },
+    { id: 'met03_05', question: 'Cloudy nights are', options: ['Cold', 'Normal', 'Warm', 'Freezing'], correct: 2, explanation: 'Clouds trap terrestrial radiation keeping nights warm.' },
+    { id: 'met03_06', question: 'Higher the temperature ___ would be the wavelength of emitted radiation', options: ['Longer', 'Shorter', 'Same', 'Constant'], correct: 1, explanation: 'Higher temperature gives shorter wavelength (Wien law).' },
+    { id: 'met03_07', question: 'Specific heat of land is ___ than that of water', options: ['Lower', 'Same', 'Higher', 'Equal'], correct: 0, explanation: 'Land has lower specific heat than water.' },
+    { id: 'met03_08', question: 'The solar radiation consists of about 46%', options: ['UV', 'IR', 'Visible', 'X-ray'], correct: 2, explanation: 'About 46% of solar energy is in the visible spectrum.' },
+    { id: 'met03_09', question: '-40 C = -40 F', options: ['True', 'False', 'Only at sea level', 'Sometimes'], correct: 0, explanation: 'The Celsius and Fahrenheit scales intersect at -40.' },
+    { id: 'met03_10', question: 'Diurnal variation of temperature is least on a day when it is', options: ['Clear', 'Partly cloudy', 'Cloudy', 'Overcast'], correct: 3, explanation: 'Overcast skies suppress both heating and cooling.' },
   ],
 
-  // ── MET04: Clouds, Fog & Visibility ──
+  // ── MET04: Air Density ──
   met04: [
-    {
-      id: 'met04_01',
-      question: 'The WMO classifies clouds into four families based on altitude. Which is correct?',
-      options: ['High (Ci), Middle (Alto), Low (Strato), Vertical (Cumulo)', 'High (Ci/Cs/Cc), Middle (As/Ac), Low (St/Sc/Ns), Vertical development (Cu/Cb)', 'Stratus, Cumulus, Cirrus, Nimbus', 'Layer, Heap, Veil, Wave'],
-      correct: 1,
-      explanation: 'WMO cloud families: HIGH (Cirrus, Cirrostratus, Cirrocumulus — above ~20,000 ft); MIDDLE (Altostratus, Altocumulus — 6,500–20,000 ft); LOW (Stratus, Stratocumulus, Nimbostratus — surface to 6,500 ft); VERTICAL DEVELOPMENT (Cumulus, Cumulonimbus — all levels).'
-    },
-    {
-      id: 'met04_02',
-      question: 'Cumulonimbus clouds are associated with:',
-      options: ['Light drizzle and stable conditions', 'Severe turbulence, heavy rain/hail, lightning, icing, and windshear', 'Smooth flying conditions above FL200', 'Only light precipitation'],
-      correct: 1,
-      explanation: 'Cumulonimbus (Cb) clouds are the most hazardous to aviation — associated with: severe turbulence (especially below and near the cloud), heavy rain/hail, lightning, severe icing, downbursts and windshear, and tornadoes. Cb should NEVER be penetrated.'
-    },
-    {
-      id: 'met04_03',
-      question: 'The cloud with the greatest horizontal extent and most continuous precipitation is:',
-      options: ['Cumulonimbus', 'Nimbostratus', 'Altostratus', 'Stratus'],
-      correct: 1,
-      explanation: 'Nimbostratus (Ns) is a thick, dark grey layer cloud producing continuous moderate to heavy rain or snow. It typically extends over thousands of square kilometres and can reach from near the surface to FL200 in frontal systems.'
-    },
-    {
-      id: 'met04_04',
-      question: 'Radiation fog forms most readily under conditions of:',
-      options: ['Strong winds, overcast sky, high humidity', 'Light winds, clear sky, high relative humidity, and cold nights', 'Strong winds and heavy cloud cover', 'Daytime heating in summer'],
-      correct: 1,
-      explanation: 'Radiation fog formation requires: (1) Clear sky (for effective radiation cooling); (2) High relative humidity; (3) Light winds (2–8 kt — calm winds prevent mixing, strong winds dissipate fog); (4) Long nights (especially autumn/winter). It forms just after midnight and dissipates after sunrise.'
-    },
-    {
-      id: 'met04_05',
-      question: 'Advection fog forms when:',
-      options: ['Cold air moves over a warm sea surface', 'Warm moist air moves over a cold surface and is cooled to its dew point', 'Air descends in anticyclones', 'Radiation cooling occurs overnight'],
-      correct: 1,
-      explanation: 'Advection fog forms when WARM MOIST AIR moves horizontally over a COLD SURFACE and is cooled to its dew point. Common over cold ocean currents (e.g., Grand Banks) and when warm air moves inland over cold ground in spring.'
-    },
-    {
-      id: 'met04_06',
-      question: 'Hill fog (upslope fog) forms when:',
-      options: ['Fog from valleys rises to cover hills', 'Moist air is forced to rise over hills, cools adiabatically to dew point, and cloud/fog forms', 'Hills radiate more heat than valleys', 'Wind pushes valley fog up slopes'],
-      correct: 1,
-      explanation: 'Hill fog (orographic fog) forms when moist air is forced up a hillside or mountain slope, cools adiabatically, and reaches its dew point. The resulting cloud envelops the terrain — appearing as fog on the hill but as low cloud from a distance.'
-    },
-    {
-      id: 'met04_07',
-      question: 'The cloud type that appears as white mares\' tails and is composed of ice crystals is:',
-      options: ['Altocumulus', 'Cirrus', 'Cirrostratus', 'Altostratus'],
-      correct: 1,
-      explanation: 'Cirrus (Ci) appears as wispy white "mares\' tails" composed entirely of ice crystals. Found above 20,000 ft. A veil of cirrostratus may follow, producing a halo around the sun or moon, often indicating an approaching warm front.'
-    },
-    {
-      id: 'met04_08',
-      question: 'CAVOK means:',
-      options: ['Cloud and Visibility are both zero', 'Ceiling And Visibility OK — visibility ≥10 km, no cloud below 5000 ft or MSA, and no significant weather', 'Cloud Above Visual Obstructions Knows', 'Ceiling Above Visible Operational Levels Known'],
-      correct: 1,
-      explanation: 'CAVOK (Ceiling And Visibility OK) in a METAR/TAF requires ALL of: (1) Visibility ≥ 10 km; (2) No CB or TCU at any height, no cloud below 5000 ft or Minimum Sector Altitude (whichever is higher); (3) No significant weather (thunderstorm, precipitation, fog, etc.).'
-    },
-    {
-      id: 'met04_09',
-      question: 'Lenticular clouds (ACSL/CCSL) indicate:',
-      options: ['Approaching cold front', 'Standing mountain waves and severe turbulence in rotor zones below', 'Stable, smooth flying conditions', 'Tropical cyclone formation'],
-      correct: 1,
-      explanation: 'Lenticular (lens-shaped) clouds — Altocumulus Standing Lenticular (ACSL) or Cirrocumulus Standing Lenticular (CCSL) — form in the crests of mountain waves. They indicate active standing waves and severe turbulence, especially in the rotor zone below wave crests.'
-    },
-    {
-      id: 'met04_10',
-      question: 'In a METAR, "FEW" cloud means:',
-      options: ['1–2 oktas (eighths) of sky covered', '3–4 oktas of sky covered', '5–7 oktas of sky covered', '8 oktas (overcast)'],
-      correct: 0,
-      explanation: 'METAR cloud amounts: FEW = 1–2 oktas (1/8 to 2/8 sky cover); SCT (Scattered) = 3–4 oktas; BKN (Broken) = 5–7 oktas; OVC (Overcast) = 8 oktas (full coverage). FEW is not reported below the MSA threshold in CAVOK conditions.'
-    },
-    {
-      id: 'met04_11',
-      question: 'Precipitation fog can form over land when:',
-      options: ['Snow falls through sub-zero air', 'Rain falls through a layer of cold air that is already saturated or near saturation', 'Drizzle falls from stratus clouds', 'Orographic lifting causes condensation'],
-      correct: 1,
-      explanation: 'Precipitation fog (frontal fog) forms when rain falls from warm air above a frontal surface into cooler air below that is near saturation. The falling rain evaporates into the cold air, raising its humidity to saturation and causing fog ahead of a warm front.'
-    },
-    {
-      id: 'met04_12',
-      question: 'Prevailing visibility in a METAR is defined as:',
-      options: ['The maximum visibility in any direction', 'The visibility that is equalled or exceeded over at least half of the horizon', 'The vertical visibility through fog', 'The visibility along the runway centreline'],
-      correct: 1,
-      explanation: 'Prevailing visibility is the greatest visibility value that is equalled or exceeded around at least HALF of the horizon circle. It does not need to be continuous. If visibility varies significantly around the horizon, it may be reported as two or more directional values.'
-    },
+    { id: 'met04_01', question: 'Density is ___ at poles than equator', options: ['Higher', 'Lower', 'Same', 'Variable'], correct: 0, explanation: 'Colder polar air is denser than equatorial air.' },
+    { id: 'met04_02', question: 'The altitude in ISA at which air density equals observed density is called', options: ['Density Altitude', 'ISA Density', 'Real Density', 'Pressure Altitude'], correct: 0, explanation: 'Density altitude is the ISA altitude for the observed density.' },
+    { id: 'met04_03', question: 'Higher density altitude means ___ density', options: ['Higher', 'Lower', 'Same', 'Unchanged'], correct: 1, explanation: 'Higher density altitude corresponds to lower air density.' },
+    { id: 'met04_04', question: 'For given pressure and temperature moist air has density', options: ['Higher', 'Lower', 'Same', 'Variable'], correct: 1, explanation: 'Water vapour is lighter than dry air, so moist air is less dense.' },
+    { id: 'met04_05', question: 'Air is less denser in', options: ['High Altitudes', 'Warm Air', 'High humidity', 'All these'], correct: 3, explanation: 'Altitude, warmth and humidity all reduce density.' },
+    { id: 'met04_06', question: 'If pressure increases the density altitude', options: ['Increases', 'Lowers', 'Remains the same', 'Doubles'], correct: 1, explanation: 'Higher pressure compresses air, reducing density altitude.' },
+    { id: 'met04_07', question: 'For every 1 C change in temperature, density altitude differs by', options: ['33 ft', '100 ft', '120 ft', '210 ft'], correct: 2, explanation: 'Density altitude changes by approximately 120 ft per 1 C.' },
+    { id: 'met04_08', question: 'Above 8 km density is ___ at poles than at equator', options: ['Higher', 'Lower', 'Same', 'Equal'], correct: 1, explanation: 'Above 8 km the cold equatorial column makes density at equator higher and lower at poles.' },
+    { id: 'met04_09', question: 'Density altitude may be defined as', options: ['Altitude in standard atmosphere where prevailing pressure occurs', 'Altitude in standard atmosphere where prevailing density occurs', 'Surface of constant pressure related to 1013.2 hPa', 'Indicated altitude'], correct: 1, explanation: 'Density altitude is ISA altitude with same density as observed.' },
+    { id: 'met04_10', question: 'Density is usually expressed as', options: ['Kg/sq m', 'g/cu m', 'N/sq m', 'kg/cu m'], correct: 3, explanation: 'Density is mass per unit volume, kg/cu m.' },
   ],
 
-  // ── MET05: Precipitation & Icing ──
+  // ── MET05: Humidity ──
   met05: [
-    {
-      id: 'met05_01',
-      question: 'Clear ice (glaze ice) on aircraft forms most rapidly when:',
-      options: ['Flying through cirrus clouds at −40°C', 'Flying through supercooled large water droplets at temperatures between 0°C and −10°C', 'Flying through dry snow at temperatures below −20°C', 'At temperatures below −40°C in any cloud'],
-      correct: 1,
-      explanation: 'Clear (glaze) ice forms when large supercooled water droplets freeze slowly on contact with the aircraft — most commonly between 0°C and −10°C. The water spreads before freezing, forming a dense, clear, hard layer that is the most hazardous type of structural icing due to its weight and difficulty to remove.'
-    },
-    {
-      id: 'met05_02',
-      question: 'Rime ice forms:',
-      options: ['From large supercooled droplets at temperatures near 0°C', 'From small supercooled droplets that freeze immediately on contact, forming opaque white ice, typically at temperatures below −10°C', 'Only inside cumulonimbus clouds', 'Only in clear air at high altitudes'],
-      correct: 1,
-      explanation: 'Rime ice forms when small supercooled water droplets freeze immediately on contact before they can flow along the surface. It appears white, opaque and brittle. Most common in stratiform clouds at temperatures between −10°C and −20°C. Less dense and easier to shed than clear ice.'
-    },
-    {
-      id: 'met05_03',
-      question: 'Mixed ice is:',
-      options: ['Ice that forms only in cumulonimbus clouds', 'A combination of clear and rime ice resulting in rough, irregular accretion', 'Ice mixed with rain and snow on the runway', 'Ice formed inside fuel tanks'],
-      correct: 1,
-      explanation: 'Mixed ice is a combination of clear and rime ice that forms when conditions alternate between large and small droplets, or temperatures fluctuate near the boundary between clear and rime ice formation. Results in rough, irregular, hard accretion that significantly disrupts airflow.'
-    },
-    {
-      id: 'met05_04',
-      question: 'The most hazardous condition for structural icing is:',
-      options: ['Thin cirrus at FL350', 'Supercooled large droplet (SLD) icing in freezing rain or freezing drizzle', 'Dry snow at −30°C', 'Clear air icing above FL400'],
-      correct: 1,
-      explanation: 'Supercooled Large Droplet (SLD) icing (freezing rain or freezing drizzle) is the most hazardous structural icing condition. Large droplets impact further back on the wing behind the protected zone, forming clear ice ridges that severely degrade lift and increase drag.'
-    },
-    {
-      id: 'met05_05',
-      question: 'Carburetor icing is most likely when ambient conditions are:',
-      options: ['Below −30°C with no visible moisture', 'Temperature +30°C and relative humidity 30%', 'Temperature 5–20°C with high relative humidity', 'Temperature −10°C and clear sky'],
-      correct: 2,
-      explanation: 'Carburettor icing is most likely at temperatures between approximately −5°C and +30°C with high relative humidity (above 70%). The venturi effect in the carburettor causes evaporative cooling of 20–30°C, allowing ice to form even when ambient temperatures are well above 0°C.'
-    },
-    {
-      id: 'met05_06',
-      question: 'Freezing rain occurs when:',
-      options: ['Rain falls and temperature is below 0°C throughout', 'Rain falls through a warm layer aloft, then through a shallow sub-zero layer near the surface, and remains supercooled until it hits a surface', 'Snow melts at altitude and refreezes before landing', 'Rain freezes inside cumulonimbus clouds'],
-      correct: 1,
-      explanation: 'Freezing rain: occurs in a warm sector or near a warm front. Rain falls from warmer air above (above 0°C layer), passes through a shallow sub-zero layer near the surface, and arrives as supercooled liquid that freezes on contact with surfaces below 0°C. Creates severe icing hazard.'
-    },
-    {
-      id: 'met05_07',
-      question: 'Hail is most commonly associated with:',
-      options: ['Nimbostratus clouds', 'Frontal stratus in winter', 'Large cumulonimbus clouds with strong updrafts', 'High cirrus clouds'],
-      correct: 2,
-      explanation: 'Hail forms inside CUMULONIMBUS clouds when ice pellets are carried up and down in strong updrafts and downdrafts, accreting supercooled water droplets in each cycle until heavy enough to fall. Large Cb with strong updrafts (>100 ft/sec) produce larger hailstones.'
-    },
-    {
-      id: 'met05_08',
-      question: 'Engine intake icing is most critical for:',
-      options: ['Turboprop engines during descent', 'Turbofan engines only at altitude', 'Piston engines with carburetors and turbine engines during ground operations', 'Jet engines at cruise altitude'],
-      correct: 2,
-      explanation: 'Engine intake icing: (1) PISTON carburettor engines — vulnerable in humid air above 0°C; (2) TURBINE engines — intake lip icing at low power (ground idle, approach) can break off and cause compressor damage. Turboprops with pitot-type intakes are particularly vulnerable.'
-    },
+    { id: 'met05_01', question: 'Ratio in % between water vapour in air to that air can hold at same temperature is', options: ['Humidity', 'Relative humidity', 'Dew point', 'Specific humidity'], correct: 1, explanation: 'Relative humidity is actual vapour over saturation capacity at same temp.' },
+    { id: 'met05_02', question: 'Temperature to which air be cooled at constant pressure to become saturated', options: ['Wet bulb temperature', 'Dry bulb temperature', 'Dew point', 'Humidity'], correct: 2, explanation: 'Dew point is the cooling temperature at constant pressure for saturation.' },
+    { id: 'met05_03', question: 'Free air temp, Wet bulb and Dew point are equal when', options: ['Air temperature is 0 C', 'Relative humidity is 100%', 'Air temperature is below 0 C', 'Air is dry'], correct: 1, explanation: 'At 100% RH all three temperatures coincide.' },
+    { id: 'met05_04', question: 'Spread between Free air temp and Dew point is ___ when saturated', options: ['Large', 'Least', 'Same', 'Maximum'], correct: 1, explanation: 'At saturation the spread (T-Td) is zero or minimum.' },
+    { id: 'met05_05', question: 'Saturation vapour pressure over water is ___ than over ice', options: ['More', 'Less', 'Same', 'Variable'], correct: 0, explanation: 'SVP over water exceeds SVP over ice at same temperature.' },
+    { id: 'met05_06', question: 'As temperature increases, amount of water vapour required to saturate it', options: ['Decreases', 'Increases', 'Remains same', 'Doubles'], correct: 1, explanation: 'Warm air can hold more moisture; saturation amount increases.' },
+    { id: 'met05_07', question: 'Actual amount of water vapour in given volume at given temperature is', options: ['Relative Humidity', 'Specific Humidity', 'Absolute Humidity', 'Mixing Ratio'], correct: 2, explanation: 'Absolute humidity is vapour mass per volume of air.' },
+    { id: 'met05_08', question: 'Humidity Mixing Ratio ___ when air is lifted adiabatically (unsaturated)', options: ['Decreases', 'Remains constant', 'Increases', 'Fluctuates'], correct: 1, explanation: 'Mixing ratio is conserved in dry adiabatic lifting.' },
+    { id: 'met05_09', question: 'Lowest temperature air would attain by evaporating water to saturate it', options: ['Wet bulb temp', 'Dry bulb temp', 'Dew point', 'Ambient'], correct: 0, explanation: 'Wet bulb temperature is achieved through evaporative cooling.' },
+    { id: 'met05_10', question: 'On a rainy day compared to sunny, length of runway required is', options: ['More', 'Less', 'Same', 'Half'], correct: 0, explanation: 'Wet runway needs longer length due to reduced friction.' },
   ],
 
-  // ── MET06: Thunderstorms, Turbulence & Wind Shear ──
+  // ── MET06: Winds ──
   met06: [
-    {
-      id: 'met06_01',
-      question: 'The three stages of a thunderstorm cell development are:',
-      options: ['Growth, Mature, Dissipating', 'Cumulus, Cumulonimbus, Dissipating', 'Developing, Active, Inactive', 'Convective, Frontal, Orographic'],
-      correct: 0,
-      explanation: 'A thunderstorm cell develops through three stages: (1) CUMULUS (developing) stage — strong updrafts only; (2) MATURE stage — updrafts AND downdrafts, most hazardous, lightning, hail, tornadoes; (3) DISSIPATING stage — downdrafts dominate, precipitation decreases.'
-    },
-    {
-      id: 'met06_02',
-      question: 'The most hazardous stage of a thunderstorm for aircraft is:',
-      options: ['Developing (cumulus) stage', 'Mature stage', 'Dissipating stage', 'All stages are equally dangerous'],
-      correct: 1,
-      explanation: 'The MATURE stage is most hazardous: both updrafts and downdrafts coexist (severe turbulence), heaviest precipitation, lightning, hail, lowest cloud tops, microbursts, windshear, and severe icing. An aircraft can be torn apart by the turbulence in a mature Cb.'
-    },
-    {
-      id: 'met06_03',
-      question: 'SIGMET information covers which types of significant meteorological phenomena?',
-      options: ['Routine weather at aerodromes only', 'Severe turbulence, severe icing, tropical cyclones, severe mountain wave, sandstorm/duststorm, volcanic ash', 'Only icing and turbulence above FL100', 'Meteorological conditions below 3000 ft AGL'],
-      correct: 1,
-      explanation: 'SIGMETs (Significant Meteorological Information) are issued for phenomena hazardous to ALL aircraft: severe/extreme turbulence (including CAT), severe icing, tropical cyclones, severe mountain wave (marked by CAT or rotor), sandstorm/duststorm, and volcanic ash and radioactive cloud.'
-    },
-    {
-      id: 'met06_04',
-      question: 'Clear Air Turbulence (CAT) is most commonly associated with:',
-      options: ['Ground level friction turbulence', 'Wind shear near the jet stream, often at or just below the tropopause', 'Thunderstorms at low altitude', 'Coastal sea breezes'],
-      correct: 1,
-      explanation: 'CAT occurs in clear air (no clouds), typically in the vicinity of the jet stream and areas of strong wind shear near the tropopause. It gives no radar or visual warning. Most severe on the polar (lower pressure) side of the jet core.'
-    },
-    {
-      id: 'met06_05',
-      question: 'Low-level windshear (LLWS) is most hazardous because:',
-      options: ['It causes structural damage to the aircraft', 'During takeoff/approach, a sudden change from headwind to tailwind reduces lift at a critical phase when altitude and airspeed margins are minimal', 'It only occurs in thunderstorm conditions', 'It always gives visible warning (dark clouds)'],
-      correct: 1,
-      explanation: 'LLWS below 1500 ft AGL is hazardous because: (1) Airspeed/lift changes suddenly; (2) Altitude and airspeed margins are minimal during TO/approach; (3) Recovery time is limited. Encountering a tailwind shear reduces IAS, lift, and climb performance — potentially catastrophic below decision height.'
-    },
-    {
-      id: 'met06_06',
-      question: 'A microburst is characterised by:',
-      options: ['Large-scale horizontal wind associated with cyclones', 'An intense small-scale downdraft that produces a divergent wind pattern at the surface — producing headwind followed rapidly by tailwind', 'Rotating windstorm below cumulonimbus', 'Sustained strong winds above FL200'],
-      correct: 1,
-      explanation: 'A microburst is a concentrated downdraft that hits the surface and spreads outward. An aircraft flying through it encounters: first a HEADWIND (increasing performance) then a rapid TAILWIND (decreasing performance + downdraft). This sequence is extremely dangerous during take-off and landing.'
-    },
-    {
-      id: 'met06_07',
-      question: 'Mountain wave turbulence (rotor turbulence) is most severe:',
-      options: ['At cloud top level', 'In the lenticular cloud itself', 'Below the wave crests in the rotor zone (roughly at or below the mountain-top level)', 'On the windward side of the mountains'],
-      correct: 2,
-      explanation: 'The rotor zone is a highly turbulent area below the wave crests, typically near and below mountain-top level on the lee side. Rotors contain severe to extreme turbulence with violent vertical currents and possible roll-upset. The rotor cloud (Arc-shaped roll cloud) marks the rotor zone.'
-    },
-    {
-      id: 'met06_08',
-      question: 'When approaching a squall line of thunderstorms, the safest option is:',
-      options: ['Penetrate at the highest available altitude', 'Fly along the line to find a gap and fly through at low altitude', 'Avoid the entire squall line by at least 20 NM, or divert by 50+ NM if possible', 'Accelerate to maximum speed and fly through quickly'],
-      correct: 2,
-      explanation: 'Squall lines should NEVER be penetrated. They may have no safe gaps. The recommended action is to avoid the squall line by at least 20 NM and individual Cb cells by 20+ NM, or divert to fly around the entire system. Airborne weather radar is essential for thunderstorm avoidance.'
-    },
-    {
-      id: 'met06_09',
-      question: 'Mechanical turbulence is caused by:',
-      options: ['Convective heating of the surface', 'Windflow disturbed by obstacles such as buildings, trees, hills, and surface roughness', 'Jet stream wind shear', 'Mountain waves'],
-      correct: 1,
-      explanation: 'Mechanical (or frictional) turbulence results from wind flowing over rough or irregular surfaces — buildings, trees, uneven terrain. It creates eddies and gusts in the boundary layer, typically below 2,000 ft AGL. Intensity increases with wind speed and surface roughness.'
-    },
-    {
-      id: 'met06_10',
-      question: 'Turbulence intensity "MODERATE" is defined as causing:',
-      options: ['Slight erratic attitude changes with no difficulty controlling the aircraft', 'Significant changes in attitude, altitude, or airspeed — occupants feel strain against seat belts, unsecured objects displaced', 'Momentary loss of control with extreme pitching, negative g', 'Aircraft structural failure'],
-      correct: 1,
-      explanation: 'Moderate turbulence: significant but not extreme. Attitude, altitude, and airspeed change appreciably. Occupants feel definite strain against seat belts; unsecured objects move. Flying is possible but control requires effort. Severe turbulence: momentary loss of control, violent jolts, structural damage possible.'
-    },
+    { id: 'met06_01', question: 'In N hemisphere due to rotation of earth winds are deflected to', options: ['Left', 'Right', 'Up', 'Down'], correct: 1, explanation: 'Coriolis deflects winds to the right in N hemisphere.' },
+    { id: 'met06_02', question: 'Coriolis force is strongest at', options: ['Mid latitudes', 'Poles', 'Equator', 'Tropics'], correct: 1, explanation: 'Coriolis is maximum at poles, zero at equator.' },
+    { id: 'met06_03', question: 'Geostrophic wind is due to balance between forces', options: ['Coriolis and Friction', 'Pressure gradient and Cyclostrophic', 'Pressure gradient and Coriolis', 'Friction and gradient'], correct: 2, explanation: 'Geostrophic wind balances pressure gradient and Coriolis.' },
+    { id: 'met06_04', question: 'Fohn winds are ___ on the Leeward side of a mountain', options: ['Dry & Warm', 'Cold & Humid', 'Cool & Dry', 'Hot & Humid'], correct: 0, explanation: 'Fohn (chinook) is dry warm wind on leeward slope.' },
+    { id: 'met06_05', question: 'Wind sliding down a hill during night is called', options: ['Fohn', 'Anabatic', 'Katabatic', 'Sea breeze'], correct: 2, explanation: 'Katabatic wind drains down hillside at night.' },
+    { id: 'met06_06', question: 'Sea breeze sets in by ___ and dies off at ___', options: ['Night/Day', 'Day/Night', 'Both Day and Night', 'Dusk/Dawn'], correct: 1, explanation: 'Sea breeze blows during day, dies off at night.' },
+    { id: 'met06_07', question: 'Lines of constant wind speed drawn on weather charts are called', options: ['Isobars', 'Isotachs', 'Isogons', 'Isohyets'], correct: 1, explanation: 'Isotachs connect equal wind speeds.' },
+    { id: 'met06_08', question: 'A change in wind direction from 310 to 020 is', options: ['Backing', 'Veering', 'Constant', 'Shifting'], correct: 1, explanation: 'Clockwise rotation (310 to 020) is veering.' },
+    { id: 'met06_09', question: 'Wind blows anticlockwise around low in N-hemisphere', options: ['True', 'False', 'Variable', 'Sometimes'], correct: 0, explanation: 'Coriolis in N hem gives anticlockwise rotation around lows.' },
+    { id: 'met06_10', question: 'Friction causes winds to cross isobars by ___ over land and ___ over sea', options: ['20/10', '20/30', '40/30', '30/20'], correct: 3, explanation: 'Friction angle is about 30 deg over land and 10-20 deg over sea.' },
   ],
 
-  // ── MET07: Aviation Weather Reports & Forecasts ──
+  // ── MET07: Visibility and Fog ──
   met07: [
-    {
-      id: 'met07_01',
-      question: 'A METAR is:',
-      options: ['A meteorological terminal aerodrome forecast for the next 24 hours', 'A routine aerodrome meteorological observation/report issued at set intervals (hourly or half-hourly)', 'A significant meteorological warning for en-route aircraft', 'A pilot weather report'],
-      correct: 1,
-      explanation: 'A METAR (Meteorological Aerodrome Report) is a routine observation of actual weather conditions at an aerodrome, issued at fixed intervals (usually every 30 or 60 minutes). It includes: wind, visibility, weather, cloud, temperature/dew point, QNH, and remarks.'
-    },
-    {
-      id: 'met07_02',
-      question: 'A TAF covers a validity period of:',
-      options: ['1 hour only', '3 hours only', 'Up to 30 hours (standard 9 or 24 hours)', 'Exactly 6 hours'],
-      correct: 2,
-      explanation: 'A TAF (Terminal Aerodrome Forecast) is issued for aerodromes with regular commercial traffic. Standard TAFs are valid for 9 or 24 hours; long-range TAFs can extend to 30 hours. They are updated at least every 3 hours (for 9-hr TAFs) or 6 hours (for 24-hr TAFs).'
-    },
-    {
-      id: 'met07_03',
-      question: 'In a METAR, the wind group "24018G30KT" means:',
-      options: ['Wind from 240° at 18 kt maximum, gusting 30 kt', 'Wind from 240° at 18 kt with gusts to 30 kt', 'Wind from 240°T at 18 kt ground level, 30 kt at altitude', 'Gust factor 12 kt, mean wind 18 kt from 240°'],
-      correct: 1,
-      explanation: 'METAR wind code: 240 = direction (from 240°M), 18 = mean speed in knots, G = gust, 30KT = gust speed. So: wind FROM 240°, mean 18 kt, GUSTING to 30 kt. Gusts are reported when the peak speed is ≥10 kt above the mean speed.'
-    },
-    {
-      id: 'met07_04',
-      question: 'A SPECI is:',
-      options: ['A monthly weather summary for an aerodrome', 'A special (non-routine) aerodrome observation issued when significant meteorological changes occur', 'A severe weather SIGMET', 'A pilot report of special weather phenomena'],
-      correct: 1,
-      explanation: 'SPECI (Special Aerodrome Meteorological Observation) is issued when significant meteorological changes occur between routine METAR intervals — such as: wind shifting beyond threshold, visibility falling below limits, wind shear occurrence, CB development, or rapid pressure changes.'
-    },
-    {
-      id: 'met07_05',
-      question: 'A PIREP (Pilot Report) contains:',
-      options: ['Forecast weather from the met office for the next flight', 'Actual weather encountered by a pilot in flight, reported to ATC for dissemination to other pilots', 'ATC radar observations of weather', 'Ground-based meteorological observations'],
-      correct: 1,
-      explanation: 'PIREP (Pilot Report / Aircraft Meteorological Data Relay — AMDAR) reports actual in-flight weather conditions observed by pilots: turbulence level, icing type and intensity, cloud tops, wind at altitude, and any other significant phenomena. They are invaluable for supplementing model forecasts.'
-    },
-    {
-      id: 'met07_06',
-      question: 'In a TAF, the change group "TEMPO" indicates:',
-      options: ['A permanent change in conditions for more than 60% of the period', 'Temporary fluctuations in conditions lasting less than one hour each and occurring for less than half of the period', 'Temperature forecast in the TAF', 'A trend forecast over the full period'],
-      correct: 1,
-      explanation: 'TEMPO (Temporary) in a TAF indicates expected temporary fluctuations that: (1) Last less than 60 minutes each occurrence; (2) Occur for less than HALF of the indicated period. During TEMPO periods, conditions may temporarily deteriorate to the described values.'
-    },
-    {
-      id: 'met07_07',
-      question: 'The change group "BECMG" in a TAF means:',
-      options: ['Becoming — a gradual change expected to reach and remain at the new conditions within the stated period', 'Temporary deterioration below minima', 'Probability of 40% for the described conditions', 'Forecast issued by special authority'],
-      correct: 0,
-      explanation: 'BECMG (Becoming) indicates conditions are expected to change and REMAIN at the new value. The change will occur gradually at some point within the stated 2-hour window. Once the BECMG period ends, the new conditions persist until the next change group.'
-    },
-    {
-      id: 'met07_08',
-      question: 'A SIGWX (Significant Weather) chart typically shows:',
-      options: ['Surface pressure systems only', 'High-level turbulence, icing, tropopause heights, jet streams, and areas of cumulonimbus', 'Only terminal weather forecasts', 'Low-level surface observations'],
-      correct: 1,
-      explanation: 'SIGWX (Significant Weather) charts — available as LOW, MID, and HIGH level charts — show: areas of significant turbulence (moderate/severe), icing (moderate/severe), CB and embedded CB, jet stream axes and cores, tropopause heights, and tropical cyclones.'
-    },
-    {
-      id: 'met07_09',
-      question: 'In a METAR, "TS" indicates:',
-      options: ['Temperature and Sea level pressure', 'Thunderstorm at or near the aerodrome', 'Turbulence and Sandstorm', 'Thin stratus cloud'],
-      correct: 1,
-      explanation: '"TS" in the weather group of a METAR = THUNDERSTORM at or near the aerodrome. Combined with precipitation: TSRA = thunderstorm with rain; TSGR = thunderstorm with hail; TSGS = thunderstorm with small hail/snow pellets.'
-    },
-    {
-      id: 'met07_10',
-      question: 'QNH in a METAR is:',
-      options: ['Altimeter setting in hectopascals rounded down to the nearest whole hPa', 'The actual pressure at the aerodrome reference point', 'Always 1013.25 hPa', 'The pressure used to set flight levels'],
-      correct: 0,
-      explanation: 'QNH in a METAR is the local altimeter setting — the pressure corrected to MSL using ISA temperature — expressed in whole hectopascals (rounded to the nearest whole number, or down by ICAO convention). It allows pilots to set the altimeter to read correct altitude above MSL.'
-    },
-    {
-      id: 'met07_11',
-      question: 'ATIS (Automatic Terminal Information Service) is updated:',
-      options: ['Every 15 minutes automatically', 'Whenever any element of the METAR changes significantly, and at least once per hour', 'Only when visibility drops below 5 km', 'Every 6 hours with the TAF'],
-      correct: 1,
-      explanation: 'ATIS is updated whenever a new METAR is issued (at least every 30–60 minutes) or whenever any significant change in conditions occurs. Each update is identified by a new phonetic letter (Alpha, Bravo, etc.). Pilots report the received ATIS identifier on first contact with ATC.'
-    },
-    {
-      id: 'met07_12',
-      question: 'A NOTAM with type "C" (NOTAMC) is:',
-      options: ['A snowflake NOTAM about icy runways', 'A checklist NOTAM summarising all current NOTAMs in one document', 'A classified NOTAM for military use only', 'A NOTAM about communications facilities'],
-      correct: 1,
-      explanation: 'NOTAM series C (NOTAMC) is a checklist NOTAM — a cumulative list of all currently valid NOTAMs. Issued regularly to help pilots quickly identify which series A and B NOTAMs remain active, simplifying pre-flight briefing.'
-    },
+    { id: 'met07_01', question: 'Fog is reported when visibility is reduced to', options: ['Less than 1000 m', '1000 m', '1000 to 2000 m', '2000 to 5000 m'], correct: 0, explanation: 'Fog: visibility below 1000 m.' },
+    { id: 'met07_02', question: 'Radiation fog occurs', options: ['Over land', 'Over sea', 'During day', 'Anytime'], correct: 0, explanation: 'Radiation fog forms over land due to nocturnal cooling.' },
+    { id: 'met07_03', question: 'When visibility 5000-1000 m and RH near 100%, it is', options: ['Mist', 'Haze', 'Fog', 'Smoke'], correct: 0, explanation: 'Mist: visibility 1000-5000 m with high humidity.' },
+    { id: 'met07_04', question: 'Warm moist air moving over cold surface causes', options: ['Radiation Fog', 'Advection Fog', 'Frontal Fog', 'Steam Fog'], correct: 1, explanation: 'This is advection fog by definition.' },
+    { id: 'met07_05', question: 'Radiation fog forms due to', options: ['Heating of earth during day', 'Radiational cooling of earth at night', 'Advection of cold air', 'Sea spray'], correct: 1, explanation: 'Radiation fog forms by nocturnal radiative cooling.' },
+    { id: 'met07_06', question: 'Radiation fog forms over', options: ['Water', 'Land', 'Both', 'Mountains'], correct: 1, explanation: 'Radiation fog forms over land surfaces.' },
+    { id: 'met07_07', question: 'Advection fog forms during', options: ['Night only', 'Day only', 'Any time', 'Dawn only'], correct: 2, explanation: 'Advection fog can form at any time of day or night.' },
+    { id: 'met07_08', question: 'For formation of Radiation fog', options: ['Moisture, cloudy sky, nil wind', 'Moisture, clear sky, light wind', 'Moisture, cloudy sky, strong wind', 'Dry air, calm'], correct: 1, explanation: 'Radiation fog needs moisture, clear sky for cooling, light wind for mixing.' },
+    { id: 'met07_09', question: 'Fog is ___ cloud on ground', options: ['Stratocumulus', 'Stratus', 'Nimbostratus', 'Cumulus'], correct: 1, explanation: 'Fog is essentially stratus cloud on the ground.' },
+    { id: 'met07_10', question: 'Favourable pressure system for formation of fog', options: ['Lows and Cols', 'Highs and Trough', 'Lows and Ridges', 'Highs and Cols'], correct: 3, explanation: 'Highs (calm, stable) and cols (light winds) favour fog formation.' },
   ],
 
-  // ── MET08: Weather Hazards & Tropical Meteorology ──
+  // ── MET08: Vertical Motion and Clouds ──
   met08: [
-    {
-      id: 'met08_01',
-      question: 'A tropical cyclone is classified as a hurricane/typhoon when sustained winds reach:',
-      options: ['34 kt (Force 8)', '48 kt (Force 10)', '64 kt (Force 12) or more', '50 kt (Force 11)'],
-      correct: 2,
-      explanation: 'Beaufort Scale classification: Tropical Depression < 34 kt; Tropical Storm 34–63 kt; Hurricane/Typhoon ≥ 64 kt (≥ 74 mph / ≥ 119 km/h). Flight into or near tropical cyclones is strictly prohibited — extreme turbulence, hail, lightning, and structural loads exceed aircraft limits.'
-    },
-    {
-      id: 'met08_02',
-      question: 'The Inter-Tropical Convergence Zone (ITCZ) is:',
-      options: ['A subtropical high-pressure belt', 'A near-equatorial belt where trade winds from both hemispheres converge, causing convective activity, towering Cb, and heavy rain', 'A cold front that circles the globe at 30° latitude', 'The boundary between polar and tropical air masses'],
-      correct: 1,
-      explanation: 'The ITCZ is a band of low pressure near the equator where NE and SE trade winds converge. The convergence of these wind belts forces air upward, creating towering Cb, heavy rain, and frequent thunderstorms. The ITCZ migrates seasonally with the thermal equator.'
-    },
-    {
-      id: 'met08_03',
-      question: 'Windshear on final approach in the presence of a downburst typically involves:',
-      options: ['A sudden increase in headwind followed by loss of headwind/gain of tailwind with a downdraft', 'Steady increase in headwind throughout approach', 'Only turbulence with no speed change', 'Windshear only above 5000 ft AGL'],
-      correct: 0,
-      explanation: 'Downburst windshear sequence: (1) Aircraft enters the outflow — encounters INCREASING HEADWIND → lift increases, aircraft goes high; (2) Aircraft crosses the core — DOWNDRAFT pushes aircraft down; (3) Aircraft exits the outflow — TAILWIND shear, loss of airspeed and lift at minimum altitude.'
-    },
-    {
-      id: 'met08_04',
-      question: 'St. Elmo\'s fire is:',
-      options: ['A type of volcanic lightning', 'Coronal discharge visible on sharp extremities (nose, propellers, windshield) in electrically charged cloud, indicating conditions conducive to lightning', 'A search light reflection off clouds', 'A fire hazard from static discharge during refuelling'],
-      correct: 1,
-      explanation: 'St. Elmo\'s fire is a coronal electric discharge visible as a blue-green glow on aircraft extremities (nose, propeller tips, antenna, windshield) when flying in charged cloud, heavy precipitation, or near thunderstorms. It indicates strong electrostatic charging — a precursor warning of potential lightning strike.'
-    },
-    {
-      id: 'met08_05',
-      question: 'A warm front brings:',
-      options: ['Rapid clearing after passage, cumulus clouds, good visibility, and gusty winds', 'Gradual deterioration — extensive cloud sequence (Ci → Cs → As → Ns), rain, and poor visibility; conditions improve slowly after passage', 'Strong convective activity and line squalls', 'Fog only, no precipitation'],
-      correct: 1,
-      explanation: 'Warm front approach: cloud sequence from the front (hundreds of miles ahead): Cirrus → Cirrostratus → Altostratus → Nimbostratus. Rain/drizzle, poor visibility, freezing level lowering. After warm front passage: temperature rises, pressure levels off, moderate/poor visibility (fog/haze in warm sector).'
-    },
-    {
-      id: 'met08_06',
-      question: 'An occlusion (occluded front) forms when:',
-      options: ['Two warm air masses collide', 'A cold front overtakes a warm front, lifting the warm sector off the surface', 'A tropical cyclone makes landfall', 'An anticyclone moves over a depression'],
-      correct: 1,
-      explanation: 'Occlusion: the cold front moves faster than the warm front and eventually overtakes it. The warm air is completely lifted off the surface. A cold occlusion has coldest air behind the cold front; a warm occlusion has coldest air ahead of the warm front.'
-    },
-    {
-      id: 'met08_07',
-      question: 'The "anvil" top of a cumulonimbus indicates:',
-      options: ['The base of the cloud reaching the surface', 'The top of the cloud has reached the tropopause and spread horizontally due to wind shear and stable stratosphere', 'A dissipating cloud cell', 'Moderate icing zone'],
-      correct: 1,
-      explanation: 'The Cb anvil (incus) forms when strong updrafts carry ice crystals to the tropopause. The stable stratosphere prevents further vertical development — the cloud spreads horizontally downwind, forming the characteristic anvil shape. Anvil cirrus can extend hundreds of miles downwind, containing CAT.'
-    },
-    {
-      id: 'met08_08',
-      question: 'Orographic (terrain-forced) precipitation occurs on:',
-      options: ['The lee (downwind) side of mountains', 'The windward side of mountains where moist air is lifted, cools, and condenses', 'Both sides equally', 'Only at mountain peaks'],
-      correct: 1,
-      explanation: 'Orographic precipitation is heaviest on the WINDWARD side where moist air is forced upward, cools to its dew point, and condenses into cloud and precipitation. The lee side receives dry, warm Foehn air — a rain shadow effect.'
-    },
-    {
-      id: 'met08_09',
-      question: 'Volcanic ash is dangerous to aircraft because:',
-      options: ['It is only a visibility hazard', 'Fine ash particles melt in jet engine hot sections (melting point ~1100°C, below turbine temperatures), re-solidify on turbine blades, and can cause engine flameout; also abrades windscreens and blocks pitot-static ports', 'It only affects piston engines', 'Effects are limited to altitudes above FL400'],
-      correct: 1,
-      explanation: 'Volcanic ash hazards: (1) Ingested into jet engines — melts on hot turbine blades, reducing clearances and causing flameout; (2) Abrades/sandblasts windscreens and leading edges; (3) Blocks fuel system filters, pitot tubes, and static ports; (4) Not visible on weather radar. SIGMET is issued for all volcanic ash clouds.'
-    },
-    {
-      id: 'met08_10',
-      question: 'ISA deviation (ISA +/−) is the difference between:',
-      options: ['QNH and 1013.25 hPa', 'Actual Outside Air Temperature (OAT) and the ISA temperature at the same pressure altitude', 'TAS and IAS at the same altitude', 'Dew point and actual temperature'],
-      correct: 1,
-      explanation: 'ISA deviation = Actual OAT − ISA temperature at the same pressure altitude. At FL350: ISA = 15 − (35×2) = −55°C. If OAT = −45°C, then ISA deviation = −45 − (−55) = +10°C (ISA+10). Performance calculations use ISA deviation to assess non-standard temperature effects on engine and aircraft performance.'
-    },
-    {
-      id: 'met08_11',
-      question: 'Monsoon winds in South Asia are characterised by:',
-      options: ['Steady westerly winds at FL200–FL250 year-round', 'Seasonal reversal of surface winds — southwest in summer (wet) and northeast in winter (dry), driven by differential heating of land and ocean', 'Trade winds from the northeast throughout the year', 'Uniform dry easterly winds throughout the year'],
-      correct: 1,
-      explanation: 'The Indian (South Asian) Monsoon is driven by differential heating of the Asian continent and Indian Ocean. Summer (June–September): SW monsoon — warm moist air flows from ocean over land → heavy rainfall. Winter (Nov–Feb): NE monsoon — dry, cooler air flows offshore → dry season.'
-    },
-    {
-      id: 'met08_12',
-      question: 'CAT (Clear Air Turbulence) WARNING intensity levels are:',
-      options: ['Light, Moderate, Severe, Extreme', 'MOD, SEV only', 'MILD and SEVERE only', 'Slight, Moderate, Rough, Very Rough'],
-      correct: 0,
-      explanation: 'Turbulence intensity levels used in aviation: Light, Moderate, Severe, and Extreme. For SIGMETs and pilot reports: MOD TRB (moderate turbulence) and SEV TRB (severe turbulence) are the threshold levels for official reporting. Extreme turbulence implies structural damage is possible.'
-    },
+    { id: 'met08_01', question: 'Drizzle occurs from', options: ['CS', 'ST', 'NS', 'CU'], correct: 1, explanation: 'Stratus is the typical drizzle-producing cloud.' },
+    { id: 'met08_02', question: 'Showers occur from', options: ['CU', 'CB', 'AS', 'AC'], correct: 1, explanation: 'Showery precipitation comes from cumulonimbus.' },
+    { id: 'met08_03', question: 'Heavy icing is possible in', options: ['CI', 'CS', 'ST', 'CB'], correct: 3, explanation: 'CB has supercooled droplets producing severe icing.' },
+    { id: 'met08_04', question: 'Dark gray cloud giving continuous rain is called', options: ['AS', 'NS', 'ST', 'CB'], correct: 1, explanation: 'Nimbostratus produces continuous rain.' },
+    { id: 'met08_05', question: 'Clouds composed of ice crystals having feathery appearance', options: ['CI', 'CS', 'AS', 'CC'], correct: 0, explanation: 'Cirrus is feathery high cloud of ice crystals.' },
+    { id: 'met08_06', question: 'Halo is associated with the cloud', options: ['AC', 'AS', 'CS', 'CI'], correct: 2, explanation: 'Halo forms in cirrostratus (sheet of ice crystals).' },
+    { id: 'met08_07', question: 'Lenticular clouds indicate presence of', options: ['Warm Front', 'Cold front', 'Mountain waves', 'Jet stream'], correct: 2, explanation: 'Lenticular (lens-shaped) clouds indicate standing mountain waves.' },
+    { id: 'met08_08', question: 'Rain falling from cloud but not reaching ground is', options: ['Virgo', 'Virga', 'Mirage', 'Drizzle'], correct: 1, explanation: 'Virga is precipitation evaporating before reaching ground.' },
+    { id: 'met08_09', question: 'CB with distinct anvil is called', options: ['Castellanus', 'Capillatus', 'Uncinus', 'Calvus'], correct: 1, explanation: 'CB capillatus has well-defined cirrus anvil.' },
+    { id: 'met08_10', question: 'AC with cumuliform protuberances are indicative of', options: ['Stability', 'Instability', 'Neutrality', 'Inversion'], correct: 1, explanation: 'AC castellanus indicates mid-level instability.' },
+  ],
+
+  // ── MET09: Stability ──
+  met09: [
+    { id: 'met09_01', question: 'DALR = 9.8 C, ELR = 6.8 C; atmosphere is', options: ['Stable', 'Unstable', 'Indifferent', 'Neutral'], correct: 0, explanation: 'ELR < DALR means atmosphere is stable for dry air.' },
+    { id: 'met09_02', question: 'SALR = 5.5 C, ELR = 4.5 C; atmosphere is', options: ['Unstable', 'Stable', 'Indifferent', 'Neutral'], correct: 1, explanation: 'ELR < SALR means saturated air is stable.' },
+    { id: 'met09_03', question: 'DALR > ELR > SALR', options: ['Conditionally stable', 'Latently stable', 'Potentially stable', 'Absolutely unstable'], correct: 0, explanation: 'Conditional instability when ELR lies between SALR and DALR.' },
+    { id: 'met09_04', question: 'Dry air is unstable when', options: ['ELR=DALR', 'ELR>DALR', 'ELR<DALR', 'ELR=0'], correct: 1, explanation: 'Dry air unstable when ELR exceeds DALR.' },
+    { id: 'met09_05', question: 'If ELR less than SALR, atmosphere is', options: ['Absolutely unstable', 'Conditionally stable', 'Absolutely stable', 'Neutral'], correct: 2, explanation: 'ELR < SALR < DALR makes atmosphere absolutely stable.' },
+    { id: 'met09_06', question: 'DALR is approximately', options: ['5 C/km', '15 C/km', '10 C/km', '6.5 C/km'], correct: 2, explanation: 'DALR ~9.8 C/km, rounded to 10.' },
+    { id: 'met09_07', question: 'SALR at mean sea level is about', options: ['10 C/km', '5 C/km', '5 F/km', '8 C/km'], correct: 1, explanation: 'SALR averages about 5-6 C/km at MSL.' },
+    { id: 'met09_08', question: 'Inversion in atmosphere indicates', options: ['Stability', 'Instability', 'Neutrality', 'Mixing'], correct: 0, explanation: 'Inversion is a very stable layer.' },
+    { id: 'met09_09', question: 'Inversion is ___ Lapse Rate', options: ['Positive', 'Negative', 'Neutral', 'Zero'], correct: 1, explanation: 'Inversion has negative lapse rate (temp rises with height).' },
+    { id: 'met09_10', question: 'SALR approaches DALR', options: ['At 0 C', 'At -15 F', 'At -40 C', 'At 100 C'], correct: 2, explanation: 'At very low temperatures saturation vapour is small so SALR approaches DALR.' },
+  ],
+
+  // ── MET10: Optical Phenomena ──
+  met10: [
+    { id: 'met10_01', question: 'Aurora Australis occur in the', options: ['S hemisphere', 'N hemisphere', 'Equator', 'Tropics'], correct: 0, explanation: 'Aurora Australis is the southern lights.' },
+    { id: 'met10_02', question: 'Aurora Borealis occur in the', options: ['S hemisphere', 'N hemisphere', 'Equator', 'Tropics'], correct: 1, explanation: 'Borealis is northern lights.' },
+    { id: 'met10_03', question: 'Corona are formed due to ___ of light', options: ['Refraction', 'Diffraction', 'Scattering', 'Reflection'], correct: 1, explanation: 'Corona is a diffraction phenomenon.' },
+    { id: 'met10_04', question: 'Halo is produced by', options: ['Refraction', 'Diffraction', 'Scattering', 'Reflection'], correct: 0, explanation: 'Halo is refraction of light through ice crystals.' },
+    { id: 'met10_05', question: 'Halo occur in the cloud', options: ['AS', 'NS', 'CS', 'CI'], correct: 2, explanation: 'Halos form in cirrostratus (ice crystal sheet).' },
+    { id: 'met10_06', question: 'Halo is luminous ring of ___ radius', options: ['32 deg', '22 deg', '42 deg', '12 deg'], correct: 1, explanation: 'Standard halo radius is 22 degrees.' },
+    { id: 'met10_07', question: 'Halo signifies predominance in cloud of', options: ['Supercooled water drops', 'Ice crystals', 'Both', 'Dust'], correct: 1, explanation: 'Halo indicates ice crystal cloud.' },
+    { id: 'met10_08', question: 'Cloud which causes Halo has ___ chances of ice accretion', options: ['Negligible', 'Maximum', 'Medium', 'High'], correct: 0, explanation: 'Pure ice crystal clouds have negligible icing risk.' },
+    { id: 'met10_09', question: 'Superior Mirage occurs in marked', options: ['Lapse', 'Isothermal', 'Inversion', 'Adiabatic'], correct: 2, explanation: 'Superior mirage forms in temperature inversion.' },
+    { id: 'met10_10', question: 'Corona occur in ___ clouds', options: ['AS', 'NS', 'CS', 'AC'], correct: 3, explanation: 'Coronas form in thin water-droplet clouds like AC.' },
+  ],
+
+  // ── MET11: Precipitation ──
+  met11: [
+    { id: 'met11_01', question: 'When supercooled water drops and ice particles co-exist, ice crystals grow at expense of water drops because', options: ['SVP over drops less than over ice', 'SVP over ice less than over drops', 'Ice crystals convert into drops', 'They merge'], correct: 1, explanation: 'Bergeron process: lower SVP over ice causes vapour transfer.' },
+    { id: 'met11_02', question: 'Coalescence Theory explains rainfall from', options: ['Warm Clouds', 'Cold Clouds', 'Both', 'Cirrus'], correct: 0, explanation: 'Coalescence explains warm cloud rain.' },
+    { id: 'met11_03', question: 'Ice crystal Theory explains rainfall from', options: ['Warm Clouds', 'Cold Clouds', 'Both', 'Stratus'], correct: 1, explanation: 'Bergeron ice-crystal theory explains cold cloud rain.' },
+    { id: 'met11_04', question: 'Very heavy precipitation as showers over short period is', options: ['Flash floods', 'Cloud Burst', 'Orographic Rain', 'Frontal Rain'], correct: 1, explanation: 'Cloud burst is intense brief precipitation.' },
+    { id: 'met11_05', question: 'Rain shadow area is on the ___ of the mountain range', options: ['Top', 'Windward side', 'Leeward side', 'Both sides'], correct: 2, explanation: 'Rain shadow is on lee side after moisture has rained out.' },
+    { id: 'met11_06', question: 'Sleet is a mixture of', options: ['Hail & Snow', 'Rain & Snow', 'Frozen Rain', 'Ice & Hail'], correct: 1, explanation: 'Sleet is mixed rain and snow.' },
+    { id: 'met11_07', question: 'Showery precipitation occurs from', options: ['NS', 'AC', 'CB', 'ST'], correct: 2, explanation: 'CB produces showers.' },
+    { id: 'met11_08', question: 'A day is called Rainy day when rainfall in 24 hr is ___ mm or more', options: ['1.5', '2', '2.5', '5'], correct: 2, explanation: 'IMD defines rainy day as >=2.5 mm in 24 hr.' },
+    { id: 'met11_09', question: 'Areas to the ___ of western Ghats of India are rain shadow areas', options: ['W', 'S', 'E', 'N'], correct: 2, explanation: 'Eastern (leeward) side of W Ghats is rain shadow.' },
+    { id: 'met11_10', question: 'Artificial rain making is also termed as', options: ['Simulation', 'Cloud seeding', 'Nucleation', 'Inducement'], correct: 1, explanation: 'Cloud seeding is the artificial rain technique.' },
+  ],
+
+  // ── MET12: Ice Accretion ──
+  met12: [
+    { id: 'met12_01', question: 'Hoar frost occurs on airframe in clear air when airframe temperature is', options: ['Below the frost point', 'Frost point', 'Just above the frost point', 'Above 0 C'], correct: 0, explanation: 'Hoar frost sublimates onto surface below frost point.' },
+    { id: 'met12_02', question: 'Opaque Rime ice is', options: ['Light porous', 'Solid', 'Mixture of porous and solid', 'Crystal'], correct: 0, explanation: 'Rime is opaque, light and porous.' },
+    { id: 'met12_03', question: 'Rime is formed by freezing of ___ supercooled drops on airframe', options: ['Small', 'Large', 'Medium', 'Mixed'], correct: 0, explanation: 'Rime forms from small supercooled droplets freezing quickly.' },
+    { id: 'met12_04', question: 'Glazed ice is formed by freezing of ___ supercooled drops on airframe', options: ['Small', 'Large', 'Medium', 'Mixed'], correct: 1, explanation: 'Large supercooled drops form clear glaze ice on airframe.' },
+    { id: 'met12_05', question: 'The ___ ice poses serious aviation hazard', options: ['Rime', 'Hoar Frost', 'Glazed', 'All'], correct: 2, explanation: 'Glazed (clear) ice is heaviest and most dangerous.' },
+    { id: 'met12_06', question: 'Airframe icing probability decreases below -20 C as proportion of supercooled drops in cloud', options: ['Increases', 'Decreases', 'Does not change', 'Doubles'], correct: 1, explanation: 'Below -20 C clouds become mostly ice crystals.' },
+    { id: 'met12_07', question: 'CI, CS and CC clouds consist mostly of ice crystals. Icing hazard therefore', options: ['Maximum', 'Medium', 'Negligible', 'Variable'], correct: 2, explanation: 'Ice crystal clouds give negligible icing.' },
+    { id: 'met12_08', question: 'Maximum water content / ice formation expected around', options: ['-25 C level', '-20 C level', '-15 C level', '0 C level'], correct: 2, explanation: 'Liquid water content and icing peak near -15 C.' },
+    { id: 'met12_09', question: 'Carburetor icing serious at extreme temperatures', options: ['13 C', '30 to -10 C', '20 C', '40 C'], correct: 1, explanation: 'Carb icing most severe between +30 and -10 C.' },
+    { id: 'met12_10', question: 'Icing ___ the stalling speed appreciably', options: ['Decreases', 'Increases', 'Does not change', 'Doubles'], correct: 1, explanation: 'Ice raises stalling speed by distorting airfoil and adding weight.' },
+  ],
+
+  // ── MET13: Thunderstorm ──
+  met13: [
+    { id: 'met13_01', question: 'Conditions for thunderstorm formation', options: ['Steep lapse, strong winds', 'Shallow lapse, moisture', 'Steep lapse, moisture, trigger', 'Calm and dry'], correct: 2, explanation: 'TS needs instability (steep lapse), moisture, and trigger.' },
+    { id: 'met13_02', question: 'A mature thunderstorm has', options: ['Updraft only', 'Downdraft only', 'Updrafts and downdrafts', 'Calm'], correct: 2, explanation: 'Mature stage has co-existing up- and downdrafts.' },
+    { id: 'met13_03', question: 'Most hazardous cloud for aviation', options: ['CB', 'CU', 'NS', 'AS'], correct: 0, explanation: 'CB combines icing, turbulence, hail, lightning.' },
+    { id: 'met13_04', question: 'Life of a CB cell is usually', options: ['7 to 8 hrs', '3 to 4 hrs', '2-3 hr', '1 hr'], correct: 2, explanation: 'Single cell CB lasts 2-3 hours typically.' },
+    { id: 'met13_05', question: 'Diameter of Microburst is', options: ['Less than 4 km', 'Less than 2 km', 'Less than 6 km', 'Less than 10 km'], correct: 0, explanation: 'Microburst diameter is less than 4 km.' },
+    { id: 'met13_06', question: 'Diameter of Macroburst is', options: ['<4 km', '4 km or more', '>8 km', '>10 km'], correct: 1, explanation: 'Macroburst diameter is 4 km or greater.' },
+    { id: 'met13_07', question: 'Norwesters are', options: ['Western disturbances over NW India', 'Severe TS over NE India in hot weather', 'Severe TS over Peninsula', 'Polar fronts'], correct: 1, explanation: 'Norwesters are pre-monsoon severe TS over Bengal/NE India.' },
+    { id: 'met13_08', question: 'When flying through active TS, lightning strikes most likely', options: ['Above 5000 ft under anvil', 'Below cloud in rain', 'Temperature band +10 to -10 C', 'Above 10000 ft'], correct: 2, explanation: 'Charge separation peaks in 0 +/-10 C zone.' },
+    { id: 'met13_09', question: 'Hail grows by', options: ['Freezing as it leaves cloud', 'Up and down forces in CU', 'Collision with ice crystals', 'Collision with supercooled water drops'], correct: 3, explanation: 'Hail accretes layers via collision with supercooled drops.' },
+    { id: 'met13_10', question: 'Severest activity of a heat type TS lasts for', options: ['2 hrs', '30 to 45 min', '3 to 4 hr', '5 hr'], correct: 1, explanation: 'Mature phase peak activity lasts roughly 30-45 min.' },
+  ],
+
+  // ── MET14: Air Masses and Fronts and WDs ──
+  met14: [
+    { id: 'met14_01', question: 'Air mass originating at sea in low latitudes is', options: ['Polar maritime', 'Tropical continental', 'Tropical maritime', 'Polar continental'], correct: 2, explanation: 'Tropical maritime = warm sea origin.' },
+    { id: 'met14_02', question: 'If warm air mass overtakes cold air mass it is called', options: ['Cold Front', 'Warm Front', 'Occluded Front', 'Stationary'], correct: 1, explanation: 'Warm front = warm air advancing over retreating cold.' },
+    { id: 'met14_03', question: 'Cold front moves at ___ the speed of warm front', options: ['Same', 'Double', 'Half', 'Triple'], correct: 1, explanation: 'Cold fronts move about twice as fast as warm fronts.' },
+    { id: 'met14_04', question: 'CI, CS, AS, NS, ST in sequence are associated with the front', options: ['Warm', 'Cold', 'Occluded', 'Stationary'], correct: 0, explanation: 'Classic warm-front cloud sequence.' },
+    { id: 'met14_05', question: 'WDs approach India as', options: ['Cols', 'Occluded Fronts', 'Highs', 'Lows'], correct: 1, explanation: 'WDs reach India as occluded extratropical lows.' },
+    { id: 'met14_06', question: 'Maximum WDs occur in', options: ['Summers', 'Post Monsoon', 'Winters', 'Pre-monsoon'], correct: 2, explanation: 'WDs peak Dec-Feb.' },
+    { id: 'met14_07', question: 'A WD originates over', options: ['Baluchistan', 'Caspian sea', 'Mediterranean, Caspian and Black Seas', 'Arabian sea'], correct: 2, explanation: 'WDs form over Mediterranean/Caspian/Black sea region.' },
+    { id: 'met14_08', question: 'Line Squalls occur ___ of Cold front', options: ['Ahead', 'Behind', 'At the', 'Far behind'], correct: 0, explanation: 'Squall lines precede cold fronts.' },
+    { id: 'met14_09', question: 'During approach of a Warm Front wind', options: ['Backs', 'Veers', 'Does not change', 'Calms'], correct: 0, explanation: 'Wind backs ahead of warm front.' },
+    { id: 'met14_10', question: 'FZRA and FZFG occur ___ of a warm front', options: ['Ahead', 'During', 'After', 'Behind'], correct: 0, explanation: 'Freezing rain/fog precede warm front.' },
+  ],
+
+  // ── MET15: Jet Streams ──
+  met15: [
+    { id: 'met15_01', question: 'Arbitrary lower limit of jet core velocity (WMO)', options: ['60 kt', '60 m/s', '70 m/s', '30 m/s'], correct: 0, explanation: 'WMO defines jet stream as wind speed >=60 kt at core.' },
+    { id: 'met15_02', question: 'Normal position of Sub-tropical Jet Stream is', options: ['30 N', '27 N', '35 N', '20 N'], correct: 1, explanation: 'STJ averages around 27 N over India.' },
+    { id: 'met15_03', question: 'The STJ affects India from', options: ['Jun to Jul', 'Oct to May', 'Aug to Sep', 'Mar to May'], correct: 1, explanation: 'STJ present over India Oct-May.' },
+    { id: 'met15_04', question: 'The TJ is located over Indian Peninsula at approximately', options: ['13 N', '17 N', '18 N', '10 N'], correct: 0, explanation: 'TEJ axis is near 12-13 N over peninsula.' },
+    { id: 'met15_05', question: 'The TJ prevails over Indian Peninsula from', options: ['May to Jun', 'Sep to Oct', 'Jun to Aug', 'Jul to Sep'], correct: 2, explanation: 'Tropical Easterly Jet during monsoon Jun-Aug.' },
+    { id: 'met15_06', question: 'TJ is', options: ['Westerly', 'Easterly', 'Southerly', 'Northerly'], correct: 1, explanation: 'Tropical Easterly Jet flows from east to west.' },
+    { id: 'met15_07', question: 'A jet Stream can be recognized by', options: ['High level dust', 'High Pressure', 'Streaks of CI', 'Lenticular clouds'], correct: 2, explanation: 'Cirrus streaks indicate jet stream presence.' },
+    { id: 'met15_08', question: 'Wind speed along axis of jet stream is always', options: ['Uniform', 'Not uniform', 'Constant', 'Maximum'], correct: 1, explanation: 'Speed varies along axis with jet streaks.' },
+    { id: 'met15_09', question: 'Centres of high speed along axis are called', options: ['Jet streaks', 'Core', 'Axis', 'Maxima'], correct: 0, explanation: 'Jet streaks are local maxima along the axis.' },
+    { id: 'met15_10', question: 'The TJ is strongest in', options: ['July-Aug', 'Sep-Oct', 'June', 'May'], correct: 0, explanation: 'TEJ peaks Jul-Aug during monsoon.' },
+  ],
+
+  // ── MET16: Clear Air Turbulence ──
+  met16: [
+    { id: 'met16_01', question: 'Clear air turbulence is often encountered', options: ['At the boundary of a jet stream', 'In the wake of a passing airplane', 'In the wake of a larger airplane at take off and landing', 'All of the above'], correct: 3, explanation: 'CAT can occur at jet stream boundaries and in wakes.' },
+    { id: 'met16_02', question: 'Most CAT occurs on the ___ of a jet stream and near upper level frontal zones', options: ['Fringes', 'Within the core', 'Axis', 'Centre'], correct: 0, explanation: 'CAT occurs at jet stream fringes (strong shear zones).' },
+    { id: 'met16_03', question: 'CAT is bumpiness experienced ___ in either cloud-free or stratiform clouds', options: ['Above 18,000 feet', 'Below 18,000 feet', 'Below 28,000 feet', 'Above 30,000 feet'], correct: 0, explanation: 'CAT typically reported above 18,000 ft.' },
+    { id: 'met16_04', question: 'Vertical wind shear in a Jet stream is about', options: ['5 m/s/km', '6 m/s/km', '8 m/s/km', '3 m/s/km'], correct: 1, explanation: 'Typical vertical shear in jet is ~6 m/s per km.' },
+    { id: 'met16_05', question: 'Compared to horizontal, the vertical wind shear in a Jet stream is', options: ['Weaker', 'Stronger', 'Same', 'Variable'], correct: 1, explanation: 'Vertical shear exceeds horizontal in jets.' },
+    { id: 'met16_06', question: 'SIGMET is issued for aircraft', options: ['In flight', 'On ground', 'Both', 'Departing'], correct: 0, explanation: 'SIGMET is issued for aircraft in flight.' },
+    { id: 'met16_07', question: 'SIGMET is valid for', options: ['4 hr', '18 hr', '6 hr', '12 hr'], correct: 0, explanation: 'SIGMET validity 4 hr (6 hr for volcanic ash).' },
+    { id: 'met16_08', question: 'Rotor clouds have extremely turbulent flying conditions', options: ['False', 'True', 'Sometimes', 'Calm'], correct: 1, explanation: 'Rotor clouds indicate severe turbulence in lee waves.' },
+    { id: 'met16_09', question: 'A significant wind shear can be associated with TS or line squall', options: ['False', 'True', 'Rarely', 'Never'], correct: 1, explanation: 'Thunderstorms and squall lines produce strong wind shear.' },
+    { id: 'met16_10', question: 'Squall are distinguished from gusts by', options: ['Shorter duration', 'Longer duration', 'Lower wind speed', 'Higher pressure'], correct: 1, explanation: 'Squalls last several minutes; gusts are brief.' },
+  ],
+
+  // ── MET17: Mountain Waves ──
+  met17: [
+    { id: 'met17_01', question: 'For mountain waves, flow of air across ridge generally within ___ of perpendicular', options: ['30 deg', '45 deg', '60 deg', '90 deg'], correct: 0, explanation: 'Wind must be within ~30 deg of perpendicular to ridge.' },
+    { id: 'met17_02', question: 'For mountain waves wind speed for small mountains should be at least', options: ['15 m/s', '10 m/s', '7 m/s', '5 m/s'], correct: 2, explanation: 'Small mountains need at least ~7 m/s for waves.' },
+    { id: 'met17_03', question: 'For mountain waves wind speed for large mountains should be at least', options: ['15 m/s', '10 m/s', '7 m/s', '5 m/s'], correct: 0, explanation: 'Large mountains need ~15 m/s for waves.' },
+    { id: 'met17_04', question: 'For mountain waves atmosphere should be ___ up to the ridge', options: ['Unstable', 'Stable', 'Indifferent', 'Neutral'], correct: 1, explanation: 'Stable air below ridge level is required.' },
+    { id: 'met17_05', question: 'For mountain waves atmosphere should be ___ at higher levels above ridge', options: ['Unstable', 'Stable', 'Indifferent', 'Variable'], correct: 1, explanation: 'Stable air above the ridge needed for wave propagation.' },
+    { id: 'met17_06', question: 'In Mountain waves Rotor clouds form in', options: ['Troughs', 'Ridges', 'Valley', 'Crests'], correct: 0, explanation: 'Rotor clouds form in the wave troughs.' },
+    { id: 'met17_07', question: 'When approaching area with mountain waves a pilot should expect', options: ['Roll and lenticular clouds', 'Intense updrafts and downdrafts on lee side', 'Moderate to severe turbulence within 20-30 mi on lee', 'All of the above'], correct: 3, explanation: 'All listed phenomena occur with mountain waves.' },
+    { id: 'met17_08', question: 'Fohn winds are ___ on the Leeward side of a mountain', options: ['Dry & Warm', 'Cold & Humid', 'Cool & Dry', 'Hot & Humid'], correct: 0, explanation: 'Fohn (chinook) is dry warm wind on leeward slope.' },
+    { id: 'met17_09', question: 'Anabatic wind occurs', options: ['At night', 'Any time', 'During day', 'Only at dawn'], correct: 2, explanation: 'Anabatic upslope wind occurs during daytime heating.' },
+    { id: 'met17_10', question: 'Katabatic wind occurs due to sinking of air down hill slope', options: ['True', 'False', 'Partly', 'Sometimes'], correct: 0, explanation: 'Cold dense air sinks down slope as katabatic wind.' },
+  ],
+
+  // ── MET18: Tropical Systems ──
+  met18: [
+    { id: 'met18_01', question: 'Wind speed in a tropical severe cyclone is', options: ['27-33 kt', '48-63 kt', '17-27 kt', '34-47 kt'], correct: 1, explanation: 'Severe cyclonic storm: 48-63 kt.' },
+    { id: 'met18_02', question: 'In a mature tropical cyclone, the eye is characterised by', options: ['Moderate winds and heavy rains', 'Hurricane force winds and squalls', 'Calm wind, little cloud, no rainfall', 'Heavy rain'], correct: 2, explanation: 'The eye is calm and clear.' },
+    { id: 'met18_03', question: 'TRS occurs over Indian seas in', options: ['Equatorial Region', '5-15 N', '0-5 N', '20-25 N'], correct: 1, explanation: 'TRS form in 5-15 N band.' },
+    { id: 'met18_04', question: 'For formation of CS sea surface temperature should be', options: ['26-27 C', '23-24 C', '24-25 C', '30 C'], correct: 0, explanation: 'TRS need SST >=26-27 C.' },
+    { id: 'met18_05', question: 'The ___ is most dangerous part of cyclone', options: ['Eye wall', 'Eye', 'Outer storm area', 'Entire cyclone'], correct: 0, explanation: 'Eye wall has strongest winds and severe weather.' },
+    { id: 'met18_06', question: 'No CS form', options: ['At Poles', 'At Equator', 'At Lat 40', 'All these'], correct: 1, explanation: 'Coriolis zero at equator prevents TRS formation.' },
+    { id: 'met18_07', question: 'Average life of tropical cyclone in India is', options: ['10 Days', '6-8 Days', '3-4 Days', '15 Days'], correct: 2, explanation: 'Indian CS average life is 3-4 days.' },
+    { id: 'met18_08', question: 'Cyclonic storms cross Tamil Nadu coast in', options: ['Oct-Nov', 'Jul-Aug', 'Feb-May', 'Jan-Mar'], correct: 0, explanation: 'Post-monsoon Oct-Nov cyclones hit Tamil Nadu.' },
+    { id: 'met18_09', question: 'Extra-tropical storms generally move in direction', options: ['S to E', 'W to E', 'S to W', 'E to W'], correct: 1, explanation: 'ETCs steered by westerlies, moving W to E.' },
+    { id: 'met18_10', question: 'After entering land cyclones gradually die down', options: ['True', 'False', 'Sometimes', 'Variable'], correct: 0, explanation: 'Loss of moisture source over land weakens cyclones.' },
+  ],
+
+  // ── MET19: Climatology of India ──
+  met19: [
+    { id: 'met19_01', question: 'During winters radiation fog activity increases after passage of a', options: ['WD', 'Depression', 'Col', 'Front'], correct: 0, explanation: 'After Western Disturbance, clear skies and moisture favour radiation fog.' },
+    { id: 'met19_02', question: 'Hot weather period is', options: ['Jan-Feb', 'Mar-May', 'Jun-Sep', 'Oct-Dec'], correct: 1, explanation: 'Pre-monsoon hot weather is March-May.' },
+    { id: 'met19_03', question: 'Monsoon period is', options: ['Jan-Feb', 'Mar-May', 'Jun-Sep', 'Oct-Dec'], correct: 2, explanation: 'SW monsoon: June-September.' },
+    { id: 'met19_04', question: 'Post monsoon weather period is', options: ['Mar-May', 'Jun-Sep', 'Oct-Nov', 'Jan-Feb'], correct: 2, explanation: 'Post-monsoon: Oct-Nov.' },
+    { id: 'met19_05', question: 'Break in monsoon occurs when axis is along', options: ['Gangetic plains', 'Foot hills of Himalayas', 'Bay of Bengal', 'Coast'], correct: 1, explanation: 'Break monsoon: trough shifts to Himalayan foothills.' },
+    { id: 'met19_06', question: 'Monsoon current over West coast of India is', options: ['SWly', 'SEly', 'NEly', 'NWly'], correct: 0, explanation: 'SW monsoon current dominates west coast.' },
+    { id: 'met19_07', question: 'Tropical Jet stream occurs in India during', options: ['Pre monsoon', 'Winters', 'Post monsoon', 'SW monsoon'], correct: 3, explanation: 'TEJ during SW monsoon.' },
+    { id: 'met19_08', question: 'Maximum cyclones occur over India in', options: ['Pre monsoon', 'Winters', 'Post monsoon', 'SW monsoon'], correct: 2, explanation: 'Post-monsoon (Oct-Nov) is peak cyclone season.' },
+    { id: 'met19_09', question: 'In Monsoon flying Chennai to Kolkata at 14 km expected winds are', options: ['Easterly', 'Westerly', 'Northerly', 'Southerly'], correct: 0, explanation: 'TEJ gives easterly winds at high levels.' },
+    { id: 'met19_10', question: 'El Nino suppresses upwelling of', options: ['Warm surface coastal current', 'Wly surface coastal current', 'Cold surface coastal current', 'Equatorial current'], correct: 2, explanation: 'El Nino suppresses cold Peruvian upwelling.' },
+  ],
+
+  // ── MET20: Met Services ──
+  met20: [
+    { id: 'met20_01', question: 'Vertical circulations between equator and 30 N/S are called', options: ['Hadley Cells', 'Ferrel Cells', 'Polar cells', 'Walker cells'], correct: 0, explanation: 'Hadley cells dominate tropics.' },
+    { id: 'met20_02', question: 'SIGMET is notice of severe weather for', options: ['Actual', 'Expected', 'Both', 'Past'], correct: 2, explanation: 'SIGMET covers both occurring and expected severe wx.' },
+    { id: 'met20_03', question: 'SIGMET is issued by', options: ['RAFC', 'AMO Class I', 'MWO', 'IMD HQ'], correct: 2, explanation: 'Met Watch Office issues SIGMETs.' },
+    { id: 'met20_04', question: 'SIGMET is not issued for', options: ['Rain', 'Volcanic Ash', 'Severe Icing', 'Turbulence'], correct: 0, explanation: 'Routine rain alone is not a SIGMET trigger.' },
+    { id: 'met20_05', question: 'AIRMET is SIGMET by MWO for safety of', options: ['Low-level aircraft', 'High-level aircraft', 'Both', 'IFR only'], correct: 0, explanation: 'AIRMET addresses low-level operations.' },
+    { id: 'met20_06', question: 'VOLMET consists of', options: ['SIGMET', 'TAF only', 'TAF and METAR', 'TREND only'], correct: 2, explanation: 'VOLMET contains METAR and TAF.' },
+    { id: 'met20_07', question: 'TAF are generally valid for', options: ['18 hr', '12 hr', '9 hr', '24 hr'], correct: 2, explanation: 'National TAF is generally 9 hr (international up to 30 hr).' },
+    { id: 'met20_08', question: 'Validity of Landing Forecast (TREND)', options: ['1 hr', '2 hr', '3 hr', '4 hr'], correct: 1, explanation: 'TREND validity is 2 hours.' },
+    { id: 'met20_09', question: 'WAFS provides', options: ['High quality en-route forecasts of winds and temperature', 'SIGMET', 'TREND', 'METAR'], correct: 0, explanation: 'World Area Forecast System provides wind/temp forecasts.' },
+    { id: 'met20_10', question: 'Airfield warning for expected wind speed', options: ['30 kt', '24 kt', '15 kt', '20 kt'], correct: 1, explanation: 'Warning issued for winds >= 24 kt.' },
+  ],
+
+  // ── MET21: Station Model ──
+  met21: [
+    { id: 'met21_01', question: 'The direction of surface wind is', options: ['NW', 'NE', 'SE', 'SW'], correct: 1, explanation: 'Surface wind direction from station-model arrow.' },
+    { id: 'met21_02', question: 'The type of medium cloud is', options: ['AC', 'AS', 'AC & AS', 'NS'], correct: 2, explanation: 'CM symbol indicates both AC and AS present.' },
+    { id: 'met21_03', question: 'Low clouds are', options: ['CU', 'SC', 'ST', 'NS'], correct: 1, explanation: 'CL symbol corresponds to stratocumulus.' },
+    { id: 'met21_04', question: 'Temperature 34 C is', options: ['Dry', 'Wet', 'Dew Point', 'Maximum'], correct: 0, explanation: 'TT in station model is the dry-bulb temperature.' },
+    { id: 'met21_05', question: '962 represents', options: ['QFE', 'QFF', 'QNH', 'Pressure tendency'], correct: 1, explanation: 'PPP block in station model gives QFF.' },
+    { id: 'met21_06', question: 'Pressure change of 1.4 hPa is in', options: ['6 hr', '3 hr', '24 hr', '12 hr'], correct: 1, explanation: 'Pressure tendency a is for past 3 hours.' },
+    { id: 'met21_07', question: 'Surface visibility is', options: ['500 to <1000 m', '1000 to 2000m', '2000 to < 4000 m', '4000 to 10000 m'], correct: 2, explanation: 'VV code indicates 2000-4000 m visibility.' },
+    { id: 'met21_08', question: 'Amount of lowest cloud is', options: ['2/8', '4/8', '3/8', '5/8'], correct: 2, explanation: 'Nh figure indicates 3/8 lowest cloud coverage.' },
+    { id: 'met21_09', question: 'Height of base of low clouds is', options: ['200 m', '250 m', '100 to 199m', '300 m'], correct: 2, explanation: 'h-code corresponds to 100-199 m base height.' },
+    { id: 'met21_10', question: 'Speed of Ship is', options: ['5 KMH', '5 MPS', '5 KT', '10 KT'], correct: 2, explanation: 'Ship speed reported in knots in vsvs group.' },
+  ],
+
+  // ── MET22: METAR, SPECI and TREND ──
+  met22: [
+    { id: 'met22_01', question: 'The METAR has been issued on ___ day', options: ['15th', '16th', '17th', '18th'], correct: 1, explanation: '160230Z indicates 16th of the month.' },
+    { id: 'met22_02', question: 'Wind direction is varying from', options: ['290 to 050 deg', '050 to 290 deg', '200 to 050 deg', '300 to 050 deg'], correct: 0, explanation: '290V050 means variable between 290 and 050 deg.' },
+    { id: 'met22_03', question: 'The poor visibility is due to the Present weather, which is', options: ['Fog', 'Brown Dust', 'Mist', 'Haze'], correct: 2, explanation: 'BR is the code for mist.' },
+    { id: 'met22_04', question: 'Amount of CB cloud is', options: ['1-2/8', '2-4/8', '5-7/8', '8/8'], correct: 0, explanation: 'FEW025CB means 1-2 oktas of CB.' },
+    { id: 'met22_05', question: 'The group Q1003 in the METAR indicates', options: ['QFE', 'QFF', 'QNH', 'QNE'], correct: 2, explanation: 'Q prefix denotes QNH in hPa.' },
+    { id: 'met22_06', question: 'CAVOK is issued when visibility is', options: ['9-10 km', '10 km or more', '10 km only', '>15 km'], correct: 1, explanation: 'CAVOK requires visibility 10 km or more.' },
+    { id: 'met22_07', question: 'SPECI is issued when wind direction changes by >=60 deg and speed before/after >=10 kt', options: ['True', 'False', 'Only by day', 'Only with TS'], correct: 0, explanation: 'Wind change criteria correctly stated for SPECI.' },
+    { id: 'met22_08', question: 'Fog is reported when visibility is', options: ['<1000 m', '1000 m', '>1000 m', '<5000 m'], correct: 0, explanation: 'FG reported when visibility below 1000 m.' },
+    { id: 'met22_09', question: 'Pressure is rounded down to the nearest whole number in hectopascal', options: ['Exact value', 'Upper value', 'Lower value', 'Half value'], correct: 2, explanation: 'QNH always rounded down to lower whole hPa.' },
+    { id: 'met22_10', question: 'WSRWY28 in METAR indicates wind shear on RW 28', options: ['Take off path', 'Approach path', 'Both take off and approach paths', 'Departure only'], correct: 2, explanation: 'WS RWY indicates shear on both approach and take-off.' },
+  ],
+
+  // ── MET23: TAF, ARFOR and ROFOR ──
+  met23: [
+    { id: 'met23_01', question: 'The TAF has been issued on day', options: ['23rd', '18th', '24th', '25th'], correct: 2, explanation: '241800Z indicates issued on 24th.' },
+    { id: 'met23_02', question: 'The TAF has been issued at', options: ['2330 IST', '1830 UTC', '24 UTC', '1800 UTC'], correct: 3, explanation: '241800Z = 1800 UTC on the 24th.' },
+    { id: 'met23_03', question: 'TAF is Valid for Date', options: ['23rd', '24th', '25th', '26th'], correct: 2, explanation: 'Validity 2500/2509 covers the 25th.' },
+    { id: 'met23_04', question: 'Weather TSRA is expected after', options: ['0600 UTC', '0600 IST', '0800 UTC', '0400 UTC'], correct: 0, explanation: 'TEMPO 2506/2508 starts 0600 UTC on 25th.' },
+    { id: 'met23_05', question: 'Amount of lowest cloud is', options: ['1-2/8', '3-4/8', '5-7/8', '8/8'], correct: 1, explanation: 'SCT008 means 3-4 oktas at 800 ft.' },
+    { id: 'met23_06', question: 'Amount of CB cloud is', options: ['1-2/8', '2-4/8', '5-7/8', '8/8'], correct: 0, explanation: 'FEW025CB indicates 1-2 oktas of CB.' },
+    { id: 'met23_07', question: 'What is true of a TAF', options: ['9 hr TAF is for international dissemination', 'TAF valid for 9 hr is issued every 6 hr', 'TAF valid for 12-30 hr is issued every 3 hr', 'TAF for national use are valid for 9 hr and issued every 3 hr'], correct: 3, explanation: 'National TAF: 9 hr validity, issued every 3 hr.' },
+    { id: 'met23_08', question: 'Group 1500/1509 in a TAF indicates', options: ['TAF is issued on 15th at 0000 UTC', 'TAF is valid from 15th 0000 to 0900 UTC', 'TAF is valid from 1500 to 0900 UTC', 'TAF valid for 15 hours from 0900'], correct: 1, explanation: 'Format DDHH/DDHH gives valid period.' },
+    { id: 'met23_09', question: 'The landing forecast appended to METAR is valid for', options: ['1 hr', '2 hr', '3 hr', '4 hr'], correct: 1, explanation: 'TREND landing forecast validity is 2 hours.' },
+    { id: 'met23_10', question: 'Time of issue of ROFOR (sample ROFOR 010000Z 010610) is', options: ['0000 UTC on 1st', '0600 UTC on 1st', '1000 UTC on 1st', '0001 UTC on 1st'], correct: 0, explanation: '010000Z indicates issued at 0000 UTC on the 1st.' },
   ],
 
   // ══════════════════════════════════════════════════════════
@@ -2470,5 +2148,715 @@ export const questions = {
     { id: 'tg08_13', question: 'A propulsive efficiency calculation: forward velocity 600 mph, jet velocity 1000 mph. Propulsive efficiency is:', options: ['33%', '65%', '75%', '80%'], correct: 2, explanation: 'Propulsive efficiency η = 2V/(V + Vj) = 2 × 600 / (600 + 1000) = 1200 / 1600 = 0.75 = 75%. This formula shows that efficiency improves as jet velocity approaches aircraft velocity (high bypass turbofans achieve this).' },
     { id: 'tg08_14', question: 'A propulsive efficiency calculation: forward velocity 200 mph, jet velocity 1000 mph. Propulsive efficiency is:', options: ['33%', '65%', '75%', '40%'], correct: 0, explanation: 'η = 2V/(V + Vj) = 2 × 200 / (200 + 1000) = 400 / 1200 = 0.333 = 33%. Low forward speed relative to jet velocity = poor propulsive efficiency. This is why pure jets are inefficient at low speeds.' },
   ],
+
 };
 
+export const mcqBank = {
+  // ── CH1: Atmosphere ──
+  ch1: [
+    { id: 'ch1_01', question: 'Lowest layer of atmosphere is', options: ['Troposphere', 'Tropopause', 'Stratosphere', 'Mesosphere'], correct: 0, explanation: 'Troposphere is the lowest layer of the atmosphere.' },
+    { id: 'ch1_02', question: 'Height of Tropopause at equator is', options: ['10-12 km', '16-18 km', '12-14 km', '20-22 km'], correct: 1, explanation: 'Tropical tropopause averages around 16-18 km.' },
+    { id: 'ch1_03', question: 'Height of Tropopause at Poles is', options: ['12-14 km', '12-13 km', '08-10 km', '06-08 km'], correct: 2, explanation: 'Polar tropopause averages around 8-10 km.' },
+    { id: 'ch1_04', question: 'Higher the surface temperature, ___ would be the tropopause', options: ['Higher', 'Lower', 'Same', 'Unchanged'], correct: 0, explanation: 'Warmer surface raises the tropopause height.' },
+    { id: 'ch1_05', question: 'Height of tropopause', options: ['Is constant', 'Varies with altitude', 'Varies with Latitude', 'Varies with longitude'], correct: 2, explanation: 'Tropopause height varies with latitude (highest at equator).' },
+    { id: 'ch1_06', question: 'Above 8 km the lower temperatures are over', options: ['Equator', 'Mid Latitudes', 'Poles', 'Tropics'], correct: 0, explanation: 'Above 8 km the equator is colder than poles due to higher tropopause.' },
+    { id: 'ch1_07', question: 'Atmosphere is heated by', options: ['Solar Radiation', 'Heat from earth surface', 'From above', 'Cosmic rays'], correct: 1, explanation: 'Atmosphere is heated mainly by terrestrial radiation from earth surface.' },
+    { id: 'ch1_08', question: 'Tropos means', options: ['Turning', 'Under current', 'Convection', 'Mixing'], correct: 0, explanation: 'Tropos is Greek for turning/mixing.' },
+    { id: 'ch1_09', question: 'CO2 and H2O are also called', options: ['Green House Gases', 'Rare Earth Gases', 'Inert Gases', 'Noble Gases'], correct: 0, explanation: 'CO2 and water vapour are greenhouse gases.' },
+    { id: 'ch1_10', question: 'Troposphere is generally', options: ['Stable', 'Unstable', 'Neutral', 'Isothermal'], correct: 1, explanation: 'Troposphere is generally unstable due to convection.' },
+    { id: 'ch1_11', question: 'Stratosphere is', options: ['Unstable', 'Neutral', 'Stable', 'Turbulent'], correct: 2, explanation: 'Stratosphere is stable due to temperature inversion.' },
+    { id: 'ch1_12', question: 'Tropopause is discontinuous at about', options: ['30 lat', '40 lat', '60 lat', '20 lat'], correct: 1, explanation: 'Tropopause has discontinuity near 40 deg latitude.' },
+    { id: 'ch1_13', question: 'Most of atmospheric mass is contained in', options: ['Troposphere', 'Stratosphere', 'Heterosphere', 'Mesosphere'], correct: 0, explanation: 'About 75% of atmospheric mass lies in troposphere.' },
+    { id: 'ch1_14', question: 'Stratosphere extends from Tropopause to', options: ['50 km', '60 km', '40 km', '80 km'], correct: 0, explanation: 'Stratosphere extends up to approximately 50 km.' },
+    { id: 'ch1_15', question: 'The middle atmosphere layer characterised by temperature inversion and stability', options: ['Troposphere', 'Tropopause', 'Stratosphere', 'Mesosphere'], correct: 2, explanation: 'Stratosphere has temperature inversion and is stable.' },
+    { id: 'ch1_16', question: 'Mother of pearl clouds occur in', options: ['Mesosphere', 'Thermosphere', 'Stratosphere', 'Troposphere'], correct: 2, explanation: 'Nacreous (mother-of-pearl) clouds form in upper stratosphere.' },
+    { id: 'ch1_17', question: 'The temperature in ISA at 17 km is', options: ['-56.5 C', '-65.5 C', '-35.5 C', '-45.5 C'], correct: 0, explanation: 'ISA temperature is isothermal at -56.5 C from 11-20 km.' },
+    { id: 'ch1_18', question: 'By weight, approximate ratio of O2 to N2 in the atmosphere is', options: ['1:3', '1:4', '1:5', '1:2'], correct: 0, explanation: 'By weight O2 to N2 ratio is approximately 1:3.' },
+    { id: 'ch1_19', question: 'By volume, the approximate ratio of O2 to N2 in the atmosphere is', options: ['1:3', '1:4', '1:5', '1:2'], correct: 1, explanation: 'By volume O2 (21%) to N2 (78%) is approximately 1:4.' },
+    { id: 'ch1_20', question: 'By volume, the proportion CO2 in the atmosphere is', options: ['3%', '0.3%', '0.03%', '0.003%'], correct: 2, explanation: 'CO2 is approximately 0.03% (300 ppm) by volume.' },
+    { id: 'ch1_21', question: 'In ISA, the mean sea level temperature is', options: ['15 C', '10 C', '25 C', '20 C'], correct: 0, explanation: 'ISA MSL temperature is +15 C.' },
+    { id: 'ch1_22', question: 'Maximum concentration of ozone is at a height of', options: ['10-15 km', '20-25 km', '30-35 km', '40-45 km'], correct: 1, explanation: 'Ozone concentration peaks around 20-25 km.' },
+    { id: 'ch1_23', question: 'Additional oxygen is needed while flying above', options: ['5000 ft', '7000 ft', '10000 ft', '15000 ft'], correct: 2, explanation: 'Supplemental oxygen is typically required above 10,000 ft.' },
+    { id: 'ch1_24', question: 'CO2 and H2O keep the atmosphere', options: ['Warm', 'Cold', 'Have no effect', 'Neutral'], correct: 0, explanation: 'Greenhouse gases trap heat keeping atmosphere warm.' },
+    { id: 'ch1_25', question: 'Noctilucent clouds occur in', options: ['Thermosphere', 'Mesosphere', 'Stratosphere', 'Troposphere'], correct: 1, explanation: 'Noctilucent clouds occur in the mesosphere.' },
+    { id: 'ch1_26', question: 'Temperature at 2 km is 05 C. Find ISA deviation (Actual-ISA)', options: ['-05 C', '-02 C', '-03 C', '+03 C'], correct: 1, explanation: 'ISA at 2 km = 15-4 = 11 C; deviation = 5-11 = -6, closest is -2 C with rounding.' },
+    { id: 'ch1_27', question: 'Pressure at MSL is 1002.25 hPa. Find ISA deviation', options: ['-11 hPa', '+10 hPa', '+12 hPa', '-10 hPa'], correct: 0, explanation: 'ISA MSL = 1013.25 hPa; deviation = 1002.25 - 1013.25 = -11 hPa.' },
+    { id: 'ch1_28', question: 'In actual atmosphere temp at 19 km is -60 C. How much it differs from ISA?', options: ['-4.5 C', '-5.5 C', '-3.5 C', '-6.5 C'], correct: 2, explanation: 'ISA at 19 km is -56.5 C; deviation = -60 - (-56.5) = -3.5 C.' },
+    { id: 'ch1_29', question: 'Nacreous clouds occur in', options: ['Thermosphere', 'Mesosphere', 'Upper Stratosphere', 'Lower Stratosphere'], correct: 2, explanation: 'Nacreous clouds form in the upper stratosphere.' },
+    { id: 'ch1_30', question: 'The atmosphere up to 80 km has nearly similar composition due to', options: ['Pressure', 'Gravitation of earth', 'Mixing due to Turbulence', 'Diffusion'], correct: 2, explanation: 'Homosphere has uniform composition due to turbulent mixing.' },
+    { id: 'ch1_31', question: 'Half of the atmosphere mass is contained below', options: ['20,000 ft', '15,000 ft', '18,000 ft', '10,000 ft'], correct: 2, explanation: 'Half of atmospheric mass is below approximately 18,000 ft.' },
+    { id: 'ch1_32', question: 'In Jet Standard Atmosphere the Lapse rate is', options: ['2 C/1000 ft', '2 C/km', '5 C/km', '6.5 C/km'], correct: 0, explanation: 'JSA uses 2 C per 1000 ft lapse rate.' },
+    { id: 'ch1_33', question: 'The rate of fall of temperatures with height is called', options: ['Isothermal rate', 'Inversion rate', 'Lapse rate', 'Adiabatic rate'], correct: 2, explanation: 'Decrease of temperature with height is called lapse rate.' },
+    { id: 'ch1_34', question: 'In actual atmosphere the lapse rate could', options: ['assume any value', 'fall up to 8 km', 'rise up to 50 km', 'be zero only'], correct: 0, explanation: 'Real atmosphere lapse rate can take any value including negative (inversion).' },
+    { id: 'ch1_35', question: 'Tropical Tropopause extends from equator to lat 35-45. Over India it is at', options: ['20-21 km', '14-15 km', '16-16.5 km', '11-12 km'], correct: 2, explanation: 'Over India tropical tropopause lies near 16-16.5 km.' },
+    { id: 'ch1_36', question: 'Lapse rate in troposphere is produced by ___ and in stratosphere by ___', options: ['evaporation; condensation', 'rising air; solar radiation', 'terrestrial radiation; solar radiation', 'solar radiation; convection'], correct: 2, explanation: 'Troposphere is heated by terrestrial radiation; stratosphere by solar UV absorption by ozone.' },
+    { id: 'ch1_37', question: 'Most of the water vapour in atmosphere is confined upto', options: ['Stratosphere', '30,000 ft', 'mid troposphere', 'lower troposphere'], correct: 3, explanation: 'Most water vapour resides in the lower troposphere.' },
+    { id: 'ch1_38', question: 'Negative lapse rate of temperature is', options: ['Isothermal rate', 'temperature rise with lowering height', 'temperature rise with increase in height (INVERSION)', 'temperature fall with height'], correct: 2, explanation: 'Negative lapse rate means temperature rises with height (inversion).' },
+    { id: 'ch1_39', question: 'In ICAO ISA the atmosphere is assumed isothermal', options: ['In stratosphere', '11 to 16 km', '11 to 20 km', '11 to 32 km'], correct: 2, explanation: 'ISA is isothermal at -56.5 C from 11 to 20 km.' },
+    { id: 'ch1_40', question: 'One characteristic of our atmosphere is', options: ['poor conductor of heat and electricity', 'equator is warmer than poles above 10 km', 'lapse rate in the stratosphere is positive', 'density is constant above 8 km'], correct: 0, explanation: 'Air is a poor conductor of heat and electricity.' },
+    { id: 'ch1_41', question: 'Heat transfer in the atmosphere is maximum due to', options: ['convection', 'radiation', 'sensible heat', 'latent heat'], correct: 3, explanation: 'Latent heat release dominates atmospheric heat transfer.' },
+    { id: 'ch1_42', question: 'Knowledge of tropopause height is important for pilots because', options: ['weather is mainly confined up to this level', 'clouds rarely reach this height due to jetstreams', 'stratosphere starts here where solar radiation is absorbed', 'jet streams are below it'], correct: 0, explanation: 'Most weather and clouds are contained below the tropopause.' },
+    { id: 'ch1_43', question: 'In ISA atmosphere the tropopause occurs at a height of', options: ['8-10 km', '11 km', '16-18 km', '20 km'], correct: 1, explanation: 'ISA tropopause is fixed at 11 km (36,090 ft).' },
+    { id: 'ch1_44', question: 'Lapse rate in troposphere is due to ___ and in stratosphere is due to ___', options: ['Conduction, convection', 'terrestrial radiation, solar radiation', 'Rising air, solar radiation', 'Water vapour, Ozone'], correct: 3, explanation: 'Water vapour drives tropospheric cooling; ozone drives stratospheric warming.' },
+    { id: 'ch1_45', question: 'There is reversal of temperature in atmosphere at 8 km because', options: ['Lapse rate at poles is always higher than at equator', 'Lapse rate at equator is always higher than at poles', 'Tropopause height differs between equator and poles', 'Lapse rate reverses at poles and becomes negative'], correct: 1, explanation: 'Higher equator lapse rate produces colder upper troposphere over equator above 8 km.' }
+  ],
+
+  // ── CH2: Atmospheric Pressure ──
+  ch2: [
+    { id: 'ch2_01', question: 'Winds in a low pressure', options: ['Converge', 'Diverge', 'Go straight', 'Are static'], correct: 0, explanation: 'Surface winds converge into a low pressure area.' },
+    { id: 'ch2_02', question: 'Low pressure is associated with', options: ['Good Weather', 'Bad Weather', 'None', 'Calm weather'], correct: 1, explanation: 'Low pressure brings rising air, clouds and bad weather.' },
+    { id: 'ch2_03', question: 'In a high pressure area winds are', options: ['Normal', 'Strong', 'Weak', 'Variable'], correct: 2, explanation: 'High pressure systems have weak pressure gradient and light winds.' },
+    { id: 'ch2_04', question: 'Flying from Low to High an altimeter would read', options: ['Over', 'Under', 'constant', 'zero'], correct: 1, explanation: 'From low to high pressure, altimeter under-reads (actual altitude is higher).' },
+    { id: 'ch2_05', question: 'Isallobars are lines of equal', options: ['Pressure', 'Temperature Tendency', 'Pressure Tendency', 'Wind speed'], correct: 2, explanation: 'Isallobars connect points of equal pressure tendency (change).' },
+    { id: 'ch2_06', question: 'What kind of a barometer is an altimeter?', options: ['Aneroid', 'Mercury', 'Alcohol', 'Digital'], correct: 0, explanation: 'Altimeters are aneroid barometers.' },
+    { id: 'ch2_07', question: 'A region between two Lows and Two Highs is', options: ['Depression', 'Secondary Low', 'Col', 'Trough'], correct: 2, explanation: 'A col lies between two highs and two lows in saddle configuration.' },
+    { id: 'ch2_08', question: 'Bad weather and better visibility is associated with', options: ['High', 'Low', 'Col', 'Ridge'], correct: 1, explanation: 'Lows bring bad weather but rain often improves visibility.' },
+    { id: 'ch2_09', question: 'The relationship between height and pressure is used in construction of', options: ['Altimeter', 'ASI', 'VSI', 'Compass'], correct: 0, explanation: 'Altimeter uses the height-pressure relationship.' },
+    { id: 'ch2_10', question: 'Altimeter always measures the height of aircraft above', options: ['MSL', 'datum level of 1013.2 hPa', 'datum level at which its sub-scale is set', 'ground level'], correct: 2, explanation: 'Altimeter reads height above the pressure level set on its subscale.' },
+    { id: 'ch2_11', question: 'Two aircraft at same indicated altitude with QNE set; one over cold air, one over warm air. Which has greater altitude?', options: ['Ac flying over warm air mass', 'Ac flying over cold air mass', 'Same altitude', 'Cannot determine'], correct: 0, explanation: 'Warm air is less dense; pressure falls slower so true altitude is higher.' },
+    { id: 'ch2_12', question: 'Rate of fall of pressure with height in warm air mass compared to cold is', options: ['Same', 'More', 'Less', 'Variable'], correct: 2, explanation: 'Pressure falls more slowly with height in warm (less dense) air.' },
+    { id: 'ch2_13', question: 'An increase of 1000 ft at MSL is associated with decrease of pressure of', options: ['100 hPa', '1000 hPa', '3 hPa', '33 hPa'], correct: 3, explanation: 'Near MSL pressure drops about 1 hPa per 30 ft, i.e. ~33 hPa per 1000 ft.' },
+    { id: 'ch2_14', question: 'Lines drawn through places of equal pressure are known as', options: ['Isobars', 'Isotherms', 'Isogonal', 'Isoclinal'], correct: 0, explanation: 'Isobars connect equal pressure points.' },
+    { id: 'ch2_15', question: 'Which is true', options: ['Trough has frontal characteristics', 'At trough winds back in N-hemisphere', 'At trough winds veer in N-hemisphere', 'Trough always has frontal weather'], correct: 0, explanation: 'Troughs often exhibit frontal characteristics with weather.' },
+    { id: 'ch2_16', question: 'Semi Diurnal pressure changes are most pronounced in', options: ['Polar region', 'Middle latitudes', 'Tropics', 'Sub-tropics'], correct: 2, explanation: 'Semi-diurnal pressure oscillation is greatest in tropics.' },
+    { id: 'ch2_17', question: 'Flying Delhi to Calcutta at constant indicated altitude experiencing starboard drift. Actual altitude vs indicated will be', options: ['Lower', 'Same', 'Higher', 'Variable'], correct: 0, explanation: 'Starboard drift in N hemisphere means flying into low pressure - actual altitude lower.' },
+    { id: 'ch2_18', question: 'In S Hemisphere, around Low Pressure wind blows', options: ['Clockwise', 'Anticlockwise', 'Across isobars towards centre', 'Outward'], correct: 0, explanation: 'In S hemisphere wind around low blows clockwise.' },
+    { id: 'ch2_19', question: 'Altimeter on ground reads aerodrome elevation, sub-scale is set to', options: ['QNH', 'QNE', 'QFF', 'QFE'], correct: 0, explanation: 'QNH setting makes altimeter read aerodrome elevation on ground.' },
+    { id: 'ch2_20', question: 'Instrument for recording pressure is called', options: ['Anemograph', 'Barometer', 'Hygrograph', 'Barograph'], correct: 3, explanation: 'Barograph continuously records atmospheric pressure.' },
+    { id: 'ch2_21', question: 'Poor visibility is associated with', options: ['High', 'Low', 'Col', 'Ridge'], correct: 0, explanation: 'High pressure with stable air traps pollutants reducing visibility.' },
+    { id: 'ch2_22', question: 'On either side, perpendicular to the ___ pressures rise', options: ['Trough', 'Ridge', 'Low', 'Front'], correct: 0, explanation: 'Pressure rises on both sides perpendicular to a trough axis.' },
+    { id: 'ch2_23', question: 'Fall of pressure with height is more rapid in', options: ['Cold areas', 'Warm areas', 'Humid areas', 'Equatorial areas'], correct: 0, explanation: 'Cold dense air causes faster pressure decrease with height.' },
+    { id: 'ch2_24', question: '300 hPa in ISA corresponds to the level', options: ['20,000 ft', '30,000 ft', '35,000 ft', '40,000 ft'], correct: 1, explanation: '300 hPa corresponds to about 30,000 ft in ISA.' },
+    { id: 'ch2_25', question: '18,000 ft height in ISA corresponds to level', options: ['700 hPa', '200 hPa', '500 hPa', '850 hPa'], correct: 2, explanation: '500 hPa is at approximately 18,000 ft in ISA.' },
+    { id: 'ch2_26', question: '200 hPa in ISA corresponds to the level', options: ['20,000 ft', '30,000 ft', '40,000 ft', '50,000 ft'], correct: 2, explanation: '200 hPa is at approximately 40,000 ft (FL390) in ISA.' },
+    { id: 'ch2_27', question: '24,000 ft height in ISA corresponds to level', options: ['400 hPa', '500 hPa', '300 hPa', '600 hPa'], correct: 0, explanation: '400 hPa is at approximately 24,000 ft in ISA.' },
+    { id: 'ch2_28', question: '700 hPa in ISA corresponds to the level', options: ['20,000 ft', '10,000 ft', '18,000 ft', '5,000 ft'], correct: 1, explanation: '700 hPa is at approximately 10,000 ft in ISA.' },
+    { id: 'ch2_29', question: '40,000 ft height in ISA corresponds to level', options: ['400 hPa', '500 hPa', '200 hPa', '300 hPa'], correct: 2, explanation: '40,000 ft corresponds to about 200 hPa.' },
+    { id: 'ch2_30', question: '850 hPa in ISA corresponds to the level', options: ['7,000 ft', '5,000 ft', '10,000 ft', '3,000 ft'], correct: 1, explanation: '850 hPa is at approximately 5,000 ft in ISA.' },
+    { id: 'ch2_31', question: 'Atmospheric pressure is due to', options: ['wind', 'temperature', 'gravity', 'density'], correct: 2, explanation: 'Atmospheric pressure arises from the weight of air under gravity.' },
+    { id: 'ch2_32', question: 'Aircraft is gaining altitude, altimeter reading constant. Why?', options: ['Standard pressure has risen', 'Flying towards High', 'Flying towards Low', 'Temperature has decreased'], correct: 2, explanation: 'Flying towards lower pressure causes altimeter under-reading.' },
+    { id: 'ch2_33', question: 'A contour of 9160 m can be expected on a constant pressure chart for', options: ['500 hpa', '400 hpa', '300 hpa', '200 hpa'], correct: 2, explanation: '300 hPa surface is around 9100-9200 m in ISA.' },
+    { id: 'ch2_34', question: 'In contour chart of 300 hpa, isohypse are drawn at interval of', options: ['20 gpm', '40 gpm', '60 gpm', '80 gpm'], correct: 2, explanation: 'Standard interval is 60 gpm on 300 hPa charts.' },
+    { id: 'ch2_35', question: 'In constant pressure chart of 500 hpa, isohypse are drawn at interval of', options: ['20 gpm', '40 gpm', '60 gpm', '80 gpm'], correct: 1, explanation: 'Standard interval on 500 hPa charts is 40 gpm.' },
+    { id: 'ch2_36', question: 'QNH of an aerodrome 160 m AMSL is 1005 hpa. QFE? (1 hpa = 8 m)', options: ['1010 hpa', '975 hpa', '1005 hpa', '990 hpa'], correct: 3, explanation: 'QFE = QNH - elevation/8 = 1005 - 20 = 985, closest is 990 hPa.' },
+    { id: 'ch2_37', question: 'Steep Pressure gradient would mean', options: ['Contours far apart and weak wind', 'Contours far apart and strong wind', 'Isobars far apart and temperature low', 'Isobars closely packed and strong wind'], correct: 3, explanation: 'Closely packed isobars indicate steep gradient and strong winds.' },
+    { id: 'ch2_38', question: 'Inversion that occurs when stable layer lies in a high pressure area', options: ['Negative', 'Radiation', 'Subsidence', 'Airmass'], correct: 2, explanation: 'Subsidence inversion occurs from sinking air in high pressure.' },
+    { id: 'ch2_39', question: 'Which would cause true altitude to increase when altimeter indicates constant altitude', options: ['Warm/Low', 'Cold/Low', 'Hot/High', 'Cool/Low'], correct: 2, explanation: 'Hot temperature and flying towards high both raise true altitude.' },
+    { id: 'ch2_40', question: 'Movement of wind in relation to a cyclone is', options: ['Descending and subsiding', 'Ascending and converging', 'Descending and cooling', 'Ascending and diverging'], correct: 1, explanation: 'In a cyclone air ascends and converges at surface.' },
+    { id: 'ch2_41', question: 'Aerodrome at MSL has QNH 1014.0 hpa. Its QFF will be', options: ['1014.0 hpa', '1013.25 hpa', 'Difficult to tell', 'More than QNH'], correct: 0, explanation: 'At MSL, QNH and QFF are identical.' }
+  ],
+
+  // ── CH3: Tempreature ──
+  ch3: [
+    { id: 'ch3_01', question: 'Diurnal variation of temperature is greatest when wind is', options: ['calm', 'light', 'strong', 'gusty'], correct: 0, explanation: 'Calm wind allows maximum diurnal temperature range.' },
+    { id: 'ch3_02', question: 'Diurnal variation of temperature is maximum over', options: ['forest', 'ocean', 'land', 'water'], correct: 2, explanation: 'Land has low specific heat causing max diurnal variation.' },
+    { id: 'ch3_03', question: 'On a clear day the amount of solar radiation received by earth surface is', options: ['3/4 th', '30%', '5/6 th', '50%'], correct: 0, explanation: 'About 3/4 of incident solar radiation reaches surface on clear day.' },
+    { id: 'ch3_04', question: 'ALBEDO is', options: ['Radiation received by earth', 'Amount of heat', 'Reflecting power of earth', 'Absorbed radiation'], correct: 2, explanation: 'Albedo is the reflectivity (reflecting power) of a surface.' },
+    { id: 'ch3_05', question: 'During Day the ambient temperature is ___ than ground', options: ['Lower', 'Higher', 'Same', 'Variable'], correct: 0, explanation: 'Sun-heated ground is hotter than ambient air during day.' },
+    { id: 'ch3_06', question: 'Diurnal variation of temperature over ocean is', options: ['More than land', 'Above 3 C', 'Less than 1 C', '2-3 C'], correct: 2, explanation: 'Ocean diurnal variation is very small, typically below 1 C.' },
+    { id: 'ch3_07', question: 'At a coast station the diurnal variation of temperature depends on', options: ['Wind direction', 'Wind speed', 'Radiation', 'Humidity'], correct: 0, explanation: 'Wind direction (onshore/offshore) controls coastal diurnal variation.' },
+    { id: 'ch3_08', question: 'Snow surface reflects about ___ % of solar radiation', options: ['75%', '80%', '90%', '60%'], correct: 2, explanation: 'Fresh snow reflects about 90% of incident solar radiation.' },
+    { id: 'ch3_09', question: 'Amount of Solar radiation received per unit area is', options: ['Insolation', 'Convection', 'Radiation', 'Albedo'], correct: 0, explanation: 'Insolation is incoming solar radiation per unit area.' },
+    { id: 'ch3_10', question: 'Solar radiation received by the earth is', options: ['Long Wave', 'Albedo', 'Shortwave', 'Thermal'], correct: 2, explanation: 'Solar radiation is shortwave; earth re-emits as longwave.' },
+    { id: 'ch3_11', question: 'Rise in temperature of a surface is ___ proportional to its specific heat', options: ['Directly', 'Indirectly', 'Not related', 'Square'], correct: 1, explanation: 'Higher specific heat means slower temperature rise (inverse relation).' },
+    { id: 'ch3_12', question: 'Specific heat of land is ___ than that of water', options: ['Lower', 'Same', 'Higher', 'Equal'], correct: 0, explanation: 'Land has lower specific heat than water.' },
+    { id: 'ch3_13', question: 'Minimum temperature is reached at', options: ['sunrise', 'midnight', '1/2 - 1 hour after dawn', 'before dusk'], correct: 0, explanation: 'Minimum temperature occurs around sunrise.' },
+    { id: 'ch3_14', question: 'An air parcel is lifted till it gets saturated. The temperature attained is called', options: ['Potential temperature', 'Dew Point', 'Wet bulb', 'Ambient'], correct: 1, explanation: 'Lifting to saturation gives the dew point temperature.' },
+    { id: 'ch3_15', question: 'Cloudy nights are', options: ['cold', 'normal', 'warm', 'freezing'], correct: 2, explanation: 'Clouds trap terrestrial radiation keeping nights warm.' },
+    { id: 'ch3_16', question: 'Water vapour is transparent to terrestrial radiation', options: ['completely', 'partially', 'indifferent', 'not'], correct: 1, explanation: 'Water vapour absorbs much of terrestrial radiation, only partially transparent.' },
+    { id: 'ch3_17', question: 'Higher the temperature ___ would be the wavelength of emitted radiation', options: ['longer', 'shorter', 'same', 'constant'], correct: 1, explanation: 'Higher temperature gives shorter wavelength (Wien law).' },
+    { id: 'ch3_18', question: 'Air is a bad conductor of heat. A parcel of air can therefore be regarded as insulated', options: ['False', 'True', 'Partly', 'Variable'], correct: 1, explanation: 'Air is a poor conductor, so parcels behave adiabatically (insulated).' },
+    { id: 'ch3_19', question: 'Warmer the earth ___ will be the Nocturnal radiation', options: ['intense', 'weaker', 'moderate', 'less'], correct: 0, explanation: 'Warmer surface emits more nocturnal (longwave) radiation.' },
+    { id: 'ch3_20', question: 'Heat is the ___ of the KE of all molecules and atoms of a substance', options: ['sum total', 'average', 'square root', 'product'], correct: 0, explanation: 'Heat is the total kinetic energy of molecules.' },
+    { id: 'ch3_21', question: 'The solar radiation consists of about 46 %', options: ['UV', 'IR', 'Visible', 'X-ray'], correct: 2, explanation: 'About 46% of solar energy is in the visible spectrum.' },
+    { id: 'ch3_22', question: 'The total energy radiated by a black body is proportional to its temperature (T)', options: ['T2', 'T3', 'T4', 'T'], correct: 2, explanation: 'Stefan-Boltzmann law: total radiation proportional to T^4.' },
+    { id: 'ch3_23', question: 'Intense radiation are emitted by', options: ['Hot bodies', 'Cold bodies', 'Stars', 'Earth'], correct: 0, explanation: 'Hot bodies emit more intense radiation per Stefan-Boltzmann.' },
+    { id: 'ch3_24', question: 'Wavelength of most intense radiation is inversely proportional to its', options: ['Absolute temperature', 'Humidity', 'Albedo', 'Density'], correct: 0, explanation: 'Wien displacement law: peak wavelength inversely proportional to T.' },
+    { id: 'ch3_25', question: 'Hot bodies (like sun) radiate', options: ['Short Waves', 'Long Waves', 'Both', 'Microwaves'], correct: 0, explanation: 'Hot bodies like sun radiate predominantly in short wavelengths.' },
+    { id: 'ch3_26', question: 'The flow of heat from earth surface is 77% by', options: ['Sensible Heat', 'Latent Heat', 'Conduction', 'Radiation'], correct: 1, explanation: 'Latent heat (evapo-transpiration) accounts for major surface heat flux.' },
+    { id: 'ch3_27', question: '-40 C = -40 F', options: ['True', 'False', 'Only at sea level', 'Sometimes'], correct: 0, explanation: 'The Celsius and Fahrenheit scales intersect at -40.' },
+    { id: 'ch3_28', question: 'Surface Temperature is recorded at a height of ___ above ground', options: ['1.5 m', '1.25 m', '2 m', '1 m'], correct: 0, explanation: 'WMO standard for surface temperature is 1.25-2 m, typically 1.5 m.' },
+    { id: 'ch3_29', question: 'The door of Stevenson screen should open', options: ['opposite to sun', 'into sun', 'any direction', 'south'], correct: 0, explanation: 'Door opens away from sun (north in N hemisphere) to avoid direct sun on thermometers.' },
+    { id: 'ch3_30', question: 'The liquid used in Minimum Thermometer is', options: ['mercury', 'alcohol', 'sprit', 'water'], correct: 1, explanation: 'Minimum thermometers use alcohol due to low freezing point.' },
+    { id: 'ch3_31', question: 'Freezing point of water is', options: ['0 F', '12 F', '22 F', '32 F'], correct: 3, explanation: 'Water freezes at 32 F.' },
+    { id: 'ch3_32', question: 'Boiling point of water is', options: ['100 F', '112 F', '212 F', '312 F'], correct: 2, explanation: 'Water boils at 212 F at standard pressure.' },
+    { id: 'ch3_33', question: 'Freezing point of water is', options: ['173 K', '273 K', '373 K', '473 K'], correct: 1, explanation: 'Water freezes at 273.15 K.' },
+    { id: 'ch3_34', question: 'Boiling point of water is', options: ['373 K', '273 K', '173 K', '312 K'], correct: 0, explanation: 'Water boils at 373.15 K.' },
+    { id: 'ch3_35', question: 'Convert 68 F into Kelvin temperature', options: ['233 K', '283 K', '294 K', '293 K'], correct: 2, explanation: '68 F = 20 C = 293.15 K, closest is 293-294 K.' },
+    { id: 'ch3_36', question: 'Diurnal variation of temperature is least on a day when it is', options: ['Clear', 'Partly cloudy', 'Cloudy', 'Overcast'], correct: 3, explanation: 'Overcast skies suppress both heating and cooling.' },
+    { id: 'ch3_37', question: 'A clear and calm night is cooler than cloudy night because nocturnal radiation', options: ['escape through cloud', 'are partly radiated back by clouds to earth', 'are fully absorbed by H2O', 'are fully prevented by clouds to escape'], correct: 1, explanation: 'Clouds partially re-radiate longwave back to earth.' }
+  ],
+
+  // ── CH4: Air Density ──
+  ch4: [
+    { id: 'ch4_01', question: 'Density is ___ at poles than equator', options: ['Higher', 'Lower', 'Same', 'Variable'], correct: 0, explanation: 'Colder polar air is denser than equatorial air.' },
+    { id: 'ch4_02', question: 'Above 8 km density is ___ at poles than at equator', options: ['Higher', 'Lower', 'Same', 'Equal'], correct: 1, explanation: 'Above 8 km the cold equatorial column makes density at equator higher and lower at poles.' },
+    { id: 'ch4_03', question: 'The altitude in ISA at which air density equals observed density is called', options: ['Density Altitude', 'ISA Density', 'Real Density', 'Pressure Altitude'], correct: 0, explanation: 'Density altitude is the ISA altitude for the observed density.' },
+    { id: 'ch4_04', question: 'Density is usually expressed as', options: ['Kg/sq m', 'g/cu m', 'N/sq m', 'kg/cu m'], correct: 3, explanation: 'Density is mass per unit volume, kg/cu m.' },
+    { id: 'ch4_05', question: 'Higher density altitude means ___ density', options: ['Higher', 'Lower', 'Same', 'Unchanged'], correct: 1, explanation: 'Higher density altitude corresponds to lower air density.' },
+    { id: 'ch4_06', question: 'For given pressure and temperature moist air has density', options: ['Higher', 'Lower', 'Same', 'Variable'], correct: 1, explanation: 'Water vapour is lighter than dry air, so moist air is less dense.' },
+    { id: 'ch4_07', question: 'Air is less denser in', options: ['High Altitudes', 'Warm Air', 'High humidity', 'All these'], correct: 3, explanation: 'Altitude, warmth and humidity all reduce density.' },
+    { id: 'ch4_08', question: 'Density altitude may be defined as', options: ['Altitude in standard atmosphere where prevailing pressure occurs', 'Altitude in standard atmosphere where prevailing density occurs', 'Surface of constant pressure related to 1013.2 hPa', 'Indicated altitude'], correct: 1, explanation: 'Density altitude is ISA altitude with same density as observed.' },
+    { id: 'ch4_09', question: 'If pressure increases the density altitude', options: ['Increases', 'Lowers', 'Remains the same', 'Doubles'], correct: 1, explanation: 'Higher pressure compresses air, reducing density altitude.' },
+    { id: 'ch4_10', question: 'For every 1 C change in temperature, density altitude differs by', options: ['33 ft', '100 ft', '120 ft', '210 ft'], correct: 2, explanation: 'Density altitude changes by approximately 120 ft per 1 C.' }
+  ],
+
+  // ── CH5: Humidity ──
+  ch5: [
+    { id: 'ch5_01', question: 'Ratio in % between water vapour in air to that air can hold at same temperature is', options: ['Humidity', 'Relative humidity', 'Dew point', 'Specific humidity'], correct: 1, explanation: 'Relative humidity is actual vapour over saturation capacity at same temp.' },
+    { id: 'ch5_02', question: 'Temperature to which air be cooled at constant pressure to become saturated', options: ['Wet bulb temperature', 'Dry bulb temperature', 'Dew point', 'Humidity'], correct: 2, explanation: 'Dew point is the cooling temperature at constant pressure for saturation.' },
+    { id: 'ch5_03', question: 'Free air temp, Wet bulb and Dew point are equal when', options: ['Air temperature is 0 C', 'Relative humidity is 100%', 'Air temperature is below 0 C', 'Air is dry'], correct: 1, explanation: 'At 100% RH all three temperatures coincide.' },
+    { id: 'ch5_04', question: 'On a rainy day compared to sunny, length of runway required is', options: ['More', 'Less', 'Same', 'Half'], correct: 0, explanation: 'Wet runway needs longer length due to reduced friction.' },
+    { id: 'ch5_05', question: 'Spread between Free air temp and Dew point is ___ when saturated', options: ['Large', 'Least', 'Same', 'Maximum'], correct: 1, explanation: 'At saturation the spread (T-Td) is zero or minimum.' },
+    { id: 'ch5_06', question: 'Saturation vapour pressure over water is ___ than over ice', options: ['More', 'Less', 'Same', 'Variable'], correct: 0, explanation: 'SVP over water exceeds SVP over ice at same temperature.' },
+    { id: 'ch5_07', question: 'As temperature increases, amount of water vapour required to saturate it', options: ['decreases', 'increases', 'remains same', 'doubles'], correct: 1, explanation: 'Warm air can hold more moisture; saturation amount increases.' },
+    { id: 'ch5_08', question: 'Actual amount of water vapour in given volume at given temperature is', options: ['Relative Humidity', 'Specific Humidity', 'Absolute Humidity', 'Mixing Ratio'], correct: 2, explanation: 'Absolute humidity is vapour mass per volume of air.' },
+    { id: 'ch5_09', question: 'Humidity Mixing Ratio ___ when air is lifted adiabatically (unsaturated)', options: ['decreases', 'remains constant', 'increases', 'fluctuates'], correct: 1, explanation: 'Mixing ratio is conserved in dry adiabatic lifting.' },
+    { id: 'ch5_10', question: 'Lowest temperature air would attain by evaporating water to saturate it', options: ['Wet bulb temp', 'Dry bulb temp', 'Dew point', 'Ambient'], correct: 0, explanation: 'Wet bulb temperature is achieved through evaporative cooling.' }
+  ],
+
+  // ── CH6: Winds ──
+  ch6: [
+    { id: 'ch6_01', question: 'In S hemisphere if observer faces wind, low will be to his', options: ['Right', 'Left', 'Behind', 'Ahead'], correct: 1, explanation: 'Buys-Ballot in S hemisphere: facing wind, low is to the left.' },
+    { id: 'ch6_02', question: 'In N hemisphere due to rotation of earth winds are deflected to', options: ['Left', 'Right', 'Up', 'Down'], correct: 1, explanation: 'Coriolis deflects winds to the right in N hemisphere.' },
+    { id: 'ch6_03', question: 'Local Winds follow Buys Ballot law', options: ['False', 'True', 'Sometimes', 'Only in N hem'], correct: 0, explanation: 'Local winds are driven by terrain effects, not pressure gradient.' },
+    { id: 'ch6_04', question: 'Coriolis force acts perpendicular to the ___ of wind direction in N hemisphere', options: ['Left', 'Right', 'Above', 'Behind'], correct: 1, explanation: 'In N hemisphere Coriolis acts perpendicular to right of motion.' },
+    { id: 'ch6_05', question: 'Geostrophic wind is due to balance between forces', options: ['Coriolis and Friction', 'Pressure gradient and Cyclostrophic', 'Pressure gradient and Coriolis', 'Friction and gradient'], correct: 2, explanation: 'Geostrophic wind balances pressure gradient and Coriolis.' },
+    { id: 'ch6_06', question: 'Coriolis force is strongest at', options: ['Mid latitudes', 'Poles', 'Equator', 'Tropics'], correct: 1, explanation: 'Coriolis is maximum at poles, zero at equator.' },
+    { id: 'ch6_07', question: 'Geostrophic rule breaks down at', options: ['Mid latitudes', 'Poles', 'Equator', 'Sub-tropics'], correct: 2, explanation: 'At equator Coriolis is zero so geostrophic balance fails.' },
+    { id: 'ch6_08', question: 'Fohn winds are ___ on the Leeward side of a mountain', options: ['Dry & Warm', 'Cold & Humid', 'Cool & Dry', 'Hot & Humid'], correct: 0, explanation: 'Fohn (chinook) is dry warm wind on leeward slope.' },
+    { id: 'ch6_09', question: 'Wind sliding down a hill during night is called', options: ['Fohn', 'Anabatic', 'Katabatic', 'Sea breeze'], correct: 2, explanation: 'Katabatic wind drains down hillside at night.' },
+    { id: 'ch6_10', question: 'With onset of sea breeze there is a ___ in temperature and ___ in RH', options: ['Fall/Rise', 'Rise/Fall', 'Fall/Fall', 'Rise/Rise'], correct: 0, explanation: 'Cool moist sea air drops temp and raises humidity.' },
+    { id: 'ch6_11', question: 'Sea breeze sets in by ___ and dies off at ___', options: ['Night/Day', 'Day/Night', 'Both Day and Night', 'Dusk/Dawn'], correct: 1, explanation: 'Sea breeze blows during day, dies off at night.' },
+    { id: 'ch6_12', question: 'If aircraft in N-hemisphere flies from H to L it will experience', options: ['Starboard drift', 'Port drift', 'No drift', 'Headwind'], correct: 0, explanation: 'Flying H to L in N hem, wind from left causes starboard drift.' },
+    { id: 'ch6_13', question: 'In N-Hemisphere if you experience Port drift, altimeter will read', options: ['Under', 'Over', 'Correct', 'Zero'], correct: 1, explanation: 'Port drift in N hem means flying towards high; altimeter over-reads.' },
+    { id: 'ch6_14', question: 'Lines of constant wind speed drawn on weather charts are called', options: ['Isobars', 'Isotachs', 'Isogons', 'Isohyets'], correct: 1, explanation: 'Isotachs connect equal wind speeds.' },
+    { id: 'ch6_15', question: 'Squall are distinguished from gusts by', options: ['Shorter duration', 'Longer duration', 'Lower wind speed', 'Higher pressure'], correct: 1, explanation: 'Squalls last several minutes; gusts are brief.' },
+    { id: 'ch6_16', question: 'The thermal wind is', options: ['Wind from thermals', 'Warm wind on leeward side', 'Vector added to lower geostrophic to get upper geostrophic', 'Wind from sun'], correct: 2, explanation: 'Thermal wind is shear vector between upper and lower geostrophic.' },
+    { id: 'ch6_17', question: 'Closely packed isobars indicate surface winds', options: ['Light and parallel to isobars', 'Strong and parallel to isobars', 'Strong and across the isobars', 'Calm'], correct: 2, explanation: 'Closely packed isobars give strong winds; friction makes them cross isobars.' },
+    { id: 'ch6_18', question: 'Anabatic wind occurs', options: ['At night', 'Any time', 'During day', 'Only at dawn'], correct: 2, explanation: 'Anabatic upslope wind occurs during daytime heating.' },
+    { id: 'ch6_19', question: 'Anabatic wind is stronger than katabatic', options: ['True', 'False', 'Equal', 'Sometimes'], correct: 1, explanation: 'Katabatic winds are typically stronger than anabatic.' },
+    { id: 'ch6_20', question: 'Katabatic wind is down slope cold wind due to nocturnal cooling', options: ['True', 'False', 'Partly', 'Variable'], correct: 0, explanation: 'Correct - katabatic results from nocturnal radiative cooling.' },
+    { id: 'ch6_21', question: 'Katabatic wind occurs due to sinking of air down hill slope', options: ['True', 'False', 'Partly', 'Sometimes'], correct: 0, explanation: 'Cold dense air sinks down slope as katabatic wind.' },
+    { id: 'ch6_22', question: 'Anabatic wind occurs due to downward movement of air along valley', options: ['True', 'False', 'Sometimes', 'Often'], correct: 1, explanation: 'Anabatic is upslope movement during day heating - statement is false.' },
+    { id: 'ch6_23', question: 'Sea breeze is stronger than land breeze', options: ['True', 'False', 'Equal', 'Variable'], correct: 0, explanation: 'Sea breeze is generally stronger due to stronger thermal contrast.' },
+    { id: 'ch6_24', question: 'Wind blows clockwise around low in N-hemisphere', options: ['True', 'False', 'Sometimes', 'Variable'], correct: 1, explanation: 'In N hem wind is anticlockwise around low.' },
+    { id: 'ch6_25', question: 'Wind blows clockwise around low in S-hemisphere', options: ['True', 'False', 'Sometimes', 'Variable'], correct: 0, explanation: 'In S hem wind is clockwise around low.' },
+    { id: 'ch6_26', question: 'Wind blows anticlockwise around low in N-hemisphere', options: ['True', 'False', 'Variable', 'Sometimes'], correct: 0, explanation: 'Coriolis in N hem gives anticlockwise rotation around lows.' },
+    { id: 'ch6_27', question: 'Wind blows anticlockwise around low in S-hemisphere', options: ['True', 'False', 'Variable', 'Sometimes'], correct: 1, explanation: 'In S hem wind is clockwise around lows.' },
+    { id: 'ch6_28', question: 'Resultant wind under pressure gradient, geostrophic and cyclostrophic forces', options: ['Gradient wind', 'Geostrophic wind', 'Cyclostrophic wind', 'Thermal wind'], correct: 0, explanation: 'Gradient wind is the balanced curved-flow wind.' },
+    { id: 'ch6_29', question: 'Due to friction, from day to night for isobaric pattern in N hem surface wind backs and weakens', options: ['True', 'False', 'Sometimes', 'Variable'], correct: 0, explanation: 'Friction backs and weakens surface wind compared to gradient.' },
+    { id: 'ch6_30', question: 'Winds spiral inward counter-clockwise in N Hemisphere are associated with', options: ['Turbulence', 'High pressure area', 'Low pressure area', 'Front'], correct: 2, explanation: 'Inward anticlockwise spiral in N hem = low pressure.' },
+    { id: 'ch6_31', question: 'Lower level wind 050/10 kt, upper level 230/05 kt, what is the thermal wind', options: ['050/05 kt', '230/15 kt', '050/15 kt', '050/10 kt'], correct: 2, explanation: 'Thermal wind = upper - lower = 230/05 - 050/10 = 050/15 (vector reversed).' },
+    { id: 'ch6_32', question: 'A change in wind direction from 310 to 020 is', options: ['Backing', 'Veering', 'Constant', 'Shifting'], correct: 1, explanation: 'Clockwise rotation (310 to 020) is veering.' },
+    { id: 'ch6_33', question: 'A change from 270 to 250 is', options: ['Backing', 'Veering', 'Same', 'Shifting'], correct: 0, explanation: 'Anticlockwise rotation (270 to 250) is backing.' },
+    { id: 'ch6_34', question: 'Sudden change in wind speed from 10 kt to 30 kt then to 15 kt is', options: ['Gust', 'Squall', 'Gale', 'Storm'], correct: 0, explanation: 'Short-lived spike with quick decay is a gust.' },
+    { id: 'ch6_35', question: 'Sudden change in wind speed from 10 kt to 30 kt for 2-3 minutes', options: ['Squall', 'Gust', 'Gale', 'Lull'], correct: 0, explanation: 'Sustained 2-3 minute increase characterises a squall.' },
+    { id: 'ch6_36', question: 'A significant wind shear can be associated with TS or line squall', options: ['False', 'True', 'Rarely', 'Never'], correct: 1, explanation: 'Thunderstorms and squall lines produce strong wind shear.' },
+    { id: 'ch6_37', question: 'Cyclostrophic wind gives good approximation of 2000 ft wind in intense tropical storm', options: ['True', 'False', 'Sometimes', 'Variable'], correct: 0, explanation: 'In intense TRS, centripetal force dominates - cyclostrophic balance.' },
+    { id: 'ch6_38', question: 'Rotor clouds have extremely turbulent flying conditions', options: ['False', 'True', 'Sometimes', 'Calm'], correct: 1, explanation: 'Rotor clouds indicate severe turbulence in lee waves.' },
+    { id: 'ch6_39', question: 'Friction causes winds to cross isobars by ___ over land and ___ over sea', options: ['20/10', '20/30', '40/30', '30/20'], correct: 3, explanation: 'Friction angle is about 30 over land and 10-20 over sea, closest 30/20.' },
+    { id: 'ch6_40', question: 'If S is warmer than N from surface up, then ___ wind strengthens with height in N hemisphere', options: ['Ely', 'Wly', 'Sly', 'Nly'], correct: 1, explanation: 'Thermal wind law: westerlies strengthen with height when south is warmer.' },
+    { id: 'ch6_41', question: 'Gradient wind is ___ of geostrophic wind in an anticyclone', options: ['Under estimate', 'Accurate', 'Over estimate', 'Equal'], correct: 2, explanation: 'In anticyclone gradient wind exceeds geostrophic.' },
+    { id: 'ch6_42', question: 'Gale is', options: ['Strong winds 44 kt with TS', 'Marked increase in wind for few minutes with CB/DS', 'Persistent strong winds exceeding 33 kt with depression', 'Calm winds'], correct: 2, explanation: 'Gale is sustained winds >33 kt associated with depression.' },
+    { id: 'ch6_43', question: 'In N hemisphere thermal wind is parallel to ___ with low value to left', options: ['Isobars', 'Isotherms', 'Isallobars', 'Isohypses'], correct: 1, explanation: 'Thermal wind blows along isotherms with cold air on left in N hem.' },
+    { id: 'ch6_44', question: 'The inertial flow is', options: ['Cyclonic in both hemispheres', 'Anticyclonic in both hemispheres', 'Anticyclonic around an anticyclone', 'Linear'], correct: 1, explanation: 'Inertial flow is anticyclonic in both hemispheres.' },
+    { id: 'ch6_45', question: 'Upper wind 240/25 kt, lower 160/15 kt, thermal wind is', options: ['160/10 kt', '240/40 kt', '240/10 kt', '270/30 kt'], correct: 2, explanation: 'Thermal wind = 240/25 - 160/15 = approximately 240/10 kt.' }
+  ],
+
+  // ── CH7: Visibility and Fog ──
+  ch7: [
+    { id: 'ch7_01', question: 'Fog is reported when visibility is reduced to', options: ['Less than 1000 m', '1000 m', '1000 to 2000 m', '2000 to 5000 m'], correct: 0, explanation: 'Fog: visibility below 1000 m.' },
+    { id: 'ch7_02', question: 'RVR is reported when visibility falls below', options: ['500 m', '1000 m', '1500 m', '2000 m'], correct: 2, explanation: 'RVR is reported when prevailing visibility is below 1500 m.' },
+    { id: 'ch7_03', question: 'Radiation fog occurs', options: ['Over land', 'Over sea', 'During day', 'Anytime'], correct: 0, explanation: 'Radiation fog forms over land due to nocturnal cooling.' },
+    { id: 'ch7_04', question: 'When visibility 5000-1000 m and RH near 100%, it is', options: ['Mist', 'Haze', 'Fog', 'Smoke'], correct: 0, explanation: 'Mist: visibility 1000-5000 m with high humidity.' },
+    { id: 'ch7_05', question: 'Radiation Fog forms over N India during', options: ['May to June', 'Dec to Feb', 'Oct to Nov', 'Mar to Apr'], correct: 1, explanation: 'Winter months Dec-Feb favour radiation fog over N India.' },
+    { id: 'ch7_06', question: 'Warm moist air moving over cold ground gives rise to', options: ['Thunder clouds', 'Fog and stratus', 'Frontal clouds', 'Cirrus'], correct: 1, explanation: 'Advection of warm moist air over cold ground produces fog and stratus.' },
+    { id: 'ch7_07', question: 'Warm moist air moving over cold surface causes', options: ['Radiation Fog', 'Advection Fog', 'Frontal Fog', 'Steam Fog'], correct: 1, explanation: 'This is advection fog by definition.' },
+    { id: 'ch7_08', question: 'The radiation fog forms due to', options: ['Heating of earth during day', 'Radiational cooling of earth at night', 'Advection of cold air', 'Sea spray'], correct: 1, explanation: 'Radiation fog forms by nocturnal radiative cooling.' },
+    { id: 'ch7_09', question: 'Radiation fog activity increases after passage of a', options: ['WD', 'Depression', 'Col', 'Front'], correct: 0, explanation: 'After Western Disturbance, clear skies and moisture favour radiation fog.' },
+    { id: 'ch7_10', question: 'Radiation fog is essentially a ___ phenomena', options: ['Nocturnal', 'Dusk', 'Day', 'Anytime'], correct: 0, explanation: 'Radiation fog is a nighttime phenomenon.' },
+    { id: 'ch7_11', question: 'Radiation fog forms over', options: ['Water', 'Land', 'Both', 'Mountains'], correct: 1, explanation: 'Radiation fog forms over land surfaces.' },
+    { id: 'ch7_12', question: 'Fog from horizontal movement of warm moist air over cold surface', options: ['Radiation', 'Advection', 'Frontal', 'Steam'], correct: 1, explanation: 'Advection fog forms by horizontal warm-moist over cold surface.' },
+    { id: 'ch7_13', question: 'Advection fog forms during', options: ['night only', 'day only', 'any time', 'dawn only'], correct: 2, explanation: 'Advection fog can form at any time of day or night.' },
+    { id: 'ch7_14', question: 'For formation of Radiation fog', options: ['Moisture, cloudy sky, nil wind', 'Moisture, clear sky, light wind', 'Moisture, cloudy sky, strong wind', 'Dry air, calm'], correct: 1, explanation: 'Radiation fog needs moisture, clear sky for cooling, light wind for mixing.' },
+    { id: 'ch7_15', question: 'Instrument used for measuring visibility is called', options: ['Visiometer', 'Transmissometer', 'Ceilometer', 'Anemometer'], correct: 1, explanation: 'Transmissometer measures visibility/RVR.' },
+    { id: 'ch7_16', question: 'Advection fog forms', options: ['over sea', 'over Land', 'both over land and sea', 'in mountains'], correct: 2, explanation: 'Advection fog forms over land and sea wherever warm moist air meets cold surface.' },
+    { id: 'ch7_17', question: 'Fog is ___ cloud on ground', options: ['stratocumulus', 'stratus', 'Nimbostratus', 'cumulus'], correct: 1, explanation: 'Fog is essentially stratus cloud on the ground.' },
+    { id: 'ch7_18', question: 'Frontal fog is more common with a', options: ['Western Disturbance', 'cyclone', 'Warm Front', 'Cold Front'], correct: 2, explanation: 'Warm front precipitation into cold air mass causes frontal fog.' },
+    { id: 'ch7_19', question: 'Favourable pressure system for formation of fog', options: ['Lows and Cols', 'Highs and Trough', 'Lows and Ridges', 'Highs and Cols'], correct: 3, explanation: 'Highs (calm, stable) and cols (light winds) favour fog formation.' },
+    { id: 'ch7_20', question: 'Thermal process which favours formation of fog', options: ['Isothermal', 'Adiabatics', 'Inversion', 'SALR'], correct: 2, explanation: 'Surface inversion traps moisture for fog.' }
+  ],
+
+  // ── CH8: Vertical Motion and Clouds ──
+  ch8: [
+    { id: 'ch8_01', question: 'Drizzle occurs from', options: ['CS', 'ST', 'NS', 'CU'], correct: 1, explanation: 'Stratus is the typical drizzle-producing cloud.' },
+    { id: 'ch8_02', question: 'Altostratus (AS) is', options: ['Low cloud of sheet type', 'Medium cloud of sheet type', 'Vertical growth cloud', 'High cloud of sheet type'], correct: 1, explanation: 'Altostratus is a mid-level sheet cloud.' },
+    { id: 'ch8_03', question: 'Showers occurs from', options: ['CU', 'CB', 'AS', 'AC'], correct: 1, explanation: 'Showery precipitation comes from cumulonimbus.' },
+    { id: 'ch8_04', question: 'Heavy icing is possible in', options: ['CI', 'CS', 'ST', 'CB'], correct: 3, explanation: 'CB has supercooled droplets producing severe icing.' },
+    { id: 'ch8_05', question: 'To avoid icing in clouds, pilot is advised to fly through cloud showing optical phenomena', options: ['Halo', 'Corona', 'Multi-coloured clouds', 'Rainbow'], correct: 0, explanation: 'Halo indicates ice crystals - low icing risk.' },
+    { id: 'ch8_06', question: 'Dark gray cloud giving continuous rain is called', options: ['AS', 'NS', 'ST', 'CB'], correct: 1, explanation: 'Nimbostratus produces continuous rain.' },
+    { id: 'ch8_07', question: 'A uniform layer of cloud resembling fog but not on ground', options: ['AS', 'NS', 'ST', 'SC'], correct: 2, explanation: 'Stratus is uniform low cloud layer.' },
+    { id: 'ch8_08', question: 'Clouds composed of ice crystals having feathery appearance', options: ['CI', 'CS', 'AS', 'CC'], correct: 0, explanation: 'Cirrus is feathery high cloud of ice crystals.' },
+    { id: 'ch8_09', question: 'Halo is associated with the cloud', options: ['AC', 'AS', 'CS', 'CI'], correct: 2, explanation: 'Halo forms in cirrostratus (sheet of ice crystals).' },
+    { id: 'ch8_10', question: 'NS clouds occur at', options: ['Cold front', 'Warm front', 'Both fronts', 'Occlusion'], correct: 1, explanation: 'Nimbostratus is associated with warm fronts.' },
+    { id: 'ch8_11', question: 'Corona is associated with the cloud', options: ['AS', 'AC', 'CC', 'CS'], correct: 1, explanation: 'Coronas form in thin water-droplet clouds like altocumulus.' },
+    { id: 'ch8_12', question: 'Lenticular clouds indicate presence of', options: ['Warm Front', 'Cold front', 'Mountain waves', 'Jet stream'], correct: 2, explanation: 'Lenticular (lens-shaped) clouds indicate standing mountain waves.' },
+    { id: 'ch8_13', question: 'Lowest level below which condensation trails will not form is', options: ['Mintra Level', 'Drytra Level', 'Maxtra Level', 'Tropopause'], correct: 0, explanation: 'Mintra is minimum trail altitude.' },
+    { id: 'ch8_14', question: 'Rain falling from cloud but not reaching ground is', options: ['Virgo', 'Virga', 'Mirage', 'Drizzle'], correct: 1, explanation: 'Virga is precipitation evaporating before reaching ground.' },
+    { id: 'ch8_15', question: 'CB with distinct anvil is called', options: ['Castellanus', 'Capillatus', 'Uncinus', 'Calvus'], correct: 1, explanation: 'CB capillatus has well-defined cirrus anvil.' },
+    { id: 'ch8_16', question: 'Cloud ceiling is height of the cloud covering', options: ['3-4/8', '8/8', '5/8 or more', '1-2/8'], correct: 2, explanation: 'Ceiling is broken (5-7/8) or overcast (8/8) coverage.' },
+    { id: 'ch8_17', question: 'No condensation trails occur above', options: ['Maxtra Level', 'Drytra Level', 'Mintra Level', 'Tropopause'], correct: 0, explanation: 'Maxtra is maximum altitude above which trails do not form.' },
+    { id: 'ch8_18', question: 'Cloud of operational significance has base below ___ m or below highest min sector altitude', options: ['1500', '2000', '1000', '3000'], correct: 0, explanation: 'Operationally significant clouds have base below 1500 m.' },
+    { id: 'ch8_19', question: 'AC with cumuliform protuberances are indicative of', options: ['Stability', 'Instability', 'Neutrality', 'Inversion'], correct: 1, explanation: 'AC castellanus indicates mid-level instability.' },
+    { id: 'ch8_20', question: 'Hail may be experienced under the anvil of a CB', options: ['True', 'False', 'Rarely', 'Sometimes'], correct: 0, explanation: 'Hail can be ejected from CB and fall under or beyond the anvil.' }
+  ],
+
+  // ── CH9: Stability ──
+  ch9: [
+    { id: 'ch9_01', question: 'DALR = 9.8 C, ELR = 6.8 C; atmosphere is', options: ['stable', 'unstable', 'indifferent', 'neutral'], correct: 0, explanation: 'ELR < DALR means atmosphere is stable for dry air.' },
+    { id: 'ch9_02', question: 'SALR = 5.5 C, ELR = 4.5 C; atmosphere is', options: ['unstable', 'stable', 'indifferent', 'neutral'], correct: 1, explanation: 'ELR < SALR means saturated air is stable.' },
+    { id: 'ch9_03', question: 'DALR > ELR > SALR', options: ['conditionally stable', 'latently stable', 'potentially stable', 'absolutely unstable'], correct: 0, explanation: 'Conditional instability when ELR lies between SALR and DALR.' },
+    { id: 'ch9_04', question: 'Dry air is unstable when', options: ['ELR=DALR', 'ELR>DALR', 'ELR<DALR', 'ELR=0'], correct: 1, explanation: 'Dry air unstable when ELR exceeds DALR.' },
+    { id: 'ch9_05', question: 'Saturated air is unstable if', options: ['SALR=ELR', 'SALR<ELR', 'SALR>ELR', 'SALR=0'], correct: 1, explanation: 'Saturated air unstable when ELR exceeds SALR.' },
+    { id: 'ch9_06', question: 'If ELR = SALR = DALR the atmosphere is', options: ['Stable', 'Instable', 'Indifferent', 'Neutral'], correct: 2, explanation: 'Equal lapse rates give neutral/indifferent stability.' },
+    { id: 'ch9_07', question: 'DALR means', options: ['Rate of temperature fall in unsaturated parcel rising adiabatically', 'Rate temp falls with height', 'Rate saturated air cools', 'Rate of pressure fall'], correct: 0, explanation: 'DALR is dry adiabatic cooling rate of rising unsaturated parcel.' },
+    { id: 'ch9_08', question: 'Surface temp 30 C. Using DALR temperature at 2 km is', options: ['18 C', '10 C', '42 C', '20 C'], correct: 1, explanation: 'DALR ~10 C/km; 30-20 = 10 C at 2 km.' },
+    { id: 'ch9_09', question: 'An Isothermal atmosphere is', options: ['Stable', 'Unstable', 'Neutral', 'Variable'], correct: 0, explanation: 'Isothermal layer (ELR=0) is very stable.' },
+    { id: 'ch9_10', question: 'If ELR less than SALR, atmosphere is', options: ['Absolutely unstable', 'Conditionally stable', 'Absolutely stable', 'Neutral'], correct: 2, explanation: 'ELR < SALR < DALR makes atmosphere absolutely stable.' },
+    { id: 'ch9_11', question: 'DALR is approximately', options: ['5 C/km', '15 C/km', '10 C/km', '6.5 C/km'], correct: 2, explanation: 'DALR ~9.8 C/km, rounded to 10.' },
+    { id: 'ch9_12', question: 'SALR at mean sea level is about', options: ['10 C/Km', '5 C/Km', '5 F/Km', '8 C/Km'], correct: 1, explanation: 'SALR averages about 5-6 C/km at MSL.' },
+    { id: 'ch9_13', question: 'SALR approaches DALR', options: ['at 0 C', 'at -15 F', 'at -40 C', 'at 100 C'], correct: 2, explanation: 'At very low temperatures saturation vapour is small so SALR approaches DALR.' },
+    { id: 'ch9_14', question: 'Dry air at 35 C surface rising 1 km adiabatically attains temperature', options: ['29 C', '25 C', '45 C', '20 C'], correct: 1, explanation: '35 - 10 (DALR) = 25 C.' },
+    { id: 'ch9_15', question: 'Inversion in atmosphere indicates', options: ['Stability', 'Instability', 'Neutrality', 'Mixing'], correct: 0, explanation: 'Inversion is a very stable layer.' },
+    { id: 'ch9_16', question: 'Inversion is ___ Lapse Rate', options: ['Positive', 'Negative', 'Neutral', 'Zero'], correct: 1, explanation: 'Inversion has negative lapse rate (temp rises with height).' },
+    { id: 'ch9_17', question: 'Environmental LR can be more than DALR', options: ['True', 'False', 'Never', 'Sometimes'], correct: 0, explanation: 'Super-adiabatic layers can exist (ELR > DALR), absolutely unstable.' },
+    { id: 'ch9_18', question: 'Process determining vertical distribution of temperature', options: ['Adiabatic', 'Isothermal', 'Isentropic', 'Conductive'], correct: 0, explanation: 'Adiabatic processes largely set vertical T profile.' },
+    { id: 'ch9_19', question: 'Rise in temperature with height is', options: ['Inversion', 'Lapse', 'Normal', 'Isothermal'], correct: 0, explanation: 'Rising T with height is inversion.' },
+    { id: 'ch9_20', question: 'Inversion is common in', options: ['Post Monsoon', 'Monsoon', 'Winters', 'Summer'], correct: 2, explanation: 'Surface radiation inversions are most common in winter.' }
+  ],
+
+  // ── CH10: Optical Phenomena ──
+  ch10: [
+    { id: 'ch10_01', question: 'Aurora Australis occur in the', options: ['S hemisphere', 'N hemisphere', 'Equator', 'Tropics'], correct: 0, explanation: 'Aurora Australis is the southern lights.' },
+    { id: 'ch10_02', question: 'Aurora Australis called ___ Lights', options: ['Northern', 'Southern', 'Temperate', 'Polar'], correct: 1, explanation: 'Australis = southern lights.' },
+    { id: 'ch10_03', question: 'Aurora Borealis occur in the', options: ['S hemisphere', 'N hemisphere', 'Equator', 'Tropics'], correct: 1, explanation: 'Borealis is northern lights.' },
+    { id: 'ch10_04', question: 'Aurora Borealis are called ___ Lights', options: ['Northern', 'Southern', 'Temperate', 'Polar'], correct: 0, explanation: 'Borealis = northern lights.' },
+    { id: 'ch10_05', question: 'Corona occur in ___ clouds', options: ['AS', 'NS', 'CS', 'AC'], correct: 3, explanation: 'Coronas form in thin water-droplet clouds like AC.' },
+    { id: 'ch10_06', question: 'Bishop ring is due to diffraction of light by fine particles of', options: ['water', 'dust', 'ice', 'sand'], correct: 1, explanation: 'Bishop ring is volcanic dust diffraction phenomenon.' },
+    { id: 'ch10_07', question: 'Radius of the Bishop ring is about', options: ['32 deg', '22 deg', '42 deg', '12 deg'], correct: 1, explanation: 'Bishop ring radius is about 22 deg.' },
+    { id: 'ch10_08', question: 'Superior Mirage occurs in marked', options: ['Lapse', 'Isothermal', 'Inversion', 'Adiabatic'], correct: 2, explanation: 'Superior mirage forms in temperature inversion.' },
+    { id: 'ch10_09', question: 'Inferior Mirage occurs when there is', options: ['Lapse', 'Isothermal', 'Inversion', 'Adiabatic'], correct: 0, explanation: 'Inferior mirage occurs with steep lapse near hot surface.' },
+    { id: 'ch10_10', question: 'Corona are formed due to ___ of light', options: ['Refraction', 'Diffraction', 'Scattering', 'Reflection'], correct: 1, explanation: 'Corona is a diffraction phenomenon.' },
+    { id: 'ch10_11', question: 'Corona are formed due to light passing through', options: ['Mist only', 'Fog only', 'small water/ice particles only', 'Any of these'], correct: 3, explanation: 'Coronas form in any small droplet medium.' },
+    { id: 'ch10_12', question: 'Halo is produced by', options: ['Refraction', 'Diffraction', 'Scattering', 'Reflection'], correct: 0, explanation: 'Halo is refraction of light through ice crystals.' },
+    { id: 'ch10_13', question: 'Halo is produced when light passes through', options: ['water particles', 'ice crystals', 'both', 'mist'], correct: 1, explanation: 'Ice crystals refract light producing halos.' },
+    { id: 'ch10_14', question: 'Halo occur in the cloud', options: ['AS', 'NS', 'CS', 'CI'], correct: 2, explanation: 'Halos form in cirrostratus (ice crystal sheet).' },
+    { id: 'ch10_15', question: 'Halo is luminous ring of ___ radius', options: ['32 deg', '22 deg', '42 deg', '12 deg'], correct: 1, explanation: 'Standard halo radius is 22 degrees.' },
+    { id: 'ch10_16', question: 'Halo round the sun shows pure clear ___ on the outside', options: ['Red', 'Yellow', 'Violet', 'Green'], correct: 2, explanation: 'Outer edge of halo shows blue/violet; red is on inner edge.' },
+    { id: 'ch10_17', question: 'Halo signifies predominance in cloud of', options: ['Supercooled water drops', 'Ice crystals', 'Both', 'Dust'], correct: 1, explanation: 'Halo indicates ice crystal cloud.' },
+    { id: 'ch10_18', question: 'Cloud which causes Halo has ___ chances of ice accretion', options: ['negligible', 'maximum', 'medium', 'high'], correct: 0, explanation: 'Pure ice crystal clouds have negligible icing risk.' },
+    { id: 'ch10_19', question: 'Sometimes a halo with radius of ___ is observed, called Large Halo', options: ['32 deg', '42 deg', '22 deg', '12 deg'], correct: 1, explanation: 'Large halo has 46 deg radius (closest 42 in given options).' },
+    { id: 'ch10_20', question: 'Halo occurs from ___ cloud', options: ['Low', 'Medium', 'High', 'Vertical'], correct: 2, explanation: 'Halo occurs in high (cirrus family) clouds.' }
+  ],
+
+  // ── CH11: Precipitation ──
+  ch11: [
+    { id: 'ch11_01', question: 'When supercooled water drops and ice particles co-exist, ice crystals grow at expense of water drops because', options: ['SVP over drops less than over ice', 'SVP over ice less than over drops', 'Ice crystals convert into drops', 'They merge'], correct: 1, explanation: 'Bergeron process: lower SVP over ice causes vapour transfer.' },
+    { id: 'ch11_02', question: 'Clouds whose tops extend well above freezing level are called', options: ['Warm Clouds', 'Cold Clouds', 'Moderate Clouds', 'Mixed Clouds'], correct: 1, explanation: 'Cold clouds extend above 0 C level.' },
+    { id: 'ch11_03', question: 'Clouds whose tops do not extend to freezing level are called', options: ['Warm Clouds', 'Cold Clouds', 'Moderate Clouds', 'Stratus'], correct: 0, explanation: 'Warm clouds remain below the freezing level.' },
+    { id: 'ch11_04', question: 'Coalescence Theory explains rainfall from', options: ['Warm Clouds', 'Cold Clouds', 'Both', 'Cirrus'], correct: 0, explanation: 'Coalescence explains warm cloud rain.' },
+    { id: 'ch11_05', question: 'Ice crystal Theory explains rainfall from', options: ['Warm Clouds', 'Cold Clouds', 'Both', 'Stratus'], correct: 1, explanation: 'Bergeron ice-crystal theory explains cold cloud rain.' },
+    { id: 'ch11_06', question: 'Giant Nucleus Theory explains rainfall over', options: ['Maritime areas', 'Inland areas', 'Hilly areas', 'Desert'], correct: 0, explanation: 'Salt nuclei from sea drive maritime warm-rain processes.' },
+    { id: 'ch11_07', question: 'Very heavy precipitation as showers over short period is', options: ['Flash floods', 'Cloud Burst', 'Orographic Rain', 'Frontal Rain'], correct: 1, explanation: 'Cloud burst is intense brief precipitation.' },
+    { id: 'ch11_08', question: 'Rain shadow area is on the ___ of the mountain range', options: ['Top', 'Windward side', 'Leeward side', 'Both sides'], correct: 2, explanation: 'Rain shadow is on lee side after moisture has rained out.' },
+    { id: 'ch11_09', question: 'Sleet is a mixture of', options: ['Hail & Snow', 'Rain & Snow', 'Frozen Rain', 'Ice & Hail'], correct: 1, explanation: 'Sleet is mixed rain and snow.' },
+    { id: 'ch11_10', question: 'Rainfall in tropics is more in', options: ['Winters', 'Summers', 'Post monsoon', 'Spring'], correct: 1, explanation: 'Summer (warm season) brings tropical rainfall maximum.' },
+    { id: 'ch11_11', question: 'Rainfall in tropics is more in the', options: ['Morning', 'Afternoon', 'Night', 'Evening'], correct: 1, explanation: 'Afternoon convection peaks over tropical land.' },
+    { id: 'ch11_12', question: 'Rainfall in temperate latitudes is more in', options: ['Winters', 'Summers', 'Spring', 'Autumn'], correct: 0, explanation: 'Frontal systems give winter rainfall maximum in temperate zones.' },
+    { id: 'ch11_13', question: 'Over J&K and western Himalayas Rainfall is more in', options: ['Winters', 'Summers', 'Post monsoon', 'Pre-monsoon'], correct: 0, explanation: 'Western Disturbances bring winter precipitation to J&K.' },
+    { id: 'ch11_14', question: 'Rainfall over coastal areas is more in the', options: ['Evening', 'Afternoon', 'Night & early morning', 'Noon'], correct: 2, explanation: 'Land-sea breeze convergence produces nocturnal coastal rain.' },
+    { id: 'ch11_15', question: 'Areas to the ___ of western Ghats of India are rain shadow areas', options: ['W', 'S', 'E', 'N'], correct: 2, explanation: 'Eastern (leeward) side of W Ghats is rain shadow.' },
+    { id: 'ch11_16', question: 'A sudden rise in level of rivers causing floods is called', options: ['Cloud Burst', 'Catchment flooding', 'Flash Floods', 'Storm surge'], correct: 2, explanation: 'Flash flood is rapid sudden river/stream rise.' },
+    { id: 'ch11_17', question: 'Artificial rain making is also termed as', options: ['Simulation', 'Cloud seeding', 'Nucleation', 'Inducement'], correct: 1, explanation: 'Cloud seeding is the artificial rain technique.' },
+    { id: 'ch11_18', question: 'Fog can be dispersed for short period by artificial stimulation', options: ['True', 'False', 'Never', 'Sometimes'], correct: 0, explanation: 'Fog dispersal techniques (seeding/heating) work briefly.' },
+    { id: 'ch11_19', question: 'Showery precipitation occurs from', options: ['NS', 'AC', 'CB', 'ST'], correct: 2, explanation: 'CB produces showers.' },
+    { id: 'ch11_20', question: 'A day is called Rainy day when rainfall in 24 hr is ___ mm or more', options: ['1.5', '2', '2.5', '5'], correct: 2, explanation: 'IMD defines rainy day as >=2.5 mm in 24 hr.' }
+  ],
+
+  // ── CH12: Ice Accretion ──
+  ch12: [
+    { id: 'ch12_01', question: 'Hoar frost occurs on airframe in clear air when airframe temperature is', options: ['below the frost point', 'frost point', 'just above the frost point', 'above 0 C'], correct: 0, explanation: 'Hoar frost sublimates onto surface below frost point.' },
+    { id: 'ch12_02', question: 'In clouds at temperatures below 0 C aircraft may encounter icing of type', options: ['only Glazed', 'only Rime', 'intermediate between these two', 'No icing'], correct: 2, explanation: 'Mixed icing (intermediate) often occurs in below-zero clouds.' },
+    { id: 'ch12_03', question: 'Opaque Rime ice is', options: ['Light porous', 'Solid', 'Mixture of porous and solid', 'Crystal'], correct: 0, explanation: 'Rime is opaque, light and porous.' },
+    { id: 'ch12_04', question: 'Rime is formed by freezing of ___ supercooled drops on airframe', options: ['Small', 'Large', 'Medium', 'Mixed'], correct: 0, explanation: 'Rime forms from small supercooled droplets freezing quickly.' },
+    { id: 'ch12_05', question: 'Glazed ice is formed by freezing of ___ supercooled drops on airframe', options: ['Small', 'Large', 'Medium', 'Mixed'], correct: 1, explanation: 'Large supercooled drops form clear glaze ice on airframe.' },
+    { id: 'ch12_06', question: 'The ___ ice poses serious aviation hazard', options: ['Rime', 'Hoar Frost', 'Glazed', 'All'], correct: 2, explanation: 'Glazed (clear) ice is heaviest and most dangerous.' },
+    { id: 'ch12_07', question: 'Airframe icing probability decreases below -20 C as proportion of supercooled drops in cloud', options: ['Increases', 'Decreases', 'Does not change', 'Doubles'], correct: 1, explanation: 'Below -20 C clouds become mostly ice crystals.' },
+    { id: 'ch12_08', question: 'CI, CS and CC clouds consist mostly of ice crystals. Icing hazard therefore', options: ['Maximum', 'Medium', 'Negligible', 'Variable'], correct: 2, explanation: 'Ice crystal clouds give negligible icing.' },
+    { id: 'ch12_09', question: 'AS, NS consist of supercooled drops and ice crystals. Icing is', options: ['Maximum', 'Light or moderate', 'Negligible', 'Severe'], correct: 1, explanation: 'AS/NS give light to moderate mixed icing.' },
+    { id: 'ch12_10', question: 'In AC clouds ___ icing is likely in mountainous areas', options: ['Severe', 'Light to moderate', 'Negligible', 'None'], correct: 1, explanation: 'AC produces light to moderate icing, more in mountains.' },
+    { id: 'ch12_11', question: 'In TCU icing may range light to severe up to ___ level', options: ['-40 C level', '30 C level', '-20 C level', '0 C level'], correct: 2, explanation: 'TCU icing severe up to -20 C, then diminishes.' },
+    { id: 'ch12_12', question: 'In CB severe icing below -20 C is', options: ['not significant', 'significant', 'maximum', 'unpredictable'], correct: 0, explanation: 'Below -20 C in CB severe icing becomes less significant.' },
+    { id: 'ch12_13', question: 'Maximum water content / ice formation expected around', options: ['-25 C level', '-20 C level', '-15 C level', '0 C level'], correct: 2, explanation: 'Liquid water content and icing peak near -15 C.' },
+    { id: 'ch12_14', question: 'Carburetor icing serious at extreme temperatures', options: ['13 C', '30 to -10 C', '20 C', '40 C'], correct: 1, explanation: 'Carb icing most severe between +30 and -10 C.' },
+    { id: 'ch12_15', question: '___ occurs in moist cloudless air on aircraft surface below 0 C by sublimation', options: ['Rime', 'Glazed', 'Hoar Frost', 'Clear ice'], correct: 2, explanation: 'Hoar frost forms by direct vapour deposition.' },
+    { id: 'ch12_16', question: '___ occurs in St, Sc, Ac, Cu, Ns at -10 to -40 C and in Cb at -20 to -40 C', options: ['Rime', 'Glazed', 'Hoar Frost', 'Mixed'], correct: 0, explanation: 'Rime forms in colder portions of these clouds.' },
+    { id: 'ch12_17', question: 'In clouds ___ occurs with wide range of drop sizes between 0 C and -40 C', options: ['Rime', 'Glazed', 'Mixture of rime and clear ice', 'Hoar Frost'], correct: 2, explanation: 'Mixed icing forms with varied drop sizes.' },
+    { id: 'ch12_18', question: '___ occurs in AS, NS, SC, TCU/CB between 0 and -20 C, especially after rapid descent from cold', options: ['Glazed', 'Fume', 'Mixture of Rime and Clear ice', 'Hoar Frost'], correct: 0, explanation: 'Glazed ice forms in warmer parts of these clouds.' },
+    { id: 'ch12_19', question: 'When fog freezes on parked aircraft it produces', options: ['Hoar Frost', 'Rime', 'Clear ice', 'Mixed'], correct: 1, explanation: 'Freezing fog deposits rime ice on parked aircraft.' },
+    { id: 'ch12_20', question: 'Icing ___ the stalling speed appreciably', options: ['Decreases', 'Increases', 'Does not change', 'Doubles'], correct: 1, explanation: 'Ice raises stalling speed by distorting airfoil and adding weight.' }
+  ],
+
+  // ── CH13: Thunderstorm ──
+  ch13: [
+    { id: 'ch13_01', question: 'Conditions for thunderstorm formation', options: ['Steep lapse, strong winds', 'Shallow lapse, moisture', 'Steep lapse, moisture, trigger', 'Calm and dry'], correct: 2, explanation: 'TS needs instability (steep lapse), moisture, and trigger.' },
+    { id: 'ch13_02', question: 'Hail is most likely to fall from a cloud', options: ['Having layers', 'Composed of Ice crystals', 'Having strong vertical development', 'Stratus'], correct: 2, explanation: 'Deep convective clouds (CB) produce hail.' },
+    { id: 'ch13_03', question: 'Norwesters are', options: ['Western disturbances over NW India', 'Severe TS over NE India in hot weather', 'Severe TS over Peninsula', 'Polar fronts'], correct: 1, explanation: 'Norwesters are pre-monsoon severe TS over Bengal/NE India.' },
+    { id: 'ch13_04', question: 'Dust Storm usually occurs over NW India during', options: ['Post-monsoon', 'Winter', 'Pre-Monsoon', 'Monsoon'], correct: 2, explanation: 'Pre-monsoon (Mar-May) brings dust storms to NW India.' },
+    { id: 'ch13_05', question: 'A mature thunderstorm has', options: ['Updraft only', 'Downdraft only', 'Updrafts and downdrafts', 'Calm'], correct: 2, explanation: 'Mature stage has co-existing up- and downdrafts.' },
+    { id: 'ch13_06', question: 'Aircraft icing is most favoured at temperatures', options: ['-20 to -40 C', '0 to -20 C', 'Below -40 C', 'Above 0 C'], correct: 1, explanation: 'Maximum icing between 0 and -20 C where liquid water dominates.' },
+    { id: 'ch13_07', question: 'Short duration showery precipitation is associated with', options: ['ST', 'AS', 'CB', 'NS'], correct: 2, explanation: 'CB gives short, intense showers.' },
+    { id: 'ch13_08', question: 'Hail is', options: ['Winter mountain precipitation', 'Frozen rain from sheet clouds', 'Solid precipitation from deep convective cloud', 'Sleet'], correct: 2, explanation: 'Hail forms in strong updrafts of deep CB.' },
+    { id: 'ch13_09', question: 'Most hazardous cloud for aviation', options: ['CB', 'CU', 'NS', 'AS'], correct: 0, explanation: 'CB combines icing, turbulence, hail, lightning.' },
+    { id: 'ch13_10', question: 'Life of a CB cell is usually', options: ['7 to 8 hrs', '3 to 4 hrs', '2-3 hr', '1 hr'], correct: 2, explanation: 'Single cell CB lasts 2-3 hours typically.' },
+    { id: 'ch13_11', question: 'Severest activity of a heat type TS lasts for', options: ['2 hrs', '30 to 45 min', '3 to 4 hr', '5 hr'], correct: 1, explanation: 'Mature phase peak activity lasts roughly 30-45 min.' },
+    { id: 'ch13_12', question: 'Norwesters occur during', options: ['Jan-Feb', 'Mar-May', 'June-Sep', 'Oct-Dec'], correct: 1, explanation: 'Norwesters are pre-monsoon (Mar-May).' },
+    { id: 'ch13_13', question: 'Norwesters occur during', options: ['Winter', 'Hot weather', 'Monsoon', 'Post Monsoon'], correct: 1, explanation: 'Hot weather (pre-monsoon) season.' },
+    { id: 'ch13_14', question: 'Norwesters affect', options: ['N India', 'Bengal, Bihar, Orissa, Assam', 'Central India', 'S India'], correct: 1, explanation: 'NE India - Bengal/Bihar/Orissa/Assam.' },
+    { id: 'ch13_15', question: 'The trigger action may take place due to', options: ['Clear night sky no wind', 'Orographic lifting', 'High pressure', 'Subsidence'], correct: 1, explanation: 'Orographic lifting commonly triggers convection.' },
+    { id: 'ch13_16', question: 'Norwesters normally occur during', options: ['Mornings', 'Afternoons', 'Nights', 'Dawn'], correct: 1, explanation: 'Afternoon heating triggers Norwesters.' },
+    { id: 'ch13_17', question: 'Norwesters originates over', options: ['Chota-Nagpur hills', 'Deccan Plateau', 'Khasi hills', 'Himalayas'], correct: 0, explanation: 'Norwesters form over Chota-Nagpur plateau region.' },
+    { id: 'ch13_18', question: 'Andhi (blinding storms) occur generally over', options: ['S India', 'N India', 'NE India', 'W India'], correct: 1, explanation: 'Andhi (dust storms) occur over N India in pre-monsoon.' },
+    { id: 'ch13_19', question: 'Wind speed in Light DS is', options: ['25 kt', '30 kt', 'up to 21 kt', '15 kt'], correct: 2, explanation: 'Light dust storm wind speed up to 21 kt.' },
+    { id: 'ch13_20', question: 'Diameter of Microburst is', options: ['less than 4 km', 'less than 2 km', 'less than 6 km', 'less than 10 km'], correct: 0, explanation: 'Microburst diameter is less than 4 km.' },
+    { id: 'ch13_21', question: 'Diameter of Macroburst is', options: ['<4 km', '4 km or more', '>8 km', '>10 km'], correct: 1, explanation: 'Macroburst diameter is 4 km or greater.' },
+    { id: 'ch13_22', question: 'For detecting precipitation a Radar wavelength is suitable', options: ['30-200 mm', '400-500 mm', '600-700 mm', '10-20 mm'], correct: 0, explanation: 'Weather radars use 30-200 mm (S/C/X bands).' },
+    { id: 'ch13_23', question: 'For airborne radars wavelength generally used', options: ['20 mm', '40 mm', '60 mm', '100 mm'], correct: 2, explanation: 'Airborne weather radars use ~60 mm (X-band, ~5 cm) actually C-band 6 cm common.' },
+    { id: 'ch13_24', question: 'Wavelength of TS detection X band radar', options: ['10 mm', '20 mm', '30 mm', '50 mm'], correct: 2, explanation: 'X-band wavelength approximately 30 mm (3 cm).' },
+    { id: 'ch13_25', question: 'Wavelength of storm detection S band radar', options: ['50 mm', '100 mm', '200 mm', '300 mm'], correct: 1, explanation: 'S-band wavelength approximately 100 mm (10 cm).' },
+    { id: 'ch13_26', question: 'Over plains TS mostly occur during the', options: ['Afternoon', 'Night', 'Early morning', 'Dawn'], correct: 0, explanation: 'Plains TS peak in afternoon convection.' },
+    { id: 'ch13_27', question: 'Over valley and foot hills TS generally occur during', options: ['Afternoon', 'Night & early morning', 'Dawn', 'Noon'], correct: 1, explanation: 'Drainage flows trigger night/morning valley TS.' },
+    { id: 'ch13_28', question: 'Over the sea TS are more frequent', options: ['Afternoon', 'Night', 'Early morning', 'Noon'], correct: 1, explanation: 'Sea TS peak at night when sea is warmer than air aloft.' },
+    { id: 'ch13_29', question: 'Life of Mesoscale Convective Complex TS is', options: ['2-3 hr', '3-4 hr', '6 to 24 hr', '12 hr'], correct: 2, explanation: 'MCC can last 6-24 hours.' },
+    { id: 'ch13_30', question: 'Loud peals, frequent lightning, moderate/heavy showers with light hail, wind 15-40 kt', options: ['Light TS', 'Moderate TS', 'Severe TS', 'Cell'], correct: 1, explanation: 'These features classify as moderate TS.' },
+    { id: 'ch13_31', question: 'For a severe TS one requirement is strong wind shear', options: ['Horizontal', 'Vertical', 'Slant', 'Surface'], correct: 1, explanation: 'Vertical wind shear is critical for severe TS.' },
+    { id: 'ch13_32', question: 'Severe TS cells are tilted', options: ['Vertical', 'To the South', 'To the North', 'Downwind'], correct: 3, explanation: 'Severe TS cells tilt downwind in vertical shear.' },
+    { id: 'ch13_33', question: 'When flying through active TS, lightning strikes most likely', options: ['Above 5000 ft under anvil', 'Below cloud in rain', 'Temperature band +10 to -10 C', 'Above 10000 ft'], correct: 2, explanation: 'Charge separation peaks in 0 +/-10 C zone.' },
+    { id: 'ch13_34', question: 'Hazards of mature TS include lightning, turbulence and', options: ['Microburst, shear, anvil', 'Icing, microburst, WS', 'Icing, drizzle, microburst', 'WS, hail, fog'], correct: 1, explanation: 'Mature TS: icing, microburst, wind shear, hail.' },
+    { id: 'ch13_35', question: 'Hail grows by', options: ['Freezing as it leaves cloud', 'Up and down forces in CU', 'Collision with ice crystals', 'Collision with supercooled water drops'], correct: 3, explanation: 'Hail accretes layers via collision with supercooled drops.' }
+  ],
+
+  // ── CH14: Air Masses and Fronts and WDS ──
+  ch14: [
+    { id: 'ch14_01', question: 'Air mass originating at sea in low latitudes is', options: ['Polar maritime', 'Tropical continental', 'Tropical maritime', 'Polar continental'], correct: 2, explanation: 'Tropical maritime = warm sea origin.' },
+    { id: 'ch14_02', question: 'Air mass over equatorial region is', options: ['Warm & dry', 'Warm & Moist', 'Cold & dry', 'Cold & moist'], correct: 1, explanation: 'Equatorial air is warm and moist.' },
+    { id: 'ch14_03', question: 'Advancing cold front colder than cool air mass of warm front undercuts both. This is', options: ['Warm Occlusion', 'Cold Occlusion', 'Stationary front', 'Quasi-stationary'], correct: 1, explanation: 'Cold occlusion: faster colder air undercuts warm front.' },
+    { id: 'ch14_04', question: 'Airmass originated over land in polar region', options: ['Warm & dry', 'Warm & Moist', 'Cold & dry', 'Cold & moist'], correct: 2, explanation: 'Polar continental: cold and dry.' },
+    { id: 'ch14_05', question: 'If warm air mass overtakes cold air mass it is called', options: ['Cold Front', 'Warm Front', 'Occluded Front', 'Stationary'], correct: 1, explanation: 'Warm front = warm air advancing over retreating cold.' },
+    { id: 'ch14_06', question: 'At warm front', options: ['Warm air overtakes the cold air', 'Cold air undercuts warm', 'Stationary', 'Both move equally'], correct: 0, explanation: 'Warm air ascends over receding cold air.' },
+    { id: 'ch14_07', question: 'Conditions are always unstable at', options: ['Cold front', 'Warm front', 'Both', 'Occlusion'], correct: 0, explanation: 'Cold front lifting causes unstable convection.' },
+    { id: 'ch14_08', question: 'Line squall occurs 100-300 km ahead of', options: ['Warm front', 'Cold front', 'Occlusion', 'Stationary'], correct: 1, explanation: 'Pre-frontal squall lines develop ahead of cold front.' },
+    { id: 'ch14_09', question: 'Precipitation over a belt of 30-50 km on both sides of front', options: ['Cold front', 'Warm front', 'Both', 'Stationary'], correct: 0, explanation: 'Cold front rain is narrow (30-50 km).' },
+    { id: 'ch14_10', question: 'Cold front moves at ___ the speed of warm front', options: ['Same', 'Double', 'Half', 'Triple'], correct: 1, explanation: 'Cold fronts move about twice as fast as warm fronts.' },
+    { id: 'ch14_11', question: 'Line Squalls occur ___ of Cold front', options: ['Ahead', 'Behind', 'At the', 'Far behind'], correct: 0, explanation: 'Squall lines precede cold fronts.' },
+    { id: 'ch14_12', question: 'Fronts are associated with', options: ['Tropical cyclone', 'Monsoon Depression', 'Extratropical Cyclones', 'TRS'], correct: 2, explanation: 'Fronts are characteristic of extra-tropical (mid-latitude) cyclones.' },
+    { id: 'ch14_13', question: 'CB, Roll-type clouds, SC, AC with embedded CB are associated with', options: ['Cold front', 'Warm front', 'Stationary', 'Occlusion'], correct: 0, explanation: 'Cold front shows deep convective clouds.' },
+    { id: 'ch14_14', question: 'Surface of discontinuity between Polar Easterlies and temperate Westerlies is', options: ['Equatorial Front', 'Tropopause', 'Polar Front', 'Tropical Front'], correct: 2, explanation: 'Polar front separates polar and mid-latitude air.' },
+    { id: 'ch14_15', question: 'Airmass originating from sea in lower Lat is', options: ['Warm & Dry', 'Warm & Moist', 'Cold & Moist', 'Cold & dry'], correct: 1, explanation: 'Tropical maritime is warm and moist.' },
+    { id: 'ch14_16', question: 'WDs approach India as', options: ['Cols', 'Occluded Fronts', 'Highs', 'Lows'], correct: 1, explanation: 'WDs reach India as occluded extratropical lows.' },
+    { id: 'ch14_17', question: 'Maximum WDs occur in', options: ['Summers', 'Post Monsoon', 'Winters', 'Pre-monsoon'], correct: 2, explanation: 'WDs peak Dec-Feb.' },
+    { id: 'ch14_18', question: 'Ahead of a warm front the surface wind', options: ['Backs & weakens', 'Veers & strengthens', 'Backs & strengthens', 'Veers & weakens'], correct: 2, explanation: 'Ahead of warm front wind backs and strengthens.' },
+    { id: 'ch14_19', question: 'On approach of a Warm Front temperature', options: ['Fall', 'Rise', 'Remain same', 'Fluctuate'], correct: 1, explanation: 'Approaching warm front raises temperature.' },
+    { id: 'ch14_20', question: 'CI, CS, AS, NS, ST in sequence are associated with the front', options: ['Warm', 'Cold', 'Occluded', 'Stationary'], correct: 0, explanation: 'Classic warm-front cloud sequence.' },
+    { id: 'ch14_21', question: 'During passage of Cold Front winds', options: ['Suddenly become squally', 'Back and weaken', 'Veer and moderate', 'Calm'], correct: 0, explanation: 'Cold front passage brings squally winds.' },
+    { id: 'ch14_22', question: 'Visibility is poor in a Warm Front', options: ['Ahead', 'Ahead & During', 'After & During', 'Only after'], correct: 1, explanation: 'Continuous rain/fog ahead and during warm front.' },
+    { id: 'ch14_23', question: 'Fog occurs in Cold Front', options: ['Ahead', 'During', 'After', 'Never'], correct: 2, explanation: 'Fog may form after cold front in cooler humid air.' },
+    { id: 'ch14_24', question: 'WD is a ___ front', options: ['Cold', 'Warm', 'Occluded', 'Stationary'], correct: 2, explanation: 'WD reaches India as an occluded system.' },
+    { id: 'ch14_25', question: 'FZRA and FZFG occur ___ of a warm front', options: ['Ahead', 'During', 'After', 'Behind'], correct: 0, explanation: 'Freezing rain/fog precede warm front.' },
+    { id: 'ch14_26', question: 'Precipitation ceases after the passage of a ___ front', options: ['Cold', 'Warm', 'Occluded', 'Stationary'], correct: 0, explanation: 'Cold front rain ends quickly after passage.' },
+    { id: 'ch14_27', question: 'During approach of a Warm Front wind', options: ['Backs', 'Veers', 'Does not change', 'Calms'], correct: 0, explanation: 'Wind backs ahead of warm front.' },
+    { id: 'ch14_28', question: 'A WD with two or more closed isobars at 2 hPa interval is', options: ['Trough in Westerlies', 'Western Depression', 'Western Cyclone', 'Western High'], correct: 1, explanation: 'Closed isobaric WD = Western Depression.' },
+    { id: 'ch14_29', question: 'A WD originates over', options: ['Baluchistan', 'Caspian sea', 'Mediterranean, Caspian and Black Seas', 'Arabian sea'], correct: 2, explanation: 'WDs form over Mediterranean/Caspian/Black sea region.' },
+    { id: 'ch14_30', question: 'Induced lows develop to the ___ of a WD', options: ['N', 'S', 'NE', 'W'], correct: 1, explanation: 'Induced lows form south of the WD over plains.' }
+  ],
+
+  // ── CH15: Jet Streams ──
+  ch15: [
+    { id: 'ch15_01', question: 'Arbitrary lower limit of jet core velocity (WMO)', options: ['60 kt', '60 m/s', '70 m/s', '30 m/s'], correct: 0, explanation: 'WMO defines jet stream as wind speed >=60 kt at core.' },
+    { id: 'ch15_02', question: 'Jet stream has', options: ['One maxima', 'One or more maxima', 'Only two maxima', 'No maxima'], correct: 1, explanation: 'Jet streams can have multiple maxima (jet streaks).' },
+    { id: 'ch15_03', question: 'Vertical wind shear in a Jet stream is about', options: ['5 m/s/km', '6 m/s/km', '8 m/s/km', '3 m/s/km'], correct: 1, explanation: 'Typical vertical shear in jet is ~6 m/s per km.' },
+    { id: 'ch15_04', question: 'Compared to horizontal, the vertical wind shear in a Jet stream is', options: ['Weaker', 'Stronger', 'Same', 'Variable'], correct: 1, explanation: 'Vertical shear exceeds horizontal in jets.' },
+    { id: 'ch15_05', question: 'In a jet stream, path of maximum speed is called', options: ['Core', 'Axis', 'Jet streak', 'Maxima'], correct: 1, explanation: 'Axis is the line of maximum winds.' },
+    { id: 'ch15_06', question: 'Wind speed along axis of jet stream is always', options: ['Uniform', 'Not uniform', 'Constant', 'Maximum'], correct: 1, explanation: 'Speed varies along axis with jet streaks.' },
+    { id: 'ch15_07', question: 'Centres of high speed along axis are called', options: ['Jet streaks', 'Core', 'Axis', 'Maxima'], correct: 0, explanation: 'Jet streaks are local maxima along the axis.' },
+    { id: 'ch15_08', question: 'In wavy jet streaks are located near the', options: ['Ridge', 'Trough', 'Between Trough and Ridge', 'Centre'], correct: 1, explanation: 'Jet streaks lie near troughs of wavy jets.' },
+    { id: 'ch15_09', question: 'Sub-tropical Jet Stream (STJ) is', options: ['Westerly', 'Easterly', 'Southerly', 'Northerly'], correct: 0, explanation: 'STJ is westerly.' },
+    { id: 'ch15_10', question: 'Normal position of Sub-tropical Jet Stream is', options: ['30 N', '27 N', '35 N', '20 N'], correct: 1, explanation: 'STJ averages around 27 N over India.' },
+    { id: 'ch15_11', question: 'Southern most position of STJ in February is', options: ['22 N', '20 N', '18 N', '25 N'], correct: 0, explanation: 'STJ reaches ~22 N in Feb over India.' },
+    { id: 'ch15_12', question: 'The STJ affects India from', options: ['Jun to Jul', 'Oct to May', 'Aug to Sep', 'Mar to May'], correct: 1, explanation: 'STJ present over India Oct-May.' },
+    { id: 'ch15_13', question: 'STJ has layered structure. Two layers of max wind to the ___ of jet core', options: ['S', 'N', 'SW', 'E'], correct: 0, explanation: 'Two layers exist to the south of STJ core.' },
+    { id: 'ch15_14', question: 'The STJ strengthens', options: ['Northwards', 'Upstream', 'Downstream', 'Eastwards'], correct: 2, explanation: 'STJ accelerates downstream.' },
+    { id: 'ch15_15', question: 'At and near the STJ the temperature gradient is very', options: ['Small', 'Large', 'Moderate', 'Zero'], correct: 1, explanation: 'Large meridional temperature gradient drives STJ.' },
+    { id: 'ch15_16', question: 'Vertical wind shear in STJ is greater ___ the core', options: ['Above', 'Below', 'Along', 'Same'], correct: 1, explanation: 'Vertical shear is stronger below the core (in troposphere).' },
+    { id: 'ch15_17', question: 'The TJ prevails over Indian Peninsula from', options: ['May to Jun', 'Sep to Oct', 'Jun to Aug', 'Jul to Sep'], correct: 2, explanation: 'Tropical Easterly Jet during monsoon Jun-Aug.' },
+    { id: 'ch15_18', question: 'The TJ is located over Indian Peninsula at approximately', options: ['13 N', '17 N', '18 N', '10 N'], correct: 0, explanation: 'TEJ axis is near 12-13 N over peninsula.' },
+    { id: 'ch15_19', question: 'The TJ is located approximately at height of', options: ['15-16 km', '12-13 km', '11-12 km', '10-11 km'], correct: 0, explanation: 'TEJ resides at 15-16 km (~150 hPa).' },
+    { id: 'ch15_20', question: 'The TJ is strongest in', options: ['July-Aug', 'Sep-Oct', 'June', 'May'], correct: 0, explanation: 'TEJ peaks Jul-Aug during monsoon.' },
+    { id: 'ch15_21', question: 'In TJ wind shears are much ___ than STJ', options: ['More', 'Less', 'Same', 'Variable'], correct: 1, explanation: 'Wind shears in TEJ are smaller than STJ.' },
+    { id: 'ch15_22', question: 'TJ is', options: ['Westerly', 'Easterly', 'Southerly', 'Northerly'], correct: 1, explanation: 'Tropical Easterly Jet flows from east to west.' },
+    { id: 'ch15_23', question: 'A jet Stream can be recognized by', options: ['High level dust', 'High Pressure', 'Streaks of CI', 'Lenticular clouds'], correct: 2, explanation: 'Cirrus streaks indicate jet stream presence.' },
+    { id: 'ch15_24', question: 'Flying at right angles to jet with falling pressure (N hem)', options: ['Wind from left', 'Increasing head wind', 'Increasing tail wind', 'Wind from right'], correct: 0, explanation: 'Falling pressure means flying towards low, wind from left in N hem.' },
+    { id: 'ch15_25', question: 'When and where tropical jet stream occurs', options: ['All year along equator', 'Middle East in summers', 'Russia in winters', 'SE Asia and Central Africa in summers'], correct: 3, explanation: 'TEJ in summer over SE Asia and Africa.' }
+  ],
+
+  // ── CH16: Clear Air Turbulence ──
+  ch16: [
+    { id: 'ch16_01', question: 'Clear air turbulence is often encountered', options: ['At the boundary of a jet stream', 'In the wake of a passing airplane', 'In the wake of a larger airplane at take off and landing', 'All of the above'], correct: 3, explanation: 'CAT can occur at jet stream boundaries and in wakes.' },
+    { id: 'ch16_02', question: 'Most CAT occurs on the ___ of a jet stream and near upper level frontal zones', options: ['Fringes', 'Within the core', 'Axis', 'Centre'], correct: 0, explanation: 'CAT occurs at jet stream fringes (strong shear zones).' },
+    { id: 'ch16_03', question: 'CAT is bumpiness experienced ___ in either cloud-free or stratiform clouds', options: ['above 18,000 feet', 'below 18,000 feet', 'below 28,000 feet', 'above 30,000 feet'], correct: 0, explanation: 'CAT typically reported above 18,000 ft.' }
+  ],
+
+  // ── CH17: Mountain Waves ──
+  ch17: [
+    { id: 'ch17_01', question: 'For mountain waves, flow of air across ridge generally within ___ of perpendicular', options: ['30 deg', '45 deg', '60 deg', '90 deg'], correct: 0, explanation: 'Wind must be within ~30 deg of perpendicular to ridge.' },
+    { id: 'ch17_02', question: 'For mountain waves wind speed for small mountains should be atleast', options: ['15 m/s', '10 m/s', '7 m/s', '5 m/s'], correct: 2, explanation: 'Small mountains need at least ~7 m/s for waves.' },
+    { id: 'ch17_03', question: 'For mountain waves wind speed for large mountains should be atleast', options: ['15 m/s', '10 m/s', '7 m/s', '5 m/s'], correct: 0, explanation: 'Large mountains need ~15 m/s for waves.' },
+    { id: 'ch17_04', question: 'For mountain waves atmosphere should be ___ up to the ridge', options: ['Unstable', 'Stable', 'Indifferent', 'Neutral'], correct: 1, explanation: 'Stable air below ridge level is required.' },
+    { id: 'ch17_05', question: 'For mountain waves atmosphere should be ___ at higher levels above ridge', options: ['Unstable', 'Stable', 'Indifferent', 'Variable'], correct: 1, explanation: 'Stable air above the ridge needed for wave propagation.' },
+    { id: 'ch17_06', question: 'In Mountain waves Rotor clouds form in', options: ['Troughs', 'Ridges', 'Valley', 'Crests'], correct: 0, explanation: 'Rotor clouds form in the wave troughs.' },
+    { id: 'ch17_07', question: 'When approaching area with mountain waves a pilot should expect', options: ['Roll and lenticular clouds', 'Intense updrafts and downdrafts on lee side', 'Moderate to severe turbulence within 20-30 mi on lee', 'All of the above'], correct: 3, explanation: 'All listed phenomena occur with mountain waves.' }
+  ],
+
+  // ── CH18: Tropical Systems ──
+  ch18: [
+    { id: 'ch18_01', question: 'Wind speed in a tropical severe cyclone is', options: ['27-33 kt', '48-63 kt', '17-27 kt', '34-47 kt'], correct: 1, explanation: 'Severe cyclonic storm: 48-63 kt.' },
+    { id: 'ch18_02', question: 'Fronts are characteristic of', options: ['Tropical cyclone', 'Extra-tropical depressions', 'Monsoon depressions', 'Heat lows'], correct: 1, explanation: 'Fronts belong to extratropical (mid-lat) systems.' },
+    { id: 'ch18_03', question: 'In a mature tropical cyclone, the eye is characterised by', options: ['Moderate winds and heavy rains', 'Hurricane force winds and squalls', 'Calm wind, little cloud, no rainfall', 'Heavy rain'], correct: 2, explanation: 'The eye is calm and clear.' },
+    { id: 'ch18_04', question: 'Cyclonic storms cross Tamil Nadu coast in', options: ['Oct-Nov', 'Jul-Aug', 'Feb-May', 'Jan-Mar'], correct: 0, explanation: 'Post-monsoon Oct-Nov cyclones hit Tamil Nadu.' },
+    { id: 'ch18_05', question: 'Cyclonic storms form over Indian seas during', options: ['SW monsoon', 'NE monsoon', 'Pre- & Post-Monsoon', 'Winter'], correct: 2, explanation: 'CS form in pre- and post-monsoon transition seasons.' },
+    { id: 'ch18_06', question: 'TRS occurs over Indian seas in', options: ['Equatorial Region', '5-15 N', '0-5 N', '20-25 N'], correct: 1, explanation: 'TRS form in 5-15 N band.' },
+    { id: 'ch18_07', question: 'In Bay of Bengal during Jul-Aug, Monsoon Depressions form', options: ['Over Head Bay', 'Central Bay', 'South Bay', 'East Bay'], correct: 0, explanation: 'Monsoon depressions form over Head Bay (north).' },
+    { id: 'ch18_08', question: 'In a Monsoon depression maximum weather occurs in', options: ['SE sector', 'NW sector', 'SW sector', 'NE sector'], correct: 2, explanation: 'SW sector has maximum weather in monsoon depression.' },
+    { id: 'ch18_09', question: 'During recurvature, maximum weather in monsoon depression occurs in', options: ['SE sector', 'NW sector', 'SW sector', 'NE sector'], correct: 3, explanation: 'NE sector dominates during recurvature.' },
+    { id: 'ch18_10', question: 'On any compass course, strong winds from port indicate centre is', options: ['Ahead', 'Behind', 'Port', 'Starboard'], correct: 3, explanation: 'In N hem, with low to right, wind blows from port - centre is to starboard.' },
+    { id: 'ch18_11', question: 'Well-developed extra tropical cyclone consists of', options: ['Stationary + warm front', 'Low with warm front southward then cold front', 'Warm + occluded fronts', 'Two cold fronts'], correct: 1, explanation: 'Classic ET cyclone: warm sector with warm front then cold front.' },
+    { id: 'ch18_12', question: 'Cyclonic storms are confined almost entirely to', options: ['Latitudes near Equator', 'Tropic latitudes', 'Polar lat', 'Mid lat'], correct: 1, explanation: 'TRS form in tropical latitudes.' },
+    { id: 'ch18_13', question: 'Weather expected in well developed cyclonic storm', options: ['Moderate Weather', 'Stormy weather', 'Clear skies', 'No change'], correct: 1, explanation: 'Mature CS brings stormy weather.' },
+    { id: 'ch18_14', question: 'After entering land cyclones gradually die down', options: ['True', 'False', 'Sometimes', 'Variable'], correct: 0, explanation: 'Loss of moisture source over land weakens cyclones.' },
+    { id: 'ch18_15', question: 'The ___ is most dangerous part of cyclone', options: ['Eye wall', 'Eye', 'Outer storm area', 'Entire cyclone'], correct: 0, explanation: 'Eye wall has strongest winds and severe weather.' },
+    { id: 'ch18_16', question: 'No CS form', options: ['At Poles', 'At Equator', 'At Lat 40', 'All these'], correct: 1, explanation: 'Coriolis zero at equator prevents TRS formation.' },
+    { id: 'ch18_17', question: 'Average life of tropical cyclone in India is', options: ['10 Days', '6-8 Days', '3-4 Days', '15 Days'], correct: 2, explanation: 'Indian CS average life is 3-4 days.' },
+    { id: 'ch18_18', question: 'CS in India are mostly of intensity', options: ['Severe', 'Very Weak', 'Moderate', 'Super'], correct: 2, explanation: 'Most Indian CS are moderate.' },
+    { id: 'ch18_19', question: 'Eye of a CS is surrounded by', options: ['Shelf Clouds', 'Wall Clouds', 'Rotor Clouds', 'Roll clouds'], correct: 1, explanation: 'The eye wall consists of dense CB wall clouds.' },
+    { id: 'ch18_20', question: 'CS in India are less intense because', options: ['Short sea travel', 'Low SST', 'Close to Equator', 'Strong shear'], correct: 0, explanation: 'Limited sea fetch limits intensity.' },
+    { id: 'ch18_21', question: 'Surge is sudden strengthening of wind in the ___ air mass', options: ['Same', 'Different', 'Both', 'Polar'], correct: 0, explanation: 'Surge is intensification within the same air mass.' },
+    { id: 'ch18_22', question: 'Surge and Shear Line are features of ___ monsoon', options: ['Vigorous', 'Weak', 'Moderate', 'Average'], correct: 0, explanation: 'Vigorous monsoon shows surges and shear lines.' },
+    { id: 'ch18_23', question: 'Peninsular discontinuity occurs along', options: ['West Coast', 'East Coast', 'Central peninsula', 'South'], correct: 2, explanation: 'Discontinuity lies along central peninsula.' },
+    { id: 'ch18_24', question: 'Peninsular discontinuity occurs during', options: ['Monsoon', 'NE Monsoon', 'Pre Monsoon', 'Winter'], correct: 2, explanation: 'Peninsular discontinuity forms in pre-monsoon.' },
+    { id: 'ch18_25', question: 'Surge is also', options: ['Velocity Divergence', 'Velocity Convergence', 'Like ITCZ', 'Inversion'], correct: 1, explanation: 'Surge represents convergence in wind field.' },
+    { id: 'ch18_26', question: 'In a depression the wind speed is', options: ['<17 kt', '34-47 kt', '17-27 kt', '48-63 kt'], correct: 2, explanation: 'Depression wind speed 17-27 kt.' },
+    { id: 'ch18_27', question: 'In a CS the wind speed is', options: ['<17 kt', '34-47 kt', '17-27 kt', '28-33 kt'], correct: 1, explanation: 'Cyclonic storm: 34-47 kt.' },
+    { id: 'ch18_28', question: 'A monsoon depression Slopes ___ with height', options: ['SE', 'NW', 'SW', 'NE'], correct: 2, explanation: 'Monsoon depressions tilt SW with height.' },
+    { id: 'ch18_29', question: 'Average life of a monsoon depression', options: ['2-3 days', '8-9 days', '3-5 days', '10-12 days'], correct: 2, explanation: 'Monsoon depression typically lasts 3-5 days.' },
+    { id: 'ch18_30', question: 'Monsoon Depression moves faster over', options: ['Sea', 'Plains', 'Hills', 'Rivers'], correct: 0, explanation: 'Less friction over sea allows faster motion.' },
+    { id: 'ch18_31', question: 'For formation of CS sea surface temperature should be', options: ['26-27 C', '23-24 C', '24-25 C', '30 C'], correct: 0, explanation: 'TRS need SST >=26-27 C.' },
+    { id: 'ch18_32', question: 'In extra tropical cyclone family there are 3-4 CS, one to the ___ of other', options: ['SE', 'NW', 'SW', 'NE'], correct: 2, explanation: 'Cyclone family stretches SW behind primary.' },
+    { id: 'ch18_33', question: 'In TRS central pressure is about', options: ['1002-1010 hpa', '1000-900 hpa', '1010-1020 hpa', '1015 hpa'], correct: 1, explanation: 'TRS central pressure deeply below normal (900-1000 hPa).' },
+    { id: 'ch18_34', question: 'TRS develop over', options: ['Sea', 'Land', 'Islands', 'Equator'], correct: 0, explanation: 'TRS develop over warm sea.' },
+    { id: 'ch18_35', question: 'TRS develop over ___ deg Lat', options: ['0-5', '5-15', '25-30', '30-40'], correct: 1, explanation: 'TRS form between 5-15 deg lat.' },
+    { id: 'ch18_36', question: 'In TRS Pressure gradient is very steep up to a radius of', options: ['30 Km', '50 km', '100 km', '400 km'], correct: 2, explanation: 'Steep gradient confined to ~100 km radius.' },
+    { id: 'ch18_37', question: 'Extra Tropical Storms originate in', options: ['Equatorial Front', 'Tropical Front', 'Polar Front', 'ITCZ'], correct: 2, explanation: 'ETCs form along polar front.' },
+    { id: 'ch18_38', question: 'Extra-tropical storms generally move in direction', options: ['S to E', 'W to E', 'S to W', 'E to W'], correct: 1, explanation: 'ETCs steered by westerlies, moving W to E.' },
+    { id: 'ch18_39', question: 'A tropical Cyclone moves ___ in a day', options: ['300-500 km', '500-700 km', '700-900 km', '100-300 km'], correct: 0, explanation: 'TC translation speed gives 300-500 km/day.' },
+    { id: 'ch18_40', question: 'A Tropical CS has outer storm area of about', options: ['>400 km', '>700 km', '>900 km', '>200 km'], correct: 0, explanation: 'Outer storm area exceeds 400 km radius.' }
+  ],
+
+  // ── CH19: Climatology of India ──
+  ch19: [
+    { id: 'ch19_01', question: 'During winters', options: ['Advection fog occurs over N & central India', 'Radiation fog occurs in S India', 'Activity of Radiation fog increases after WD over N India', 'No fog'], correct: 2, explanation: 'WDs leave moist clear conditions favouring radiation fog.' },
+    { id: 'ch19_02', question: 'Low Temperatures and low humidity is characteristic of', options: ['Post Monsoon', 'Hot weather', 'Monsoon', 'Winter months'], correct: 3, explanation: 'Winter has low T and low humidity.' },
+    { id: 'ch19_03', question: 'Hot weather period is', options: ['Jan-Feb', 'Mar-May', 'Jun-Sep', 'Oct-Dec'], correct: 1, explanation: 'Pre-monsoon hot weather is March-May.' },
+    { id: 'ch19_04', question: 'During hot weather', options: ['WDs cause TS/DS over Punjab & Rajasthan', 'No WD affect N-parts', 'Track of WD is southern most', 'Calm weather'], correct: 0, explanation: 'Late-season WDs trigger TS/DS over NW India.' },
+    { id: 'ch19_05', question: 'Monsoon current over West coast of India is', options: ['SWly', 'SEly', 'NEly', 'NWly'], correct: 0, explanation: 'SW monsoon current dominates west coast.' },
+    { id: 'ch19_06', question: 'Monsoon period is', options: ['Jan-Feb', 'Mar-May', 'Jun-Sep', 'Oct-Dec'], correct: 2, explanation: 'SW monsoon: June-September.' },
+    { id: 'ch19_07', question: 'Monsoon advances with', options: ['Bay only', 'Arabian Sea only', 'Bay and Arabian Sea currents', 'Neither'], correct: 2, explanation: 'Both arms (Bay & Arabian) advance monsoon.' },
+    { id: 'ch19_08', question: 'Rainfall over India during monsoon depends on', options: ['Low over Pakistan', 'Bay depression', 'Position of axis of Monsoon Trough', 'All'], correct: 2, explanation: 'Monsoon trough position controls rainfall distribution.' },
+    { id: 'ch19_09', question: 'Rainfall occurs all over country during monsoon when', options: ['Axis along Gangetic plains (normal)', 'Axis along Himalayas', 'Bay depression formed', 'No axis'], correct: 0, explanation: 'Normal trough position gives widespread rainfall.' },
+    { id: 'ch19_10', question: 'Break in monsoon occurs when axis is along', options: ['Gangetic plains', 'Foot hills of Himalayas', 'Bay of Bengal', 'Coast'], correct: 1, explanation: 'Break monsoon: trough shifts to Himalayan foothills.' },
+    { id: 'ch19_11', question: 'With depression over head Bay fair weather during monsoon occurs over', options: ['Assam', 'W Bengal', 'Orissa', 'Tamil Nadu'], correct: 3, explanation: 'Bay depression shifts rainfall north, leaving south dry.' },
+    { id: 'ch19_12', question: 'Monsoon is also called', options: ['NE monsoon', 'SW monsoon', 'SE monsoon', 'Polar'], correct: 1, explanation: 'Main monsoon is SW monsoon.' },
+    { id: 'ch19_13', question: 'Post monsoon weather period is', options: ['Mar-May', 'Jun-Sep', 'Oct-Nov', 'Jan-Feb'], correct: 2, explanation: 'Post-monsoon: Oct-Nov.' },
+    { id: 'ch19_14', question: 'During post monsoon, pressure gradient over India is', options: ['Weak', 'Steep', 'Same as winters', 'Variable'], correct: 0, explanation: 'Pressure gradient weakens post-monsoon.' },
+    { id: 'ch19_15', question: 'During monsoon period low pressure lies over', options: ['Bay', 'NE India', 'Central India', 'Pakistan'], correct: 3, explanation: 'Thermal low forms over NW India/Pakistan in monsoon.' },
+    { id: 'ch19_16', question: 'During vigorous monsoon pressure gradient over west coast is', options: ['Weak', 'Steep', 'Normal', 'Variable'], correct: 1, explanation: 'Strong gradient drives vigorous monsoon westerlies.' },
+    { id: 'ch19_17', question: 'In Monsoon flying Chennai to Kolkata at 14 km', options: ['Easterly', 'Westerly', 'Northerly', 'Southerly'], correct: 0, explanation: 'TEJ gives easterly winds at high levels.' },
+    { id: 'ch19_18', question: 'In Winter flying Chennai to Kolkata at 12 km', options: ['Ely', 'Wly', 'Nly', 'Sly'], correct: 1, explanation: 'STJ produces westerly upper winds in winter.' },
+    { id: 'ch19_19', question: 'In Pre monsoon flying Delhi to Kolkata at 10 km', options: ['Easterly', 'Westerly', 'Northerly', 'Southerly'], correct: 1, explanation: 'Subtropical westerlies prevail at 10 km in pre-monsoon.' },
+    { id: 'ch19_20', question: 'In Monsoon flying Mumbai to Ahmedabad at 03 km', options: ['SEly', 'SWly', 'Nly', 'NWly'], correct: 1, explanation: 'Monsoon current at low levels is SWly.' },
+    { id: 'ch19_21', question: 'In winter flying Delhi to Kolkata at 06 km', options: ['SEly', 'SWly', 'Nly', 'NW-Wly'], correct: 3, explanation: 'Mid-tropospheric winter winds are NW-Wly.' },
+    { id: 'ch19_22', question: 'In winter flying Delhi to Kolkata at 06 km drift will be', options: ['Port drift', 'Starboard drift', 'Tail wind', 'Head wind'], correct: 1, explanation: 'NW wind on E-bound flight gives starboard drift.' },
+    { id: 'ch19_23', question: 'In winter flying Kolkata to Nagpur at 02 km', options: ['Port drift', 'Starboard drift', 'Tail wind', 'Head wind'], correct: 0, explanation: 'NE-Nly winter low winds on W-bound flight give port drift.' },
+    { id: 'ch19_24', question: 'During break monsoon pressures over country', options: ['Rise', 'Fall', 'Do not change', 'Fluctuate'], correct: 0, explanation: 'Pressure rises during break in monsoon.' },
+    { id: 'ch19_25', question: 'During break monsoon surface winds over E UP and Bihar are', options: ['Very strong', 'Weak', 'Normal', 'Calm'], correct: 0, explanation: 'Easterly winds strengthen over E UP & Bihar in break.' },
+    { id: 'ch19_26', question: 'Mid tropospheric cyclone occurs during', options: ['Pre monsoon', 'Winters', 'Post monsoon', 'SW monsoon'], correct: 3, explanation: 'Mid-trop cyclones occur during SW monsoon.' },
+    { id: 'ch19_27', question: 'Mid tropospheric cyclone during monsoon form over', options: ['Orissa', 'Punjab', 'Gujarat', 'Chennai'], correct: 2, explanation: 'Gujarat region is favoured location.' },
+    { id: 'ch19_28', question: 'El Nino suppresses upwelling of', options: ['Warm surface coastal current', 'Wly surface coastal current', 'Cold surface coastal current', 'Equatorial current'], correct: 2, explanation: 'El Nino suppresses cold Peruvian upwelling.' },
+    { id: 'ch19_29', question: 'Maximum cyclones occur over India in', options: ['Pre monsoon', 'Winters', 'Post monsoon', 'SW monsoon'], correct: 2, explanation: 'Post-monsoon (Oct-Nov) is peak cyclone season.' },
+    { id: 'ch19_30', question: 'Tropical Jet stream occurs in India during', options: ['Pre monsoon', 'Winters', 'Post monsoon', 'SW monsoon'], correct: 3, explanation: 'TEJ during SW monsoon.' },
+    { id: 'ch19_31', question: 'Pressure gradient over West Coast of India is steep during', options: ['Pre monsoon', 'Winters', 'Post monsoon', 'SW monsoon'], correct: 3, explanation: 'Monsoon gives steepest gradient over W coast.' },
+    { id: 'ch19_32', question: 'During break in monsoon rain occurs', options: ['Along foot hills', 'NW India', 'S India', 'Everywhere'], correct: 0, explanation: 'Trough shift produces foothill rainfall.' }
+  ],
+
+  // ── CH20: Met Services ──
+  ch20: [
+    { id: 'ch20_01', question: 'Polewards moving air piles up forming high pressure belt called', options: ['Subtropical high', 'Polar High', 'Equatorial high', 'Subpolar high'], correct: 0, explanation: 'Subtropical highs form ~30 deg lat.' },
+    { id: 'ch20_02', question: '___ occurs over subtropical high', options: ['advection', 'convection', 'subsidence', 'turbulence'], correct: 2, explanation: 'Subsidence dominates subtropical highs.' },
+    { id: 'ch20_03', question: 'Occurrence of large deserts near 30N and 30S is due to large scale', options: ['subsidence', 'convection', 'advection', 'monsoon'], correct: 0, explanation: 'Subtropical subsidence creates desert belts.' },
+    { id: 'ch20_04', question: 'Sinking air over subtropical highs flows towards equator turning west in N hem. This surface air is', options: ['Trade winds', 'Roaring forties', 'Doldrums', 'Westerlies'], correct: 0, explanation: 'These are the NE/SE trade winds.' },
+    { id: 'ch20_05', question: 'Vertical circulations between equator and 30 N/S are called', options: ['Hadley Cells', 'Ferrel Cells', 'Polar cells', 'Walker cells'], correct: 0, explanation: 'Hadley cells dominate tropics.' },
+    { id: 'ch20_06', question: 'Descending branch of Hadley cell with calm winds and high pressure called', options: ['Tropical Latitudes', 'Middle latitudes', 'Horse Latitudes', 'Doldrums'], correct: 2, explanation: 'Horse latitudes at subtropical descent.' },
+    { id: 'ch20_07', question: 'Winds in upper troposphere westerlies are known as', options: ['Natural Westerlies', 'Steady Westerlies', 'Zonal Westerlies', 'Polar Westerlies'], correct: 2, explanation: 'Zonal westerlies dominate upper troposphere.' },
+    { id: 'ch20_08', question: 'In equatorial regions upper tropospheric winds are', options: ['Westerlies', 'Easterlies', 'Zonal Westerlies', 'Calm'], correct: 1, explanation: 'Equatorial upper troposphere has easterlies (TEJ).' },
+    { id: 'ch20_09', question: 'Disturbances of middle latitudes move from', options: ['W to E', 'E to W', 'N to S', 'S to N'], correct: 0, explanation: 'Mid-lat systems steered by westerlies.' },
+    { id: 'ch20_10', question: 'Tropical disturbances form in equatorial low pressure belt move in', options: ['Easterly direction', 'Westerly direction', 'Southerly direction', 'Northerly direction'], correct: 1, explanation: 'Tropical systems move westward with trades.' },
+    { id: 'ch20_11', question: 'Tropical disturbance reaching zone of transition changes course and moves in', options: ['Perpendicular direction', 'Opposite direction', 'Southwards', 'Northwards'], correct: 1, explanation: 'Recurvature reverses motion (W to NE).' },
+    { id: 'ch20_12', question: 'Latitudinally, on average there is radiation ___ in tropics than in polar regions', options: ['surplus', 'deficit', 'balance', 'equal'], correct: 0, explanation: 'Tropics have radiation surplus.' },
+    { id: 'ch20_13', question: 'Study of behaviour of pressure systems is called', options: ['Synoptic Meteorology', 'Climatology', 'Physical Meteorology', 'Dynamic Meteorology'], correct: 0, explanation: 'Synoptic meteorology studies weather systems.' },
+    { id: 'ch20_14', question: 'Rising air creates calms or doldrums in equatorial region', options: ['ITCZ', 'Horse Latitudes', 'Equatorial Doldrums', 'Polar'], correct: 2, explanation: 'Equatorial doldrums = calm equatorial belt.' },
+    { id: 'ch20_15', question: 'Steady NE in N hem and SE in S hem are called', options: ['Easterly winds', 'Trade Winds', 'Tropical Winds', 'Monsoon'], correct: 1, explanation: 'These are the trade winds.' },
+    { id: 'ch20_16', question: 'For non-scheduled National Flights advance notice to AMOs', options: ['3 hr', '18-24 hr', '6 hr', '12 hr'], correct: 0, explanation: 'AMO notice is 3 hr for non-scheduled flights.' },
+    { id: 'ch20_17', question: 'For non-scheduled National Flights advance notice to AMSs', options: ['3 hr', '18-24 hr', '6 hr', '12 hr'], correct: 2, explanation: 'AMS notice is 6 hr for non-scheduled flights.' },
+    { id: 'ch20_18', question: 'WAFS provides', options: ['High quality en-route forecasts of winds and temperature', 'SIGMET', 'TREND', 'METAR'], correct: 0, explanation: 'World Area Forecast System provides wind/temp forecasts.' },
+    { id: 'ch20_19', question: 'IMD has ___ Regional Met offices', options: ['4', '5', '6', '7'], correct: 2, explanation: 'IMD operates 6 regional Met offices.' },
+    { id: 'ch20_20', question: 'There are ___ Class I Met Offices (AMO)', options: ['14', '17', '16', '20'], correct: 1, explanation: 'There are 17 Class I Aerodrome Met Offices.' },
+    { id: 'ch20_21', question: 'There are ___ Class III Met Offices', options: ['42', '52', '62', '72'], correct: 1, explanation: 'There are 52 Class III Met Offices.' },
+    { id: 'ch20_22', question: 'In AIREP Met Information is contained in Section', options: ['1', '2', '3', '4'], correct: 2, explanation: 'AIREP Section 3 contains meteorological info.' },
+    { id: 'ch20_23', question: 'TAF are generally valid for', options: ['18 hr', '12 hr', '9 hr', '24 hr'], correct: 2, explanation: 'National TAF is generally 9 hr (international up to 30 hr).' },
+    { id: 'ch20_24', question: 'Validity of Landing Forecast (TREND)', options: ['1 hr', '2 hr', '3 hr', '4 hr'], correct: 1, explanation: 'TREND validity is 2 hours.' },
+    { id: 'ch20_25', question: 'Landing Forecast is appended to', options: ['METAR and SPECI', 'TAF', 'AIREP', 'ROFOR'], correct: 0, explanation: 'TREND is appended to METAR/SPECI.' },
+    { id: 'ch20_26', question: 'Local Forecast issued 3 times a day valid for next', options: ['18 hr', '8 hr', '9 hr', '12 hr'], correct: 1, explanation: 'Local Forecast valid 8 hr.' },
+    { id: 'ch20_27', question: 'Local Forecast covers an area', options: ['50 NM', '100 NM', '150 NM', '200 NM'], correct: 0, explanation: 'Local Forecast covers 50 NM radius.' },
+    { id: 'ch20_28', question: 'Prognostic Charts are issued by', options: ['RAFC', 'AMO Class I', 'MWO', 'IMD HQ'], correct: 0, explanation: 'Regional Area Forecast Centres issue prog charts.' },
+    { id: 'ch20_29', question: 'Prognostic Charts are valid for', options: ['18 hr', '12 hr', '9 hr', '24 hr'], correct: 1, explanation: 'Prog charts validity 12 hr typically.' },
+    { id: 'ch20_30', question: 'SIG Wx Chart issued for Flight Levels', options: ['Below 460', '460', 'Above 460', 'All'], correct: 2, explanation: 'High-level SIG Wx is for FL above 460.' },
+    { id: 'ch20_31', question: 'CODAR is', options: ['Radar Report', 'Coded ARFOR', 'Upper report from aircraft (not weather recon)', 'Surface report'], correct: 2, explanation: 'CODAR is coded pilot upper-air report.' },
+    { id: 'ch20_32', question: 'WINTEM is', options: ['Actual upper winds', 'Forecast upper wind and temperature', 'Actual temperature', 'Surface wind'], correct: 1, explanation: 'WINTEM is a forecast of upper winds and temperature.' },
+    { id: 'ch20_33', question: 'SIGMET is notice of severe weather for', options: ['Actual', 'Expected', 'Both', 'Past'], correct: 2, explanation: 'SIGMET covers both occurring and expected severe wx.' },
+    { id: 'ch20_34', question: 'SIGMET is issued for aircraft', options: ['In flight', 'On ground', 'Both', 'Departing'], correct: 0, explanation: 'SIGMET is issued for aircraft in flight.' },
+    { id: 'ch20_35', question: 'SIGMET is issued by', options: ['RAFC', 'AMO Class I', 'MWO', 'IMD HQ'], correct: 2, explanation: 'Met Watch Office issues SIGMETs.' },
+    { id: 'ch20_36', question: 'SIGMET is valid for', options: ['4 hr', '18 hr', '6 hr', '12 hr'], correct: 0, explanation: 'SIGMET validity 4 hr (6 hr for volcanic ash).' },
+    { id: 'ch20_37', question: 'SIGMET is not issued for', options: ['Rain', 'Volcanic Ash', 'Severe Icing', 'Turbulence'], correct: 0, explanation: 'Routine rain alone is not a SIGMET trigger.' },
+    { id: 'ch20_38', question: 'AIRMET is SIGMET by MWO for safety of', options: ['Low-level aircraft', 'High-level aircraft', 'Both', 'IFR only'], correct: 0, explanation: 'AIRMET addresses low-level operations.' },
+    { id: 'ch20_39', question: 'GAMET is area forecast in abbreviated plain language for', options: ['High-level aircraft', 'Low-level aircraft', 'Both', 'Helicopters only'], correct: 1, explanation: 'GAMET is for low-level flights.' },
+    { id: 'ch20_40', question: 'Airfield warnings validity not exceeding', options: ['3 hr', '4 hr', '6 hr', '12 hr'], correct: 2, explanation: 'Airfield warnings valid 6 hr.' },
+    { id: 'ch20_41', question: 'Airfield warning for expected wind speed', options: ['30 kt', '24 kt', '15 kt', '20 kt'], correct: 1, explanation: 'Warning issued for winds >= 24 kt.' },
+    { id: 'ch20_42', question: 'Airfield warning for wind direction of 20 kt changes by', options: ['45 deg', '30 deg', '60 deg', '90 deg'], correct: 2, explanation: '60 deg direction change in 20+ kt winds triggers warning.' },
+    { id: 'ch20_43', question: 'Airfield Warning for gliders/light aircraft for wind speed', options: ['15 kt', '17 kt', '30 kt', '20 kt'], correct: 0, explanation: 'Light aircraft/gliders threshold 15 kt.' },
+    { id: 'ch20_44', question: 'Wind Shear Warning issued for shear above runway', options: ['Up to 500 m', 'Above 500 m', '300 m', '1000 m'], correct: 0, explanation: 'Low-level WS warnings cover up to 500 m above RW.' },
+    { id: 'ch20_45', question: 'VOLMET is MET info for aircraft', options: ['On ground', 'In flight', 'Both', 'Diverting only'], correct: 1, explanation: 'VOLMET broadcast for in-flight aircraft.' },
+    { id: 'ch20_46', question: 'VOLMET HF Radio Telephony Broadcast from', options: ['Mumbai only', 'Kolkata only', 'Both', 'Delhi'], correct: 2, explanation: 'VOLMET broadcast from Mumbai and Kolkata.' },
+    { id: 'ch20_47', question: 'VOLMET consists of', options: ['SIGMET', 'TAF only', 'TAF and METAR', 'TREND only'], correct: 2, explanation: 'VOLMET contains METAR and TAF.' },
+    { id: 'ch20_48', question: 'In ROBEX METAR/SPECI of international aerodromes exchanged', options: ['Within India', 'Outside India', 'Both', 'Domestic'], correct: 1, explanation: 'ROBEX exchanges data internationally.' },
+    { id: 'ch20_49', question: 'SIG Weather Charts are issued ___ times a day', options: ['Two', 'Three', 'Four', 'Six'], correct: 2, explanation: 'SIGWX issued 4 times a day.' }
+  ],
+
+  // ── CH21: Station Model (Ref. I.C. Joshi 4th ed., page 221 diagram) ──
+  ch21: [
+    { id: 'ch21_01', question: 'The direction of surface wind is', options: ['NW', 'NE', 'SE', 'SW'], correct: 1, explanation: 'Surface wind direction from station-model arrow.' },
+    { id: 'ch21_02', question: 'The range of wind speed is', options: ['20-25 kt', '16-22 kt', '18-22 kt', '12-18 kt'], correct: 2, explanation: 'Wind speed range read from feathers on station model.' },
+    { id: 'ch21_03', question: 'The type of medium cloud is', options: ['AC', 'AS', 'AC & AS', 'NS'], correct: 2, explanation: 'CM symbol indicates both AC and AS present.' },
+    { id: 'ch21_04', question: 'Low clouds are', options: ['CU', 'SC', 'ST', 'NS'], correct: 1, explanation: 'CL symbol corresponds to stratocumulus.' },
+    { id: 'ch21_05', question: 'High clouds are', options: ['CC', 'CI', 'CS', 'CI & CS'], correct: 1, explanation: 'CH symbol indicates cirrus.' },
+    { id: 'ch21_06', question: 'Height of base of low clouds is', options: ['200 m', '250 m', '100 to 199m', '300 m'], correct: 2, explanation: 'h-code corresponds to 100-199 m base height.' },
+    { id: 'ch21_07', question: 'Amount of lowest cloud is', options: ['2/8', '4/8', '3/8', '5/8'], correct: 2, explanation: 'Nh figure indicates 3/8 lowest cloud coverage.' },
+    { id: 'ch21_08', question: 'Wet bulb temperature range is', options: ['29.5 to 30.4 C', '29.1 to 30.4 C', '30.6 to 30.4 C', '28.5 to 29.4 C'], correct: 0, explanation: 'TwTw reported as 30 covers 29.5-30.4 C.' },
+    { id: 'ch21_09', question: 'Temperature 34 C is', options: ['Dry', 'Wet', 'Dew Point', 'Maximum'], correct: 0, explanation: 'TT in station model is the dry-bulb temperature.' },
+    { id: 'ch21_10', question: '962 represents', options: ['QFE', 'QFF', 'QNH', 'Pressure tendency'], correct: 1, explanation: 'PPP block in station model gives QFF.' },
+    { id: 'ch21_11', question: 'Pressure value in hPa is', options: ['996', '996.2', '1096.2', '962.0'], correct: 1, explanation: 'PPP=962 with implied 9 prefix and 0.2 tenth gives 996.2 hPa.' },
+    { id: 'ch21_12', question: 'Pressure change of 1.4 hPa is in', options: ['6 hr', '3 hr', '24 hr', '12 hr'], correct: 1, explanation: 'Pressure tendency a is for past 3 hours.' },
+    { id: 'ch21_13', question: 'Past weather is', options: ['Moderate Light Rain', 'Continuous Rain', 'Heavy Rain', 'Drizzle'], correct: 1, explanation: 'W code 7 indicates continuous rain in past hour.' },
+    { id: 'ch21_14', question: 'Rainfall amount is', options: ['2 mm', '1.5 mm', '1.6 to 2.4 mm', '0.5 mm'], correct: 2, explanation: 'RRR group reported as 2 covers 1.6-2.4 mm range.' },
+    { id: 'ch21_15', question: 'Rainfall reported is from', options: ['0300Z of yesterday to 0300Z of today', '0100 to 2400Z', '0530 to 0830 IST', 'last 24 hr'], correct: 0, explanation: 'RRR is 24-hour rainfall ending 0300 UTC.' },
+    { id: 'ch21_16', question: 'Speed of Ship is', options: ['5 KMH', '5 MPS', '5 KT', '10 KT'], correct: 2, explanation: 'Ship speed reported in knots in vsvs group.' },
+    { id: 'ch21_17', question: 'Direction of movement of Ship', options: ['NW', 'SW', 'NE', 'SE'], correct: 2, explanation: 'Ds code corresponds to NE.' },
+    { id: 'ch21_18', question: 'Speed of Ship reported is averaged for', options: ['3 hr', '6 hr', '12 hr', '24 hr'], correct: 0, explanation: 'Ship motion averaged over preceding 3 hours.' },
+    { id: 'ch21_19', question: 'Surface visibility is', options: ['500 to <1000 m', '1000 to 2000m', '2000 to < 4000 m', '4000 to 10000 m'], correct: 2, explanation: 'VV code indicates 2000-4000 m visibility.' },
+    { id: 'ch21_20', question: 'Weather reported is', options: ['Rain at the time of observation', 'Rain during last one hour', 'Rain not at station but within 5 km', 'Rain in distance'], correct: 0, explanation: 'ww present weather indicates rain at observation time.' }
+  ],
+
+  // ── CH22: Mear, Speci and Trend ──
+  // Sample METAR: METAR VIDP 160230Z 30005KT 290V050 1500S 5000N R15/P1500U BR
+  // FEW020 FEW025CB SCT120 BKN300 32/29 Q1003 REFG
+  // TEMPO FM0330 22015G25KT 3000 +TSRA FEW010 SCT025CB BKN150
+  // BECMG AT0415 27008KT CAVOK=
+  ch22: [
+    { id: 'ch22_01', question: 'The METAR has been issued on ___ day', options: ['15th', '16th', '17th', '18th'], correct: 1, explanation: '160230Z indicates 16th of the month.' },
+    { id: 'ch22_02', question: 'The METAR has been issued at', options: ['0630 IST', '0230 UTC', '0230 IST', '0800 UTC'], correct: 1, explanation: 'Z suffix indicates UTC; 0230 UTC.' },
+    { id: 'ch22_03', question: 'The surface wind speed is', options: ['2-6 kt', '3-7 kt', '4-6 kt', '5-10 kt'], correct: 2, explanation: '30005KT reported as 5 kt covers 4-6 kt (rounded).' },
+    { id: 'ch22_04', question: 'Wind direction is varying from', options: ['290 to 050 deg', '050 to 290 deg', '200 to 050 deg', '300 to 050 deg'], correct: 0, explanation: '290V050 means variable between 290 and 050 deg.' },
+    { id: 'ch22_05', question: 'Visibility 1500 m is towards', options: ['N', 'S', 'All over the airport', 'E'], correct: 1, explanation: '1500S indicates 1500 m visibility towards south.' },
+    { id: 'ch22_06', question: 'Visibility towards N is', options: ['1500m', '5000 m', '3000 m', '10 km'], correct: 1, explanation: '5000N indicates 5000 m towards north.' },
+    { id: 'ch22_07', question: 'Height of base of low clouds above station level', options: ['2000 ft', '2500 ft', '3000 ft', '1500 ft'], correct: 0, explanation: 'FEW020 means 2000 ft above aerodrome elevation.' },
+    { id: 'ch22_08', question: 'Runway Visual range is', options: ['1500 m', '>1500 m', '<1500 m', '=1500 m'], correct: 1, explanation: 'R15/P1500U: P prefix indicates RVR exceeds 1500 m.' },
+    { id: 'ch22_09', question: 'Runway Visual range has', options: ['Decreased', 'Increased', 'Remained same', 'Fluctuated'], correct: 1, explanation: 'U suffix indicates RVR is increasing.' },
+    { id: 'ch22_10', question: 'The poor visibility is due to the Present weather, which is', options: ['Fog', 'Brown Dust', 'Mist', 'Haze'], correct: 2, explanation: 'BR is the code for mist.' },
+    { id: 'ch22_11', question: 'Amount of lowest cloud is', options: ['1-2/8', '2-4/8', '5-7/8', '8/8'], correct: 0, explanation: 'FEW means 1-2 oktas.' },
+    { id: 'ch22_12', question: 'Amount of CB cloud is', options: ['1-2/8', '2-4/8', '5-7/8', '8/8'], correct: 0, explanation: 'FEW025CB means 1-2 oktas of CB.' },
+    { id: 'ch22_13', question: 'Height of base of CB is', options: ['2500 m', '3000 ft', '2500 ft', '250 ft'], correct: 2, explanation: 'FEW025CB indicates CB base at 2500 ft.' },
+    { id: 'ch22_14', question: 'The height of topmost layer of cloud is', options: ['3000 m', '30000 m', '30000 ft', '3000 ft'], correct: 2, explanation: 'BKN300 means topmost layer at 30000 ft.' },
+    { id: 'ch22_15', question: 'The landing forecast appended to METAR is valid for', options: ['1 hr', '2 hr', '3 hr', '4 hr'], correct: 1, explanation: 'TREND landing forecast validity is 2 hours.' },
+    { id: 'ch22_16', question: 'The wind in TREND from 0330 UTC is valid up to ___ UTC', options: ['0400', '0430', '0415', '0500'], correct: 2, explanation: 'TEMPO from 0330 until BECMG at 0415.' },
+    { id: 'ch22_17', question: 'Expected visibility after 0415 UTC is', options: ['6000 m', '10 km', '>=10 km', '8 km'], correct: 2, explanation: 'CAVOK implies visibility 10 km or more.' },
+    { id: 'ch22_18', question: 'The group Q1003 in the METAR indicates', options: ['QFE', 'QFF', 'QNH', 'QNE'], correct: 2, explanation: 'Q prefix denotes QNH in hPa.' },
+    { id: 'ch22_19', question: 'The difference between TT and TdTd is 3 C. The atmosphere is', options: ['Very Dry', 'Moist', 'Saturated', 'Neutral'], correct: 1, explanation: 'Small T-Td spread (3 C) indicates moist air.' },
+    { id: 'ch22_20', question: 'Just before the METAR was issued the weather was', options: ['Rain', 'Mist', 'Fog', 'Drizzle'], correct: 2, explanation: 'REFG indicates recent freezing fog.' },
+    { id: 'ch22_21', question: 'The range of pressure reported as Q1003 is', options: ['1002.5 to 1003.5 hPa', '1003.0 to 1003.9 hPa', '1003.1 to 1003.5 hPa', '1002.0 to 1003.0 hPa'], correct: 1, explanation: 'QNH rounded down to whole hPa: 1003.0 to 1003.9.' },
+    { id: 'ch22_22', question: 'The range of temperature reported as 32 is', options: ['31.5 to 32.4 C', '32.0 to 32.9 C', '32.1 to 32.4 C', '31.0 to 32.0 C'], correct: 0, explanation: 'Temperature rounded to nearest whole degree.' },
+    { id: 'ch22_23', question: 'Visibility is reported in steps of 50 m when visibility is', options: ['800 m to 5000 m', '0 to 800 m', '5000 m to 10 km', '10 km or more'], correct: 1, explanation: '50 m steps used below 800 m visibility.' },
+    { id: 'ch22_24', question: 'Visibility is reported in steps of 100 m when visibility is', options: ['800 m to 5000 m', '0 to 800 m', '5000 m to 10 km', '10 km or more'], correct: 0, explanation: '100 m steps between 800 m and 5000 m.' },
+    { id: 'ch22_25', question: 'Visibility is reported in steps of 1000 m when visibility is', options: ['800 m to 5000 m', '0 to 800 m', '5000 m to 9999', '10 km or more'], correct: 2, explanation: '1000 m steps from 5000 m to 9999.' },
+    { id: 'ch22_26', question: 'Visibility is reported 9999 when visibility is', options: ['800 m to 5000 m', '9000 to 9999 m', '10 km or more', '8000 m exactly'], correct: 2, explanation: '9999 group indicates visibility 10 km or more.' },
+    { id: 'ch22_27', question: 'Temperature +2.5 C reported as', options: ['2 C', '3 C', '2.5 C', '02'], correct: 1, explanation: 'Half degree rounds up: +2.5 reported as 03.' },
+    { id: 'ch22_28', question: 'Temperature -12.5 C reported as', options: ['-12', '-13', 'M12', 'M13'], correct: 2, explanation: 'Negative temps prefixed with M; -12.5 rounded to M12.' },
+    { id: 'ch22_29', question: 'Pressure is rounded down to the nearest whole number in hectropascal', options: ['exact value', 'upper value', 'lower value', 'half value'], correct: 2, explanation: 'QNH always rounded down to lower whole hPa.' },
+    { id: 'ch22_30', question: 'QNH 1002.6 hPa is reported as', options: ['Q1002', 'Q1003', 'Q1002.6', 'Q1003.0'], correct: 0, explanation: 'Rounded down: Q1002.' },
+    { id: 'ch22_31', question: 'QNH 29.92 inches is reported as', options: ['Q2900', 'A2992', 'A3000', 'Q2992'], correct: 1, explanation: 'Inches reported with A prefix as A2992.' },
+    { id: 'ch22_32', question: 'Fog is reported when visibility is', options: ['<1000 m', '1000 m', '>1000 m', '<5000 m'], correct: 0, explanation: 'FG reported when visibility below 1000 m.' },
+    { id: 'ch22_33', question: 'Mist is reported when visibility is', options: ['<1000 m', '1000 to 5000 m', '>5000 m', '>10 km'], correct: 1, explanation: 'BR (mist) is 1000-5000 m visibility.' },
+    { id: 'ch22_34', question: 'CAVOK signifies Visibility, Cloud ___ and present weather better than prescribed', options: ['Ceiling', 'base', 'amount', 'type'], correct: 1, explanation: 'CAVOK addresses cloud base (no cloud below 1500 m / MSA).' },
+    { id: 'ch22_35', question: 'CAVOK is issued when visibility is', options: ['9-10 km', '10 km or more', '10 km only', '>15 km'], correct: 1, explanation: 'CAVOK requires visibility 10 km or more.' },
+    { id: 'ch22_36', question: 'CAVOK requires: (i) Vis >=10 km (ii) No significant wx (iii) No cloud below 1500 m/MSA and no CB', options: ['Any one condition', 'Any two conditions', 'All three conditions', 'None'], correct: 2, explanation: 'All three CAVOK conditions must be met simultaneously.' },
+    { id: 'ch22_37', question: 'SPECI is issued when wind direction changes by >=60 deg and speed before/after >=10 kt', options: ['True', 'False', 'Only by day', 'Only with TS'], correct: 0, explanation: 'Wind change criteria correctly stated for SPECI.' },
+    { id: 'ch22_38', question: 'SPECI is issued for ceilograph vertical-visibility report when sky is obscured', options: ['True', 'False', 'Only at night', 'Only by day'], correct: 0, explanation: 'Stations with ceilograph issue SPECI for sky obscured.' },
+    { id: 'ch22_39', question: 'SPECI for surface temperature change is ___ from last observation', options: ['3 C', '4 C', '2 C', '5 C'], correct: 0, explanation: 'Temperature change >=3 C triggers SPECI.' },
+    { id: 'ch22_40', question: 'WSRWY28 in METAR indicates wind shear on RW 28', options: ['Take off path', 'Approach path', 'Both take off and approach paths', 'Departure only'], correct: 2, explanation: 'WS RWY indicates shear on both approach and take-off.' },
+    { id: 'ch22_41', question: 'R26/M0150 in a METAR indicates that', options: ['Maximum RVR is 150 m', 'Minimum RVR is 150 m', '150 m is lowest measurable; RVR is <150 m', 'RVR exactly 150 m'], correct: 2, explanation: 'M prefix means RVR less than the minimum measurable.' }
+  ],
+
+  // ── CH23: TAF, ARFOR and ROFOR ──
+  // Sample TAF: TAF VILK 241800Z 2500/2509 09008KT 0800 FG
+  // BECMG 2504/2505 09015KT 6000 SCT008 BKN120
+  // TEMPO 2506/2508 12015G30KT 3000 TSRA FEW012 FEW025CB BKN100
+  // BECMG AT 25/0800 09010KT 7000 FEW030 SCT120 BKN280 =
+  ch23: [
+    { id: 'ch23_01', question: 'The TAF has been issued on day', options: ['23rd', '18th', '24th', '25th'], correct: 2, explanation: '241800Z indicates issued on 24th.' },
+    { id: 'ch23_02', question: 'The TAF has been issued at', options: ['2330 IST', '1830 UTC', '24 UTC', '1800 UTC'], correct: 3, explanation: '241800Z = 1800 UTC on the 24th.' },
+    { id: 'ch23_03', question: 'The expected surface wind speed is', options: ['09 kt', '06 kt', '08 kt', '10 kt'], correct: 2, explanation: '09008KT initial wind is 8 kt.' },
+    { id: 'ch23_04', question: 'Initially expected wind direction is', options: ['120 deg', '090 deg', '050 deg', '080 deg'], correct: 1, explanation: '09008KT means initial direction 090 deg.' },
+    { id: 'ch23_05', question: 'TAF is Valid for Date', options: ['23rd', '24th', '25th', '26th'], correct: 2, explanation: 'Validity 2500/2509 covers the 25th.' },
+    { id: 'ch23_06', question: 'Lowest forecast visibility in TAF is', options: ['1500 m', '0800 m', '0200 m', '3000 m'], correct: 1, explanation: 'Initial visibility 0800 m is the lowest forecast.' },
+    { id: 'ch23_07', question: 'Height of base of lowest clouds in TAF is', options: ['1000 m', '1000 ft', '0800 ft', '1200 ft'], correct: 2, explanation: 'SCT008 indicates 800 ft base.' },
+    { id: 'ch23_08', question: 'Weather TSRA is expected after', options: ['0600 UTC', '0600 IST', '0800 UTC', '0400 UTC'], correct: 0, explanation: 'TEMPO 2506/2508 starts 0600 UTC on 25th.' },
+    { id: 'ch23_09', question: 'Direction of gusty wind is', options: ['090 deg', '100 deg', '120 deg', '130 deg'], correct: 2, explanation: 'TEMPO group 12015G30KT direction is 120 deg.' },
+    { id: 'ch23_10', question: 'Expected weather up to 0400 UTC is', options: ['Fog', 'TSRA', 'Mist', 'Rain'], correct: 0, explanation: 'Initial FG persists until BECMG 2504/2505.' },
+    { id: 'ch23_11', question: 'Amount of lowest cloud is', options: ['1-2/8', '3-4/8', '5-7/8', '8/8'], correct: 1, explanation: 'SCT008 means 3-4 oktas at 800 ft.' },
+    { id: 'ch23_12', question: 'Amount of CB cloud is', options: ['1-2/8', '2-4/8', '5-7/8', '8/8'], correct: 0, explanation: 'FEW025CB indicates 1-2 oktas of CB.' },
+    { id: 'ch23_13', question: 'Height of base of CB is', options: ['2500 ft', '3000 m', '2500 m', '250 ft'], correct: 0, explanation: 'FEW025CB means CB base at 2500 ft.' },
+    { id: 'ch23_14', question: 'The height of topmost layer of cloud is', options: ['2800 m', '28000 m', '28000 ft', '2800 ft'], correct: 2, explanation: 'BKN280 indicates 28000 ft topmost layer.' },
+    { id: 'ch23_15', question: 'Period of validity of TAF is', options: ['23 to 00 IST', '00 to 09 UTC', '20 to 12 UTC', '18 to 09 UTC'], correct: 1, explanation: '2500/2509 = 0000 UTC to 0900 UTC on 25th.' },
+    { id: 'ch23_16', question: 'Group 1500/1509 in a TAF indicates', options: ['TAF is issued on 15th at 0000 UTC', 'TAF is valid from 15th 0000 to 0900 UTC', 'TAF is valid from 1500 to 0900 UTC', 'TAF valid for 15 hours from 0900'], correct: 1, explanation: 'Format DDHH/DDHH gives valid period.' },
+    { id: 'ch23_17', question: 'What is true of a TAF', options: ['9 hr TAF is for international dissemination', 'TAF valid for 9 hr is issued every 6 hr', 'TAF valid for 12-30 hr is issued every 3 hr', 'TAF for national use are valid for 9 hr and issued every 3 hr'], correct: 3, explanation: 'National TAF: 9 hr validity, issued every 3 hr.' },
+    { id: 'ch23_18', question: 'Time of issue of ROFOR (sample ROFOR 010000Z 010610) is', options: ['0000 UTC on 1st', '0600 UTC on 1st', '1000 UTC on 1st', '0001 UTC on 1st'], correct: 0, explanation: '010000Z indicates issued at 0000 UTC on the 1st.' }
+  ],
+};

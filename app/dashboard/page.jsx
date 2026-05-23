@@ -151,10 +151,10 @@ export const SUBJECTS = [
     color: '#0EA5E9',
     gradient: 'linear-gradient(135deg,#0EA5E9,#38BDF8)',
     parts: [
-      { label: 'Meteorology', color: '#0EA5E9', chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08'] },
+      { label: 'Meteorology', color: '#0EA5E9', chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08', 'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16', 'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23'] },
     ],
-    chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08'],
-    stats: '8 Chapters · 150+ MCQs',
+    chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08', 'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16', 'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23'],
+    stats: '16 Chapters · 300+ MCQs',
     exam: 'ATPL / CPL',
   },
   {

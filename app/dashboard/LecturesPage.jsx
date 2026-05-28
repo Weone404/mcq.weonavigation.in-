@@ -21,351 +21,258 @@ const C = {
 
 const FREE_LIMIT = 2;
 
-const LECTURES = [
-  // ── AIR REGULATIONS ──────────────────────────────────────────────────────
-  {
-    id: 'ar-001',
-    title: 'Met: Atmospheric Pressure Part-1',
-    subject: 'Air Regulations',
-    chapter: 'Chapter 1',
-    videoUrl: 'https://drive.google.com/file/d/1fnPKGpELy5lBK1a9r9UV-xuG3Dy11x_O/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
-    description: 'Introduction to key definitions and abbreviations used in Indian Air Regulations.',
-    order: 1,
-    uploadedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: 'ar-002',
-    title: 'Air Regulations – Chapter 2: Aircraft Categories',
-    subject: 'Air Regulations',
-    chapter: 'Chapter 2',
-    videoUrl: 'https://drive.google.com/file/d/1sSKySNACSx6Lgyko6y2fwvkLJ161uM3P/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
-    description: 'Classification of aircraft under DGCA regulations — types, categories, and classes.',
-    order: 2,
-    uploadedAt: '2024-01-02T00:00:00Z',
-  },
-  {
-    id: 'ar-003',
-    title: 'Air Regulations – Chapter 3: Aircraft Registration',
-    subject: 'Air Regulations',
-    chapter: 'Chapter 3',
-    videoUrl: 'https://drive.google.com/file/d/1bhblKxgZlFnb9Rc71A1PTdWOmqDNHOqP/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
-    description: 'Aircraft registration requirements, nationality marks, and DGCA procedures.',
-    order: 3,
-    uploadedAt: '2024-01-03T00:00:00Z',
-  },
-  {
-    id: 'ar-004',
-    title: 'Air Regulations – Chapter 4: Registration Part-2',
-    subject: 'Air Regulations',
-    chapter: 'Chapter 4',
-    videoUrl: 'https://drive.google.com/file/d/1sSKySNACSx6Lgyko6y2fwvkLJ161uM3P/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
-    description: 'Aircraft registration requirements, nationality marks, and DGCA procedures.',
-    order: 4,
-    uploadedAt: '2024-01-04T00:00:00Z',
-  },
-  {
-    id: 'ar-005',
-    title: 'Air Regulations – Chapter 5: Registration Part-3',
-    subject: 'Air Regulations',
-    chapter: 'Chapter 5',
-    videoUrl: 'https://drive.google.com/file/d/10PnlY4PoVeXFplVR9trEduZW0r_T4Pp-/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Wg. Cdr. R.K. Bali (Retd.)',
-    description: 'Aircraft registration requirements, nationality marks, and DGCA procedures.',
-    order: 5,
-    uploadedAt: '2024-01-05T00:00:00Z',
-  },
-  // ── METEOROLOGY ──────────────────────────────────────────────────────────
-  {
-    id: 'met-001',
-    title: 'Meteorology: Atmosphere',
-    subject: 'Meteorology',
-    chapter: 'Chapter 1',
-    videoUrl: 'https://drive.google.com/file/d/1sSKySNACSx6Lgyko6y2fwvkLJ161uM3P/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Structure of the atmosphere, layers, and standard atmosphere.',
-    order: 1,
-    uploadedAt: '2024-02-01T00:00:00Z',
-  },
-  {
-    id: 'met-002',
-    title: 'Meteorology – Temperature Part-1',
-    subject: 'Meteorology',
-    chapter: 'Chapter 2',
-    videoUrl: 'https://drive.google.com/file/d/1WSNOhyrJbsHdqrffufdfzG0TBe3iXd3i/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Temperature gradients, pressure systems, and their effects on flight.',
-    order: 2,
-    uploadedAt: '2024-02-02T00:00:00Z',
-  },
-  {
-    id: 'met-003',
-    title: 'Meteorology – Temperature Part-2',
-    subject: 'Meteorology',
-    chapter: 'Chapter 2 Part-2',
-    videoUrl: 'https://drive.google.com/file/d/1XiOdkvgAnuRjDz92KiYcABRgT0aWR9ID/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Continued study of temperature effects and atmospheric stability.',
-    order: 3,
-    uploadedAt: '2024-02-03T00:00:00Z',
-  },
-  {
-    id: 'met-004',
-    title: 'Meteorology – Atmospheric Pressure Part-1',
-    subject: 'Meteorology',
-    chapter: 'Chapter 4',
-    videoUrl: 'https://drive.google.com/file/d/1fnPKGpELy5lBK1a9r9UV-xuG3Dy11x_O/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Atmospheric pressure concepts and their aviation significance.',
-    order: 4,
-    uploadedAt: '2024-02-04T00:00:00Z',
-  },
-  {
-    id: 'met-004b',
-    title: 'Meteorology – Atmospheric Pressure Part-2',
-    subject: 'Meteorology',
-    chapter: 'Chapter 4 Part-2',
-    videoUrl: 'https://drive.google.com/file/d/14MpmzxrlUmKIysLWZLpjrRZuOU9UnStp/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Advanced atmospheric pressure systems and altimetry.',
-    order: 5,
-    uploadedAt: '2024-02-05T00:00:00Z',
-  },
-  {
-    id: 'met-005',
-    title: 'Meteorology – Density',
-    subject: 'Meteorology',
-    chapter: 'Chapter 5',
-    videoUrl: 'https://drive.google.com/file/d/1sQJS4YZny3Nkj4isZeuBuovJqyaW8m-D/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Air density, density altitude, and effects on aircraft performance.',
-    order: 6,
-    uploadedAt: '2024-02-06T00:00:00Z',
-  },
-  {
-    id: 'met-006',
-    title: 'Meteorology – Humidity Part-1',
-    subject: 'Meteorology',
-    chapter: 'Chapter 6',
-    videoUrl: 'https://drive.google.com/file/d/10PnlY4PoVeXFplVR9trEduZW0r_T4Pp-/view?usp=drive_link',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Humidity, dew point, and moisture in the atmosphere.',
-    order: 7,
-    uploadedAt: '2024-02-07T00:00:00Z',
-  },
-  // ── NAVIGATION ───────────────────────────────────────────────────────────
-  {
-    id: 'nav-001',
-    title: 'Navigation – Chapter 1: Basic Principles',
-    subject: 'Navigation',
-    chapter: 'Chapter 1',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Fundamentals of air navigation — charts, coordinates, and direction.',
-    order: 1,
-    uploadedAt: '2024-03-01T00:00:00Z',
-  },
-  {
-    id: 'nav-002',
-    title: 'Navigation – Chapter 2: VOR & ILS',
-    subject: 'Navigation',
-    chapter: 'Chapter 2',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'VOR and ILS navigation aids, approach procedures, and limitations.',
-    order: 2,
-    uploadedAt: '2024-03-02T00:00:00Z',
-  },
-  {
-    id: 'nav-003',
-    title: 'Navigation – Chapter 3: RNAV & GPS',
-    subject: 'Navigation',
-    chapter: 'Chapter 3',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Area navigation, GPS systems, and performance-based navigation.',
-    order: 3,
-    uploadedAt: '2024-03-03T00:00:00Z',
-  },
-  // ── TECHNICAL GENERAL ────────────────────────────────────────────────────
-  {
-    id: 'tg-001',
-    title: 'Technical General – Chapter 1: Airframe Structures',
-    subject: 'Technical General',
-    chapter: 'Chapter 1',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Aircraft structural components, loads, and materials.',
-    order: 1,
-    uploadedAt: '2024-04-01T00:00:00Z',
-  },
-  {
-    id: 'tg-002',
-    title: 'Technical General – Chapter 2: Piston Engines',
-    subject: 'Technical General',
-    chapter: 'Chapter 2',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Piston engine operation, systems, and maintenance principles.',
-    order: 2,
-    uploadedAt: '2024-04-02T00:00:00Z',
-  },
-  {
-    id: 'tg-003',
-    title: 'Technical General – Chapter 3: Turbine Engines',
-    subject: 'Technical General',
-    chapter: 'Chapter 3',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Gas turbine engine theory, components, and operational characteristics.',
-    order: 3,
-    uploadedAt: '2024-04-03T00:00:00Z',
-  },
-  // ── RADIO TELEPHONY ──────────────────────────────────────────────────────
-  {
-    id: 'rt-001',
-    title: 'Radio Telephony – Chapter 1: RTF Procedures',
-    subject: 'Radio Telephony',
-    chapter: 'Chapter 1',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Standard RTF procedures, phraseology, and communication techniques.',
-    order: 1,
-    uploadedAt: '2024-05-01T00:00:00Z',
-  },
-  {
-    id: 'rt-002',
-    title: 'Radio Telephony – Chapter 2: Distress & Urgency',
-    subject: 'Radio Telephony',
-    chapter: 'Chapter 2',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'Emergency communications, distress and urgency procedures.',
-    order: 2,
-    uploadedAt: '2024-05-02T00:00:00Z',
-  },
-  {
-    id: 'rt-003',
-    title: 'Radio Telephony – Chapter 3: ATC Communications',
-    subject: 'Radio Telephony',
-    chapter: 'Chapter 3',
-    videoUrl: 'https://drive.google.com/file/d/YOUR_ID/view',
-    thumbnailUrl: '',
-    duration: '',
-    instructor: 'Your Instructor Name',
-    description: 'ATC communication procedures, clearances, and read-back requirements.',
-    order: 3,
-    uploadedAt: '2024-05-03T00:00:00Z',
-  },
-];
+// ─────────────────────────────────────────────────────────────────────────────
+// SUBJECT CONFIG
+// Each subject has 23 iframe slots. Paste the full YouTube <iframe> embed code
+// (copy from YouTube → Share → Embed) into the `iframeCode` field.
+// Leave iframeCode as '' to show a "Coming Soon" placeholder.
+// ─────────────────────────────────────────────────────────────────────────────
 
-const SUBJECT_CONFIG = {
+function makeSlots(overrides = []) {
+  return Array.from({ length: 23 }, (_, i) => {
+    const slot = overrides[i] || {};
+    return {
+      order: i + 1,
+      title: slot.title || `Lecture ${i + 1}`,
+      chapter: slot.chapter || `Chapter ${i + 1}`,
+      description: slot.description || '',
+      iframeCode: slot.iframeCode || '', // ← PASTE YouTube iframe code here
+      duration: slot.duration || '',
+      uploadedAt: slot.uploadedAt || '2024-01-01T00:00:00Z',
+    };
+  });
+}
+
+const SUBJECTS_DATA = {
+  Meteorology: {
+    icon: '🌤️',
+    subtitle: 'Weather, Clouds, Pressure Systems',
+    examTags: ['ATPL', 'CPL'],
+    color: '#0EA5E9',
+    lectures: makeSlots([
+      {
+        title: 'Met : Atmosphere Composition, Structure, and Standard Specifications',
+        chapter: 'Chapter 1',
+        description: 'Structure of the atmosphere, layers, and standard atmosphere.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/9JdYfqbPQ6g?si=SKQbsC4kWbS_sNUI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>', // ← PASTE IFRAME CODE HERE
+      },
+      {
+        title: 'Met : Atmospheric Pressure and Altimetry Fundamentals',
+        chapter: 'Chapter 2',
+        description: 'Temperature gradients, lapse rates, and inversions.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/ks2598HPflQ?si=LLwIQ7X8KEGiSVp6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Principles of Temperature and Heat Dynamics',
+        chapter: 'Chapter 3',
+        description: 'Continued study of temperature effects and atmospheric stability.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/36VHcqi8Qyc?si=nvjT_tlt1zBaV4mn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Density in Aviation Principles and Effects',
+        chapter: 'Chapter 4',
+        description: 'Air Density in Aviation Principles and Effects',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/lTPUZum-Lrc?si=_zO5Nfon9lW05ptw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Atmospheric Pressure Part-2',
+        chapter: 'Chapter 3 Part-2',
+        description: 'Advanced pressure systems and altimetry.',
+        iframeCode: '',
+      },
+      {
+        title: 'Met: Density',
+        chapter: 'Chapter 4',
+        description: 'Air density, density altitude, and aircraft performance.',
+        iframeCode: '',
+      },
+      {
+        title: 'Met: Humidity Part-1',
+        chapter: 'Chapter 5',
+        description: 'Humidity, dew point, and moisture in the atmosphere.',
+        iframeCode: '',
+      },
+      {
+        title: 'Met: Atmospheric Optical Phenomena and Electricity',
+        chapter: 'Chapter 10',
+        description: 'Atmospheric Optical Phenomena and Electricity.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/9JdYfqbPQ6g?si=69Cyw3GynXw2lJlQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+
+      {
+        title: 'Met: Precipitation Theories, Classifications, and Mechanisms',
+        chapter: 'Chapter 11',
+        description: 'Precipitation theories, classifications, and mechanisms.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Y0jlY-U_SZM?si=83w7KjX0xm5p5ms6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Aviation Meteorology Ice Accretion and its Effects on Flight',
+        chapter: 'Chapter 12',
+        description: 'Ice accretion and its effects on flight operations.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/wEFrC9Qi24o?si=ZGeFL9q3yV25CEMX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Thunderstorms and Severe Weather Phenomena Structures and Hazards',
+        chapter: 'Chapter 13',
+        description: 'Thunderstorms and severe weather phenomena, structures, and hazards.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/NgkGB6jTjs8?si=RruhR06xriR7zH3X" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 14',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      // Lectures 8–23 are empty slots — fill iframeCode when ready
+    ]),
+  },
+
   'Air Regulations': {
     icon: '📋',
     subtitle: 'ICAO, DGCA, National Law & Procedures',
     examTags: ['ATPL', 'CPL', 'DGCA'],
+    color: '#6366F1',
+    lectures: makeSlots([
+      {
+        title: 'Air Regulations – Definitions & Abbreviations',
+        chapter: 'Chapter 1',
+        description: 'Key definitions and abbreviations used in Indian Air Regulations.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Categories',
+        chapter: 'Chapter 2',
+        description: 'Classification of aircraft under DGCA regulations.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Registration Part-1',
+        chapter: 'Chapter 3',
+        description: 'Registration requirements, nationality marks, DGCA procedures.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Registration Part-2',
+        chapter: 'Chapter 3 Part-2',
+        description: 'Continued registration topics.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Registration Part-3',
+        chapter: 'Chapter 3 Part-3',
+        description: 'Advanced registration procedures.',
+        iframeCode: '',
+      },
+    ]),
   },
-  'Meteorology': {
-    icon: '🌤️',
-    subtitle: 'Weather, Clouds, Pressure Systems',
-    examTags: ['ATPL', 'CPL'],
-  },
-  'Navigation': {
+
+  Navigation: {
     icon: '🧭',
     subtitle: 'Charts, VOR, ILS, RNAV',
     examTags: ['ATPL', 'CPL'],
+    color: '#10B981',
+    lectures: makeSlots([
+      {
+        title: 'Navigation – Basic Principles',
+        chapter: 'Chapter 1',
+        description: 'Fundamentals of air navigation — charts, coordinates, and direction.',
+        iframeCode: '',
+      },
+      {
+        title: 'Navigation – VOR & ILS',
+        chapter: 'Chapter 2',
+        description: 'VOR and ILS navigation aids, approach procedures, and limitations.',
+        iframeCode: '',
+      },
+      {
+        title: 'Navigation – RNAV & GPS',
+        chapter: 'Chapter 3',
+        description: 'Area navigation, GPS systems, and performance-based navigation.',
+        iframeCode: '',
+      },
+    ]),
   },
+
   'Technical General': {
     icon: '⚙️',
     subtitle: 'Airframes, Engines, Systems',
     examTags: ['AME', 'ATPL'],
+    color: '#F59E0B',
+    lectures: makeSlots([
+      {
+        title: 'Technical General – Airframe Structures',
+        chapter: 'Chapter 1',
+        description: 'Aircraft structural components, loads, and materials.',
+        iframeCode: '',
+      },
+      {
+        title: 'Technical General – Piston Engines',
+        chapter: 'Chapter 2',
+        description: 'Piston engine operation, systems, and maintenance principles.',
+        iframeCode: '',
+      },
+      {
+        title: 'Technical General – Turbine Engines',
+        chapter: 'Chapter 3',
+        description: 'Gas turbine engine theory, components, and operational characteristics.',
+        iframeCode: '',
+      },
+    ]),
   },
+
   'Radio Telephony': {
     icon: '📡',
     subtitle: 'RTF Procedures & Phraseology',
     examTags: ['RTR (Aero)'],
+    color: '#EF4444',
+    lectures: makeSlots([
+      {
+        title: 'Radio Telephony – RTF Procedures',
+        chapter: 'Chapter 1',
+        description: 'Standard RTF procedures, phraseology, and communication techniques.',
+        iframeCode: '',
+      },
+      {
+        title: 'Radio Telephony – Distress & Urgency',
+        chapter: 'Chapter 2',
+        description: 'Emergency communications, distress and urgency procedures.',
+        iframeCode: '',
+      },
+      {
+        title: 'Radio Telephony – ATC Communications',
+        chapter: 'Chapter 3',
+        description: 'ATC communication procedures, clearances, and read-back requirements.',
+        iframeCode: '',
+      },
+    ]),
   },
 };
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+
 function fmtDate(iso) {
   return new Date(iso).toLocaleDateString('en-IN', {
     day: 'numeric', month: 'short', year: 'numeric',
   });
 }
 
-function toEmbedUrl(url = '') {
-  if (!url) return '';
-  if (url.includes('youtube.com/embed/')) return url;
-  const ytMatch = url.match(
-    /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/
-  );
-  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1`;
-  const driveMatch = url.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
-  if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
-  return url;
-}
-
-function isGoogleDrive(url = '') { return url.includes('drive.google.com'); }
-function isLocalVideo(url = '') { return url.startsWith('/'); }
-
-function getThumb(videoUrl, thumbnailUrl) {
-  if (thumbnailUrl) return thumbnailUrl;
-  const ytMatch = videoUrl?.match(
-    /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/
-  );
-  if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
-  return null;
+/**
+ * Extract the src URL from a raw YouTube <iframe> embed code string.
+ * If iframeCode is already a URL, returns it directly.
+ */
+function extractSrc(iframeCode) {
+  if (!iframeCode) return '';
+  if (iframeCode.startsWith('http')) return iframeCode;
+  const match = iframeCode.match(/src=["']([^"']+)["']/i);
+  return match ? match[1] : '';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// VIDEO MODAL — needed by LectureCard onPlay
+// VIDEO MODAL
 // ─────────────────────────────────────────────────────────────────────────────
-function VideoModal({ lecture, onClose }) {
-  const embedUrl = toEmbedUrl(lecture.videoUrl);
+function VideoModal({ lecture, subject, onClose }) {
+  const src = extractSrc(lecture.iframeCode);
+
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handler);
@@ -376,56 +283,82 @@ function VideoModal({ lecture, onClose }) {
     <div
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,.85)',
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,.88)',
         zIndex: 9999, display: 'flex', alignItems: 'center',
         justifyContent: 'center', padding: 20,
       }}
     >
       <div style={{
-        background: C.sidebar, borderRadius: 20, width: '100%', maxWidth: 860,
-        overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,.6)',
+        background: C.sidebar, borderRadius: 20, width: '100%', maxWidth: 900,
+        overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,.7)',
       }}>
         {/* Header */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '16px 20px', borderBottom: `1px solid rgba(255,255,255,.1)`,
+          padding: '16px 22px', borderBottom: '1px solid rgba(255,255,255,.1)',
         }}>
           <div>
             <div style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>{lecture.title}</div>
             <div style={{ color: '#93C5FD', fontSize: 12, marginTop: 2 }}>
-              {lecture.subject} · {lecture.chapter}
+              {subject} · {lecture.chapter}
             </div>
           </div>
           <button
             onClick={onClose}
             style={{
-              width: 34, height: 34, borderRadius: 10,
+              width: 36, height: 36, borderRadius: 10,
               background: 'rgba(255,255,255,.15)', border: 'none',
-              color: '#fff', fontSize: 20, cursor: 'pointer',
+              color: '#fff', fontSize: 22, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >×</button>
         </div>
-        {/* Video */}
+
+        {/* iframe embed */}
         <div style={{ position: 'relative', paddingBottom: '56.25%', background: '#000' }}>
-          <iframe
-            src={embedUrl}
-            style={{
-              position: 'absolute', top: 0, left: 0,
-              width: '100%', height: '100%', border: 'none',
-            }}
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-            title={lecture.title}
-          />
+          {src ? (
+            <iframe
+              src={src}
+              style={{
+                position: 'absolute', top: 0, left: 0,
+                width: '100%', height: '100%', border: 'none',
+              }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              title={lecture.title}
+            />
+          ) : (
+            <div style={{
+              position: 'absolute', inset: 0,
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              color: '#64748B', gap: 12,
+            }}>
+              <div style={{ fontSize: 52 }}>🎬</div>
+              <div style={{ fontWeight: 700, fontSize: 16, color: '#94A3B8' }}>
+                Video coming soon
+              </div>
+              <div style={{ fontSize: 12, color: '#475569' }}>
+                Paste the YouTube iframe code in SUBJECTS_DATA
+              </div>
+            </div>
+          )}
         </div>
+
         {/* Footer */}
         <div style={{
-          padding: '14px 20px', display: 'flex',
-          alignItems: 'center', justifyContent: 'space-between',
+          padding: '14px 22px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}>
-          <div style={{ color: '#93C5FD', fontSize: 12 }}>{lecture.instructor}</div>
-          <div style={{ color: '#64748B', fontSize: 12 }}>{fmtDate(lecture.uploadedAt)}</div>
+          {lecture.description && (
+            <div style={{ color: '#94A3B8', fontSize: 12, flex: 1, marginRight: 16 }}>
+              {lecture.description}
+            </div>
+          )}
+          <div style={{ color: '#475569', fontSize: 12, flexShrink: 0 }}>
+            {fmtDate(lecture.uploadedAt)}
+          </div>
         </div>
       </div>
     </div>
@@ -433,88 +366,43 @@ function VideoModal({ lecture, onClose }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LIVE CLASSES SECTION  ← FULLY FIXED
-//
-// FIX 1 — `now` is stored as a ref (mutable) AND also triggers re-render via
-//          a separate `tick` state counter, so isLive() / countdown() always
-//          read the true current timestamp without stale-closure problems.
-//
-// FIX 2 — isPast() guard uses Date.now() directly (not the stale `now` state)
-//          so a class that just ended is removed on the next tick without waiting
-//          for a full re-fetch.
-//
-// FIX 3 — The "Join Now →" anchor always opens cls.meetLink in a new tab.
-//          It is rendered whenever isLive() is true, regardless of meetLink being
-//          populated — if meetLink is empty we show a warning tooltip instead of
-//          silently doing nothing.
-//
-// FIX 4 — API errors are surfaced to the UI so you can see them in production
-//          instead of silently showing "No upcoming classes".
+// LIVE CLASSES SECTION
 // ─────────────────────────────────────────────────────────────────────────────
 function LiveClassesSection() {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState('');
-  // Use a ref for the true current time (avoids stale closure in helpers)
-  // and a counter just to force re-renders every 30 s.
   const nowRef = useRef(Date.now());
   const [tick, setTick] = useState(0);
 
-  // ── Fetch helper ──
   const fetchClasses = () => {
     setApiError('');
     fetch('/api/classes')
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
+      .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
       .then((d) => {
-        if (d.success) {
-          setClasses(d.events || []);
-        } else {
-          setApiError(d.message || 'API returned success:false');
-        }
+        if (d.success) setClasses(d.events || []);
+        else setApiError(d.message || 'API returned success:false');
       })
-      .catch((err) => {
-        setApiError(err.message || 'Failed to load classes');
-      })
+      .catch((err) => setApiError(err.message || 'Failed to load classes'))
       .finally(() => setLoading(false));
   };
 
-  // ── Initial fetch ──
   useEffect(() => { fetchClasses(); }, []);
-
-  // ── Re-fetch every 60 s ──
+  useEffect(() => { const id = setInterval(fetchClasses, 60_000); return () => clearInterval(id); }, []);
   useEffect(() => {
-    const id = setInterval(fetchClasses, 60_000);
+    const id = setInterval(() => { nowRef.current = Date.now(); setTick((t) => t + 1); }, 15_000);
     return () => clearInterval(id);
   }, []);
 
-  // ── Tick every 15 s — update nowRef AND force a re-render ──
-  useEffect(() => {
-    const id = setInterval(() => {
-      nowRef.current = Date.now();
-      setTick((t) => t + 1);
-    }, 15_000);
-    return () => clearInterval(id);
-  }, []);
-
-  // ── Status helpers — always use nowRef.current for accuracy ──
   function isLive(cls) {
     const now = nowRef.current;
-    return (
-      cls.startDateTime &&
-      cls.endDateTime &&
-      new Date(cls.startDateTime).getTime() <= now &&
-      now <= new Date(cls.endDateTime).getTime()
-    );
+    return cls.startDateTime && cls.endDateTime &&
+      new Date(cls.startDateTime).getTime() <= now && now <= new Date(cls.endDateTime).getTime();
   }
-
   function isPast(cls) {
     if (!cls.endDateTime) return false;
     return new Date(cls.endDateTime).getTime() < nowRef.current;
   }
-
   function countdown(cls) {
     if (!cls.startDateTime) return null;
     const diff = new Date(cls.startDateTime).getTime() - nowRef.current;
@@ -526,7 +414,6 @@ function LiveClassesSection() {
     if (h > 0) return `in ${h}h ${m}m`;
     return `in ${m}m`;
   }
-
   function formatDateTime(iso) {
     if (!iso) return '';
     return new Date(iso).toLocaleString('en-IN', {
@@ -535,287 +422,87 @@ function LiveClassesSection() {
     });
   }
 
-  // Filter past classes; sort live → upcoming by startDateTime
   const visibleClasses = classes
     .filter((cls) => !isPast(cls))
     .sort((a, b) => {
-      const aLive = isLive(a);
-      const bLive = isLive(b);
+      const aLive = isLive(a), bLive = isLive(b);
       if (aLive && !bLive) return -1;
       if (!aLive && bLive) return 1;
       return new Date(a.startDateTime) - new Date(b.startDateTime);
     });
 
-  // ── Loading skeleton ──
-  if (loading) {
-    return (
-      <div style={{
-        background: C.card, borderRadius: 16,
-        border: `1px solid ${C.border}`, padding: '20px 22px', marginBottom: 24,
-      }}>
-        <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 14 }}>
-          📅 Live Classes
-        </div>
-        {[1, 2].map((i) => (
-          <div key={i} style={{
-            height: 72, background: C.bg, borderRadius: 10, marginBottom: 10,
-            animation: 'lcsSkeleton 1.5s ease-in-out infinite',
-          }} />
-        ))}
-        <style>{`@keyframes lcsSkeleton { 0%,100%{opacity:1} 50%{opacity:.45} }`}</style>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: '20px 22px', marginBottom: 24 }}>
+      <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 14 }}>📅 Live Classes</div>
+      {[1, 2].map((i) => (
+        <div key={i} style={{ height: 72, background: C.bg, borderRadius: 10, marginBottom: 10, animation: 'sk 1.5s ease-in-out infinite' }} />
+      ))}
+      <style>{`@keyframes sk{0%,100%{opacity:1}50%{opacity:.4}}`}</style>
+    </div>
+  );
 
-  // ── API error state ──
-  if (apiError) {
-    return (
-      <div style={{
-        background: C.card, borderRadius: 16,
-        border: `1px solid #FCA5A5`, padding: '20px 22px', marginBottom: 24,
-      }}>
-        <div style={{ fontWeight: 800, fontSize: 15, color: C.red, marginBottom: 6 }}>
-          ⚠️ Live Classes — Could Not Load
-        </div>
-        <div style={{ color: C.muted, fontSize: 13, marginBottom: 10 }}>
-          {apiError}
-        </div>
-        <button
-          onClick={fetchClasses}
-          style={{
-            background: C.primary, color: '#fff', border: 'none',
-            borderRadius: 8, padding: '7px 16px', fontSize: 12,
-            fontWeight: 700, cursor: 'pointer',
-          }}
-        >
-          🔄 Retry
-        </button>
-      </div>
-    );
-  }
+  if (apiError) return (
+    <div style={{ background: C.card, borderRadius: 16, border: '1px solid #FCA5A5', padding: '20px 22px', marginBottom: 24 }}>
+      <div style={{ fontWeight: 800, fontSize: 15, color: C.red, marginBottom: 6 }}>⚠️ Live Classes — Could Not Load</div>
+      <div style={{ color: C.muted, fontSize: 13, marginBottom: 10 }}>{apiError}</div>
+      <button onClick={fetchClasses} style={{ background: C.primary, color: '#fff', border: 'none', borderRadius: 8, padding: '7px 16px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>🔄 Retry</button>
+    </div>
+  );
 
-  // ── No upcoming classes ──
-  if (visibleClasses.length === 0) {
-    return (
-      <div style={{
-        background: C.card, borderRadius: 16,
-        border: `1px solid ${C.border}`, padding: '20px 22px', marginBottom: 24,
-      }}>
-        <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 6 }}>
-          📅 Live Classes
-        </div>
-        <div style={{ color: C.muted, fontSize: 13 }}>
-          No upcoming classes scheduled. Check back soon!
-        </div>
-      </div>
-    );
-  }
+  if (visibleClasses.length === 0) return (
+    <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: '20px 22px', marginBottom: 24 }}>
+      <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 6 }}>📅 Live Classes</div>
+      <div style={{ color: C.muted, fontSize: 13 }}>No upcoming classes scheduled. Check back soon!</div>
+    </div>
+  );
 
   return (
-    <div style={{
-      background: C.card, borderRadius: 16,
-      border: `1px solid ${C.border}`, padding: '20px 22px', marginBottom: 24,
-    }}>
-      {/* Section header */}
-      <div style={{
-        display: 'flex', justifyContent: 'space-between',
-        alignItems: 'center', marginBottom: 16,
-      }}>
-        <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>
-          📅 Upcoming Live Classes
-        </div>
-        <span style={{
-          fontSize: 12, color: C.muted, background: C.bg,
-          padding: '3px 10px', borderRadius: 20, border: `1px solid ${C.border}`,
-        }}>
+    <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: '20px 22px', marginBottom: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>📅 Upcoming Live Classes</div>
+        <span style={{ fontSize: 12, color: C.muted, background: C.bg, padding: '3px 10px', borderRadius: 20, border: `1px solid ${C.border}` }}>
           {visibleClasses.length} scheduled
         </span>
       </div>
-
-      {/* Class cards */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {visibleClasses.map((cls) => {
           const live = isLive(cls);
           const timer = countdown(cls);
-          // Support both MongoDB _id (object with toString) and plain string id
           const id = cls._id ? (typeof cls._id === 'object' ? cls._id.toString() : cls._id) : cls.id;
-          const endTime = cls.endDateTime
-            ? new Date(cls.endDateTime).toLocaleTimeString('en-IN', {
-              hour: '2-digit', minute: '2-digit',
-            })
-            : null;
-
-          // Validate meetLink — must start with http
+          const endTime = cls.endDateTime ? new Date(cls.endDateTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : null;
           const hasMeetLink = cls.meetLink && cls.meetLink.startsWith('http');
-
           return (
-            <div
-              key={id}
-              style={{
-                display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', gap: 14, padding: '14px 16px',
-                borderRadius: 12, flexWrap: 'wrap',
-                background: live ? '#FFF1F1' : C.bg,
-                border: `1px solid ${live ? C.red + '55' : C.border}`,
-                transition: 'border-color .2s, background .2s',
-              }}
-            >
-              {/* Left: class info */}
+            <div key={id} style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              gap: 14, padding: '14px 16px', borderRadius: 12, flexWrap: 'wrap',
+              background: live ? '#FFF1F1' : C.bg,
+              border: `1px solid ${live ? C.red + '55' : C.border}`,
+            }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                {/* Title row with badges */}
-                <div style={{
-                  display: 'flex', alignItems: 'center',
-                  gap: 8, flexWrap: 'wrap', marginBottom: 5,
-                }}>
-                  {live && (
-                    <span style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 5,
-                      background: C.red, color: '#fff',
-                      fontSize: 10, fontWeight: 800,
-                      padding: '3px 9px', borderRadius: 20,
-                    }}>
-                      <span style={{
-                        width: 6, height: 6, borderRadius: '50%', background: '#fff',
-                        display: 'inline-block',
-                        animation: 'lcsLiveDot 1.4s ease-in-out infinite',
-                      }} />
-                      LIVE NOW
-                    </span>
-                  )}
-                  {!live && timer && (
-                    <span style={{
-                      background: C.primaryLight, color: C.primary,
-                      fontSize: 10, fontWeight: 700,
-                      padding: '3px 9px', borderRadius: 20,
-                    }}>
-                      ⏰ {timer}
-                    </span>
-                  )}
-                  <span style={{ fontWeight: 700, fontSize: 14, color: C.text }}>
-                    {cls.title}
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 5 }}>
+                  {live && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: C.red, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 9px', borderRadius: 20 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff', display: 'inline-block', animation: 'liveDot 1.4s ease-in-out infinite' }} /> LIVE NOW
+                  </span>}
+                  {!live && timer && <span style={{ background: C.primaryLight, color: C.primary, fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 20 }}>⏰ {timer}</span>}
+                  <span style={{ fontWeight: 700, fontSize: 14, color: C.text }}>{cls.title}</span>
                 </div>
-
-                {/* Date / time */}
-                <div style={{ fontSize: 12, color: C.muted }}>
-                  🕐 {formatDateTime(cls.startDateTime)}
-                  {endTime && <span> → {endTime}</span>}
-                </div>
-
-                {/* Description */}
-                {cls.description && (
-                  <div style={{ fontSize: 11, color: C.muted, marginTop: 3, lineHeight: 1.4 }}>
-                    {cls.description}
-                  </div>
-                )}
-
-                {/* Batch */}
-                {cls.batch && cls.batch !== 'All Batches' && (
-                  <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>
-                    👥 {cls.batch}
-                  </div>
-                )}
+                <div style={{ fontSize: 12, color: C.muted }}>🕐 {formatDateTime(cls.startDateTime)}{endTime && ` → ${endTime}`}</div>
+                {cls.description && <div style={{ fontSize: 11, color: C.muted, marginTop: 3 }}>{cls.description}</div>}
               </div>
-
-              {/* ── RIGHT: Join / Upcoming button ── */}
-              {live ? (
-                hasMeetLink ? (
-                  /*
-                   * ✅ LIVE + valid meetLink → RED clickable anchor
-                   * Opens Google Meet / Zoom / Teams link in a new tab.
-                   */
-                  <a
-                    href={cls.meetLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      background: `linear-gradient(135deg,${C.red},#DC2626)`,
-                      color: '#fff',
-                      padding: '10px 20px',
-                      borderRadius: 10,
-                      fontWeight: 800,
-                      fontSize: 13,
-                      textDecoration: 'none',
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 7,
-                      boxShadow: `0 4px 14px rgba(239,68,68,.35)`,
-                      animation: 'lcsJoinPulse 2.5s ease-in-out infinite',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    🔴 Join Now →
-                  </a>
-                ) : (
-                  /*
-                   * ⚠️ LIVE but meetLink missing in DB → show warning
-                   * Teacher needs to add the link in the Schedule tab.
-                   */
-                  <div style={{
-                    display: 'flex', flexDirection: 'column',
-                    alignItems: 'flex-end', gap: 4, flexShrink: 0,
-                  }}>
-                    <div style={{
-                      background: '#FEF2F2',
-                      border: `1px solid ${C.red}55`,
-                      color: C.red,
-                      padding: '10px 16px',
-                      borderRadius: 10,
-                      fontWeight: 700,
-                      fontSize: 12,
-                      whiteSpace: 'nowrap',
-                    }}>
-                      🔴 Class is Live
-                    </div>
-                    <div style={{ fontSize: 10, color: C.red }}>
-                      ⚠️ No meeting link added yet
-                    </div>
-                  </div>
-                )
-              ) : (
-                /*
-                 * ⏳ NOT yet live → gray disabled button with countdown
-                 */
-                <button
-                  disabled
-                  title="Join button activates automatically when class starts"
-                  style={{
-                    background: '#E2E8F0',
-                    color: '#94A3B8',
-                    padding: '10px 20px',
-                    borderRadius: 10,
-                    fontWeight: 700,
-                    fontSize: 13,
-                    border: 'none',
-                    cursor: 'not-allowed',
-                    whiteSpace: 'nowrap',
-                    flexShrink: 0,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 7,
-                    opacity: 0.8,
-                  }}
-                >
-                  ⚫ Join Live {timer ? `(${timer})` : ''}
-                </button>
-              )}
+              {live ? (hasMeetLink
+                ? <a href={cls.meetLink} target="_blank" rel="noopener noreferrer" style={{ background: `linear-gradient(135deg,${C.red},#DC2626)`, color: '#fff', padding: '10px 20px', borderRadius: 10, fontWeight: 800, fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 7, boxShadow: '0 4px 14px rgba(239,68,68,.35)', animation: 'joinPulse 2.5s ease-in-out infinite' }}>🔴 Join Now →</a>
+                : <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, flexShrink: 0 }}>
+                  <div style={{ background: '#FEF2F2', border: `1px solid ${C.red}55`, color: C.red, padding: '10px 16px', borderRadius: 10, fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap' }}>🔴 Class is Live</div>
+                  <div style={{ fontSize: 10, color: C.red }}>⚠️ No meeting link added yet</div>
+                </div>)
+                : <button disabled style={{ background: '#E2E8F0', color: '#94A3B8', padding: '10px 20px', borderRadius: 10, fontWeight: 700, fontSize: 13, border: 'none', cursor: 'not-allowed', whiteSpace: 'nowrap', flexShrink: 0 }}>⚫ Join Live {timer ? `(${timer})` : ''}</button>}
             </div>
           );
         })}
       </div>
-
-      {/* Keyframes */}
       <style>{`
-        @keyframes lcsLiveDot {
-          0%, 100% { opacity: 1;   transform: scale(1);   }
-          50%       { opacity: 0.3; transform: scale(0.6); }
-        }
-        @keyframes lcsJoinPulse {
-          0%, 100% { box-shadow: 0 4px 14px rgba(239,68,68,.35); }
-          50%       { box-shadow: 0 4px 24px rgba(239,68,68,.65); }
-        }
+        @keyframes liveDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.6)} }
+        @keyframes joinPulse { 0%,100%{box-shadow:0 4px 14px rgba(239,68,68,.35)} 50%{box-shadow:0 4px 24px rgba(239,68,68,.65)} }
       `}</style>
     </div>
   );
@@ -824,7 +511,7 @@ function LiveClassesSection() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PAYWALL MODAL
 // ─────────────────────────────────────────────────────────────────────────────
-function PaywallModal({ user, onSuccess, onClose }) {
+function PaywallModal({ user, totalLectures, onSuccess, onClose }) {
   const [selected, setSelected] = useState('quarterly');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -844,145 +531,51 @@ function PaywallModal({ user, onSuccess, onClose }) {
   const plan = PLANS[selected];
 
   return (
-    <div
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,.7)',
-        zIndex: 9998, display: 'flex', alignItems: 'center',
-        justifyContent: 'center', padding: 20, overflowY: 'auto',
-      }}
-    >
-      <div style={{
-        background: C.card, borderRadius: 20, width: '100%', maxWidth: 680,
-        boxShadow: '0 24px 80px rgba(0,0,0,.3)', overflow: 'hidden',
-      }}>
-        {/* Header */}
-        <div style={{
-          background: `linear-gradient(135deg,${C.sidebar},${C.primary})`,
-          padding: '28px 32px', position: 'relative',
-        }}>
-          <button onClick={onClose} style={{
-            position: 'absolute', top: 16, right: 16, width: 32, height: 32,
-            borderRadius: 8, background: 'rgba(255,255,255,.15)', border: 'none',
-            color: '#fff', fontSize: 18, cursor: 'pointer',
-          }}>×</button>
+    <div onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.7)', zIndex: 9998, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, overflowY: 'auto' }}>
+      <div style={{ background: C.card, borderRadius: 20, width: '100%', maxWidth: 680, boxShadow: '0 24px 80px rgba(0,0,0,.3)', overflow: 'hidden' }}>
+        <div style={{ background: `linear-gradient(135deg,${C.sidebar},${C.primary})`, padding: '28px 32px', position: 'relative' }}>
+          <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, width: 32, height: 32, borderRadius: 8, background: 'rgba(255,255,255,.15)', border: 'none', color: '#fff', fontSize: 18, cursor: 'pointer' }}>×</button>
           <div style={{ fontSize: 36, marginBottom: 10 }}>👑</div>
-          <div style={{ color: '#fff', fontWeight: 900, fontSize: 22, marginBottom: 6 }}>
-            Unlock All Lectures
-          </div>
-          <div style={{ color: '#93C5FD', fontSize: 13, lineHeight: 1.6 }}>
-            First {FREE_LIMIT} lectures are free. Subscribe to access everything.
-          </div>
+          <div style={{ color: '#fff', fontWeight: 900, fontSize: 22, marginBottom: 6 }}>Unlock All Lectures</div>
+          <div style={{ color: '#93C5FD', fontSize: 13, lineHeight: 1.6 }}>First {FREE_LIMIT} lectures free. Subscribe to access all {totalLectures} lectures.</div>
           <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
             {['🎬 All Lectures', '📋 All Chapters', '📝 Mock Tests', '📊 Analytics'].map((p) => (
-              <span key={p} style={{
-                background: 'rgba(255,255,255,.15)', color: '#fff',
-                fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20,
-              }}>{p}</span>
+              <span key={p} style={{ background: 'rgba(255,255,255,.15)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>{p}</span>
             ))}
           </div>
         </div>
-
-        {/* Body */}
         <div style={{ padding: '24px 32px' }}>
-          <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 14 }}>
-            Choose Your Plan
-          </div>
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',
-            gap: 12, marginBottom: 24,
-          }}>
+          <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 14 }}>Choose Your Plan</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 24 }}>
             {Object.values(PLANS).map((p) => (
-              <div key={p.id} onClick={() => setSelected(p.id)} style={{
-                borderRadius: 14,
-                border: `2px solid ${selected === p.id ? C.primary : C.border}`,
-                padding: '16px 14px', cursor: 'pointer',
-                background: selected === p.id ? C.primaryLight : C.card,
-                position: 'relative',
-              }}>
-                {p.badge && (
-                  <div style={{
-                    position: 'absolute', top: -10, left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: p.id === 'yearly' ? C.accent : C.primary,
-                    color: '#fff', fontSize: 10, fontWeight: 800,
-                    padding: '2px 10px', borderRadius: 20, whiteSpace: 'nowrap',
-                  }}>{p.badge}</div>
-                )}
-                <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 4 }}>
-                  {p.label}
-                </div>
+              <div key={p.id} onClick={() => setSelected(p.id)} style={{ borderRadius: 14, border: `2px solid ${selected === p.id ? C.primary : C.border}`, padding: '16px 14px', cursor: 'pointer', background: selected === p.id ? C.primaryLight : C.card, position: 'relative' }}>
+                {p.badge && <div style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)', background: p.id === 'yearly' ? C.accent : C.primary, color: '#fff', fontSize: 10, fontWeight: 800, padding: '2px 10px', borderRadius: 20, whiteSpace: 'nowrap' }}>{p.badge}</div>}
+                <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 4 }}>{p.label}</div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
-                  <span style={{ fontSize: 22, fontWeight: 900, color: selected === p.id ? C.primary : C.text }}>
-                    ₹{p.price}
-                  </span>
-                  <span style={{ fontSize: 12, color: C.muted, textDecoration: 'line-through' }}>
-                    ₹{p.originalPrice}
-                  </span>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: selected === p.id ? C.primary : C.text }}>₹{p.price}</span>
+                  <span style={{ fontSize: 12, color: C.muted, textDecoration: 'line-through' }}>₹{p.originalPrice}</span>
                 </div>
                 <div style={{ fontSize: 11, color: C.muted }}>{p.durationDays} days</div>
               </div>
             ))}
           </div>
-
-          {/* Plan features */}
-          <div style={{
-            background: C.bg, borderRadius: 12,
-            padding: '14px 16px', marginBottom: 20,
-          }}>
-            <div style={{ fontWeight: 700, fontSize: 13, color: C.text, marginBottom: 10 }}>
-              What you get with {plan.label}:
-            </div>
+          <div style={{ background: C.bg, borderRadius: 12, padding: '14px 16px', marginBottom: 20 }}>
+            <div style={{ fontWeight: 700, fontSize: 13, color: C.text, marginBottom: 10 }}>What you get with {plan.label}:</div>
             {plan.features.map((f) => (
-              <div key={f} style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                fontSize: 13, color: C.text, marginBottom: 6,
-              }}>
-                <span style={{
-                  width: 18, height: 18, borderRadius: '50%',
-                  background: C.green + '20', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, color: C.green, flexShrink: 0,
-                }}>✓</span>
+              <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: C.text, marginBottom: 6 }}>
+                <span style={{ width: 18, height: 18, borderRadius: '50%', background: C.green + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: C.green, flexShrink: 0 }}>✓</span>
                 {f}
               </div>
             ))}
           </div>
-
-          {error && (
-            <div style={{
-              background: '#FEF2F2', border: `1px solid ${C.red}30`,
-              borderRadius: 10, padding: '10px 14px',
-              fontSize: 13, color: C.red, marginBottom: 16,
-            }}>⚠️ {error}</div>
-          )}
-
-          <button
-            onClick={handlePay}
-            disabled={loading}
-            style={{
-              width: '100%', padding: '14px',
-              background: loading ? C.border : `linear-gradient(135deg,${C.primary},${C.purple})`,
-              border: 'none', borderRadius: 12, color: '#fff',
-              fontWeight: 800, fontSize: 15,
-              cursor: loading ? 'not-allowed' : 'pointer', marginBottom: 10,
-            }}
-          >
+          {error && <div style={{ background: '#FEF2F2', border: `1px solid ${C.red}30`, borderRadius: 10, padding: '10px 14px', fontSize: 13, color: C.red, marginBottom: 16 }}>⚠️ {error}</div>}
+          <button onClick={handlePay} disabled={loading} style={{ width: '100%', padding: '14px', background: loading ? C.border : `linear-gradient(135deg,${C.primary},${C.purple})`, border: 'none', borderRadius: 12, color: '#fff', fontWeight: 800, fontSize: 15, cursor: loading ? 'not-allowed' : 'pointer', marginBottom: 10 }}>
             {loading ? '⏳ Processing…' : `💳 Pay ₹${plan.price} with Razorpay`}
           </button>
-          <button
-            onClick={handleDemo}
-            style={{
-              width: '100%', padding: '11px', background: 'none',
-              border: `1px solid ${C.border}`, borderRadius: 12,
-              color: C.muted, fontSize: 13, cursor: 'pointer',
-            }}
-          >
+          <button onClick={handleDemo} style={{ width: '100%', padding: '11px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 12, color: C.muted, fontSize: 13, cursor: 'pointer' }}>
             🧪 Demo Mode — Activate Free (Testing Only)
           </button>
-          <div style={{ textAlign: 'center', marginTop: 12, fontSize: 11, color: C.muted }}>
-            🔒 Secured by Razorpay · Instant activation
-          </div>
+          <div style={{ textAlign: 'center', marginTop: 12, fontSize: 11, color: C.muted }}>🔒 Secured by Razorpay · Instant activation</div>
         </div>
       </div>
     </div>
@@ -990,32 +583,28 @@ function PaywallModal({ user, onSuccess, onClose }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SUBJECT FOLDER CARD
+// SUBJECT FOLDER CARD (grid view)
 // ─────────────────────────────────────────────────────────────────────────────
-function SubjectFolderCard({
-  subject, lectures, subscribed, subtitle, examTags, onClick, freeLecturesOverride,
-}) {
-  const cfg = SUBJECT_CONFIG[subject] || {};
-  const icon = cfg.icon || '📁';
-  const totalLectures = lectures.length;
-  const freeLectures = freeLecturesOverride !== undefined
-    ? freeLecturesOverride
-    : Math.min(totalLectures, FREE_LIMIT);
-  const lockedLectures = Math.max(0, totalLectures - freeLectures);
-  const chapters = [...new Set(lectures.map((l) => l.chapter).filter(Boolean))];
+function SubjectFolderCard({ subjectKey, cfg, subscribed, globalOffset, onClick }) {
+  const lectures = cfg.lectures;
+  const total = lectures.length; // always 23
+  const filled = lectures.filter((l) => !!l.iframeCode).length;
+  const freeLectures = Math.max(0, Math.min(total, FREE_LIMIT - globalOffset));
+  const locked = Math.max(0, total - freeLectures);
 
   return (
     <div
       onClick={onClick}
       style={{
-        background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
-        overflow: 'hidden', cursor: 'pointer', transition: 'all .2s',
-        boxShadow: '0 2px 8px rgba(0,0,0,.05)',
+        background: C.card, borderRadius: 20,
+        border: `1.5px solid ${C.border}`,
+        overflow: 'hidden', cursor: 'pointer',
+        transition: 'all .22s', boxShadow: '0 2px 8px rgba(0,0,0,.05)',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,.12)';
-        e.currentTarget.style.borderColor = '#94A3B8';
+        e.currentTarget.style.transform = 'translateY(-5px)';
+        e.currentTarget.style.boxShadow = `0 18px 44px rgba(0,0,0,.13)`;
+        e.currentTarget.style.borderColor = cfg.color + '88';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'none';
@@ -1023,95 +612,66 @@ function SubjectFolderCard({
         e.currentTarget.style.borderColor = C.border;
       }}
     >
-      <div style={{ height: 4, background: C.border }} />
+      {/* Colored top bar */}
+      <div style={{ height: 5, background: cfg.color }} />
+
       <div style={{ padding: '18px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
           <div style={{
-            width: 50, height: 50, borderRadius: 14, background: C.bg,
-            border: `1.5px solid ${C.border}`, display: 'flex',
-            alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0,
-          }}>{icon}</div>
+            width: 52, height: 52, borderRadius: 16,
+            background: cfg.color + '18',
+            border: `1.5px solid ${cfg.color}40`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 26, flexShrink: 0,
+          }}>{cfg.icon}</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-              <div style={{ fontWeight: 800, fontSize: 15, color: C.text, lineHeight: 1.3 }}>
-                {subject}
-              </div>
-              <span style={{
-                fontSize: 10, fontWeight: 700, background: C.bg, color: C.muted,
-                padding: '2px 8px', borderRadius: 20, border: `1px solid ${C.border}`,
-                whiteSpace: 'nowrap', flexShrink: 0,
-              }}>
-                {totalLectures} lecture{totalLectures !== 1 ? 's' : ''}
+              <div style={{ fontWeight: 800, fontSize: 15, color: C.text, lineHeight: 1.3 }}>{subjectKey}</div>
+              <span style={{ fontSize: 10, fontWeight: 700, background: C.bg, color: C.muted, padding: '2px 8px', borderRadius: 20, border: `1px solid ${C.border}`, whiteSpace: 'nowrap', flexShrink: 0 }}>
+                {total} slots
               </span>
             </div>
-            {subtitle && (
-              <div style={{ fontSize: 11, color: C.muted, marginTop: 3 }}>{subtitle}</div>
-            )}
-            {examTags?.length > 0 && (
+            {cfg.subtitle && <div style={{ fontSize: 11, color: C.muted, marginTop: 3 }}>{cfg.subtitle}</div>}
+            {cfg.examTags?.length > 0 && (
               <div style={{ display: 'flex', gap: 5, marginTop: 8, flexWrap: 'wrap' }}>
-                {examTags.map((tag) => (
-                  <span key={tag} style={{
-                    fontSize: 10, fontWeight: 600, color: C.muted, background: C.bg,
-                    border: `1px solid ${C.border}`, padding: '1px 8px', borderRadius: 20,
-                  }}>{tag}</span>
+                {cfg.examTags.map((tag) => (
+                  <span key={tag} style={{ fontSize: 10, fontWeight: 600, color: cfg.color, background: cfg.color + '12', border: `1px solid ${cfg.color}30`, padding: '1px 8px', borderRadius: 20 }}>{tag}</span>
                 ))}
               </div>
             )}
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
+        {/* Progress bar — how many slots filled */}
+        <div style={{ marginTop: 14, marginBottom: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+            <span style={{ fontSize: 11, color: C.muted }}>{filled} / {total} lectures uploaded</span>
+            <span style={{ fontSize: 11, color: cfg.color, fontWeight: 700 }}>{Math.round((filled / total) * 100)}%</span>
+          </div>
+          <div style={{ height: 6, background: C.bg, borderRadius: 99, overflow: 'hidden', border: `1px solid ${C.border}` }}>
+            <div style={{ height: '100%', width: `${(filled / total) * 100}%`, background: cfg.color, borderRadius: 99, transition: 'width .6s ease' }} />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
           {freeLectures > 0 && (
-            <span style={{
-              fontSize: 11, fontWeight: 600, background: '#F0FDF4', color: C.green,
-              padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.green}30`,
-            }}>🆓 {freeLectures} free</span>
+            <span style={{ fontSize: 11, fontWeight: 600, background: '#F0FDF4', color: C.green, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.green}30` }}>🆓 {freeLectures} free</span>
           )}
-          {!subscribed && lockedLectures > 0 && (
-            <span style={{
-              fontSize: 11, fontWeight: 600, background: '#FDF4FF', color: C.purple,
-              padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.purple}30`,
-            }}>🔒 {lockedLectures} premium</span>
+          {!subscribed && locked > 0 && (
+            <span style={{ fontSize: 11, fontWeight: 600, background: '#FDF4FF', color: C.purple, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.purple}30` }}>🔒 {locked} premium</span>
           )}
-          {subscribed && lockedLectures > 0 && (
-            <span style={{
-              fontSize: 11, fontWeight: 600, background: '#F0FDF4', color: C.green,
-              padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.green}30`,
-            }}>✅ All unlocked</span>
-          )}
-          {freeLectures === 0 && !subscribed && (
-            <span style={{
-              fontSize: 11, fontWeight: 600, background: '#FDF4FF', color: C.purple,
-              padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.purple}30`,
-            }}>🔒 All premium</span>
+          {subscribed && (
+            <span style={{ fontSize: 11, fontWeight: 600, background: '#F0FDF4', color: C.green, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.green}30` }}>✅ All unlocked</span>
           )}
         </div>
 
-        {chapters.length > 0 && (
-          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 10 }}>
-            {chapters.slice(0, 4).map((ch) => (
-              <span key={ch} style={{
-                fontSize: 10, color: C.muted, background: C.bg,
-                padding: '2px 8px', borderRadius: 6, border: `1px solid ${C.border}`,
-              }}>{ch}</span>
-            ))}
-            {chapters.length > 4 && (
-              <span style={{
-                fontSize: 10, color: C.muted, background: C.bg,
-                padding: '2px 8px', borderRadius: 6, border: `1px solid ${C.border}`,
-              }}>+{chapters.length - 4} more</span>
-            )}
-          </div>
-        )}
-
         <div style={{
-          marginTop: 14, display: 'flex', alignItems: 'center',
-          justifyContent: 'center', gap: 6,
-          background: C.bg, border: `1px solid ${C.border}`,
-          borderRadius: 10, padding: '8px',
-          color: C.text, fontWeight: 700, fontSize: 12,
+          marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          background: cfg.color + '10', border: `1px solid ${cfg.color}30`,
+          borderRadius: 10, padding: '9px',
+          color: cfg.color, fontWeight: 700, fontSize: 12,
         }}>
-          📂 Open Subject →
+          📂 Open {subjectKey} →
         </div>
       </div>
     </div>
@@ -1119,172 +679,144 @@ function SubjectFolderCard({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LECTURE CARD
+// LECTURE CARD (inside a subject)
+// Shows YouTube iframe preview if video is available, otherwise shows a placeholder.
 // ─────────────────────────────────────────────────────────────────────────────
-function LectureCard({ lecture, globalIndex, subscribed, onPlay, onLock }) {
+function LectureCard({ lecture, slotNumber, globalIndex, subjectColor, subscribed, onPlay, onLock }) {
   const isLocked = !subscribed && globalIndex >= FREE_LIMIT;
-  const thumb = getThumb(lecture.videoUrl, lecture.thumbnailUrl);
-  const isDrive = isGoogleDrive(lecture.videoUrl);
-  const isLocal = isLocalVideo(lecture.videoUrl);
+  const hasVideo = !!lecture.iframeCode;
+  const src = extractSrc(lecture.iframeCode);
+
+  // Extract YouTube video ID for thumbnail
+  const ytIdMatch = src.match(/youtube\.com\/embed\/([\w-]{11})/);
+  const thumbUrl = ytIdMatch ? `https://img.youtube.com/vi/${ytIdMatch[1]}/hqdefault.jpg` : null;
 
   return (
     <div
-      onClick={() => (isLocked ? onLock() : onPlay(lecture))}
+      onClick={() => {
+        if (!hasVideo) return; // no-op for empty slots
+        if (isLocked) onLock();
+        else onPlay(lecture);
+      }}
       style={{
         background: C.card, borderRadius: 16,
-        border: `2px solid ${isLocked ? C.purple + '40' : C.border}`,
-        overflow: 'hidden', cursor: 'pointer', transition: 'all .2s',
+        border: `2px solid ${isLocked ? C.purple + '40' : hasVideo ? C.border : C.border}`,
+        overflow: 'hidden',
+        cursor: hasVideo ? 'pointer' : 'default',
+        transition: 'all .2s',
+        opacity: hasVideo ? 1 : 0.6,
       }}
       onMouseEnter={(e) => {
+        if (!hasVideo) return;
         e.currentTarget.style.transform = 'translateY(-3px)';
         e.currentTarget.style.boxShadow = isLocked
-          ? `0 10px 28px rgba(139,92,246,.2)`
-          : `0 10px 28px rgba(29,78,216,.15)`;
+          ? '0 10px 28px rgba(139,92,246,.2)'
+          : `0 10px 28px ${subjectColor}33`;
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'none';
         e.currentTarget.style.boxShadow = 'none';
       }}
     >
-      {/* Thumbnail / placeholder */}
-      <div style={{
-        position: 'relative', paddingBottom: '56.25%',
-        background: '#0F172A', overflow: 'hidden',
-      }}>
-        {thumb
-          ? <img
-            src={thumb}
+      {/* Thumbnail / iframe preview area */}
+      <div style={{ position: 'relative', paddingBottom: '56.25%', background: '#0F172A', overflow: 'hidden' }}>
+        {hasVideo && thumbUrl ? (
+          <img
+            src={thumbUrl}
             alt={lecture.title}
             style={{
-              position: 'absolute', top: 0, left: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover', opacity: isLocked ? 0.4 : 1,
+              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+              objectFit: 'cover', opacity: isLocked ? 0.35 : 1,
             }}
           />
-          : <div style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            background: isLocked
-              ? 'linear-gradient(135deg,#2D1B69,#1E0A3C)'
-              : isDrive ? 'linear-gradient(135deg,#1A3A6A,#0A1628)'
-                : isLocal ? 'linear-gradient(135deg,#064E3B,#0A1628)'
-                  : `linear-gradient(135deg,${C.sidebar},${C.primary})`,
-            display: 'flex', alignItems: 'center',
-            justifyContent: 'center', fontSize: 40,
-          }}>
-            {isLocked ? '🔒' : isDrive ? '📁' : isLocal ? '💾' : '🎬'}
-          </div>
-        }
-        {isLocked && (
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(139,92,246,.35) 0%, transparent 60%)',
-          }} />
-        )}
-        {/* Play / lock overlay button */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <div style={{
-            width: 52, height: 52, borderRadius: '50%',
-            background: isLocked
-              ? `linear-gradient(135deg,${C.purple},#6D28D9)`
-              : 'rgba(255,255,255,.92)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 22, boxShadow: '0 4px 20px rgba(0,0,0,.45)',
-          }}>
-            {isLocked ? '🔒' : '▶'}
-          </div>
-        </div>
-        {/* Free / Premium badge */}
-        {isLocked ? (
-          <div style={{
-            position: 'absolute', top: 8, left: 8,
-            background: `linear-gradient(135deg,${C.purple},#6D28D9)`,
-            color: '#fff', fontSize: 10, fontWeight: 800,
-            padding: '3px 10px', borderRadius: 20,
-          }}>👑 PREMIUM</div>
         ) : (
           <div style={{
-            position: 'absolute', top: 8, left: 8,
-            background: C.green, color: '#fff',
-            fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20,
-          }}>🆓 FREE</div>
+            position: 'absolute', inset: 0,
+            background: hasVideo
+              ? (isLocked ? 'linear-gradient(135deg,#2D1B69,#1E0A3C)' : `linear-gradient(135deg,${subjectColor}22,${C.sidebar})`)
+              : 'linear-gradient(135deg,#1E293B,#0F172A)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36,
+          }}>
+            {hasVideo ? (isLocked ? '🔒' : '🎬') : '⏳'}
+          </div>
         )}
-        <div style={{
-          position: 'absolute', top: 8, right: 8,
-          background: 'rgba(0,0,0,.7)', color: '#fff',
-          fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6,
-        }}>#{lecture.order}</div>
+
+        {/* Locked overlay */}
+        {isLocked && hasVideo && (
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(139,92,246,.4) 0%, transparent 60%)' }} />
+        )}
+
+        {/* Play / lock / coming-soon icon */}
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {hasVideo ? (
+            <div style={{
+              width: 50, height: 50, borderRadius: '50%',
+              background: isLocked ? `linear-gradient(135deg,${C.purple},#6D28D9)` : 'rgba(255,255,255,.92)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 20, boxShadow: '0 4px 20px rgba(0,0,0,.45)',
+            }}>
+              {isLocked ? '🔒' : '▶'}
+            </div>
+          ) : (
+            <div style={{
+              background: 'rgba(0,0,0,.5)', color: '#64748B',
+              fontSize: 11, fontWeight: 700, padding: '6px 12px', borderRadius: 20,
+              border: '1px solid rgba(255,255,255,.1)',
+            }}>Coming Soon</div>
+          )}
+        </div>
+
+        {/* Badges */}
+        {hasVideo ? (
+          isLocked
+            ? <div style={{ position: 'absolute', top: 8, left: 8, background: `linear-gradient(135deg,${C.purple},#6D28D9)`, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>👑 PREMIUM</div>
+            : <div style={{ position: 'absolute', top: 8, left: 8, background: C.green, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>🆓 FREE</div>
+        ) : null}
+
+        {/* Slot number badge */}
+        <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,.7)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
+          #{slotNumber}
+        </div>
+
         {lecture.duration && (
-          <div style={{
-            position: 'absolute', bottom: 8, right: 8,
-            background: 'rgba(0,0,0,.8)', color: '#fff',
-            fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6,
-          }}>{lecture.duration}</div>
-        )}
-        {!isLocked && isDrive && (
-          <div style={{
-            position: 'absolute', bottom: 8, left: 8,
-            background: '#1A73E8', color: '#fff',
-            fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 6,
-          }}>📁 Drive</div>
-        )}
-        {!isLocked && isLocal && (
-          <div style={{
-            position: 'absolute', bottom: 8, left: 8,
-            background: '#059669', color: '#fff',
-            fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 6,
-          }}>💾 Local</div>
+          <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,.8)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
+            {lecture.duration}
+          </div>
         )}
       </div>
 
       {/* Card body */}
       <div style={{ padding: '14px 16px', background: isLocked ? '#FDFAFF' : C.card }}>
         <div style={{ display: 'flex', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
-          <span style={{
-            fontSize: 10, fontWeight: 700,
-            background: C.primaryLight, color: C.primary,
-            padding: '2px 8px', borderRadius: 20,
-          }}>{lecture.subject}</span>
-          {lecture.chapter && (
-            <span style={{
-              fontSize: 10, fontWeight: 700,
-              background: C.bg, color: C.muted,
-              padding: '2px 8px', borderRadius: 20,
-            }}>{lecture.chapter}</span>
-          )}
+          <span style={{ fontSize: 10, fontWeight: 700, background: subjectColor + '15', color: subjectColor, padding: '2px 8px', borderRadius: 20, border: `1px solid ${subjectColor}30` }}>
+            {lecture.chapter}
+          </span>
         </div>
-        <div style={{
-          fontWeight: 800, fontSize: 14,
-          color: isLocked ? C.muted : C.text,
-          lineHeight: 1.4, marginBottom: 6,
-        }}>{lecture.title}</div>
+        <div style={{ fontWeight: 800, fontSize: 14, color: isLocked ? C.muted : C.text, lineHeight: 1.4, marginBottom: 6 }}>
+          {lecture.title}
+        </div>
         {lecture.description && (
-          <div style={{
-            fontSize: 12, color: C.muted, lineHeight: 1.5, marginBottom: 10,
-            display: '-webkit-box', WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical', overflow: 'hidden',
-          }}>{lecture.description}</div>
-        )}
-        {isLocked && (
-          <div style={{
-            background: `linear-gradient(135deg,${C.purple}15,${C.primary}12)`,
-            border: `1px solid ${C.purple}35`, borderRadius: 10,
-            padding: '10px 12px', display: 'flex',
-            alignItems: 'center', justifyContent: 'space-between',
-            gap: 8, marginBottom: 10,
-          }}>
-            <div style={{ fontSize: 12, color: C.purple, fontWeight: 700 }}>
-              🔒 Subscribe to watch
-            </div>
-            <div style={{ fontSize: 11, color: C.purple, fontWeight: 700, whiteSpace: 'nowrap' }}>
-              from ₹299 →
-            </div>
+          <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5, marginBottom: 10, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {lecture.description}
           </div>
         )}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: 11, color: C.muted }}>{lecture.instructor}</div>
+
+        {/* Lock CTA */}
+        {isLocked && hasVideo && (
+          <div style={{ background: `linear-gradient(135deg,${C.purple}15,${C.primary}12)`, border: `1px solid ${C.purple}35`, borderRadius: 10, padding: '10px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, color: C.purple, fontWeight: 700 }}>🔒 Subscribe to watch</div>
+            <div style={{ fontSize: 11, color: C.purple, fontWeight: 700, whiteSpace: 'nowrap' }}>from ₹299 →</div>
+          </div>
+        )}
+
+        {!hasVideo && (
+          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px 12px', fontSize: 11, color: C.muted, textAlign: 'center' }}>
+            ⏳ Video will be uploaded soon
+          </div>
+        )}
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+          <div style={{ fontSize: 11, color: C.muted }}>{hasVideo ? 'Available' : 'Upcoming'}</div>
           <div style={{ fontSize: 11, color: C.muted }}>{fmtDate(lecture.uploadedAt)}</div>
         </div>
       </div>
@@ -1298,36 +830,17 @@ function LectureCard({ lecture, globalIndex, subscribed, onPlay, onLock }) {
 function SubStatusBar({ sub, onUpgrade }) {
   const days = daysRemaining();
   return (
-    <div style={{
-      background: `linear-gradient(135deg,${C.green},#059669)`,
-      borderRadius: 14, padding: '14px 20px', marginBottom: 24,
-      display: 'flex', justifyContent: 'space-between',
-      alignItems: 'center', flexWrap: 'wrap', gap: 12,
-    }}>
+    <div style={{ background: `linear-gradient(135deg,${C.green},#059669)`, borderRadius: 14, padding: '14px 20px', marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{
-          width: 40, height: 40, borderRadius: 12,
-          background: 'rgba(255,255,255,.25)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
-        }}>👑</div>
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(255,255,255,.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>👑</div>
         <div>
-          <div style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>
-            Premium Active — {sub.planLabel} Plan
-          </div>
-          <div style={{ color: 'rgba(255,255,255,.8)', fontSize: 12 }}>
-            {days} day{days !== 1 ? 's' : ''} remaining · Expires {fmtDate(sub.expiresAt)}
-          </div>
+          <div style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>Premium Active — {sub.planLabel} Plan</div>
+          <div style={{ color: 'rgba(255,255,255,.8)', fontSize: 12 }}>{days} day{days !== 1 ? 's' : ''} remaining · Expires {fmtDate(sub.expiresAt)}</div>
         </div>
       </div>
       <div style={{ display: 'flex', gap: 8 }}>
-        <div style={{
-          background: 'rgba(255,255,255,.2)', color: '#fff',
-          padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700,
-        }}>✅ All Lectures Unlocked</div>
-        <button onClick={onUpgrade} style={{
-          background: 'rgba(255,255,255,.3)', color: '#fff', border: 'none',
-          padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer',
-        }}>Renew →</button>
+        <div style={{ background: 'rgba(255,255,255,.2)', color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>✅ All Lectures Unlocked</div>
+        <button onClick={onUpgrade} style={{ background: 'rgba(255,255,255,.3)', color: '#fff', border: 'none', padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Renew →</button>
       </div>
     </div>
   );
@@ -1338,27 +851,12 @@ function SubStatusBar({ sub, onUpgrade }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function FreeLimitBanner({ total, onUpgrade }) {
   return (
-    <div style={{
-      background: `linear-gradient(135deg,${C.purple}15,${C.primary}15)`,
-      border: `1px solid ${C.primary}30`, borderRadius: 14,
-      padding: '18px 22px', marginBottom: 24,
-      display: 'flex', justifyContent: 'space-between',
-      alignItems: 'center', flexWrap: 'wrap', gap: 14,
-    }}>
+    <div style={{ background: `linear-gradient(135deg,${C.purple}15,${C.primary}15)`, border: `1px solid ${C.primary}30`, borderRadius: 14, padding: '18px 22px', marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
       <div>
-        <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 4 }}>
-          🎬 First {FREE_LIMIT} lectures are free — across all subjects
-        </div>
-        <div style={{ fontSize: 13, color: C.muted }}>
-          Subscribe to unlock all {total} lectures — instant access, all subjects.
-        </div>
+        <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 4 }}>🎬 First {FREE_LIMIT} lectures are free — across all subjects</div>
+        <div style={{ fontSize: 13, color: C.muted }}>Subscribe to unlock all {total} lecture slots — instant access, all subjects.</div>
       </div>
-      <button onClick={onUpgrade} style={{
-        background: `linear-gradient(135deg,${C.primary},${C.purple})`,
-        color: '#fff', border: 'none', borderRadius: 12,
-        padding: '12px 24px', fontWeight: 800, fontSize: 14,
-        cursor: 'pointer', whiteSpace: 'nowrap',
-      }}>
+      <button onClick={onUpgrade} style={{ background: `linear-gradient(135deg,${C.primary},${C.purple})`, color: '#fff', border: 'none', borderRadius: 12, padding: '12px 24px', fontWeight: 800, fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }}>
         👑 Unlock All →
       </button>
     </div>
@@ -1372,7 +870,7 @@ export default function LecturesPage() {
   const [user, setUser] = useState(null);
   const [sub, setSub] = useState(null);
   const [subscribed, setSubscribed] = useState(false);
-  const [activeVideo, setActiveVideo] = useState(null);
+  const [activeVideo, setActiveVideo] = useState(null);   // { lecture, subjectKey }
   const [showPaywall, setShowPaywall] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [search, setSearch] = useState('');
@@ -1389,44 +887,31 @@ export default function LecturesPage() {
     setShowPaywall(false);
   }
 
-  // De-duplicate lectures by id
-  const seen = new Set();
-  const dedupedLectures = LECTURES.filter((l) => {
-    if (seen.has(l.id)) return false;
-    seen.add(l.id);
-    return true;
-  });
+  const SUBJECT_KEYS = Object.keys(SUBJECTS_DATA);
 
-  // Group by subject, sort by order
-  const subjectMap = {};
-  dedupedLectures.forEach((l) => {
-    if (!subjectMap[l.subject]) subjectMap[l.subject] = [];
-    subjectMap[l.subject].push(l);
-  });
-  Object.keys(subjectMap).forEach((s) => {
-    subjectMap[s].sort((a, b) => a.order - b.order);
-  });
-
-  const ALL_SUBJECTS = Object.keys(SUBJECT_CONFIG);
-  ALL_SUBJECTS.forEach((s) => { if (!subjectMap[s]) subjectMap[s] = []; });
-
-  const allLectures = dedupedLectures;
-  const subjects = ALL_SUBJECTS;
-
-  function getGlobalOffset(subject) {
-    const pos = ALL_SUBJECTS.indexOf(subject);
-    return ALL_SUBJECTS.slice(0, pos).reduce(
-      (acc, s) => acc + (subjectMap[s]?.length || 0), 0
+  // Compute global offset for each subject (for free-limit calculation)
+  function getGlobalOffset(subjectKey) {
+    const pos = SUBJECT_KEYS.indexOf(subjectKey);
+    return SUBJECT_KEYS.slice(0, pos).reduce(
+      (acc, k) => acc + SUBJECTS_DATA[k].lectures.length, 0
     );
   }
 
-  const allSubjectLectures = selectedSubject ? (subjectMap[selectedSubject] || []) : [];
-  const globalOffset = selectedSubject ? getGlobalOffset(selectedSubject) : 0;
+  const totalSlots = SUBJECT_KEYS.reduce((acc, k) => acc + SUBJECTS_DATA[k].lectures.length, 0);
+  const totalFilled = SUBJECT_KEYS.reduce(
+    (acc, k) => acc + SUBJECTS_DATA[k].lectures.filter((l) => !!l.iframeCode).length, 0
+  );
 
-  const subjectLecturesWithIndex = allSubjectLectures.map((lecture, idx) => ({
-    lecture,
-    globalIndex: globalOffset + idx,
-  }));
+  const selectedCfg = selectedSubject ? SUBJECTS_DATA[selectedSubject] : null;
+  const selectedOffset = selectedSubject ? getGlobalOffset(selectedSubject) : 0;
+
+  const subjectLecturesWithIndex = selectedSubject
+    ? selectedCfg.lectures.map((lecture, idx) => ({
+      lecture,
+      slotNumber: idx + 1,
+      globalIndex: selectedOffset + idx,
+    }))
+    : [];
 
   const filteredLectures = search
     ? subjectLecturesWithIndex.filter(({ lecture }) =>
@@ -1435,23 +920,24 @@ export default function LecturesPage() {
     )
     : subjectLecturesWithIndex;
 
-  const selectedCfg = selectedSubject ? (SUBJECT_CONFIG[selectedSubject] || {}) : {};
-  const subjectIcon = selectedCfg.icon || '📁';
-
-  function getSubjectFreeLectureCount(subject) {
-    const offset = getGlobalOffset(subject);
-    const count = subjectMap[subject]?.length || 0;
-    return Math.max(0, Math.min(count, FREE_LIMIT - offset));
-  }
-
   return (
     <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
       <style>{`* { box-sizing: border-box; }`}</style>
 
-      {activeVideo && <VideoModal lecture={activeVideo} onClose={() => setActiveVideo(null)} />}
+      {/* VIDEO MODAL */}
+      {activeVideo && (
+        <VideoModal
+          lecture={activeVideo.lecture}
+          subject={activeVideo.subjectKey}
+          onClose={() => setActiveVideo(null)}
+        />
+      )}
+
+      {/* PAYWALL */}
       {showPaywall && (
         <PaywallModal
           user={user}
+          totalLectures={totalSlots}
           onSuccess={handlePaySuccess}
           onClose={() => setShowPaywall(false)}
         />
@@ -1459,39 +945,26 @@ export default function LecturesPage() {
 
       {/* ── PAGE HEADER ── */}
       <div style={{ marginBottom: 24 }}>
-        <div style={{
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'flex-start', marginBottom: 20, flexWrap: 'wrap', gap: 14,
-        }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20, flexWrap: 'wrap', gap: 14 }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: C.text }}>
-              🎬 Recorded Lectures
-            </h2>
+            <h2 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: C.text }}>🎬 Recorded Lectures</h2>
             <p style={{ margin: '5px 0 0', color: C.muted, fontSize: 13 }}>
               {subscribed
-                ? `👑 Premium — Full access · ${allLectures.length} lectures across ${subjects.length} subjects`
-                : `First ${FREE_LIMIT} lectures free (across all subjects) · Subscribe to unlock all ${allLectures.length}`}
+                ? `👑 Premium — Full access · ${totalFilled} lectures live, ${totalSlots} total slots across ${SUBJECT_KEYS.length} subjects`
+                : `First ${FREE_LIMIT} lectures free · Subscribe to unlock all ${totalSlots} slots`}
             </p>
           </div>
           {!subscribed && (
-            <button
-              onClick={() => setShowPaywall(true)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                background: `linear-gradient(135deg,${C.primary},${C.purple})`,
-                color: '#fff', border: 'none', borderRadius: 12,
-                padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer',
-              }}
-            >
+            <button onClick={() => setShowPaywall(true)} style={{ display: 'flex', alignItems: 'center', gap: 8, background: `linear-gradient(135deg,${C.primary},${C.purple})`, color: '#fff', border: 'none', borderRadius: 12, padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
               👑 Get Premium
             </button>
           )}
         </div>
         {subscribed && sub && <SubStatusBar sub={sub} onUpgrade={() => setShowPaywall(true)} />}
-        {!subscribed && <FreeLimitBanner total={allLectures.length} onUpgrade={() => setShowPaywall(true)} />}
+        {!subscribed && <FreeLimitBanner total={totalSlots} onUpgrade={() => setShowPaywall(true)} />}
       </div>
 
-      {/* ── LIVE CLASSES — shown on both views ── */}
+      {/* LIVE CLASSES */}
       <LiveClassesSection />
 
       {/* ══════════════════════════════════════════
@@ -1502,182 +975,143 @@ export default function LecturesPage() {
           {/* Stats row */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
             {[
-              { icon: '📚', val: subjects.length, label: 'Subjects' },
-              { icon: '🎬', val: allLectures.length, label: 'Total Lectures' },
-              { icon: '🆓', val: FREE_LIMIT, label: 'Free' },
-              { icon: '👑', val: Math.max(0, allLectures.length - FREE_LIMIT), label: 'Premium' },
+              { icon: '📚', val: SUBJECT_KEYS.length, label: 'Subjects' },
+              { icon: '🎬', val: totalFilled, label: 'Uploaded' },
+              { icon: '⏳', val: totalSlots - totalFilled, label: 'Coming Soon' },
+              { icon: '🆓', val: FREE_LIMIT, label: 'Free Slots' },
+              { icon: '👑', val: Math.max(0, totalSlots - FREE_LIMIT), label: 'Premium' },
             ].map((s) => (
-              <div key={s.label} style={{
-                background: C.card, borderRadius: 12, padding: '10px 16px',
-                border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10,
-              }}>
+              <div key={s.label} style={{ background: C.card, borderRadius: 12, padding: '10px 16px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: 18 }}>{s.icon}</span>
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: 16, color: C.text, lineHeight: 1 }}>
-                    {s.val}
-                  </div>
+                  <div style={{ fontWeight: 800, fontSize: 16, color: C.text, lineHeight: 1 }}>{s.val}</div>
                   <div style={{ fontSize: 11, color: C.muted }}>{s.label}</div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Section title */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <div style={{ height: 3, width: 28, borderRadius: 99, background: C.primary }} />
             <span style={{ fontWeight: 800, fontSize: 15, color: C.text }}>All Subjects</span>
             <div style={{ flex: 1, height: 1, background: C.border }} />
-            <span style={{ fontSize: 12, color: C.muted }}>{subjects.length} subjects</span>
+            <span style={{ fontSize: 12, color: C.muted }}>{SUBJECT_KEYS.length} subjects · 23 slots each</span>
           </div>
 
-          {/* Subject grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: 18,
-          }}>
-            {subjects.map((subject) => {
-              const cfg = SUBJECT_CONFIG[subject] || {};
-              const freeCount = getSubjectFreeLectureCount(subject);
-              return (
-                <SubjectFolderCard
-                  key={subject}
-                  subject={subject}
-                  lectures={subjectMap[subject] || []}
-                  subscribed={subscribed}
-                  subtitle={cfg.subtitle || ''}
-                  examTags={cfg.examTags || []}
-                  freeLecturesOverride={freeCount}
-                  onClick={() => { setSelectedSubject(subject); setSearch(''); }}
-                />
-              );
-            })}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
+            {SUBJECT_KEYS.map((key) => (
+              <SubjectFolderCard
+                key={key}
+                subjectKey={key}
+                cfg={SUBJECTS_DATA[key]}
+                subscribed={subscribed}
+                globalOffset={getGlobalOffset(key)}
+                onClick={() => { setSelectedSubject(key); setSearch(''); }}
+              />
+            ))}
           </div>
         </>
       )}
 
       {/* ══════════════════════════════════════════
           VIEW B — LECTURES INSIDE A SUBJECT
+          Shows all 23 slots (filled or placeholder)
       ══════════════════════════════════════════ */}
-      {selectedSubject && (
+      {selectedSubject && selectedCfg && (
         <>
-          {/* Breadcrumb / subject header */}
+          {/* Breadcrumb header */}
           <div style={{
-            background: C.card, border: `1px solid ${C.border}`, borderRadius: 16,
-            padding: '18px 22px', marginBottom: 20,
-            display: 'flex', alignItems: 'center',
-            justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+            background: C.card, border: `1.5px solid ${selectedCfg.color}40`,
+            borderRadius: 16, padding: '18px 22px', marginBottom: 20,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{
-                width: 48, height: 48, borderRadius: 14, background: C.bg,
-                border: `1.5px solid ${C.border}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 24, flexShrink: 0,
-              }}>{subjectIcon}</div>
+                width: 52, height: 52, borderRadius: 16,
+                background: selectedCfg.color + '18', border: `1.5px solid ${selectedCfg.color}40`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0,
+              }}>{selectedCfg.icon}</div>
               <div>
-                <div style={{ color: C.text, fontWeight: 900, fontSize: 17 }}>
-                  {selectedSubject}
+                <div style={{ color: C.text, fontWeight: 900, fontSize: 18 }}>{selectedSubject}</div>
+                {selectedCfg.subtitle && <div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>{selectedCfg.subtitle}</div>}
+                <div style={{ display: 'flex', gap: 5, marginTop: 6, flexWrap: 'wrap' }}>
+                  {selectedCfg.examTags?.map((tag) => (
+                    <span key={tag} style={{ fontSize: 10, fontWeight: 600, color: selectedCfg.color, background: selectedCfg.color + '12', border: `1px solid ${selectedCfg.color}30`, padding: '1px 8px', borderRadius: 20 }}>{tag}</span>
+                  ))}
                 </div>
-                {selectedCfg.subtitle && (
-                  <div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>
-                    {selectedCfg.subtitle}
-                  </div>
-                )}
               </div>
             </div>
             <button
               onClick={() => { setSelectedSubject(null); setSearch(''); }}
-              style={{
-                background: C.bg, border: `1px solid ${C.border}`,
-                borderRadius: 10, padding: '8px 16px',
-                fontSize: 13, color: C.muted, cursor: 'pointer', fontWeight: 600,
-              }}
-            >
-              ← All Subjects
-            </button>
+              style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px 16px', fontSize: 13, color: C.muted, cursor: 'pointer', fontWeight: 600 }}
+            >← All Subjects</button>
           </div>
 
-          {/* Lecture count + exam tags */}
-          <div style={{
-            display: 'flex', alignItems: 'center',
-            gap: 8, marginBottom: 16, flexWrap: 'wrap',
-          }}>
+          {/* Info row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 12, color: C.muted }}>
-              {allSubjectLectures.length} lecture{allSubjectLectures.length !== 1 ? 's' : ''}
-              {!subscribed && (() => {
-                const free = getSubjectFreeLectureCount(selectedSubject);
-                return free > 0
-                  ? ` · ${free} free, ${allSubjectLectures.length - free} require subscription`
-                  : ` · All require subscription`;
-              })()}
+              {selectedCfg.lectures.filter((l) => !!l.iframeCode).length} uploaded · {selectedCfg.lectures.filter((l) => !l.iframeCode).length} coming soon
             </span>
-            {selectedCfg.examTags?.map((tag) => (
-              <span key={tag} style={{
-                fontSize: 11, fontWeight: 600, color: C.muted, background: C.bg,
-                border: `1px solid ${C.border}`, padding: '2px 10px', borderRadius: 20,
-              }}>{tag}</span>
-            ))}
           </div>
 
-          {/* Search bar */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            background: C.card, borderRadius: 10, padding: '9px 14px',
-            border: `1px solid ${C.border}`, marginBottom: 20,
-          }}>
+          {/* Search */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: C.card, borderRadius: 10, padding: '9px 14px', border: `1px solid ${C.border}`, marginBottom: 20 }}>
             <span style={{ color: C.muted }}>🔍</span>
             <input
               placeholder={`Search in ${selectedSubject}…`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                border: 'none', background: 'transparent',
-                outline: 'none', fontSize: 13, color: C.text, width: '100%',
-              }}
+              style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: '100%' }}
             />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                style={{
-                  background: 'none', border: 'none',
-                  color: C.muted, cursor: 'pointer', fontSize: 18, lineHeight: 1,
-                }}
-              >×</button>
-            )}
+            {search && <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', color: C.muted, cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>}
           </div>
 
-          {/* Lecture grid or empty state */}
-          {filteredLectures.length === 0 ? (
+          {/* 
+            ── HOW TO ADD A VIDEO ──────────────────────────────────────────────
+            1. Go to YouTube video → Share → Embed → Copy the <iframe> code
+            2. Open this file and find SUBJECTS_DATA
+            3. Paste the iframe code into the `iframeCode` field of the right slot
+            4. Also update `title`, `chapter`, `description` for that slot
+            ───────────────────────────────────────────────────────────────────
+          */}
+
+          {/* How-to tip box (only shown when some slots are empty) */}
+          {selectedCfg.lectures.some((l) => !l.iframeCode) && (
             <div style={{
-              textAlign: 'center', padding: '60px 20px',
-              background: C.card, borderRadius: 16, border: `1px solid ${C.border}`,
+              background: '#FFFBEB', border: '1px solid #FDE68A',
+              borderRadius: 12, padding: '12px 16px', marginBottom: 20,
+              display: 'flex', alignItems: 'flex-start', gap: 10,
             }}>
-              <div style={{ fontSize: 48, marginBottom: 12 }}>
-                {search ? '🔍' : '🎬'}
-              </div>
-              <div style={{ fontWeight: 800, fontSize: 18, color: C.text, marginBottom: 6 }}>
-                {search ? 'No lectures found' : 'Lectures Coming Soon'}
-              </div>
-              <div style={{ color: C.muted, fontSize: 13 }}>
-                {search
-                  ? 'Try a different search term'
-                  : "We're uploading lectures for this subject. Check back soon!"}
+              <span style={{ fontSize: 20, flexShrink: 0 }}>💡</span>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 13, color: '#92400E', marginBottom: 2 }}>
+                  How to add a YouTube video to an empty slot
+                </div>
+                <div style={{ fontSize: 12, color: '#B45309', lineHeight: 1.6 }}>
+                  Open <code style={{ background: '#FEF3C7', padding: '1px 5px', borderRadius: 4 }}>SUBJECTS_DATA</code> in this file → find the <strong>{selectedSubject}</strong> lectures array → paste the YouTube <code>&lt;iframe&gt;</code> embed code into the <code>iframeCode</code> field of the corresponding slot.
+                </div>
               </div>
             </div>
+          )}
+
+          {/* Lecture grid — all 23 slots */}
+          {filteredLectures.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '60px 20px', background: C.card, borderRadius: 16, border: `1px solid ${C.border}` }}>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>🔍</div>
+              <div style={{ fontWeight: 800, fontSize: 18, color: C.text, marginBottom: 6 }}>No lectures found</div>
+              <div style={{ color: C.muted, fontSize: 13 }}>Try a different search term</div>
+            </div>
           ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: 18,
-            }}>
-              {filteredLectures.map(({ lecture, globalIndex }) => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 18 }}>
+              {filteredLectures.map(({ lecture, slotNumber, globalIndex }) => (
                 <LectureCard
-                  key={lecture.id}
+                  key={slotNumber}
                   lecture={lecture}
+                  slotNumber={slotNumber}
                   globalIndex={globalIndex}
+                  subjectColor={selectedCfg.color}
                   subscribed={subscribed}
-                  onPlay={(l) => setActiveVideo(l)}
+                  onPlay={(l) => setActiveVideo({ lecture: l, subjectKey: selectedSubject })}
                   onLock={() => setShowPaywall(true)}
                 />
               ))}
@@ -1686,31 +1120,16 @@ export default function LecturesPage() {
         </>
       )}
 
-      {/* ── Bottom CTA (non-subscribers only) ── */}
-      {!subscribed && allLectures.length > 0 && (
-        <div style={{
-          marginTop: 32,
-          background: `linear-gradient(135deg,${C.sidebar},${C.primary})`,
-          borderRadius: 20, padding: '32px', textAlign: 'center',
-        }}>
+      {/* Bottom CTA */}
+      {!subscribed && (
+        <div style={{ marginTop: 32, background: `linear-gradient(135deg,${C.sidebar},${C.primary})`, borderRadius: 20, padding: '32px', textAlign: 'center' }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🚀</div>
-          <div style={{ color: '#fff', fontWeight: 900, fontSize: 20, marginBottom: 8 }}>
-            Ready to Unlock Everything?
-          </div>
+          <div style={{ color: '#fff', fontWeight: 900, fontSize: 20, marginBottom: 8 }}>Ready to Unlock Everything?</div>
           <div style={{ color: '#93C5FD', fontSize: 14, marginBottom: 20, lineHeight: 1.6 }}>
-            Get unlimited access to all {allLectures.length} lectures, mock tests,
-            chapter tests and more.<br />
-            Plans starting at just{' '}
-            <strong style={{ color: C.accent }}>₹299/month</strong>.
+            Get unlimited access to all {totalSlots} lecture slots, mock tests, chapter tests and more.<br />
+            Plans starting at just <strong style={{ color: C.accent }}>₹299/month</strong>.
           </div>
-          <button
-            onClick={() => setShowPaywall(true)}
-            style={{
-              background: C.accent, color: '#fff', border: 'none',
-              borderRadius: 14, padding: '14px 32px',
-              fontWeight: 900, fontSize: 16, cursor: 'pointer',
-            }}
-          >
+          <button onClick={() => setShowPaywall(true)} style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 14, padding: '14px 32px', fontWeight: 900, fontSize: 16, cursor: 'pointer' }}>
             👑 Subscribe Now — Starting ₹299 →
           </button>
         </div>

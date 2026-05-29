@@ -1,140 +1,725 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { getUser, setUser, registerUser } from '../../lib/storage';
+import { useState } from "react";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
-  useEffect(() => {
-    const user = getUser();
-    if (user) router.replace('/dashboard');
-  }, [router]);
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  function validate() {
-    const errs = {};
-    if (!name || name.trim().length < 2) errs.name = 'Name must be at least 2 characters.';
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = 'Enter a valid email address.';
-    if (!phone || !/^[6-9]\d{9}$/.test(phone)) errs.phone = 'Enter a valid 10-digit Indian mobile number.';
-    return errs;
+  body {
+    font-family: 'Sora', sans-serif;
+    background-color: #0d1117;
+    min-height: 100vh;
+    color: #e2e8f0;
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
-    setErrors({});
-    setApiError('');
+  .page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(56,189,248,0.05) 0%, transparent 50%),
+      #0d1117;
+  }
+
+  /* ── Navbar ── */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-icon svg { width: 20px; height: 20px; }
+  .brand-text { line-height: 1; }
+  .brand-name  { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; color: #f1f5f9; }
+  .brand-sub   {
+    font-size: 9px; font-weight: 500; letter-spacing: 0.2em;
+    color: #6366f1; font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; margin-top: 2px;
+  }
+  .session-badge {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .session-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #22c55e; box-shadow: 0 0 8px #22c55e;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* ── Center / Card ── */
+  .center {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    width: 100%; max-width: 420px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 40px 36px 36px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.08);
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-heading { text-align: center; margin-bottom: 28px; }
+  .card-title   { font-size: 26px; font-weight: 600; color: #f8fafc; letter-spacing: -0.02em; }
+  .card-sub     { font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.5; }
+
+  /* ── Tabs — text only, no icons ── */
+  .tabs {
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 4px; gap: 4px;
+    margin-bottom: 28px;
+  }
+  .tab-btn {
+    padding: 10px 0;
+    border: none; border-radius: 9px;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.22s ease;
+    background: transparent; color: #64748b;
+  }
+  .tab-btn.active {
+    background: rgba(99,102,241,0.18);
+    color: #a5b4fc;
+    box-shadow: inset 0 0 0 1px rgba(99,102,241,0.3);
+  }
+  .tab-btn:hover:not(.active) { color: #94a3b8; background: rgba(255,255,255,0.04); }
+
+  /* ── Input mode toggle (Phone / Email) ── */
+  .toggle-row {
+    display: flex;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 3px; gap: 3px;
+    margin-bottom: 16px;
+  }
+  .toggle-btn {
+    flex: 1; padding: 8px 0;
+    border: none; border-radius: 8px;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    background: transparent; color: #64748b;
+    transition: all 0.18s ease;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .toggle-btn.active {
+    background: rgba(99,102,241,0.2);
+    color: #a5b4fc;
+    box-shadow: inset 0 0 0 1px rgba(99,102,241,0.25);
+  }
+  .toggle-btn svg { width: 13px; height: 13px; }
+
+  /* ── Fields ── */
+  .field { margin-bottom: 18px; }
+  .field-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px; display: block;
+  }
+
+  .phone-row { display: flex; gap: 8px; width: 100%; }
+  .cc-input {
+    flex: 0 0 68px; min-width: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 12px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: #a5b4fc;
+    outline: none; text-align: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .cc-input:focus {
+    border-color: rgba(99,102,241,0.5);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+  }
+  .num-wrap { position: relative; flex: 1 1 0; min-width: 0; }
+  .num-input {
+    width: 100%; min-width: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 12px 13px 12px 40px;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px; color: #e2e8f0;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .num-input::placeholder { color: #475569; }
+  .num-input:focus {
+    border-color: rgba(99,102,241,0.5);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+  }
+
+  .input-wrap { position: relative; width: 100%; }
+  .input-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: #475569; pointer-events: none; display: flex;
+  }
+  .input-icon svg { width: 16px; height: 16px; }
+  .text-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 12px 14px 12px 42px;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px; color: #e2e8f0;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .text-input::placeholder { color: #475569; }
+  .text-input:focus {
+    border-color: rgba(99,102,241,0.5);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+  }
+
+  /* ── Misc ── */
+  .helper-text { font-size: 12px; color: #475569; text-align: center; margin-bottom: 20px; line-height: 1.6; }
+  .helper-text.success { color: #4ade80; }
+
+  .btn-primary {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%);
+    border: none; border-radius: 11px;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px; font-weight: 600; color: #fff;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.01em;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #818cf8 0%, #7dd3fc 100%);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-primary svg  { position: relative; z-index: 1; width: 15px; height: 15px; }
+
+  .spinner {
+    width: 15px; height: 15px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    position: relative; z-index: 1;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 24px 0; }
+
+  .footer-link { text-align: center; font-size: 13px; color: #475569; }
+  .footer-link a { color: #818cf8; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .footer-link a:hover { color: #a5b4fc; }
+
+  .sec-badge {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-size: 11px; color: #334155;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 20px;
+  }
+  .sec-badge svg { width: 13px; height: 13px; color: #22c55e; }
+
+  .page-footer {
+    text-align: center;
+    font-size: 11px; color: #1e293b;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 20px;
+  }
+`;
+
+// ── SVG icon helpers ──────────────────────────────────────────────
+const IconLock = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+
+const IconPhone = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.57 3.41 2 2 0 0 1 3.54 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l1.58-1.58a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
+);
+
+const IconMail = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="M2 7l10 7 10-7" />
+  </svg>
+);
+
+const IconShield = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
+);
+
+const IconArrowRight = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+    <polyline points="10 17 15 12 10 7" />
+    <line x1="15" y1="12" x2="3" y2="12" />
+  </svg>
+);
+
+const IconSend = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13" />
+    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+  </svg>
+);
+
+// ── Backend API ───────────────────────────────────────────────────
+// Your live FastAPI backend on Railway:
+const API_BASE = "https://web-production-b426.up.railway.app/api/v1/auth";
+
+// Save the JWT tokens the backend returns (kept in localStorage).
+function saveTokens(data) {
+  if (data?.access_token) localStorage.setItem("access_token", data.access_token);
+  if (data?.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
+  if (data?.user) localStorage.setItem("user", JSON.stringify(data.user));
+}
+
+// ── Main component ────────────────────────────────────────────────
+export default function LoginPage() {
+  const [activeTab, setActiveTab] = useState("password");
+
+  // Password tab
+  const [pwMode, setPwMode] = useState("phone"); // "phone" | "email"
+  const [countryCode, setCountryCode] = useState("+91");
+  const [phone, setPhone] = useState("");
+  const [pwEmail, setPwEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // OTP tab
+  const [otpMode, setOtpMode] = useState("phone"); // "phone" | "email"
+  const [otpCc, setOtpCc] = useState("+91");
+  const [otpPhone, setOtpPhone] = useState("");
+  const [otpEmail, setOtpEmail] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); // shows backend / network errors
+
+  /* ── Helpers ── */
+  const fake = (ms = 1200) => new Promise((r) => setTimeout(r, ms));
+
+  const handleTabSwitch = (tab) => {
+    setActiveTab(tab);
+    setOtpSent(false);
+    setOtp("");
+    setLoading(false);
+  };
+
+  const handleOtpModeSwitch = (mode) => {
+    setOtpMode(mode);
+    setOtpSent(false);
+    setOtp("");
+  };
+
+  /* ── Password login ── */
+  const handlePasswordLogin = async () => {
+    const id = pwMode === "phone" ? `${countryCode}${phone}` : pwEmail;
+    if (!id || !password) return;
+    setError("");
     setLoading(true);
     try {
-      const user = await registerUser({ name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim() });
-      setUser(user);
-      router.push('/dashboard');
-    } catch (err) {
-      setApiError(err.message || 'Could not connect to server. Please try again.');
+      const res = await fetch(`${API_BASE}/login/password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: id, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Login failed");
+      saveTokens(data);
+      window.location.href = "/dashboard"; // change to wherever you want users to land
+    } catch (e) {
+      setError(e.message);
+    } finally {
       setLoading(false);
     }
-  }
+  };
+
+  /* ── OTP flow (email OTP works; phone OTP is disabled on the backend) ── */
+  const handleSendOtp = async () => {
+    const id = otpMode === "phone" ? `${otpCc}${otpPhone}` : otpEmail;
+    if (!id) return;
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/login/otp/request`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Could not send OTP");
+      setOtpSent(true);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otp.length !== 6) return;
+    const id = otpMode === "phone" ? `${otpCc}${otpPhone}` : otpEmail;
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/login/otp/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: id, otp_code: otp }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Invalid OTP");
+      saveTokens(data);
+      window.location.href = "/dashboard"; // change to wherever you want users to land
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ── Derived values ── */
+  const otpDestLabel = otpMode === "phone" ? "phone" : "inbox";
+  const otpSentTo = otpMode === "phone"
+    ? `${otpCc} ${otpPhone}`
+    : otpEmail;
 
   return (
-    <div className="page">
-      <div className="radar-bg">
-        {[1, 2, 3, 4].map(i => <div key={i} className={`ring ring-${i}`} />)}
-        <div className="sweep" />
-      </div>
+    <>
+      <style dangerouslySetInnerHTML={{ __html: styles }} />
 
-      <div className="card">
-        <div className="logo">
-          <span className="logo-icon">✈</span>
-          <div>
-            <div className="logo-title">DGCA Prep</div>
-            <div className="logo-sub">PILOT EXAM PLATFORM</div>
-          </div>
-        </div>
+      <div className="page">
 
-        <h2 className="heading">Create Your Profile</h2>
-        <p className="subheading">Start your journey to becoming a licensed pilot</p>
-
-        {apiError && <div className="api-error">⚠️ {apiError}</div>}
-
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="field">
-            <label>Full Name</label>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Arjun Sharma" className={errors.name ? 'error' : ''} disabled={loading} />
-            {errors.name && <span className="err">{errors.name}</span>}
-          </div>
-          <div className="field">
-            <label>Email Address</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="e.g. arjun@email.com" className={errors.email ? 'error' : ''} disabled={loading} />
-            {errors.email && <span className="err">{errors.email}</span>}
-          </div>
-          <div className="field">
-            <label>Mobile Number</label>
-            <div className="phone-wrap">
-              <span className="prefix">+91</span>
-              <input type="tel" value={phone} onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="9876543210" className={errors.phone ? 'error' : ''} disabled={loading} />
+        {/* ── Navbar ── */}
+        <nav className="navbar">
+          <div className="brand">
+            <div className="brand-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
             </div>
-            {errors.phone && <span className="err">{errors.phone}</span>}
+            <div className="brand-text">
+              <div className="brand-name">PortalAuth</div>
+              <div className="brand-sub">Secure Gateway</div>
+            </div>
           </div>
-          <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? <span className="spinner-wrap"><span className="spinner" /> Connecting to server...</span> : 'Begin Training →'}
-          </button>
-        </form>
-        <div className="teacher-link">
-          <span>Are you a teacher?</span>
-          <button type="button" className="teacher-btn" onClick={() => router.push('/teacher')}>Teacher Dashboard</button>
-        </div>
-      </div>
+          <div className="session-badge">
+            <div className="session-dot" />
+            Active Session Tunnel
+          </div>
+        </nav>
 
-      <style jsx>{`
-        .page { min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #e0f2fe, #f8fafc); padding:1rem; position:relative; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; color:#0f172a; }
-        .radar-bg { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:0; }
-        .ring { position:absolute; border-radius:50%; border:1px solid rgba(59,130,246,0.12); animation:expand 4s ease-out infinite; }
-        .ring-1{width:200px;height:200px;animation-delay:0s}
-        .ring-2{width:400px;height:400px;animation-delay:1s}
-        .ring-3{width:600px;height:600px;animation-delay:2s}
-        .ring-4{width:800px;height:800px;animation-delay:3s}
-        @keyframes expand{0%{opacity:.5;transform:scale(.95)}100%{opacity:0;transform:scale(1.05)}}
-        .sweep { position:absolute; width:400px; height:400px; border-radius:50%; background:conic-gradient(from 0deg,transparent 340deg,rgba(59,130,246,0.12) 360deg); animation:sweep 4s linear infinite; }
-        @keyframes sweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-        .card { position:relative; z-index:1; background:#ffffff; border:1px solid rgba(59,130,246,0.18); border-radius:20px; padding:2.5rem 2rem; width:100%; max-width:440px; box-shadow:0 30px 80px rgba(15,23,42,0.08); }
-        .logo { display:flex; align-items:center; gap:.75rem; margin-bottom:2rem; justify-content:center; }
-        .logo-icon { font-size:2rem; color:#2563eb; }
-        .logo-title { font-size:1.5rem; font-weight:700; color:#0f172a; letter-spacing:.05em; }
-        .logo-sub { font-size:.65rem; color:#2563eb; letter-spacing:.15em; font-weight:700; }
-        .heading { font-size:1.4rem; font-weight:700; color:#0f172a; text-align:center; margin-bottom:.35rem; }
-        .subheading { font-size:.85rem; color:#475569; text-align:center; margin-bottom:1.25rem; }
-        .api-error { background:#fee2e2; border:1px solid #fecaca; border-radius:8px; padding:.75rem 1rem; color:#b91c1c; font-size:.85rem; margin-bottom:1rem; }
-        .field { margin-bottom:1.2rem; }
-        .field label { display:block; font-size:.82rem; font-weight:600; color:#475569; margin-bottom:.4rem; }
-        .field input { width:100%; background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:.8rem 1rem; color:#0f172a; font-size:.95rem; outline:none; transition:border-color .2s,box-shadow .2s; }
-        .field input:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(59,130,246,.14); }
-        .field input.error { border-color:#f87171; }
-        .field input::placeholder { color:#94a3b8; }
-        .field input:disabled { opacity:.75; }
-        .phone-wrap { display:flex; align-items:center; background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; overflow:hidden; transition:border-color .2s; }
-        .phone-wrap:focus-within { border-color:#2563eb; box-shadow:0 0 0 3px rgba(59,130,246,.14); }
-        .prefix { background:#eff6ff; color:#2563eb; padding:.75rem .85rem; font-size:.9rem; font-weight:700; border-right:1px solid #cbd5e1; white-space:nowrap; }
-        .phone-wrap input { background:transparent; border:none!important; border-radius:0!important; box-shadow:none!important; flex:1; }
-        .err { display:block; margin-top:.35rem; font-size:.78rem; color:#ef4444; }
-        .submit-btn { width:100%; padding:.95rem; background:linear-gradient(135deg,#2563eb,#1d4ed8); border:none; border-radius:10px; color:#fff; font-size:1rem; font-weight:700; cursor:pointer; margin-top:.75rem; transition:opacity .2s,transform .15s; }
-        .submit-btn:hover:not(:disabled){opacity:.95;transform:translateY(-1px)}
-        .submit-btn:disabled{opacity:.7;cursor:not-allowed}
-        .teacher-link{margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;justify-content:center;color:#64748b;font-size:.9rem;}
-        .teacher-btn{background:#ffffff;border:1px solid #cbd5e1;border-radius:10px;padding:.75rem 1rem;color:#0f172a;cursor:pointer;}
-        .teacher-btn:hover{background:#eef2ff}
-        .spinner-wrap{display:flex;align-items:center;justify-content:center;gap:.5rem}
-        .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(37,99,235,.25);border-top-color:#2563eb;border-radius:50%;animation:spin .7s linear infinite}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        @media(max-width:480px){.card{padding:2rem 1.25rem}}
-      `}</style>
-    </div>
+        {/* ── Card ── */}
+        <div className="center">
+          <div className="card">
+            <div className="card-heading">
+              <h1 className="card-title">Secure Login</h1>
+              <p className="card-sub">Step into your sandbox account workspace with confidence</p>
+            </div>
+
+            {/* ── Main tabs — text only, no icons ── */}
+            <div className="tabs">
+              <button
+                className={`tab-btn ${activeTab === "password" ? "active" : ""}`}
+                onClick={() => handleTabSwitch("password")}
+              >
+                Password
+              </button>
+              <button
+                className={`tab-btn ${activeTab === "otp" ? "active" : ""}`}
+                onClick={() => handleTabSwitch("otp")}
+              >
+                Security OTP
+              </button>
+            </div>
+
+            {error && (
+              <p style={{ color: "#f87171", fontSize: "12px", textAlign: "center", marginBottom: "14px", fontFamily: "'JetBrains Mono', monospace" }}>
+                {error}
+              </p>
+            )}
+
+            {/* ════════════════════════════════
+                PASSWORD TAB
+                ════════════════════════════════ */}
+            {activeTab === "password" && (
+              <>
+                {/* Phone / Email toggle */}
+                <div className="toggle-row">
+                  <button
+                    className={`toggle-btn ${pwMode === "phone" ? "active" : ""}`}
+                    onClick={() => setPwMode("phone")}
+                  >
+                    <IconPhone />
+                    Phone Number
+                  </button>
+                  <button
+                    className={`toggle-btn ${pwMode === "email" ? "active" : ""}`}
+                    onClick={() => setPwMode("email")}
+                  >
+                    <IconMail />
+                    Email Address
+                  </button>
+                </div>
+
+                {/* Phone input */}
+                {pwMode === "phone" && (
+                  <div className="field">
+                    <label className="field-label">Phone Number</label>
+                    <div className="phone-row">
+                      <input
+                        type="text"
+                        className="cc-input"
+                        value={countryCode}
+                        maxLength={5}
+                        onChange={(e) => setCountryCode(e.target.value)}
+                      />
+                      <div className="num-wrap">
+                        <span className="input-icon"><IconPhone /></span>
+                        <input
+                          type="tel"
+                          className="num-input"
+                          placeholder="98765 43210"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Email input */}
+                {pwMode === "email" && (
+                  <div className="field">
+                    <label className="field-label">Email Address</label>
+                    <div className="input-wrap">
+                      <span className="input-icon"><IconMail /></span>
+                      <input
+                        type="email"
+                        className="text-input"
+                        placeholder="name@example.com"
+                        value={pwEmail}
+                        onChange={(e) => setPwEmail(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Password */}
+                <div className="field">
+                  <label className="field-label">Password</label>
+                  <div className="input-wrap">
+                    <span className="input-icon"><IconLock /></span>
+                    <input
+                      type="password"
+                      className="text-input"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  className="btn-primary"
+                  onClick={handlePasswordLogin}
+                  disabled={loading || !(pwMode === "phone" ? phone : pwEmail) || !password}
+                >
+                  {loading ? (
+                    <div className="spinner" />
+                  ) : (
+                    <>
+                      <IconArrowRight />
+                      <span>Sign In</span>
+                    </>
+                  )}
+                </button>
+              </>
+            )}
+
+            {/* ════════════════════════════════
+                OTP TAB
+                ════════════════════════════════ */}
+            {activeTab === "otp" && (
+              <>
+                {/* Phone / Email toggle */}
+                <div className="toggle-row">
+                  <button
+                    className={`toggle-btn ${otpMode === "phone" ? "active" : ""}`}
+                    onClick={() => handleOtpModeSwitch("phone")}
+                  >
+                    <IconPhone />
+                    Phone Number
+                  </button>
+                  <button
+                    className={`toggle-btn ${otpMode === "email" ? "active" : ""}`}
+                    onClick={() => handleOtpModeSwitch("email")}
+                  >
+                    <IconMail />
+                    Email Address
+                  </button>
+                </div>
+
+                {/* Phone input */}
+                {otpMode === "phone" && (
+                  <div className="field">
+                    <label className="field-label">Phone Number</label>
+                    <div className="phone-row">
+                      <input
+                        type="text"
+                        className="cc-input"
+                        value={otpCc}
+                        maxLength={5}
+                        onChange={(e) => setOtpCc(e.target.value)}
+                      />
+                      <div className="num-wrap">
+                        <span className="input-icon"><IconPhone /></span>
+                        <input
+                          type="tel"
+                          className="num-input"
+                          placeholder="98765 43210"
+                          value={otpPhone}
+                          onChange={(e) => setOtpPhone(e.target.value.replace(/\D/g, ""))}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Email input */}
+                {otpMode === "email" && (
+                  <div className="field">
+                    <label className="field-label">Email Address</label>
+                    <div className="input-wrap">
+                      <span className="input-icon"><IconMail /></span>
+                      <input
+                        type="email"
+                        className="text-input"
+                        placeholder="name@example.com"
+                        value={otpEmail}
+                        onChange={(e) => setOtpEmail(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {!otpSent ? (
+                  <>
+                    <p className="helper-text">
+                      We will dispatch a secure 6-digit passcode to your {otpDestLabel}.
+                    </p>
+                    <button
+                      className="btn-primary"
+                      onClick={handleSendOtp}
+                      disabled={loading || !(otpMode === "phone" ? otpPhone : otpEmail)}
+                    >
+                      {loading ? (
+                        <div className="spinner" />
+                      ) : (
+                        <>
+                          <IconSend />
+                          <span>Send OTP Verification Code</span>
+                        </>
+                      )}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p className="helper-text success">✓ OTP dispatched to {otpSentTo}</p>
+
+                    <div className="field">
+                      <label className="field-label">Enter OTP</label>
+                      <div className="input-wrap">
+                        <span className="input-icon"><IconShield /></span>
+                        <input
+                          type="text"
+                          className="text-input"
+                          placeholder="000000"
+                          maxLength={6}
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                          style={{ fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.25em" }}
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      className="btn-primary"
+                      onClick={handleVerifyOtp}
+                      disabled={loading || otp.length !== 6}
+                    >
+                      {loading ? (
+                        <div className="spinner" />
+                      ) : (
+                        <>
+                          <IconShield />
+                          <span>Verify &amp; Sign In</span>
+                        </>
+                      )}
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+
+            <hr className="divider" />
+
+            <p className="footer-link">
+              New around here? <a href="/register">Create Free Account</a>
+            </p>
+
+            <div className="sec-badge">
+              <IconShield />
+              AES-256 local storage sandbox vault verification
+            </div>
+          </div>
+        </div>
+
+        <footer className="page-footer">
+          © 2026 PortalAuth Gateway. Sandbox local sandbox context.
+        </footer>
+      </div>
+    </>
   );
 }

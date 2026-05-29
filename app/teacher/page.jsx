@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { chapters, questions as allQuestions } from '../../data/questions';
 
 const TEACHER_PASSWORD = 'dgca@teacher2026';
 const TEACHER_AUTH_KEY = 'dgca_teacher_authed';
-const LIVE_POLL_MS = 15_000; // student banner polls every 15 s
+const LIVE_POLL_MS = 15_000;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatDate(iso) {
@@ -76,9 +76,6 @@ function Ring({ pct, color, size = 52, stroke = 4 }) {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LIVE CLASS BUTTON  — export for student dashboard
-// Usage: import { LiveClassButton } from '@/app/teacher/page';
-//        <LiveClassButton />   (place above chapter grid on student dashboard)
-// Polls /api/live-link every 15 s. Auto-appears / disappears.
 // ═══════════════════════════════════════════════════════════════════════════════
 export function LiveClassButton() {
     const [liveData, setLiveData] = useState(null);
@@ -101,7 +98,7 @@ export function LiveClassButton() {
             } else {
                 setLiveData(null); setVisible(false); prevUrl.current = null;
             }
-        } catch { /* silent — never break student UI */ }
+        } catch { /* silent */ }
         finally { setLoading(false); }
     }
 
@@ -165,7 +162,7 @@ export function LiveClassButton() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// QUICK LIVE LINK PANEL  — teacher side inside Schedule tab
+// QUICK LIVE LINK PANEL
 // ═══════════════════════════════════════════════════════════════════════════════
 function QuickLiveLinkPanel() {
     const [link, setLink] = useState('');
@@ -179,7 +176,6 @@ function QuickLiveLinkPanel() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => { setTimeout(() => setMounted(true), 20); }, []);
-
     useEffect(() => {
         fetch('/api/live-link')
             .then(r => r.ok ? r.json() : null)
@@ -188,10 +184,7 @@ function QuickLiveLinkPanel() {
             .finally(() => setLoadingCurrent(false));
     }, []);
 
-    function flash(text, type = 'ok') {
-        setMsg({ text, type });
-        setTimeout(() => setMsg({ text: '', type: '' }), 4000);
-    }
+    function flash(text, type = 'ok') { setMsg({ text, type }); setTimeout(() => setMsg({ text: '', type: '' }), 4000); }
     function isValidUrl(s) { try { new URL(s); return true; } catch { return false; } }
 
     async function handleGoLive() {
@@ -199,14 +192,10 @@ function QuickLiveLinkPanel() {
         if (!isValidUrl(link.trim())) { flash("Doesn't look like a valid URL — include https://", 'err'); return; }
         setSaving(true);
         try {
-            const res = await fetch('/api/teacher/live-link', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: link.trim(), label: label.trim() || 'Live Class' }),
-            });
+            const res = await fetch('/api/teacher/live-link', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: link.trim(), label: label.trim() || 'Live Class' }) });
             const data = await res.json();
             if (!res.ok || !data.success) throw new Error(data.error || 'Failed to set live link.');
-            setCurrentLive(data.liveLink);
-            setLink(''); setLabel('');
+            setCurrentLive(data.liveLink); setLink(''); setLabel('');
             flash('✓ Link is now live! Students can see the Join button on their dashboard.', 'ok');
         } catch (err) { flash(err.message, 'err'); }
         finally { setSaving(false); }
@@ -231,52 +220,29 @@ function QuickLiveLinkPanel() {
 
     return (
         <div className={`qlp-wrap${mounted ? ' qlp-in' : ''}`}>
-
-            {/* ── Live Status Banner ── */}
             {!loadingCurrent && currentLive?.url && (
                 <div className="qlp-live-banner qlp-banner-in">
-                    <div className="qlp-live-dot-wrap">
-                        <span className="qlp-live-ring" />
-                        <span className="qlp-live-dot" />
-                    </div>
+                    <div className="qlp-live-dot-wrap"><span className="qlp-live-ring" /><span className="qlp-live-dot" /></div>
                     <div className="qlp-live-info">
-                        <div className="qlp-live-title">
-                            <span className="qlp-live-badge">● LIVE</span>
-                            <strong>{currentLive.label || 'Live Class'}</strong>
-                        </div>
+                        <div className="qlp-live-title"><span className="qlp-live-badge">● LIVE</span><strong>{currentLive.label || 'Live Class'}</strong></div>
                         <div className="qlp-live-url">{currentLive.url}</div>
-                        {currentLive.setAt && (
-                            <div className="qlp-live-since">
-                                Started {new Date(currentLive.setAt).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' })}
-                            </div>
-                        )}
+                        {currentLive.setAt && <div className="qlp-live-since">Started {new Date(currentLive.setAt).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' })}</div>}
                     </div>
                     <div className="qlp-live-actions">
                         <a href={currentLive.url} target="_blank" rel="noopener noreferrer" className="qlp-join-btn">🔴 Join Now</a>
                         <button className="qlp-copy-btn" onClick={copyLink}>{copied ? '✓ Copied' : '📋 Copy'}</button>
-                        <button className={`qlp-end-btn${clearing ? ' qlp-btn-busy' : ''}`} onClick={handleClearLive} disabled={clearing}>
-                            {clearing ? <span className="qlp-spinner" /> : '⏹ End Live'}
-                        </button>
+                        <button className={`qlp-end-btn${clearing ? ' qlp-btn-busy' : ''}`} onClick={handleClearLive} disabled={clearing}>{clearing ? <span className="qlp-spinner" /> : '⏹ End Live'}</button>
                     </div>
                 </div>
             )}
-
             {!loadingCurrent && !currentLive?.url && (
-                <div className="qlp-offline-notice">
-                    <span className="qlp-offline-dot" /> No live class running — students see no Join button right now.
-                </div>
+                <div className="qlp-offline-notice"><span className="qlp-offline-dot" /> No live class running — students see no Join button right now.</div>
             )}
-
             {msg.text && <div className={`qlp-msg qlp-msg-${msg.type} qlp-msg-in`}>{msg.text}</div>}
-
-            {/* ── Input Card ── */}
             <div className="qlp-card">
                 <div className="qlp-card-header">
                     <div className="qlp-card-icon">⚡</div>
-                    <div>
-                        <h3>Quick Live Link</h3>
-                        <p>Paste any meeting URL (Google Meet, Zoom, Teams, Jitsi…) and go live instantly. Students will see a pulsing <strong>Join Live Class</strong> button the moment you submit.</p>
-                    </div>
+                    <div><h3>Quick Live Link</h3><p>Paste any meeting URL (Google Meet, Zoom, Teams, Jitsi…) and go live instantly. Students will see a pulsing <strong>Join Live Class</strong> button the moment you submit.</p></div>
                 </div>
                 <div className="qlp-form">
                     <div className="qlp-field">
@@ -286,9 +252,7 @@ function QuickLiveLinkPanel() {
                     <div className="qlp-link-row">
                         <div className="qlp-link-input-wrap">
                             <span className="qlp-link-prefix">🔗</span>
-                            <input className="qlp-link-input" type="url" placeholder="https://meet.google.com/xxx-xxxx-xxx"
-                                value={link} onChange={e => setLink(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleGoLive()}
-                                spellCheck={false} autoComplete="off" />
+                            <input className="qlp-link-input" type="url" placeholder="https://meet.google.com/xxx-xxxx-xxx" value={link} onChange={e => setLink(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleGoLive()} spellCheck={false} autoComplete="off" />
                             {link && <button className="qlp-clear-input" onClick={() => setLink('')}>×</button>}
                         </div>
                         <button className={`qlp-go-live-btn${saving ? ' qlp-btn-busy' : ''}`} onClick={handleGoLive} disabled={saving || !link.trim()}>
@@ -296,17 +260,13 @@ function QuickLiveLinkPanel() {
                         </button>
                     </div>
                     <div className="qlp-how-it-works">
-                        <span className="qlp-how-step">1️⃣ Paste your link</span>
-                        <span className="qlp-how-arrow">→</span>
-                        <span className="qlp-how-step">2️⃣ Hit Go Live</span>
-                        <span className="qlp-how-arrow">→</span>
-                        <span className="qlp-how-step">3️⃣ Students see <span className="qlp-how-badge">🔴 Join Live Class</span></span>
-                        <span className="qlp-how-arrow">→</span>
+                        <span className="qlp-how-step">1️⃣ Paste your link</span><span className="qlp-how-arrow">→</span>
+                        <span className="qlp-how-step">2️⃣ Hit Go Live</span><span className="qlp-how-arrow">→</span>
+                        <span className="qlp-how-step">3️⃣ Students see <span className="qlp-how-badge">🔴 Join Live Class</span></span><span className="qlp-how-arrow">→</span>
                         <span className="qlp-how-step">4️⃣ Hit End Live when done</span>
                     </div>
                 </div>
             </div>
-
             <style jsx>{`
         .qlp-wrap{opacity:0;transform:translateY(12px);transition:opacity .4s cubic-bezier(0.16,1,0.3,1),transform .4s cubic-bezier(0.16,1,0.3,1);margin-bottom:1.5rem;display:flex;flex-direction:column;gap:.85rem}
         .qlp-in{opacity:1;transform:none}
@@ -381,21 +341,9 @@ function QuickLiveLinkPanel() {
 // ═══════════════════════════════════════════════════════════════════════════════
 // SCHEDULE MEETING TAB
 // ═══════════════════════════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════════════════════════
-// SCHEDULE MEETING TAB  — paste Meet link + date/time → saves to MongoDB
-// Students see it automatically on their dashboard with live/gray button
-// ═══════════════════════════════════════════════════════════════════════════════
 function ScheduleMeetingTab() {
     const today = new Date().toISOString().split('T')[0];
-    const [form, setForm] = useState({
-        title: '',
-        description: '',
-        date: today,
-        time: '10:00',
-        duration: '60',
-        meetLink: '',
-        batch: 'All Batches',
-    });
+    const [form, setForm] = useState({ title: '', description: '', date: today, time: '10:00', duration: '60', meetLink: '', batch: 'All Batches' });
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [successEvent, setSuccess] = useState(null);
@@ -407,490 +355,190 @@ function ScheduleMeetingTab() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => { setTimeout(() => setMounted(true), 20); }, []);
-
-    // fetch existing classes on mount
     useEffect(() => {
-        fetch('/api/classes')
-            .then(r => r.json())
-            .then(d => { if (d.success) setClasses(d.events); })
-            .catch(() => { })
-            .finally(() => setLoadingList(false));
+        fetch('/api/classes').then(r => r.json()).then(d => { if (d.success) setClasses(d.events); }).catch(() => { }).finally(() => setLoadingList(false));
     }, []);
 
-    function setField(k, v) {
-        setForm(p => ({ ...p, [k]: v }));
-        setErrors(p => ({ ...p, [k]: '' }));
-    }
+    function setField(k, v) { setForm(p => ({ ...p, [k]: v })); setErrors(p => ({ ...p, [k]: '' })); }
 
     function validate() {
         const errs = {};
         if (!form.title.trim()) errs.title = 'Class title is required.';
         if (!form.meetLink.trim()) errs.meetLink = 'Meeting link is required.';
-        else {
-            try { new URL(form.meetLink); }
-            catch { errs.meetLink = 'Enter a valid URL starting with https://'; }
-        }
+        else { try { new URL(form.meetLink); } catch { errs.meetLink = 'Enter a valid URL starting with https://'; } }
         if (!form.date) errs.date = 'Date is required.';
         if (!form.time) errs.time = 'Time is required.';
         return errs;
     }
 
     async function handleSubmit() {
-        const errs = validate();
-        setErrors(errs);
+        const errs = validate(); setErrors(errs);
         if (Object.keys(errs).length > 0) return;
-
         setSaving(true); setSaveErr(''); setSuccess(null);
         try {
-            const res = await fetch('/api/classes', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
-            });
+            const res = await fetch('/api/classes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
             const data = await res.json();
             if (!data.success) throw new Error(data.error || 'Failed to save class.');
-
-            setSuccess(data.event);
-            setClasses(prev => [data.event, ...prev]);
+            setSuccess(data.event); setClasses(prev => [data.event, ...prev]);
             setForm({ title: '', description: '', date: today, time: '10:00', duration: '60', meetLink: '', batch: 'All Batches' });
-        } catch (err) {
-            setSaveErr(err.message);
-        } finally {
-            setSaving(false);
-        }
+        } catch (err) { setSaveErr(err.message); }
+        finally { setSaving(false); }
     }
 
     async function handleDelete(id) {
         setDeletingId(id);
         try {
-            const res = await fetch('/api/classes', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id }),
-            });
+            const res = await fetch('/api/classes', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
             const data = await res.json();
             if (!data.success) throw new Error(data.error || 'Failed to delete.');
             setClasses(prev => prev.filter(c => (c._id?.toString() || c.id) !== id));
-        } catch (err) {
-            setSaveErr(err.message);
-        } finally {
-            setDeletingId(null);
-        }
+        } catch (err) { setSaveErr(err.message); }
+        finally { setDeletingId(null); }
     }
 
-    function copyLink(link, id) {
-        navigator.clipboard.writeText(link).then(() => {
-            setCopied(id);
-            setTimeout(() => setCopied(null), 2000);
-        });
-    }
-
-    // ── Live status helpers ────────────────────────────────────────────────────
-    function isLive(start, end) {
-        const now = Date.now();
-        return new Date(start) <= now && now <= new Date(end);
-    }
+    function copyLink(link, id) { navigator.clipboard.writeText(link).then(() => { setCopied(id); setTimeout(() => setCopied(null), 2000); }); }
+    function isLive(start, end) { const now = Date.now(); return new Date(start) <= now && now <= new Date(end); }
     function countdown(start) {
-        const diff = new Date(start) - Date.now();
-        if (diff <= 0) return null;
-        const h = Math.floor(diff / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        if (h > 24) return `in ${Math.floor(h / 24)}d ${h % 24}h`;
-        if (h > 0) return `in ${h}h ${m}m`;
-        return `in ${m}m`;
+        const diff = new Date(start) - Date.now(); if (diff <= 0) return null;
+        const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000);
+        if (h > 24) return `in ${Math.floor(h / 24)}d ${h % 24}h`; if (h > 0) return `in ${h}h ${m}m`; return `in ${m}m`;
     }
-    function fmtDateTime(iso) {
-        return new Date(iso).toLocaleString('en-IN', {
-            weekday: 'short', day: 'numeric', month: 'short',
-            hour: '2-digit', minute: '2-digit',
-        });
-    }
+    function fmtDateTime(iso) { return new Date(iso).toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); }
 
-    const C = {
-        primary: '#1D4ED8', purple: '#8B5CF6', green: '#10B981',
-        red: '#EF4444', accent: '#F59E0B',
-        text: '#0F172A', muted: '#64748B', border: '#E2E8F0',
-        bg: '#F0F4FF', card: '#FFFFFF', primaryLight: '#EFF6FF',
-        sidebar: '#0A1628',
-    };
+    const C = { primary: '#1D4ED8', purple: '#8B5CF6', green: '#10B981', red: '#EF4444', accent: '#F59E0B', text: '#0F172A', muted: '#64748B', border: '#E2E8F0', bg: '#F0F4FF', card: '#FFFFFF', primaryLight: '#EFF6FF', sidebar: '#0A1628' };
 
     return (
-        <div style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? 'none' : 'translateY(14px)',
-            transition: 'opacity .4s ease, transform .4s ease',
-            fontFamily: "'DM Sans','Segoe UI',sans-serif",
-        }}>
-
-            {/* ── HOW IT WORKS banner ── */}
-            <div style={{
-                background: `linear-gradient(135deg, ${C.sidebar}, ${C.primary})`,
-                borderRadius: 16, padding: '18px 22px', marginBottom: 20,
-                display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap',
-            }}>
+        <div style={{ opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(14px)', transition: 'opacity .4s ease, transform .4s ease', fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
+            <div style={{ background: `linear-gradient(135deg, ${C.sidebar}, ${C.primary})`, borderRadius: 16, padding: '18px 22px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
                 <div style={{ fontSize: 36 }}>📅</div>
                 <div style={{ flex: 1 }}>
-                    <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginBottom: 4 }}>
-                        Schedule a Live Class
-                    </div>
-                    <div style={{ color: '#93C5FD', fontSize: 13, lineHeight: 1.6 }}>
-                        Paste your Google Meet link below with date and time. Students will see it on their dashboard with a live button that turns red exactly when the class starts.
-                    </div>
+                    <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginBottom: 4 }}>Schedule a Live Class</div>
+                    <div style={{ color: '#93C5FD', fontSize: 13, lineHeight: 1.6 }}>Paste your Google Meet link below with date and time. Students will see it on their dashboard with a live button that turns red exactly when the class starts.</div>
                 </div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     {[['🔗', 'Paste link'], ['📅', 'Set time'], ['🔴', 'Auto live button']].map(([icon, label]) => (
-                        <span key={label} style={{
-                            background: 'rgba(255,255,255,.15)', color: '#fff',
-                            fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20,
-                        }}>{icon} {label}</span>
+                        <span key={label} style={{ background: 'rgba(255,255,255,.15)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20 }}>{icon} {label}</span>
                     ))}
                 </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 18 }}>
-
-                {/* ── LEFT: Form ── */}
-                <div style={{
-                    background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
-                    padding: '22px', boxShadow: '0 8px 30px rgba(15,23,42,.06)',
-                }}>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 18 }}>
-                        ➕ Add New Class
-                    </div>
-
-                    {/* Success */}
+                {/* LEFT: Form */}
+                <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, padding: '22px', boxShadow: '0 8px 30px rgba(15,23,42,.06)' }}>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 18 }}>➕ Add New Class</div>
                     {successEvent && (
-                        <div style={{
-                            background: '#F0FDF4', border: '1px solid #86EFAC', borderRadius: 12,
-                            padding: '14px 16px', marginBottom: 16,
-                            animation: 'fadeIn .3s ease',
-                        }}>
+                        <div style={{ background: '#F0FDF4', border: '1px solid #86EFAC', borderRadius: 12, padding: '14px 16px', marginBottom: 16, animation: 'fadeIn .3s ease' }}>
                             <div style={{ fontWeight: 700, color: '#15803D', marginBottom: 6 }}>✅ Class scheduled!</div>
                             <div style={{ fontSize: 13, color: '#166534' }}>{successEvent.title}</div>
-                            <div style={{ fontSize: 12, color: '#15803D', marginTop: 4 }}>
-                                Students can now see this class on their dashboard.
-                            </div>
+                            <div style={{ fontSize: 12, color: '#15803D', marginTop: 4 }}>Students can now see this class on their dashboard.</div>
                         </div>
                     )}
+                    {saveErr && <div style={{ background: '#FEF2F2', border: '1px solid #FCA5A5', borderRadius: 12, padding: '12px 14px', marginBottom: 16, fontSize: 13, color: '#B91C1C', fontWeight: 600 }}>⚠️ {saveErr}</div>}
 
-                    {/* Error */}
-                    {saveErr && (
-                        <div style={{
-                            background: '#FEF2F2', border: '1px solid #FCA5A5', borderRadius: 12,
-                            padding: '12px 14px', marginBottom: 16, fontSize: 13, color: '#B91C1C', fontWeight: 600,
-                        }}>⚠️ {saveErr}</div>
-                    )}
+                    {[{ label: 'Class Title *', key: 'title', type: 'text', placeholder: 'e.g. Air Regulations – Chapter 3 Live' }, { label: '🔗 Google Meet / Zoom Link *', key: 'meetLink', type: 'url', placeholder: 'https://meet.google.com/xxx-xxxx-xxx' }].map(({ label, key, type, placeholder }) => (
+                        <div key={key} style={{ marginBottom: 14 }}>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>{label}</label>
+                            <input type={type} placeholder={placeholder} value={form[key]} onChange={e => setField(key, e.target.value)}
+                                style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors[key] ? '#FCA5A5' : C.border}`, background: errors[key] ? '#FFF1F2' : C.bg, color: key === 'meetLink' ? C.primary : C.text, fontSize: 13, outline: 'none', fontFamily: key === 'meetLink' ? 'monospace' : 'inherit' }} />
+                            {errors[key] && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors[key]}</div>}
+                        </div>
+                    ))}
 
-                    {/* Class Title */}
-                    <div style={{ marginBottom: 14 }}>
-                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>
-                            Class Title *
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="e.g. Air Regulations – Chapter 3 Live"
-                            value={form.title}
-                            onChange={e => setField('title', e.target.value)}
-                            style={{
-                                width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
-                                border: `1px solid ${errors.title ? '#FCA5A5' : C.border}`,
-                                background: errors.title ? '#FFF1F2' : C.bg,
-                                color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit',
-                            }}
-                        />
-                        {errors.title && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.title}</div>}
-                    </div>
-
-                    {/* Meet Link */}
-                    <div style={{ marginBottom: 14 }}>
-                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>
-                            🔗 Google Meet / Zoom Link *
-                        </label>
-                        <input
-                            type="url"
-                            placeholder="https://meet.google.com/xxx-xxxx-xxx"
-                            value={form.meetLink}
-                            onChange={e => setField('meetLink', e.target.value)}
-                            style={{
-                                width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
-                                border: `1px solid ${errors.meetLink ? '#FCA5A5' : C.border}`,
-                                background: errors.meetLink ? '#FFF1F2' : C.bg,
-                                color: C.primary, fontSize: 13, outline: 'none', fontFamily: 'monospace',
-                            }}
-                        />
-                        {errors.meetLink && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.meetLink}</div>}
-                    </div>
-
-                    {/* Date + Time */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
-                        <div>
-                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Date *</label>
-                            <input
-                                type="date"
-                                value={form.date}
-                                min={today}
-                                onChange={e => setField('date', e.target.value)}
-                                style={{
-                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
-                                    border: `1px solid ${errors.date ? '#FCA5A5' : C.border}`,
-                                    background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit',
-                                }}
-                            />
-                            {errors.date && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.date}</div>}
-                        </div>
-                        <div>
-                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Start Time *</label>
-                            <input
-                                type="time"
-                                value={form.time}
-                                onChange={e => setField('time', e.target.value)}
-                                style={{
-                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
-                                    border: `1px solid ${errors.time ? '#FCA5A5' : C.border}`,
-                                    background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit',
-                                }}
-                            />
-                            {errors.time && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors.time}</div>}
-                        </div>
+                        {[{ label: 'Date *', key: 'date', type: 'date', min: today }, { label: 'Start Time *', key: 'time', type: 'time' }].map(({ label, key, type, min }) => (
+                            <div key={key}>
+                                <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>{label}</label>
+                                <input type={type} value={form[key]} min={min} onChange={e => setField(key, e.target.value)}
+                                    style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors[key] ? '#FCA5A5' : C.border}`, background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }} />
+                                {errors[key] && <div style={{ fontSize: 11, color: '#B91C1C', marginTop: 3 }}>{errors[key]}</div>}
+                            </div>
+                        ))}
                     </div>
 
-                    {/* Duration + Batch */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
                         <div>
                             <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Duration</label>
-                            <select
-                                value={form.duration}
-                                onChange={e => setField('duration', e.target.value)}
-                                style={{
-                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
-                                    border: `1px solid ${C.border}`, background: C.bg, color: C.text,
-                                    fontSize: 13, outline: 'none', fontFamily: 'inherit',
-                                }}
-                            >
-                                <option value="30">30 minutes</option>
-                                <option value="45">45 minutes</option>
-                                <option value="60">1 hour</option>
-                                <option value="90">1.5 hours</option>
-                                <option value="120">2 hours</option>
+                            <select value={form.duration} onChange={e => setField('duration', e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${C.border}`, background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}>
+                                <option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">1 hour</option><option value="90">1.5 hours</option><option value="120">2 hours</option>
                             </select>
                         </div>
                         <div>
                             <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Batch</label>
-                            <select
-                                value={form.batch}
-                                onChange={e => setField('batch', e.target.value)}
-                                style={{
-                                    width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
-                                    border: `1px solid ${C.border}`, background: C.bg, color: C.text,
-                                    fontSize: 13, outline: 'none', fontFamily: 'inherit',
-                                }}
-                            >
-                                <option>All Batches</option>
-                                <option>Batch A — Morning</option>
-                                <option>Batch B — Evening</option>
-                                <option>Batch C — Weekend</option>
+                            <select value={form.batch} onChange={e => setField('batch', e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${C.border}`, background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}>
+                                <option>All Batches</option><option>Batch A — Morning</option><option>Batch B — Evening</option><option>Batch C — Weekend</option>
                             </select>
                         </div>
                     </div>
 
-                    {/* Description */}
                     <div style={{ marginBottom: 18 }}>
-                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>
-                            Description <span style={{ fontWeight: 400, color: C.muted }}>(optional)</span>
-                        </label>
-                        <textarea
-                            rows={2}
-                            placeholder="Topics covered, what to prepare, etc."
-                            value={form.description}
-                            onChange={e => setField('description', e.target.value)}
-                            style={{
-                                width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box',
-                                border: `1px solid ${C.border}`, background: C.bg, color: C.text,
-                                fontSize: 13, outline: 'none', fontFamily: 'inherit', resize: 'vertical',
-                            }}
-                        />
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 5 }}>Description <span style={{ fontWeight: 400, color: C.muted }}>(optional)</span></label>
+                        <textarea rows={2} placeholder="Topics covered, what to prepare, etc." value={form.description} onChange={e => setField('description', e.target.value)}
+                            style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${C.border}`, background: C.bg, color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit', resize: 'vertical' }} />
                     </div>
 
-                    {/* Preview */}
                     {form.title && form.date && form.time && (
-                        <div style={{
-                            background: C.primaryLight, border: `1px solid #BFDBFE`,
-                            borderRadius: 12, padding: '12px 14px', marginBottom: 16,
-                        }}>
+                        <div style={{ background: C.primaryLight, border: '1px solid #BFDBFE', borderRadius: 12, padding: '12px 14px', marginBottom: 16 }}>
                             <div style={{ fontSize: 11, fontWeight: 700, color: C.primary, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>Preview</div>
                             <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 2 }}>{form.title}</div>
-                            <div style={{ fontSize: 12, color: C.muted }}>
-                                🗓 {new Date(`${form.date}T${form.time}`).toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}
-                                &nbsp;·&nbsp; ⏱ {form.duration} min &nbsp;·&nbsp; 👥 {form.batch}
-                            </div>
+                            <div style={{ fontSize: 12, color: C.muted }}>🗓 {new Date(`${form.date}T${form.time}`).toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })} &nbsp;·&nbsp; ⏱ {form.duration} min &nbsp;·&nbsp; 👥 {form.batch}</div>
                         </div>
                     )}
 
-                    {/* Submit */}
-                    <button
-                        onClick={handleSubmit}
-                        disabled={saving}
-                        style={{
-                            width: '100%', padding: '12px', borderRadius: 12, border: 'none',
-                            background: saving ? C.muted : `linear-gradient(135deg, ${C.primary}, ${C.purple})`,
-                            color: '#fff', fontWeight: 800, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                            transition: 'transform .15s, box-shadow .15s',
-                        }}
-                        onMouseEnter={e => { if (!saving) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 8px 20px rgba(29,78,216,.3)`; } }}
-                        onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
-                    >
+                    <button onClick={handleSubmit} disabled={saving} style={{ width: '100%', padding: '12px', borderRadius: 12, border: 'none', background: saving ? C.muted : `linear-gradient(135deg, ${C.primary}, ${C.purple})`, color: '#fff', fontWeight: 800, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'transform .15s, box-shadow .15s' }}
+                        onMouseEnter={e => { if (!saving) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(29,78,216,.3)'; } }}
+                        onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
                         {saving ? '⏳ Saving…' : '📅 Schedule Class'}
                     </button>
                 </div>
 
-                {/* ── RIGHT: Upcoming Classes list ── */}
-                <div style={{
-                    background: C.card, borderRadius: 18, border: `1px solid ${C.border}`,
-                    padding: '22px', boxShadow: '0 8px 30px rgba(15,23,42,.06)',
-                    display: 'flex', flexDirection: 'column', gap: 12,
-                }}>
+                {/* RIGHT: Class list */}
+                <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, padding: '22px', boxShadow: '0 8px 30px rgba(15,23,42,.06)', display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                         <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>📋 Upcoming Classes</div>
-                        <span style={{
-                            fontSize: 12, color: C.muted, background: C.bg,
-                            padding: '3px 10px', borderRadius: 20, border: `1px solid ${C.border}`,
-                        }}>{classes.length} scheduled</span>
+                        <span style={{ fontSize: 12, color: C.muted, background: C.bg, padding: '3px 10px', borderRadius: 20, border: `1px solid ${C.border}` }}>{classes.length} scheduled</span>
                     </div>
-
-                    {loadingList ? (
-                        <div style={{ padding: '24px 0', textAlign: 'center', color: C.muted, fontSize: 13 }}>
-                            Loading…
-                        </div>
-                    ) : classes.length === 0 ? (
-                        <div style={{
-                            padding: '36px 20px', textAlign: 'center',
-                            border: `1.5px dashed ${C.border}`, borderRadius: 14, background: C.bg,
-                        }}>
-                            <div style={{ fontSize: 36, marginBottom: 10 }}>📅</div>
-                            <div style={{ fontWeight: 700, color: C.text, marginBottom: 4 }}>No classes scheduled</div>
-                            <div style={{ fontSize: 12, color: C.muted }}>Add your first class using the form.</div>
-                        </div>
-                    ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto', maxHeight: 560 }}>
-                            {classes.map(cls => {
-                                const id = cls._id?.toString() || cls.id;
-                                const live = isLive(cls.startDateTime, cls.endDateTime);
-                                const timer = countdown(cls.startDateTime);
-                                return (
-                                    <div key={id} style={{
-                                        background: live ? '#FFF1F1' : C.bg,
-                                        border: `1px solid ${live ? '#FCA5A5' : C.border}`,
-                                        borderRadius: 14, padding: '14px 16px',
-                                        transition: 'box-shadow .2s',
-                                    }}>
-                                        {/* Top row — badges + delete */}
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                                                {live && (
-                                                    <span style={{
-                                                        background: C.red, color: '#fff', fontSize: 10, fontWeight: 800,
-                                                        padding: '2px 9px', borderRadius: 20,
-                                                    }}>🔴 LIVE NOW</span>
-                                                )}
-                                                {!live && timer && (
-                                                    <span style={{
-                                                        background: C.primaryLight, color: C.primary, fontSize: 10,
-                                                        fontWeight: 700, padding: '2px 9px', borderRadius: 20,
-                                                    }}>⏰ {timer}</span>
-                                                )}
-                                                <span style={{
-                                                    background: C.bg, color: C.muted, fontSize: 10,
-                                                    fontWeight: 600, padding: '2px 9px', borderRadius: 20,
-                                                    border: `1px solid ${C.border}`,
-                                                }}>{cls.batch}</span>
+                    {loadingList ? <div style={{ padding: '24px 0', textAlign: 'center', color: C.muted, fontSize: 13 }}>Loading…</div>
+                        : classes.length === 0 ? (
+                            <div style={{ padding: '36px 20px', textAlign: 'center', border: `1.5px dashed ${C.border}`, borderRadius: 14, background: C.bg }}>
+                                <div style={{ fontSize: 36, marginBottom: 10 }}>📅</div>
+                                <div style={{ fontWeight: 700, color: C.text, marginBottom: 4 }}>No classes scheduled</div>
+                                <div style={{ fontSize: 12, color: C.muted }}>Add your first class using the form.</div>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto', maxHeight: 560 }}>
+                                {classes.map(cls => {
+                                    const id = cls._id?.toString() || cls.id;
+                                    const live = isLive(cls.startDateTime, cls.endDateTime);
+                                    const timer = countdown(cls.startDateTime);
+                                    return (
+                                        <div key={id} style={{ background: live ? '#FFF1F1' : C.bg, border: `1px solid ${live ? '#FCA5A5' : C.border}`, borderRadius: 14, padding: '14px 16px', transition: 'box-shadow .2s' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                                                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                                                    {live && <span style={{ background: C.red, color: '#fff', fontSize: 10, fontWeight: 800, padding: '2px 9px', borderRadius: 20 }}>🔴 LIVE NOW</span>}
+                                                    {!live && timer && <span style={{ background: C.primaryLight, color: C.primary, fontSize: 10, fontWeight: 700, padding: '2px 9px', borderRadius: 20 }}>⏰ {timer}</span>}
+                                                    <span style={{ background: C.bg, color: C.muted, fontSize: 10, fontWeight: 600, padding: '2px 9px', borderRadius: 20, border: `1px solid ${C.border}` }}>{cls.batch}</span>
+                                                </div>
+                                                <button onClick={() => handleDelete(id)} disabled={deletingId === id} style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid #FECACA', background: '#FFF1F2', color: '#B91C1C', cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform .15s' }} title="Cancel class">✕</button>
                                             </div>
-                                            <button
-                                                onClick={() => handleDelete(id)}
-                                                disabled={deletingId === id}
-                                                style={{
-                                                    width: 26, height: 26, borderRadius: '50%', border: '1px solid #FECACA',
-                                                    background: '#FFF1F2', color: '#B91C1C', cursor: 'pointer',
-                                                    fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    transition: 'transform .15s',
-                                                }}
-                                                title="Cancel class"
-                                            >✕</button>
-                                        </div>
-
-                                        {/* Title */}
-                                        <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 4 }}>
-                                            {cls.title}
-                                        </div>
-
-                                        {/* Time */}
-                                        <div style={{ fontSize: 12, color: C.muted, marginBottom: 6 }}>
-                                            🕐 {fmtDateTime(cls.startDateTime)}
-                                            {cls.endDateTime && ` → ${new Date(cls.endDateTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`}
-                                        </div>
-
-                                        {/* Description */}
-                                        {cls.description && (
-                                            <div style={{ fontSize: 11, color: C.muted, marginBottom: 8, lineHeight: 1.4 }}>
-                                                {cls.description}
+                                            <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 4 }}>{cls.title}</div>
+                                            <div style={{ fontSize: 12, color: C.muted, marginBottom: 6 }}>🕐 {fmtDateTime(cls.startDateTime)}{cls.endDateTime && ` → ${new Date(cls.endDateTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`}</div>
+                                            {cls.description && <div style={{ fontSize: 11, color: C.muted, marginBottom: 8, lineHeight: 1.4 }}>{cls.description}</div>}
+                                            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+                                                {live ? (
+                                                    <a href={cls.meetLink} target="_blank" rel="noopener noreferrer" style={{ background: `linear-gradient(135deg, ${C.red}, #DC2626)`, color: '#fff', padding: '7px 14px', borderRadius: 9, fontWeight: 700, fontSize: 12, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5, boxShadow: '0 4px 14px rgba(239,68,68,.4)' }}>🔴 Join Live Now</a>
+                                                ) : (
+                                                    <button disabled style={{ background: '#E2E8F0', color: '#94A3B8', padding: '7px 14px', borderRadius: 9, fontWeight: 700, fontSize: 12, border: 'none', cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: 5 }} title="Join button activates when class starts">⚫ Join Live {timer ? `(${timer})` : ''}</button>
+                                                )}
+                                                <button onClick={() => copyLink(cls.meetLink, id)} style={{ background: C.primaryLight, color: C.primary, padding: '7px 12px', borderRadius: 9, fontWeight: 700, fontSize: 12, border: '1px solid #BFDBFE', cursor: 'pointer' }}>{copied === id ? '✓ Copied!' : '📋 Copy Link'}</button>
                                             </div>
-                                        )}
-
-                                        {/* Actions */}
-                                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
-                                            {/* LIVE button — red clickable if live, gray disabled if not */}
-                                            {live ? (
-                                                <a
-                                                    href={cls.meetLink}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    style={{
-                                                        background: `linear-gradient(135deg, ${C.red}, #DC2626)`,
-                                                        color: '#fff', padding: '7px 14px', borderRadius: 9,
-                                                        fontWeight: 700, fontSize: 12, textDecoration: 'none',
-                                                        display: 'inline-flex', alignItems: 'center', gap: 5,
-                                                        boxShadow: `0 4px 14px rgba(239,68,68,.4)`,
-                                                    }}
-                                                >
-                                                    🔴 Join Live Now
-                                                </a>
-                                            ) : (
-                                                <button
-                                                    disabled
-                                                    style={{
-                                                        background: '#E2E8F0', color: '#94A3B8', padding: '7px 14px',
-                                                        borderRadius: 9, fontWeight: 700, fontSize: 12, border: 'none',
-                                                        cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: 5,
-                                                    }}
-                                                    title="Join button activates when class starts"
-                                                >
-                                                    ⚫ Join Live {timer ? `(${timer})` : ''}
-                                                </button>
-                                            )}
-
-                                            {/* Copy link */}
-                                            <button
-                                                onClick={() => copyLink(cls.meetLink, id)}
-                                                style={{
-                                                    background: C.primaryLight, color: C.primary, padding: '7px 12px',
-                                                    borderRadius: 9, fontWeight: 700, fontSize: 12,
-                                                    border: `1px solid #BFDBFE`, cursor: 'pointer',
-                                                }}
-                                            >
-                                                {copied === id ? '✓ Copied!' : '📋 Copy Link'}
-                                            </button>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                                    );
+                                })}
+                            </div>
+                        )}
                 </div>
             </div>
-
-            <style>{`
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-      `}</style>
+            <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }`}</style>
         </div>
     );
 }
@@ -911,10 +559,7 @@ function ManageStudentsTab({ students, onStudentsChange }) {
     const [mounted, setMounted] = useState(false);
     useEffect(() => { setTimeout(() => setMounted(true), 10); }, []);
 
-    const filtered = students.filter(s =>
-        s.name.toLowerCase().includes(search.toLowerCase()) ||
-        s.email.toLowerCase().includes(search.toLowerCase())
-    );
+    const filtered = students.filter(s => s.name.toLowerCase().includes(search.toLowerCase()) || s.email.toLowerCase().includes(search.toLowerCase()));
 
     function validateAdd() {
         const errs = {};
@@ -937,8 +582,7 @@ function ManageStudentsTab({ students, onStudentsChange }) {
             const data = await res.json();
             setAddMsg(`✓ ${addForm.name} added successfully!`);
             setAddForm({ name: '', email: '', phone: '', batch: 'Batch A — Morning' });
-            setShowAddForm(false);
-            onStudentsChange(data.students);
+            setShowAddForm(false); onStudentsChange(data.students);
         } catch (err) { setAddMsg(`✗ ${err.message}`); }
         finally { setAdding(false); }
     }
@@ -949,8 +593,7 @@ function ManageStudentsTab({ students, onStudentsChange }) {
             const res = await fetch('/api/teacher/students/remove', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
             if (!res.ok) { const body = await res.json().catch(() => ({})); throw new Error(body.error || 'Failed to remove student'); }
             const data = await res.json();
-            setRemoveMsg('Student removed successfully.'); setConfirmRemove(null);
-            onStudentsChange(data.students);
+            setRemoveMsg('Student removed successfully.'); setConfirmRemove(null); onStudentsChange(data.students);
         } catch (err) { setRemoveMsg(`Error: ${err.message}`); }
         finally { setRemoving(null); }
     }
@@ -1127,9 +770,7 @@ function AttMarkTab({ students = [] }) {
             <div className="att-controls-bar">
                 <div className="att-ctrl-left">
                     <div className="ctrl-group"><label className="ctrl-label">Batch</label>
-                        <select className="ctrl-select" value={batch} onChange={e => setBatch(e.target.value)}>
-                            <option>Batch A — Morning</option><option>Batch B — Evening</option><option>Batch C — Weekend</option>
-                        </select></div>
+                        <select className="ctrl-select" value={batch} onChange={e => setBatch(e.target.value)}><option>Batch A — Morning</option><option>Batch B — Evening</option><option>Batch C — Weekend</option></select></div>
                     <div className="ctrl-group"><label className="ctrl-label">Date</label>
                         <input className="ctrl-select" type="date" value={date} onChange={e => setDate(e.target.value)} /></div>
                 </div>
@@ -1424,6 +1065,242 @@ function AttStudentTab({ students }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// LEADERBOARD HELPERS & COMPONENTS
+// ═══════════════════════════════════════════════════════════════════════════════
+const LB_MEDALS = ['🥇', '🥈', '🥉'];
+const MOCK_LB_SUBJECT_TABS = [
+    { id: 'all', label: 'All', icon: '🎯', color: '#8B5CF6' },
+    { id: 'air_regulations', label: 'Air Regs', icon: '📋', color: '#1D4ED8' },
+    { id: 'meteorology', label: 'Meteorology', icon: '🌦️', color: '#0EA5E9' },
+    { id: 'navigation', label: 'Navigation', icon: '🗺️', color: '#10B981' },
+    { id: 'technical', label: 'Technical', icon: '🔧', color: '#F59E0B' },
+    { id: 'rtfm', label: 'Radio Tel.', icon: '📻', color: '#EF4444' },
+];
+
+function lbAccuracyColor(pct) { return pct >= 80 ? '#10B981' : pct >= 50 ? '#F59E0B' : '#EF4444'; }
+function lbFmtDate(iso) { return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }); }
+function hexA(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function LbMiniPodium({ top3 }) {
+    if (top3.length < 2) return null;
+    const podiumColors = { 1: '#F59E0B', 2: '#1D4ED8', 3: '#8B5CF6' };
+    const order = top3.length >= 3
+        ? [{ e: top3[1], rank: 2, h: 80 }, { e: top3[0], rank: 1, h: 110 }, { e: top3[2], rank: 3, h: 60 }]
+        : [{ e: top3[1], rank: 2, h: 80 }, { e: top3[0], rank: 1, h: 110 }];
+    return (
+        <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E2E8F0', padding: '20px 16px 0', marginBottom: 16 }}>
+            <div style={{ textAlign: 'center', marginBottom: 14 }}>
+                <div style={{ fontSize: 14, fontWeight: 800, color: '#0F172A' }}>🏆 Top Performers</div>
+                <div style={{ fontSize: 11, color: '#64748B', marginTop: 2 }}>Best accuracy across all mock tests</div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10 }}>
+                {order.map(({ e, rank, h }, idx) => {
+                    const color = podiumColors[rank];
+                    return (
+                        <div key={e.email} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: 100 }}>
+                            <div style={{ width: 44, height: 44, borderRadius: 22, background: `linear-gradient(135deg,${color},${color}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 13, marginBottom: 6, boxShadow: `0 3px 10px ${hexA(color, 0.3)}` }}>
+                                {initials(e.name)}
+                            </div>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: '#0F172A', textAlign: 'center', marginBottom: 1 }}>{e.name.split(' ')[0]}</div>
+                            <div style={{ fontSize: 13, fontWeight: 800, color, marginBottom: 3 }}>{e.accuracy}%</div>
+                            <div style={{ fontSize: 16, marginBottom: 6 }}>{LB_MEDALS[rank - 1]}</div>
+                            <div style={{ width: '100%', height: h, background: hexA(color, 0.1), border: `2px solid ${color}`, borderBottom: 'none', borderRadius: '6px 6px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span style={{ color, fontSize: 13, fontWeight: 900 }}>#{rank}</span>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+function TeacherLeaderboardTab() {
+    const [board, setBoard] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [activeSubject, setActiveSubject] = useState('all');
+    const [search, setSearch] = useState('');
+    const [lastRefresh, setLastRefresh] = useState(null);
+
+    const fetchBoard = useCallback(async (subject) => {
+        setLoading(true);
+        try {
+            const url = subject === 'all' ? '/api/mock-leaderboard' : `/api/mock-leaderboard?subject=${subject}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data.success) { setBoard(data.entries); setLastRefresh(new Date()); }
+        } catch (err) { console.error('Leaderboard fetch failed:', err); }
+        finally { setLoading(false); }
+    }, []);
+
+    useEffect(() => { fetchBoard(activeSubject); }, [activeSubject, fetchBoard]);
+
+    const filtered = search.trim() ? board.filter(e => e.name.toLowerCase().includes(search.toLowerCase())) : board;
+    const top3 = filtered.slice(0, 3);
+    const avgAccuracy = board.length ? Math.round(board.reduce((s, e) => s + e.accuracy, 0) / board.length) : 0;
+    const totalAttempts = board.reduce((s, e) => s + (e.attempts || 1), 0);
+
+    return (
+        <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif" }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+                <div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: '#0F172A' }}>🏆 Mock Test Leaderboard</div>
+                    <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
+                        {loading ? 'Loading…' : `${board.length} students · ranked by best accuracy${lastRefresh ? ` · updated ${lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}`}
+                    </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #E2E8F0', borderRadius: 9, padding: '6px 10px', gap: 6 }}>
+                        <span style={{ color: '#64748B', fontSize: 13 }}>🔍</span>
+                        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search student…"
+                            style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 12, color: '#0F172A', width: 140 }} />
+                        {search && <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: 12, padding: 0 }}>✕</button>}
+                    </div>
+                    <button onClick={() => fetchBoard(activeSubject)} title="Refresh"
+                        style={{ width: 34, height: 34, borderRadius: 9, background: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform .2s' }}
+                        onMouseEnter={e => { e.currentTarget.style.transform = 'rotate(180deg)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.transform = 'rotate(0)'; }}
+                    >🔄</button>
+                </div>
+            </div>
+
+            {/* Stats banner */}
+            <div style={{ background: 'linear-gradient(120deg,#0A1628 0%,#1D4ED8 100%)', borderRadius: 14, padding: '18px 22px', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+                    {[
+                        { icon: '👥', label: 'Students', value: loading ? '…' : board.length },
+                        { icon: '🥇', label: 'Top Score', value: loading ? '…' : (board[0] ? `${board[0].accuracy}%` : '—') },
+                        { icon: '🎯', label: 'Avg Accuracy', value: loading ? '…' : `${avgAccuracy}%` },
+                        { icon: '📝', label: 'Total Tests', value: loading ? '…' : totalAttempts },
+                    ].map(s => (
+                        <div key={s.label}>
+                            <div style={{ color: '#93C5FD', fontSize: 10, marginBottom: 2 }}>{s.icon} {s.label}</div>
+                            <div style={{ color: '#fff', fontSize: 20, fontWeight: 900, lineHeight: 1 }}>{s.value}</div>
+                        </div>
+                    ))}
+                </div>
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    <div style={{ color: '#93C5FD', fontSize: 11, marginBottom: 2 }}>Top Student</div>
+                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 800, lineHeight: 1 }}>{board[0]?.name || '—'}</div>
+                    {board[0] && <div style={{ color: '#93C5FD', fontSize: 11, marginTop: 4 }}>{board[0].accuracy}% accuracy · {board[0].subjectLabel || board[0].subject}</div>}
+                </div>
+            </div>
+
+            {/* Subject filter tabs */}
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
+                {MOCK_LB_SUBJECT_TABS.map(tab => {
+                    const isActive = activeSubject === tab.id;
+                    return (
+                        <button key={tab.id} onClick={() => setActiveSubject(tab.id)} style={{
+                            padding: '6px 13px', borderRadius: 20,
+                            border: isActive ? `2px solid ${tab.color}` : '1px solid #E2E8F0',
+                            background: isActive ? hexA(tab.color, 0.1) : '#fff',
+                            color: isActive ? tab.color : '#64748B',
+                            fontWeight: isActive ? 700 : 400, fontSize: 12, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', gap: 5, transition: 'all .2s',
+                            transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                        }}>
+                            <span>{tab.icon}</span><span>{tab.label}</span>
+                            {isActive && !loading && (
+                                <span style={{ background: hexA(tab.color, 0.15), color: tab.color, fontSize: 9, fontWeight: 800, padding: '1px 5px', borderRadius: 8 }}>{filtered.length}</span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Podium */}
+            {!loading && !search && top3.length >= 2 && <LbMiniPodium top3={top3} />}
+
+            {/* Rankings table */}
+            <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                {/* Table header */}
+                <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: '#0F172A' }}>All Rankings</div>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <span style={{ fontSize: 11, color: '#64748B' }}>{filtered.length} pilots</span>
+                        <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981', animation: 'lbPulse 2s ease-in-out infinite' }} />
+                    </div>
+                </div>
+                {/* Column labels */}
+                <div style={{ padding: '6px 18px', background: '#F0F4FF', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ width: 32, fontSize: 10, color: '#64748B', fontWeight: 700, flexShrink: 0 }}>Rank</div>
+                    <div style={{ width: 36, flexShrink: 0 }} />
+                    <div style={{ flex: 1, fontSize: 10, color: '#64748B', fontWeight: 700 }}>Student</div>
+                    <div style={{ width: 72, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Score</div>
+                    <div style={{ width: 90, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Accuracy</div>
+                </div>
+
+                {loading ? (
+                    Array(6).fill(0).map((_, i) => (
+                        <div key={i} style={{ padding: '12px 18px', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <div style={{ width: 32, height: 32, borderRadius: 8, background: '#E2E8F0' }} />
+                            <div style={{ width: 36, height: 36, borderRadius: 18, background: '#E2E8F0' }} />
+                            <div style={{ flex: 1, height: 13, borderRadius: 6, background: '#E2E8F0' }} />
+                            <div style={{ width: 60, height: 13, borderRadius: 6, background: '#E2E8F0' }} />
+                        </div>
+                    ))
+                ) : filtered.length === 0 ? (
+                    <div style={{ padding: '36px 20px', textAlign: 'center', color: '#64748B', fontSize: 13 }}>
+                        <div style={{ fontSize: 32, marginBottom: 8 }}>🏆</div>
+                        No mock test entries yet.
+                    </div>
+                ) : (
+                    filtered.slice(0, 50).map((entry, i) => {
+                        const rank = i + 1;
+                        const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
+                        const aColor = lbAccuracyColor(entry.accuracy);
+                        const circ = 2 * Math.PI * 11;
+                        return (
+                            <div key={`${entry.email}-${i}`}
+                                style={{
+                                    padding: '12px 18px', borderTop: '1px solid #E2E8F0',
+                                    display: 'flex', alignItems: 'center', gap: 10,
+                                    background: rank === 1 ? '#FFFBEB' : 'transparent',
+                                    transition: 'background .15s',
+                                }}
+                                onMouseEnter={e => { if (rank > 1) e.currentTarget.style.background = '#F8FAFC'; }}
+                                onMouseLeave={e => { if (rank > 1) e.currentTarget.style.background = 'transparent'; }}
+                            >
+                                <div style={{ width: 32, height: 32, borderRadius: 8, flexShrink: 0, background: rank <= 3 ? 'transparent' : '#F0F4FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: rank <= 3 ? 18 : 11, fontWeight: 700, color: '#0F172A' }}>
+                                    {rank <= 3 ? medals[rank] : `#${rank}`}
+                                </div>
+                                <div style={{ width: 36, height: 36, borderRadius: 18, flexShrink: 0, background: 'linear-gradient(135deg,#1D4ED8,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 12 }}>
+                                    {initials(entry.name)}
+                                </div>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ fontWeight: 700, fontSize: 13, color: '#0F172A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.name}</div>
+                                    <div style={{ fontSize: 10, color: '#64748B', marginTop: 1 }}>
+                                        {entry.subjectLabel || entry.subject} · {entry.attempts || 1} attempt{(entry.attempts || 1) !== 1 ? 's' : ''} · {lbFmtDate(entry.submittedAt)}
+                                    </div>
+                                </div>
+                                <div style={{ width: 72, textAlign: 'right', flexShrink: 0, fontSize: 12, fontWeight: 700, color: '#0F172A' }}>{entry.score}/{entry.total}</div>
+                                <div style={{ width: 90, flexShrink: 0 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                                        <span style={{ fontSize: 13, fontWeight: 800, color: aColor }}>{entry.accuracy}%</span>
+                                        <svg width={26} height={26} style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                                            <circle cx={13} cy={13} r={11} fill="none" stroke="#E2E8F0" strokeWidth={3} />
+                                            <circle cx={13} cy={13} r={11} fill="none" stroke={aColor} strokeWidth={3}
+                                                strokeDasharray={`${circ * entry.accuracy / 100} ${circ}`} strokeLinecap="round"
+                                                style={{ transition: 'stroke-dasharray .5s ease' }} />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })
+                )}
+            </div>
+            <style>{`@keyframes lbPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}`}</style>
+        </div>
+    );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // MAIN TEACHER PAGE  (default export)
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function TeacherPage() {
@@ -1525,17 +1402,20 @@ export default function TeacherPage() {
     }
 
     // ── Main dashboard ──
+    const NAV_TABS = [
+        { id: 'students', label: '📊 Students' },
+        { id: 'attendance', label: '✅ Attendance' },
+        { id: 'schedule', label: '📅 Schedule Meeting' },
+        { id: 'manage', label: '👥 Manage Students' },
+        { id: 'leaderboard', label: '🏆 Leaderboard' },
+    ];
+
     return (
         <div className="teacher-page">
             <nav className="teacher-nav">
                 <div className="teacher-nav-brand">👩‍🏫 Teacher Dashboard</div>
                 <div className="teacher-nav-actions">
-                    {[
-                        { id: 'students', label: '📊 Students' },
-                        { id: 'attendance', label: '✅ Attendance' },
-                        { id: 'schedule', label: '📅 Schedule Meeting' },
-                        { id: 'manage', label: '👥 Manage Students' },
-                    ].map(({ id, label }) => (
+                    {NAV_TABS.map(({ id, label }) => (
                         <button key={id} className={`teacher-nav-btn${activeTab === id ? ' teacher-nav-btn-active' : ''}`} onClick={() => setActiveTab(id)}>{label}</button>
                     ))}
                     <button className="teacher-nav-btn" onClick={() => router.push('/')}>Home</button>
@@ -1623,10 +1503,7 @@ export default function TeacherPage() {
                 {activeTab === 'schedule' && (
                     <div className="tab-content tab-content-in">
                         <header className="teacher-hero hero-slide-in">
-                            <div>
-                                <h1>📅 Schedule Live Classes</h1>
-                                <p>Paste a link to go live instantly, or create a Google Meet session for a future class. Students see the Join button the moment you go live.</p>
-                            </div>
+                            <div><h1>📅 Schedule Live Classes</h1><p>Paste a link to go live instantly, or create a Google Meet session for a future class. Students see the Join button the moment you go live.</p></div>
                             <div className="teacher-summary">
                                 <div className="stat-card-pop"><span>⚡</span><small>Instant Live Link</small></div>
                                 <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span>📅</span><small>Google Calendar</small></div>
@@ -1653,6 +1530,27 @@ export default function TeacherPage() {
                                 : <ManageStudentsTab students={students} onStudentsChange={handleStudentsChange} />}
                     </div>
                 )}
+
+                {/* ── LEADERBOARD TAB ── */}
+                {activeTab === 'leaderboard' && (
+                    <div className="tab-content tab-content-in">
+                        <header className="teacher-hero hero-slide-in">
+                            <div>
+                                <h1>🏆 Mock Test Leaderboard</h1>
+                                <p>Live rankings for all students across every mock test subject. Filter by subject and search by name. Ranked by best accuracy.</p>
+                            </div>
+                            <div className="teacher-summary">
+                                <div className="stat-card-pop"><span>🏆</span><small>Live Rankings</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span>🎯</span><small>By Subject</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '160ms' }}><span>📊</span><small>Best Accuracy</small></div>
+                            </div>
+                        </header>
+                        <div className="teacher-panel panel-slide-up">
+                            <TeacherLeaderboardTab />
+                        </div>
+                    </div>
+                )}
+
             </div>
 
             <style jsx>{`

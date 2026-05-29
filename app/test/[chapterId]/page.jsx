@@ -6,9 +6,16 @@ import { getUser, saveResult, updateLeaderboard } from '../../../lib/storage';
 import { chapters, questions as allQuestions } from '../../../data/questions';
 
 const TOTAL_TIME = 300;
+const MAX_QUESTIONS = 10;
 
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function pickQuestions(chapterId) {
+  const raw = allQuestions[chapterId] || [];
+  const shuffled = shuffleArray(raw);
+  return shuffled.slice(0, MAX_QUESTIONS);
 }
 
 export default function TestPage({ params }) {
@@ -26,7 +33,7 @@ export default function TestPage({ params }) {
   const timerRef = useRef(null);
 
   // ── Tab-switch guard ──────────────────────────────────────────────
-  const testActiveRef = useRef(false); // tracks if test is running without stale closure
+  const testActiveRef = useRef(false);
 
   useEffect(() => {
     testActiveRef.current = screen === 'test';
@@ -64,8 +71,7 @@ export default function TestPage({ params }) {
     const ch = chapters.find(c => c.id === chapterId);
     if (!ch) { router.replace('/dashboard'); return; }
     setChapter(ch);
-    const raw = allQuestions[chapterId] || [];
-    setQuestions(shuffleArray(raw));
+    setQuestions(pickQuestions(chapterId));
   }, [chapterId, router]);
 
   const submitTest = useCallback(() => {
@@ -89,8 +95,7 @@ export default function TestPage({ params }) {
   }, [screen, submitTest]);
 
   function startTest() {
-    const raw = allQuestions[chapterId] || [];
-    setQuestions(shuffleArray(raw));
+    setQuestions(pickQuestions(chapterId));
     setAnswers({});
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
@@ -99,8 +104,7 @@ export default function TestPage({ params }) {
 
   function resetTest() {
     clearInterval(timerRef.current);
-    const raw = allQuestions[chapterId] || [];
-    setQuestions(shuffleArray(raw));
+    setQuestions(pickQuestions(chapterId));
     setAnswers({});
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
@@ -188,7 +192,7 @@ export default function TestPage({ params }) {
             <h1 className="start-title">{chapter.title}</h1>
             <p className="start-sub">DGCA MCQ Test</p>
             <div className="meta-badges">
-              <span className="meta-badge">❓ {questions.length} Questions</span>
+              <span className="meta-badge">❓ {Math.min((allQuestions[chapterId] || []).length, MAX_QUESTIONS)} Questions</span>
               <span className="meta-badge">⏱️ 10 Minutes</span>
               <span className="meta-badge">💡 Instant Explanations</span>
             </div>
@@ -197,9 +201,9 @@ export default function TestPage({ params }) {
               <li>✔ Once answered, you cannot change your selection</li>
               <li>✔ Explanations are shown immediately after answering</li>
               <li>✔ Test auto-submits when the timer reaches zero</li>
+              <li>✔ Questions are randomly picked each attempt</li>
             </ul>
 
-            {/* ── Tab-switch warning notice ── */}
             <div className="tab-warning">
               <span className="tab-warning-icon">🚫</span>
               <div>

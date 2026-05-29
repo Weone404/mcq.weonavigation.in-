@@ -104,6 +104,84 @@ function buildMockPool(count = 50, subjectChapterIds = null) {
   return shuffleArray(pool).slice(0, Math.min(count, pool.length));
 }
 
+export const NAV_SUB_SUBJECTS = [
+  {
+    id: 'general_navigation',
+    title: 'General Navigation',
+    subtitle: 'Dead Reckoning, Maps, Charts & Plotting',
+    icon: '🗺️',
+    color: '#10B981',
+    gradient: 'linear-gradient(135deg,#10B981,#34D399)',
+    parts: [
+      {
+        label: 'General Navigation',
+        color: '#10B981',
+        chapterIds: [
+          'gn01', 'gn02', 'gn03', 'gn04', 'gn05',
+          'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
+        ],
+      },
+    ],
+    chapterIds: [
+      'gn01', 'gn02', 'gn03', 'gn04', 'gn05',
+      'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
+    ],
+    stats: '10 Chapters · 200+ MCQs',
+    exam: 'ATPL / CPL',
+    comingSoon: false,
+  },
+  {
+    id: 'radio_navigation',
+    title: 'Radio Navigation',
+    subtitle: 'VOR, DME, ILS, NDB, RNAV & GPS',
+    icon: '📡',
+    color: '#059669',
+    gradient: 'linear-gradient(135deg,#059669,#10B981)',
+    parts: [
+      {
+        label: 'Radio Navigation',
+        color: '#059669',
+        chapterIds: [
+          'rn01', 'rn02', 'rn03', 'rn04', 'rn05',
+          'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+        ],
+      },
+    ],
+    chapterIds: [
+      'rn01', 'rn02', 'rn03', 'rn04', 'rn05',
+      'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+    ],
+    stats: '10 Chapters · 200+ MCQs',
+    exam: 'ATPL / CPL',
+    comingSoon: false,
+  },
+  {
+    id: 'instrument_navigation',
+    title: 'Instrument Navigation',
+    subtitle: 'Flight Instruments, Gyroscopes & Compasses',
+    icon: '🛩️',
+    color: '#0284C7',
+    gradient: 'linear-gradient(135deg,#0284C7,#38BDF8)',
+    parts: [
+      {
+        label: 'Instrument Navigation',
+        color: '#0284C7',
+        chapterIds: [
+          'in01', 'in02', 'in03', 'in04',
+          'in05', 'in06', 'in07', 'in08',
+        ],
+      },
+    ],
+    chapterIds: [
+      'in01', 'in02', 'in03', 'in04',
+      'in05', 'in06', 'in07', 'in08',
+    ],
+    stats: '8 Chapters · 150+ MCQs',
+    exam: 'ATPL / CPL',
+    comingSoon: false,
+  },
+];
+
 // ─── SUBJECTS CONFIG ───────────────────────────────────────────────────────────
 export const SUBJECTS = [
   {
@@ -123,7 +201,11 @@ export const SUBJECTS = [
           'ch21', 'ch22',
         ],
       },
-      { label: 'Part II – Human Factors', color: '#8B5CF6', chapterIds: ['ch23', 'ch24', 'ch25', 'ch26'] },
+      {
+        label: 'Part II – Human Factors',
+        color: '#8B5CF6',
+        chapterIds: ['ch23', 'ch24', 'ch25', 'ch26'],
+      },
       {
         label: 'Part III – QB Extra',
         color: '#0EA5E9',
@@ -142,7 +224,10 @@ export const SUBJECTS = [
     ],
     stats: '39 Chapters · 500+ MCQs',
     exam: 'ATPL / CPL / DGCA',
+    comingSoon: false,
+    hasSubjects: false,
   },
+
   {
     id: 'meteorology',
     title: 'Meteorology',
@@ -151,30 +236,74 @@ export const SUBJECTS = [
     color: '#0EA5E9',
     gradient: 'linear-gradient(135deg,#0EA5E9,#38BDF8)',
     parts: [
-      { label: 'Meteorology', color: '#0EA5E9', chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08', 'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16', 'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23'] },
+      {
+        label: 'Meteorology',
+        color: '#0EA5E9',
+        chapterIds: [
+          'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
+          'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
+          'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
+        ],
+      },
     ],
-    chapterIds: ['met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08', 'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16', 'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23'],
-    stats: '16 Chapters · 300+ MCQs',
+    chapterIds: [
+      'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
+      'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
+      'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
+    ],
+    stats: '23 Chapters · 300+ MCQs',
     exam: 'ATPL / CPL',
+    comingSoon: false,
+    hasSubjects: false,
   },
+
   {
     id: 'navigation',
     title: 'Navigation',
-    subtitle: 'Charts, VOR, ILS, RNAV',
+    subtitle: 'General, Radio & Instrument Navigation',
     icon: '🗺️',
     color: '#10B981',
     gradient: 'linear-gradient(135deg,#10B981,#34D399)',
+    // parts here represent the 3 sub-subject groups shown on the sub-selector
     parts: [
-      { label: 'Part I – General Navigation', color: '#10B981', chapterIds: ['gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10'] },
-      { label: 'Part II – Radio Navigation', color: '#059669', chapterIds: ['rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10'] },
+      {
+        label: 'Part I – General Navigation',
+        color: '#10B981',
+        chapterIds: [
+          'gn01', 'gn02', 'gn03', 'gn04', 'gn05',
+          'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
+        ],
+      },
+      {
+        label: 'Part II – Radio Navigation',
+        color: '#059669',
+        chapterIds: [
+          'rn01', 'rn02', 'rn03', 'rn04', 'rn05',
+          'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+        ],
+      },
+      {
+        label: 'Part III – Instrument Navigation',
+        color: '#0284C7',
+        chapterIds: [
+          'in01', 'in02', 'in03', 'in04',
+          'in05', 'in06', 'in07', 'in08',
+        ],
+      },
     ],
+    // all chapter IDs combined (used for mock test pool & overall stats)
     chapterIds: [
-      'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10',
+      'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
       'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+      'in01', 'in02', 'in03', 'in04', 'in05', 'in06', 'in07', 'in08',
     ],
-    stats: '20 Chapters · 400+ MCQs',
+    stats: '28 Chapters · 550+ MCQs',
     exam: 'ATPL / CPL',
+    comingSoon: false,
+    hasSubjects: true,          // ← flag: show sub-subject selector on click
+    subSubjects: NAV_SUB_SUBJECTS, // ← reference to sub-subjects array
   },
+
   {
     id: 'technical',
     title: 'Technical General',
@@ -183,14 +312,29 @@ export const SUBJECTS = [
     color: '#F59E0B',
     gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
     parts: [
-      { label: 'Part I – Aerodynamics & Structures', color: '#F59E0B', chapterIds: ['tg01', 'tg02'] },
-      { label: 'Part II – Engines & Propellers', color: '#D97706', chapterIds: ['tg03', 'tg04'] },
-      { label: 'Part III – Aircraft Systems', color: '#B45309', chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'] },
+      {
+        label: 'Part I – Aerodynamics & Structures',
+        color: '#F59E0B',
+        chapterIds: ['tg01', 'tg02'],
+      },
+      {
+        label: 'Part II – Engines & Propellers',
+        color: '#D97706',
+        chapterIds: ['tg03', 'tg04'],
+      },
+      {
+        label: 'Part III – Aircraft Systems',
+        color: '#B45309',
+        chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'],
+      },
     ],
     chapterIds: ['tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08'],
     stats: '8 Chapters · 200+ MCQs',
     exam: 'AME / ATPL',
+    comingSoon: false,
+    hasSubjects: false,
   },
+
   {
     id: 'rtfm',
     title: 'Radio Telephony',
@@ -199,12 +343,19 @@ export const SUBJECTS = [
     color: '#EF4444',
     gradient: 'linear-gradient(135deg,#EF4444,#F87171)',
     parts: [
-      { label: 'Radio Telephony', color: '#EF4444', chapterIds: ['rt01', 'rt02', 'rt03'] },
+      {
+        label: 'Radio Telephony',
+        color: '#EF4444',
+        chapterIds: ['rt01', 'rt02', 'rt03'],
+      },
     ],
     chapterIds: ['rt01', 'rt02', 'rt03'],
     stats: '3 Chapters · 60+ MCQs',
     exam: 'RTR (Aero)',
+    comingSoon: false,
+    hasSubjects: false,
   },
+
   {
     id: 'mock',
     title: 'Mock Test',
@@ -213,23 +364,37 @@ export const SUBJECTS = [
     color: '#8B5CF6',
     gradient: 'linear-gradient(135deg,#8B5CF6,#A78BFA)',
     parts: [],
+    // all chapter IDs from every subject for full mock pool
     chapterIds: [
+      // Air Regulations
       'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10',
       'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20',
       'ch21', 'ch22', 'ch23', 'ch24', 'ch25', 'ch26',
       'qb01', 'qb02', 'qb03', 'qb04', 'qb05', 'qb06', 'qb07',
       'qb08', 'qb09', 'qb10', 'qb11', 'qb12', 'qb13',
+      // Meteorology
       'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
-      'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10',
+      'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
+      'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
+      // General Navigation
+      'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
+      // Radio Navigation
       'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+      // Instrument Navigation
+      'in01', 'in02', 'in03', 'in04', 'in05', 'in06', 'in07', 'in08',
+      // Technical General
       'tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08',
+      // Radio Telephony
       'rt01', 'rt02', 'rt03',
     ],
     stats: '100 Questions · 120 Mins',
     exam: 'All Exams',
     isMock: true,
+    comingSoon: false,
+    hasSubjects: false,
   },
 ];
+
 
 export function getQuestionsForSubject(subjectId, questions, limit = null) {
   const subject = SUBJECTS.find(s => s.id === subjectId);
@@ -241,7 +406,8 @@ export function getQuestionsForSubject(subjectId, questions, limit = null) {
   return pool;
 }
 
-const MOCK_ALL_OPTION = {
+// ─── MOCK ALL OPTION (used inside MockSubjectSelector) ────────────────────────
+export const MOCK_ALL_OPTION = {
   id: 'all',
   title: 'All Subjects',
   subtitle: 'Mixed questions from every chapter',
@@ -252,13 +418,21 @@ const MOCK_ALL_OPTION = {
     'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10',
     'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20',
     'ch21', 'ch22', 'ch23', 'ch24', 'ch25', 'ch26',
-    'qb01', 'qb02', 'qb03', 'qb04', 'qb05', 'qb06', 'qb07', 'qb08', 'qb09', 'qb10', 'qb11', 'qb12', 'qb13',
-    'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10',
+    'qb01', 'qb02', 'qb03', 'qb04', 'qb05', 'qb06', 'qb07',
+    'qb08', 'qb09', 'qb10', 'qb11', 'qb12', 'qb13',
+    'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
+    'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
+    'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
+    'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
     'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+    'in01', 'in02', 'in03', 'in04', 'in05', 'in06', 'in07', 'in08',
     'tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08',
+    'rt01', 'rt02', 'rt03',
   ],
   stats: '100 questions · all chapters combined',
   exam: 'All Exams',
+  comingSoon: false,
+  hasSubjects: false,
 };
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────────
@@ -839,7 +1013,6 @@ const NAV_ITEMS = [
   { icon: '📈', label: 'My Progress', id: 'progress' },
   { icon: '📅', label: 'Live Classes', id: 'classes', badge: 'LIVE' },
   { icon: '🎬', label: 'Lectures', id: 'lectures' },
-  { icon: '✏️', label: 'Practice', id: 'practice' },
   { icon: '📝', label: 'Mock Tests', id: 'mocktests' },
   { icon: '🏆', label: 'Leaderboard', id: 'leaderboard' },
   { icon: '🥇', label: 'Mock Leaderboard', id: 'mockleaderboard' },
@@ -999,7 +1172,7 @@ function BottomNav({ active, onChange }) {
 function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
   const base = {
     home: 'Dashboard', tests: 'Tests', progress: 'My Progress',
-    classes: 'Live Classes', lectures: 'Lectures', practice: 'Practice',
+    classes: 'Live Classes', lectures: 'Lectures',
     mocktests: 'Mock Tests', leaderboard: 'Leaderboard',
     mockleaderboard: 'Mock Leaderboard', resources: 'Study Notes', doubt: 'AI Doubt Chat',
   };
@@ -1224,7 +1397,7 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
           <div style={{ padding: 14, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10 }}>
             {loading
               ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.bg, borderRadius: 10, padding: 14 }}><Skeleton h={12} /></div>)
-              : chapters.slice(0, isMobile ? 4 : 8).map((ch, idx) => {
+              : chapters.slice(0, isMobile ? 6 : 12).map((ch, idx) => {
                 const rs = allResults.filter(r => r.chapterId === ch.id);
                 const best = rs.length ? Math.max(...rs.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)) : null;
                 return (
@@ -2109,8 +2282,8 @@ function ProgressPage({ stats, allResults, loading, isMobile }) {
 }
 
 function Placeholder({ page }) {
-  const icons = { classes: '📅', lectures: '🎬', practice: '✏️', mocktests: '📝' };
-  const labels = { classes: 'Live Classes', lectures: 'Recorded Lectures', practice: 'Practice', mocktests: 'Mock Tests' };
+  const icons = { classes: '📅', lectures: '🎬', mocktests: '📝' };
+  const labels = { classes: 'Live Classes', lectures: 'Recorded Lectures', mocktests: 'Mock Tests' };
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 360, color: C.muted, background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>
       <div style={{ fontSize: 48, marginBottom: 12, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>{icons[page] || '📄'}</div>
@@ -2191,7 +2364,7 @@ export default function DashboardPage() {
       case 'lectures':
       case 'classes':
         return <LecturesPage user={user} />;
-      case 'practice':
+
         return <Placeholder page={page} />;
       case 'doubt':
         return <div style={{ minHeight: 500 }}><DoubtChat studentId={user?.id} /></div>;

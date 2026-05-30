@@ -303,14 +303,21 @@ const IconSend = () => (
 );
 
 // ── Backend API ───────────────────────────────────────────────────
-// Your live FastAPI backend on Railway:
-const API_BASE = "https://web-production-b426.up.railway.app/api/v1/auth";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://nextauth-my1u.onrender.com/api/v1/auth";
 
-// Save the JWT tokens the backend returns (kept in localStorage).
-function saveTokens(data) {
+// ── THE FIX: saves under 'dgca_user' which is what getUser() in lib/storage.js reads ──
+function saveSession(data, credential) {
   if (data?.access_token) localStorage.setItem("access_token", data.access_token);
   if (data?.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
-  if (data?.user) localStorage.setItem("user", JSON.stringify(data.user));
+
+  // Use backend's user object if provided, otherwise build one from the credential
+  const userObj = data?.user || {
+    email: credential,
+    name: credential.includes("@") ? credential.split("@")[0] : credential,
+  };
+
+  // 'dgca_user' is the key that getUser() in lib/storage.js reads
+  localStorage.setItem("dgca_user", JSON.stringify(userObj));
 }
 
 // ── Main component ────────────────────────────────────────────────
@@ -318,14 +325,14 @@ export default function LoginPage() {
   const [activeTab, setActiveTab] = useState("password");
 
   // Password tab
-  const [pwMode, setPwMode] = useState("phone"); // "phone" | "email"
+  const [pwMode, setPwMode] = useState("phone");
   const [countryCode, setCountryCode] = useState("+91");
   const [phone, setPhone] = useState("");
   const [pwEmail, setPwEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // OTP tab
-  const [otpMode, setOtpMode] = useState("phone"); // "phone" | "email"
+  const [otpMode, setOtpMode] = useState("phone");
   const [otpCc, setOtpCc] = useState("+91");
   const [otpPhone, setOtpPhone] = useState("");
   const [otpEmail, setOtpEmail] = useState("");
@@ -333,10 +340,7 @@ export default function LoginPage() {
   const [otp, setOtp] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(""); // shows backend / network errors
-
-  /* ── Helpers ── */
-  const fake = (ms = 1200) => new Promise((r) => setTimeout(r, ms));
+  const [error, setError] = useState("");
 
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
@@ -351,7 +355,7 @@ export default function LoginPage() {
     setOtp("");
   };
 
-  /* ── Password login ── */
+  // ── Password login ──────────────────────────────────────────────
   const handlePasswordLogin = async () => {
     const id = pwMode === "phone" ? `${countryCode}${phone}` : pwEmail;
     if (!id || !password) return;
@@ -365,16 +369,17 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Login failed");
-      saveTokens(data);
-      window.location.href = "/dashboard"; // change to wherever you want users to land
+
+      // Save session under 'dgca_user' so dashboard can read it
+      saveSession(data, id);
+      window.location.href = "/dashboard";
     } catch (e) {
       setError(e.message);
-    } finally {
       setLoading(false);
     }
   };
 
-  /* ── OTP flow (email OTP works; phone OTP is disabled on the backend) ── */
+  // ── OTP: Send ──────────────────────────────────────────────────
   const handleSendOtp = async () => {
     const id = otpMode === "phone" ? `${otpCc}${otpPhone}` : otpEmail;
     if (!id) return;
@@ -396,6 +401,7 @@ export default function LoginPage() {
     }
   };
 
+  // ── OTP: Verify ────────────────────────────────────────────────
   const handleVerifyOtp = async () => {
     if (otp.length !== 6) return;
     const id = otpMode === "phone" ? `${otpCc}${otpPhone}` : otpEmail;
@@ -409,16 +415,16 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Invalid OTP");
-      saveTokens(data);
-      window.location.href = "/dashboard"; // change to wherever you want users to land
+
+      // Save session under 'dgca_user' so dashboard can read it
+      saveSession(data, id);
+      window.location.href = "/dashboard";
     } catch (e) {
       setError(e.message);
-    } finally {
       setLoading(false);
     }
   };
 
-  /* ── Derived values ── */
   const otpDestLabel = otpMode === "phone" ? "phone" : "inbox";
   const otpSentTo = otpMode === "phone"
     ? `${otpCc} ${otpPhone}`
@@ -458,7 +464,7 @@ export default function LoginPage() {
               <p className="card-sub">Step into your sandbox account workspace with confidence</p>
             </div>
 
-            {/* ── Main tabs — text only, no icons ── */}
+            {/* ── Main tabs ── */}
             <div className="tabs">
               <button
                 className={`tab-btn ${activeTab === "password" ? "active" : ""}`}
@@ -485,7 +491,6 @@ export default function LoginPage() {
                 ════════════════════════════════ */}
             {activeTab === "password" && (
               <>
-                {/* Phone / Email toggle */}
                 <div className="toggle-row">
                   <button
                     className={`toggle-btn ${pwMode === "phone" ? "active" : ""}`}
@@ -503,7 +508,6 @@ export default function LoginPage() {
                   </button>
                 </div>
 
-                {/* Phone input */}
                 {pwMode === "phone" && (
                   <div className="field">
                     <label className="field-label">Phone Number</label>
@@ -529,7 +533,6 @@ export default function LoginPage() {
                   </div>
                 )}
 
-                {/* Email input */}
                 {pwMode === "email" && (
                   <div className="field">
                     <label className="field-label">Email Address</label>
@@ -546,7 +549,6 @@ export default function LoginPage() {
                   </div>
                 )}
 
-                {/* Password */}
                 <div className="field">
                   <label className="field-label">Password</label>
                   <div className="input-wrap">
@@ -583,7 +585,6 @@ export default function LoginPage() {
                 ════════════════════════════════ */}
             {activeTab === "otp" && (
               <>
-                {/* Phone / Email toggle */}
                 <div className="toggle-row">
                   <button
                     className={`toggle-btn ${otpMode === "phone" ? "active" : ""}`}
@@ -601,7 +602,6 @@ export default function LoginPage() {
                   </button>
                 </div>
 
-                {/* Phone input */}
                 {otpMode === "phone" && (
                   <div className="field">
                     <label className="field-label">Phone Number</label>
@@ -627,7 +627,6 @@ export default function LoginPage() {
                   </div>
                 )}
 
-                {/* Email input */}
                 {otpMode === "email" && (
                   <div className="field">
                     <label className="field-label">Email Address</label>

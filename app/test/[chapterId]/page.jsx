@@ -14,8 +14,7 @@ function shuffleArray(arr) {
 
 function pickQuestions(chapterId) {
   const raw = allQuestions[chapterId] || [];
-  const shuffled = shuffleArray(raw);
-  return shuffled.slice(0, MAX_QUESTIONS);
+  return shuffleArray(raw);  // ← returns all questions, still shuffled
 }
 
 export default function TestPage({ params }) {

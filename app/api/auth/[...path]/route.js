@@ -1,16 +1,37 @@
-export async function POST(request, { params }) {
-    const path = params.path.join('/');
-    const body = await request.text();
+// app/api/auth/[...path]/route.js
 
-    const res = await fetch(
-        `https://nextauth-my1u.onrender.com/api/v1/auth/${path}`,
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body,
-        }
-    );
+const BACKEND = "https://web-production-b426.up.railway.app/api/v1/auth";
 
-    const data = await res.json();
-    return Response.json(data, { status: res.status });
+async function handler(request, { params }) {
+    const path = params.path.join("/");
+    const token = request.headers.get("Authorization");
+
+    const options = {
+        method: request.method,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": token || "",
+        },
+    };
+
+    if (request.method !== "GET") {
+        options.body = await request.text();
+    }
+
+    try {
+        const res = await fetch(`${BACKEND}/${path}`, options);
+        const data = await res.json();
+        return Response.json(data, { status: res.status });
+    } catch (err) {
+        return Response.json(
+            { detail: "Proxy error: " + err.message },
+            { status: 502 }
+        );
+    }
 }
+
+export const GET = handler;
+export const POST = handler;
+export const PUT = handler;
+export const DELETE = handler;
+export const PATCH = handler;

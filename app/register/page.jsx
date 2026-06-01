@@ -3,15 +3,15 @@
 import { useState } from "react";
 
 const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Sora', sans-serif;
-    background-color: #0d1117;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(135deg, #dce8f8 0%, #eaf2fb 40%, #f0f6ff 100%);
     min-height: 100vh;
-    color: #e2e8f0;
+    color: #1e2d5a;
   }
 
   .page {
@@ -19,9 +19,9 @@ const styles = `
     display: flex;
     flex-direction: column;
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(56,189,248,0.05) 0%, transparent 50%),
-      #0d1117;
+      radial-gradient(ellipse at 15% 60%, rgba(100,149,237,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 20%, rgba(180,210,255,0.22) 0%, transparent 50%),
+      linear-gradient(135deg, #dce8f8 0%, #eaf2fb 40%, #f0f6ff 100%);
   }
 
   /* ── Navbar ── */
@@ -34,26 +34,27 @@ const styles = `
   .brand { display: flex; align-items: center; gap: 12px; }
   .brand-icon {
     width: 38px; height: 38px;
-    background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%);
+    background: linear-gradient(135deg, #2e4fd4 0%, #5b8df5 100%);
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(46,79,212,0.25);
   }
   .brand-icon svg { width: 20px; height: 20px; }
   .brand-text { line-height: 1; }
-  .brand-name { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; color: #f1f5f9; }
+  .brand-name { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: #1e2d5a; }
   .brand-sub  {
-    font-size: 9px; font-weight: 500; letter-spacing: 0.2em;
-    color: #6366f1; font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.2em;
+    color: #2e4fd4; font-family: 'JetBrains Mono', monospace;
     text-transform: uppercase; margin-top: 2px;
   }
   .session-badge {
     display: flex; align-items: center; gap: 7px;
-    font-size: 12px; color: #94a3b8;
+    font-size: 12px; color: #6b7db3;
     font-family: 'JetBrains Mono', monospace;
   }
   .session-dot {
     width: 7px; height: 7px; border-radius: 50%;
-    background: #22c55e; box-shadow: 0 0 8px #22c55e;
+    background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5);
     animation: pulse 2s infinite;
   }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
@@ -66,12 +67,13 @@ const styles = `
   }
   .card {
     width: 100%; max-width: 420px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
+    background: #ffffff;
+    border: 1px solid rgba(46,79,212,0.1);
     border-radius: 20px;
     padding: 40px 36px 36px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.08);
+    box-shadow:
+      0 8px 40px rgba(46,79,212,0.08),
+      0 2px 8px rgba(0,0,0,0.04);
     animation: fadeUp 0.5s ease both;
   }
   @keyframes fadeUp {
@@ -79,111 +81,110 @@ const styles = `
     to   { opacity: 1; transform: translateY(0); }
   }
   .card-heading { text-align: center; margin-bottom: 28px; }
-  .card-title   { font-size: 26px; font-weight: 600; color: #f8fafc; letter-spacing: -0.02em; }
-  .card-sub     { font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.5; }
+  .card-title   { font-size: 26px; font-weight: 700; color: #1e2d5a; letter-spacing: -0.02em; }
+  .card-sub     { font-size: 13px; color: #7a8db3; margin-top: 6px; line-height: 1.5; }
 
   /* ── Fields ── */
-  .field { margin-bottom: 18px; }
+  .field { margin-bottom: 16px; }
   .field-label {
-    font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 600;
+    color: #3a4d7a;
     margin-bottom: 8px; display: block;
   }
   .input-wrap { position: relative; width: 100%; }
   .input-icon {
     position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-    color: #475569; pointer-events: none; display: flex;
+    color: #b0bcdc; pointer-events: none; display: flex;
   }
   .input-icon svg { width: 16px; height: 16px; }
   .input-eye {
     position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-    color: #475569; cursor: pointer; display: flex;
+    color: #b0bcdc; cursor: pointer; display: flex;
     background: none; border: none; padding: 0;
     transition: color 0.2s;
   }
-  .input-eye:hover { color: #94a3b8; }
+  .input-eye:hover { color: #2e4fd4; }
   .input-eye svg { width: 16px; height: 16px; }
 
   /* ── Phone field layout ── */
   .phone-wrap { display: flex; gap: 8px; }
   .dial-select {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.09);
+    background: #f8faff;
+    border: 1.5px solid #dde5f8;
     border-radius: 10px;
     padding: 12px 10px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px; color: #e2e8f0;
+    font-size: 13px; color: #2e4fd4; font-weight: 600;
     outline: none;
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
     flex-shrink: 0;
     appearance: none;
     -webkit-appearance: none;
-    min-width: 78px;
+    min-width: 90px;
     text-align: center;
   }
   .dial-select:focus {
-    border-color: rgba(99,102,241,0.5);
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    border-color: #2e4fd4;
+    box-shadow: 0 0 0 3px rgba(46,79,212,0.12);
+    background: #fff;
   }
   .dial-select.error {
-    border-color: rgba(239,68,68,0.5);
-    box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+    border-color: rgba(220,38,38,0.5);
+    box-shadow: 0 0 0 3px rgba(220,38,38,0.08);
   }
-  .dial-select option { background: #1e293b; color: #e2e8f0; }
+  .dial-select option { background: #fff; color: #1e2d5a; }
   .phone-input-wrap { position: relative; flex: 1; }
 
   .text-input {
     width: 100%;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.09);
+    background: #f8faff;
+    border: 1.5px solid #dde5f8;
     border-radius: 10px;
     padding: 12px 14px 12px 42px;
-    font-family: 'Sora', sans-serif;
-    font-size: 14px; color: #e2e8f0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px; color: #1e2d5a;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .text-input.has-eye { padding-right: 42px; }
   .text-input.no-icon { padding-left: 14px; }
-  .text-input::placeholder { color: #475569; }
+  .text-input::placeholder { color: #b0bcdc; }
   .text-input:focus {
-    border-color: rgba(99,102,241,0.5);
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    border-color: #2e4fd4;
+    box-shadow: 0 0 0 3px rgba(46,79,212,0.12);
+    background: #fff;
   }
   .text-input.error {
-    border-color: rgba(239,68,68,0.5);
-    box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+    border-color: rgba(220,38,38,0.5);
+    box-shadow: 0 0 0 3px rgba(220,38,38,0.08);
   }
   .error-msg {
-    font-size: 11px; color: #f87171;
+    font-size: 11px; color: #dc2626;
     font-family: 'JetBrains Mono', monospace;
-    margin-top: 6px; display: block;
+    margin-top: 5px; display: block;
   }
 
   /* ── Button ── */
   .btn-primary {
-    width: 100%; padding: 13px;
-    background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%);
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #2e4fd4 0%, #4c6ef5 100%);
     border: none; border-radius: 11px;
-    font-family: 'Sora', sans-serif;
-    font-size: 14px; font-weight: 600; color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px; font-weight: 700; color: #fff;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: opacity 0.2s, transform 0.15s;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
     letter-spacing: 0.01em;
     position: relative; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(46,79,212,0.35);
   }
-  .btn-primary::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, #818cf8 0%, #7dd3fc 100%);
-    opacity: 0; transition: opacity 0.2s;
+  .btn-primary:hover {
+    box-shadow: 0 6px 24px rgba(46,79,212,0.45);
+    transform: translateY(-1px);
   }
-  .btn-primary:hover::before { opacity: 1; }
   .btn-primary:active { transform: scale(0.98); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
   .btn-primary span { position: relative; z-index: 1; }
   .btn-primary svg  { position: relative; z-index: 1; width: 16px; height: 16px; }
 
@@ -198,21 +199,31 @@ const styles = `
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ── Footer ── */
-  .footer-link { text-align: center; font-size: 13px; color: #475569; margin-top: 20px; }
-  .footer-link a { color: #818cf8; text-decoration: none; font-weight: 500; transition: color 0.2s; }
-  .footer-link a:hover { color: #a5b4fc; }
+  .footer-link { text-align: center; font-size: 13px; color: #7a8db3; margin-top: 20px; }
+  .footer-link a { color: #2e4fd4; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+  .footer-link a:hover { color: #1e3ab8; }
 
   .sec-badge {
     display: flex; align-items: center; justify-content: center; gap: 8px;
-    font-size: 11px; color: #334155;
+    font-size: 11px; color: #b0bcdc;
     font-family: 'JetBrains Mono', monospace;
     margin-top: 20px;
   }
   .sec-badge svg { width: 13px; height: 13px; color: #22c55e; }
 
+  .server-error {
+    color: #dc2626; font-size: 12px; text-align: center;
+    margin-bottom: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
   .page-footer {
     text-align: center;
-    font-size: 11px; color: #1e293b;
+    font-size: 11px; color: #a0b0d0;
     font-family: 'JetBrains Mono', monospace;
     padding: 20px;
   }
@@ -290,7 +301,6 @@ const DIAL_CODES = [
     { code: "+86", label: "🇨🇳 +86" },
 ];
 
-/* ── Backend API ── */
 const API_BASE = "https://web-production-b426.up.railway.app/api/v1/auth";
 
 function saveTokens(data) {
@@ -299,7 +309,6 @@ function saveTokens(data) {
     if (data?.user) localStorage.setItem("user", JSON.stringify(data.user));
 }
 
-/* ── Component ── */
 export default function RegisterPage() {
     const [fullName, setFullName] = useState("");
     const [dialCode, setDialCode] = useState("+91");
@@ -311,7 +320,7 @@ export default function RegisterPage() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
-    const [serverError, setServerError] = useState(""); // backend / network errors
+    const [serverError, setServerError] = useState("");
 
     const validate = () => {
         const e = {};
@@ -340,16 +349,16 @@ export default function RegisterPage() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    name: fullName,                              // stored once backend supports it
+                    name: fullName,
                     email,
-                    phone: `${dialCode}${phone.replace(/\D/g, "")}`, // E.164, e.g. +919876543210
+                    phone: `${dialCode}${phone.replace(/\D/g, "")}`,
                     password,
                 }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.detail || "Registration failed");
             saveTokens(data);
-            window.location.href = "/dashboard"; // change to wherever new users should land
+            window.location.href = "/dashboard";
         } catch (err) {
             setServerError(err.message);
         } finally {
@@ -365,27 +374,8 @@ export default function RegisterPage() {
 
             <div className="page">
 
-                {/* ── Navbar ── */}
-                <nav className="navbar">
-                    <div className="brand">
-                        <div className="brand-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3" y="11" width="18" height="11" rx="2" />
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                            </svg>
-                        </div>
-                        <div className="brand-text">
-                            <div className="brand-name">PortalAuth</div>
-                            <div className="brand-sub">Secure Gateway</div>
-                        </div>
-                    </div>
-                    <div className="session-badge">
-                        <div className="session-dot" />
-                        Active Session Tunnel
-                    </div>
-                </nav>
 
-                {/* ── Card ── */}
+
                 <div className="center">
                     <div className="card">
                         <div className="card-heading">
@@ -401,7 +391,7 @@ export default function RegisterPage() {
                                 <input
                                     type="text"
                                     className={`text-input${errors.fullName ? " error" : ""}`}
-                                    placeholder="e.g. Alex Carter"
+                                    placeholder="e.g. Arjun Sharma"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
                                 />
@@ -411,7 +401,7 @@ export default function RegisterPage() {
 
                         {/* Phone Number */}
                         <div className="field">
-                            <label className="field-label">Phone Number</label>
+                            <label className="field-label">Mobile Number</label>
                             <div className="phone-wrap">
                                 <select
                                     className={`dial-select${errors.phone ? " error" : ""}`}
@@ -446,7 +436,7 @@ export default function RegisterPage() {
                                 <input
                                     type="email"
                                     className={`text-input${errors.email ? " error" : ""}`}
-                                    placeholder="name@example.com"
+                                    placeholder="e.g. arjun@email.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -492,13 +482,8 @@ export default function RegisterPage() {
                             {errors.confirmPw && <span className="error-msg">{errors.confirmPw}</span>}
                         </div>
 
-                        {serverError && (
-                            <span className="error-msg" style={{ textAlign: "center", display: "block", marginBottom: "10px" }}>
-                                {serverError}
-                            </span>
-                        )}
+                        {serverError && <div className="server-error">{serverError}</div>}
 
-                        {/* Submit */}
                         <button
                             className="btn-primary"
                             onClick={handleRegister}
@@ -509,7 +494,7 @@ export default function RegisterPage() {
                                 <div className="spinner" />
                             ) : (
                                 <>
-                                    <span>Register Account</span>
+                                    <span>Begin Training →</span>
                                     <IconUserPlus />
                                 </>
                             )}

@@ -2307,12 +2307,35 @@ export default function DashboardPage() {
   const [subPage, setSubPage] = useState('subjects');
 
   useEffect(() => {
-    const u = getUser();
-    if (!u) { router.replace('/login'); return; }
-    setUserState(u);
-    Promise.all([getStats(u.email), getResults(u.email)])
-      .then(([s, r]) => { setStats(s); setAll(r); setRecent(r.slice(0, 5)); })
-      .catch(console.error)
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      router.replace('/login');
+      return;  // ← this must stop execution
+    }
+
+    fetch("/api/auth/me", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
+        if (!res.ok) { router.replace('/login'); return null; }
+        return res.json();
+      })
+      .then(userData => {
+        if (!userData) return;
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUserState(userData);
+        const email = userData.email;
+        return Promise.all([getStats(email), getResults(email)])
+          .then(([s, r]) => {
+            setStats(s);
+            setAll(r);
+            setRecent(r.slice(0, 5));
+          });
+      })
+      .catch(err => {
+        console.error("Auth error:", err);
+        router.replace('/login');
+      })
       .finally(() => setLoading(false));
   }, [router]);
 

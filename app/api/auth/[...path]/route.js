@@ -1,6 +1,6 @@
 // app/api/auth/[...path]/route.js
 
-const BACKEND = "https://web-production-b426.up.railway.app/api/v1/auth";
+const BACKEND = "https://nextauth-my1u.onrender.com/api/v1/auth";
 
 async function handler(request, { params }) {
     const path = params.path.join("/");

@@ -29,7 +29,7 @@ const FREE_LIMIT = 2;
 // ─────────────────────────────────────────────────────────────────────────────
 
 function makeSlots(overrides = []) {
-  return Array.from({ length: 23 }, (_, i) => {
+  return Array.from({ length: 26 }, (_, i) => {
     const slot = overrides[i] || {};
     return {
       order: i + 1,
@@ -74,24 +74,44 @@ const SUBJECTS_DATA = {
         description: 'Air Density in Aviation Principles and Effects',
         iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/lTPUZum-Lrc?si=_zO5Nfon9lW05ptw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
       },
+
       {
-        title: 'Met: Atmospheric Pressure Part-2',
-        chapter: 'Chapter 3 Part-2',
-        description: 'Advanced pressure systems and altimetry.',
-        iframeCode: '',
-      },
-      {
-        title: 'Met: Density',
+        title: 'Met: Air Density in Aviation Principles and Effects',
         chapter: 'Chapter 4',
-        description: 'Air density, density altitude, and aircraft performance.',
-        iframeCode: '',
+        description: 'Air Density in Aviation Principles and Effects.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/lTPUZum-Lrc?si=x6J5KA2nlHUiCTV9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
       },
       {
-        title: 'Met: Humidity Part-1',
+        title: 'Met: Principles and Measurements of Atmospheric Humidity',
         chapter: 'Chapter 5',
-        description: 'Humidity, dew point, and moisture in the atmosphere.',
-        iframeCode: '',
+        description: 'Principles and Measurements of Atmospheric Humidity.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/iMBvaoH9OU0?si=4xyZV35HhzBn8TL8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
       },
+      {
+        title: 'Met: Meteorological Principles of Wind and Atmospheric Motion',
+        chapter: 'Chapter 6',
+        description: 'Meteorological Principles of Wind and Atmospheric Motion',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/08bD_5amrdI?si=Yz5o4LpvxgJrixiV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Aeronautical Meteorology Visibility and Fog Analysis',
+        chapter: 'Chapter 7',
+        description: 'Aeronautical Meteorology Visibility and Fog Analysis',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/JkJ6BAur4VA?si=QCownWE0CuMOOr4Z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Vertical Motion and Clouds',
+        chapter: 'Chapter 8',
+        description: 'Vertical Motion and Clouds.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/XD56qfNTFjQ?si=TIRbbaAKIPB5JRTI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Stability and Instability of the Atmosphere',
+        chapter: 'Chapter 9',
+        description: 'Stability and Instability of the Atmosphere',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/0blqi_2TyMQ?si=YTYrQ0nj6W7hymzH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+
       {
         title: 'Met: Atmospheric Optical Phenomena and Electricity',
         chapter: 'Chapter 10',
@@ -122,6 +142,78 @@ const SUBJECTS_DATA = {
         chapter: 'Chapter 14',
         description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
         iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 15',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/VWK1eyCBwK8?si=K01pKbHevuzT2iN0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 16',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Kh8Aeq4Oq0I?si=UoMrhW8lHpT8GGnF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 17',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/wvw6B4UBv1c?si=2S7oOj0TMhFXiXju" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met:  Climatology of India',
+        chapter: 'Chapter 18',
+        description: 'Climatology of India.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/JK7yJnBFANs?si=H3I0EiHZwUl3AR5h" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met:  General Circulation of the Atmosphere',
+        chapter: 'Chapter 19',
+        description: ' General Circulation of the Atmosphere.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/8hbpbHX7KiU?si=LpoxGAwEMrk97tVO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 20',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 21',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 22',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 23',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Air Masses, Fronts, and Western Disturbances',
+        chapter: 'Chapter 24',
+        description: 'Air masses, fronts, and western disturbances in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Radar Reports, SIGMET Messages, and Satellite Bulletins',
+        chapter: 'Chapter 25',
+        description: 'Radar reports, SIGMET messages, and satellite bulletins in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/I_seSfqO59w?si=kKrKyA1h6Cj4sTvw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+      },
+      {
+        title: 'Met: Aviation Meteorological Documentation and Briefing Procedures',
+        chapter: 'Chapter 26',
+        description: 'Documentation and briefing procedures in aviation meteorology.',
+        iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/a3C39KMMsqE?si=r8_jD_XIcaub8VxO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
       },
       // Lectures 8–23 are empty slots — fill iframeCode when ready
     ]),

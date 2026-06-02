@@ -1113,19 +1113,21 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
           >Upgrade Now →</button>
         </div>
 
-        <div style={{ padding: '10px 14px', borderTop: '1px solid #1E3A5F' }}>
-          <button onClick={onLogout} style={{
-            width: '100%', background: hexAlpha(C.red, 0.1),
-            border: `1px solid ${hexAlpha(C.red, 0.3)}`, borderRadius: 10,
-            padding: '8px 0', color: C.red, fontSize: 12, fontWeight: 700, cursor: 'pointer',
-            WebkitAppearance: 'none', appearance: 'none',
-            WebkitTransition: 'background .15s',
-            transition: 'background .15s',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = hexAlpha(C.red, 0.18); }}
-            onMouseLeave={e => { e.currentTarget.style.background = hexAlpha(C.red, 0.1); }}
-          >🚪 Logout</button>
-        </div>
+        {user && (
+          <div style={{ padding: '10px 14px', borderTop: '1px solid #1E3A5F' }}>
+            <button onClick={onLogout} style={{
+              width: '100%', background: hexAlpha(C.red, 0.1),
+              border: `1px solid ${hexAlpha(C.red, 0.3)}`, borderRadius: 10,
+              padding: '8px 0', color: C.red, fontSize: 12, fontWeight: 700, cursor: 'pointer',
+              WebkitAppearance: 'none', appearance: 'none',
+              WebkitTransition: 'background .15s',
+              transition: 'background .15s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = hexAlpha(C.red, 0.18); }}
+              onMouseLeave={e => { e.currentTarget.style.background = hexAlpha(C.red, 0.1); }}
+            >🚪 Logout</button>
+          </div>
+        )}
       </div>
     </>
   );
@@ -1169,7 +1171,7 @@ function BottomNav({ active, onChange }) {
 }
 
 // ─── TOP BAR ──────────────────────────────────────────────────────────────────
-function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
+function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, onLogin, isMobile }) {
   const base = {
     home: 'Dashboard', tests: 'Tests', progress: 'My Progress',
     classes: 'Live Classes', lectures: 'Lectures',
@@ -1229,7 +1231,23 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, isMobile }) {
         onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.15) rotate(-5deg)'; }}
         onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1) rotate(0deg)'; }}
       >🏆</button>
-      {user && (
+      {!user ? (
+        <button onClick={onLogin} style={{
+          display: 'flex', alignItems: 'center', gap: 6, padding: '0 12px',
+          height: 36, borderRadius: 10, border: `1px solid ${C.border}`,
+          background: '#fff', color: C.text, cursor: 'pointer',
+          fontSize: 13, fontWeight: 700,
+          WebkitAppearance: 'none', appearance: 'none', flexShrink: 0,
+          WebkitTransition: 'transform .2s',
+          transition: 'transform .2s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0px)'; }}
+        >
+          <span>🔐</span>
+          <span>Login</span>
+        </button>
+      ) : (
         <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', flexShrink: 0 }}>
           <div style={{
             width: 32, height: 32, borderRadius: 9,
@@ -2309,15 +2327,15 @@ export default function DashboardPage() {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (!token) {
-      router.replace('/login');
-      return;  // ← this must stop execution
+      setLoading(false);
+      return;
     }
 
-    fetch("/api/auth/me", {
+    fetch("/api/v1/auth/[...path]/route.js", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        if (!res.ok) { router.replace('/login'); return null; }
+        if (!res.ok) { return null; }
         return res.json();
       })
       .then(userData => {
@@ -2334,12 +2352,11 @@ export default function DashboardPage() {
       })
       .catch(err => {
         console.error("Auth error:", err);
-        router.replace('/login');
       })
       .finally(() => setLoading(false));
-  }, [router]);
+  }, []);
 
-  function handleLogout() { clearUser(); router.replace('/login'); }
+  function handleLogout() { clearUser(); setUserState(null); }
 
   function handleNav(newPage, chapterId) {
     if (newPage === 'results') { router.push('/results'); return; }
@@ -2409,8 +2426,6 @@ export default function DashboardPage() {
     }
   }
 
-  if (!user) return null;
-
   return (
     <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif", background: C.bg, minHeight: '100vh' }}>
       <style>{`
@@ -2474,6 +2489,7 @@ export default function DashboardPage() {
         user={user} page={page} subPage={subPage}
         onLeaderboard={() => router.push('/leaderboard')}
         onMenuOpen={() => setSidebarOpen(true)}
+        onLogin={() => router.push('/login')}
         isMobile={!isDesktop}
       />
 

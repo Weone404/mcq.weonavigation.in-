@@ -250,8 +250,8 @@ function computeAchievements(stats, results) {
 export default function StudentProfilePage({ user: propUser, stats: propStats, allResults: propResults, onBack, onNavigate, isMobile }) {
     // ── Demo data fallback (remove when wiring to real data)
     const user = propUser || {
-        name: 'Arjun Sharma', email: 'arjun@example.com',
-        phone: '+91 98765 43210', location: 'Delhi, India',
+        name: 'Student', email: '',
+        phone: '+91 ', location: 'Delhi, India',
         target: 'CPL', bio: 'Aspiring commercial pilot. Preparing for DGCA CPL exams. Passionate about aviation and meteorology.',
         joinedAt: '2024-08-15T00:00:00.000Z',
     };

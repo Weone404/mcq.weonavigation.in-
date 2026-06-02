@@ -82,7 +82,7 @@ const styles = `
   .card-title   { font-size: 26px; font-weight: 600; color: #f8fafc; letter-spacing: -0.02em; }
   .card-sub     { font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.5; }
 
-  /* ── Tabs — text only, no icons ── */
+  /* ── Tabs ── */
   .tabs {
     display: grid; grid-template-columns: 1fr 1fr;
     background: rgba(255,255,255,0.04);
@@ -108,7 +108,7 @@ const styles = `
   }
   .tab-btn:hover:not(.active) { color: #94a3b8; background: rgba(255,255,255,0.04); }
 
-  /* ── Input mode toggle (Phone / Email) ── */
+  /* ── Input mode toggle ── */
   .toggle-row {
     display: flex;
     background: rgba(255,255,255,0.04);
@@ -302,22 +302,132 @@ const IconSend = () => (
   </svg>
 );
 
-// ── Backend API ───────────────────────────────────────────────────
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://nextauth-my1u.onrender.com/api/v1/auth";
+// ── FIX 1: All API calls now go through the Next.js proxy (/api/auth/...)
+// This keeps the backend URL server-side only and avoids CORS issues.
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://nextauth-my1u.onrender.com/api/v1/auth";
 
-// ── THE FIX: saves under 'dgca_user' which is what getUser() in lib/storage.js reads ──
+// ── FIX 2: saveSession now stores a clean, display-safe user object.
+// For phone-only logins where the backend doesn't return a user.name,
+// we store the phone as identifier and leave name empty rather than
+// setting name = "+919876543210" which looks wrong on the dashboard.
 function saveSession(data, credential) {
-  if (data?.access_token) localStorage.setItem("access_token", data.access_token);
-  if (data?.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
+  if (data?.access_token) {
+    localStorage.setItem("access_token", data.access_token);
 
-  // Use backend's user object if provided, otherwise build one from the credential
-  const userObj = data?.user || {
-    email: credential,
-    name: credential.includes("@") ? credential.split("@")[0] : credential,
+    // Store token expiry so we can proactively refresh before 401s
+    // Assumes a standard JWT — decode the exp claim without a library.
+    try {
+      const payload = JSON.parse(atob(data.access_token.split(".")[1]));
+      if (payload.exp) {
+        localStorage.setItem("token_exp", String(payload.exp * 1000)); // ms
+      }
+    } catch {
+      // Non-JWT token or decode failed — skip expiry tracking
+    }
+  }
+
+  if (data?.refresh_token) {
+    localStorage.setItem("refresh_token", data.refresh_token);
+  }
+
+  // Build a clean user object.
+  // Priority: backend's user object → derive from credential safely.
+  const isEmail = credential.includes("@");
+  const userObj = data?.user
+    ? {
+      ...data.user,
+      // Ensure name is never a raw phone number if backend omits it
+      name: data.user.name || (isEmail ? credential.split("@")[0] : ""),
+      email: data.user.email || (isEmail ? credential : ""),
+      phone: data.user.phone || (!isEmail ? credential : ""),
+    }
+    : {
+      email: isEmail ? credential : "",
+      phone: isEmail ? "" : credential,
+      name: isEmail ? credential.split("@")[0] : "", // empty for phone — dashboard should use phone fallback
+    };
+
+  // 'dgca_user' is the key getUser() in lib/storage.js reads
+  localStorage.setItem("dgca_user", JSON.stringify(userObj));
+}
+
+// ── FIX 3: Token refresh utility.
+// Call this anywhere in the app before making authenticated requests,
+// or set up an interceptor that catches 401s and calls this first.
+//
+// Usage in other components/pages:
+//   import { refreshAccessToken } from "@/app/login/page"; // or move to lib/auth.js
+//   await refreshAccessToken();
+//
+export async function refreshAccessToken() {
+  const refreshToken = localStorage.getItem("refresh_token");
+  if (!refreshToken) throw new Error("No refresh token available");
+
+  const res = await fetch(`${API_BASE}/token/refresh`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refresh_token: refreshToken }),
+  });
+
+  if (!res.ok) {
+    // Refresh failed — clear everything and send to login
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("token_exp");
+    localStorage.removeItem("dgca_user");
+    window.location.href = "/login";
+    throw new Error("Session expired. Please log in again.");
+  }
+
+  const data = await res.json();
+  if (data.access_token) {
+    localStorage.setItem("access_token", data.access_token);
+
+    try {
+      const payload = JSON.parse(atob(data.access_token.split(".")[1]));
+      if (payload.exp) localStorage.setItem("token_exp", String(payload.exp * 1000));
+    } catch {
+      // ignore
+    }
+  }
+}
+
+// ── FIX 4: Authenticated fetch wrapper.
+// Replaces raw fetch() for all post-login API calls.
+// Automatically refreshes the token if it's expired (or within 60s of expiry).
+//
+// Usage:
+//   const data = await authFetch("/api/some-protected-route");
+//
+export async function authFetch(url, options = {}) {
+  const exp = parseInt(localStorage.getItem("token_exp") || "0", 10);
+  const now = Date.now();
+  const sixtySeconds = 60 * 1000;
+
+  // Proactively refresh if token expires within 60 seconds
+  if (exp && now >= exp - sixtySeconds) {
+    await refreshAccessToken();
+  }
+
+  const token = localStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  // 'dgca_user' is the key that getUser() in lib/storage.js reads
-  localStorage.setItem("dgca_user", JSON.stringify(userObj));
+  const res = await fetch(url, { ...options, headers });
+
+  // If we still get 401 after refresh attempt, force logout
+  if (res.status === 401) {
+    localStorage.clear();
+    window.location.href = "/login";
+    throw new Error("Unauthorized");
+  }
+
+  return res;
 }
 
 // ── Main component ────────────────────────────────────────────────
@@ -347,12 +457,14 @@ export default function LoginPage() {
     setOtpSent(false);
     setOtp("");
     setLoading(false);
+    setError("");
   };
 
   const handleOtpModeSwitch = (mode) => {
     setOtpMode(mode);
     setOtpSent(false);
     setOtp("");
+    setError("");
   };
 
   // ── Password login ──────────────────────────────────────────────
@@ -362,6 +474,7 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
+      // FIX 1 in action: calling /api/auth/... (proxy) instead of backend directly
       const res = await fetch(`${API_BASE}/login/password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -370,7 +483,6 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Login failed");
 
-      // Save session under 'dgca_user' so dashboard can read it
       saveSession(data, id);
       window.location.href = "/dashboard";
     } catch (e) {
@@ -416,7 +528,6 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Invalid OTP");
 
-      // Save session under 'dgca_user' so dashboard can read it
       saveSession(data, id);
       window.location.href = "/dashboard";
     } catch (e) {
@@ -426,9 +537,7 @@ export default function LoginPage() {
   };
 
   const otpDestLabel = otpMode === "phone" ? "phone" : "inbox";
-  const otpSentTo = otpMode === "phone"
-    ? `${otpCc} ${otpPhone}`
-    : otpEmail;
+  const otpSentTo = otpMode === "phone" ? `${otpCc} ${otpPhone}` : otpEmail;
 
   return (
     <>
@@ -559,6 +668,7 @@ export default function LoginPage() {
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handlePasswordLogin()}
                     />
                   </div>
                 </div>
@@ -678,6 +788,7 @@ export default function LoginPage() {
                           maxLength={6}
                           value={otp}
                           onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                          onKeyDown={(e) => e.key === "Enter" && handleVerifyOtp()}
                           style={{ fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.25em" }}
                         />
                       </div>

@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { chapters, questions as allQuestions } from '../../data/questions';
 
-const TEACHER_PASSWORD = 'dgca@teacher2026';
+const TEACHER_PASSWORD = process.env.NEXT_PUBLIC_TEACHER_PASSWORD || 'dgca@teacher2026';
 const TEACHER_AUTH_KEY = 'dgca_teacher_authed';
 const LIVE_POLL_MS = 15_000;
 
@@ -1429,7 +1429,7 @@ export default function TeacherPage() {
                 {activeTab === 'students' && (
                     <div className="tab-content tab-content-in">
                         <header className="teacher-hero hero-slide-in">
-                            <div><h1>All Students &amp; Test Performance</h1><p>Live data from MongoDB for every student, including performance scores, results, and joined date.</p></div>
+                            <div><h1>All Students &amp; Test Performance</h1><p>Live data from Supabase for every student, including performance scores, results, and joined date..</p></div>
                             <div className="teacher-summary">
                                 <div className="stat-card-pop" style={{ animationDelay: '0ms' }}><span><AnimatedCounter value={summary.totalStudents} /></span><small>Students</small></div>
                                 <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span><AnimatedCounter value={summary.totalTests} /></span><small>Total Tests</small></div>

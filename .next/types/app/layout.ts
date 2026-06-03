@@ -1,4 +1,4 @@
-// File: E:\dgca-mcq-platform\dgca-mcq\app\layout.jsx
+// File: D:\mcq\mcq.weonavigation.in-\app\layout.jsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

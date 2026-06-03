@@ -1,40 +1,33 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '../../../../../lib/mongoose';
-import mongoose from 'mongoose';
-
-function getCollection() {
-    return mongoose.connection.db.collection('attendance');
-}
+import pool from '../../../../../lib/db';
 
 export async function POST(request, { params }) {
     try {
-        await connectDB();
         const body = await request.json();
-        const batch = decodeURIComponent(params.batch); // ← from URL path
+        const batch = decodeURIComponent(params.batch);
         const { date, records } = body;
 
         if (!date || !batch || !Array.isArray(records)) {
-            return NextResponse.json({ error: 'Missing required fields: date, batch, records' }, { status: 400 });
+            return NextResponse.json(
+                { error: 'Missing required fields: date, batch, records' },
+                { status: 400 }
+            );
         }
 
-        const ops = records.map(r => ({
-            updateOne: {
-                filter: { date, batch, email: r.email },
-                update: {
-                    $set: {
-                        date, batch,
-                        email: r.email,
-                        name: r.name,
-                        status: r.status,
-                        note: r.note || '',
-                        updatedAt: new Date().toISOString(),
-                    },
-                },
-                upsert: true,
-            },
-        }));
+        // Same upsert logic as MongoDB bulkWrite — INSERT or UPDATE if exists
+        for (const r of records) {
+            await pool.query(
+                `INSERT INTO attendance (student_email, student_name, date, batch, status, note)
+                 VALUES ($1, $2, $3, $4, $5, $6)
+                 ON CONFLICT (student_email, date, batch)
+                 DO UPDATE SET
+                   status     = EXCLUDED.status,
+                   note       = EXCLUDED.note,
+                   student_name = EXCLUDED.student_name`,
+                [r.email, r.name, date, batch, r.status, r.note || '']
+            );
+        }
 
-        await getCollection().bulkWrite(ops);
         return NextResponse.json({ success: true, saved: records.length });
     } catch (err) {
         console.error('[POST /api/teacher/attendance]', err);
@@ -44,17 +37,31 @@ export async function POST(request, { params }) {
 
 export async function GET(request, { params }) {
     try {
-        await connectDB();
-        const batch = decodeURIComponent(params.batch); // ← from URL path
+        const batch = decodeURIComponent(params.batch);
         const { searchParams } = new URL(request.url);
-        const date = searchParams.get('date'); // ← date still from query param
+        const date = searchParams.get('date');
 
         if (!date || !batch) {
-            return NextResponse.json({ error: 'Missing date or batch' }, { status: 400 });
+            return NextResponse.json(
+                { error: 'Missing date or batch' },
+                { status: 400 }
+            );
         }
 
-        const records = await getCollection().find({ date, batch }).toArray();
-        return NextResponse.json({ records });
+        const { rows } = await pool.query(
+            `SELECT 
+               student_email AS email,
+               student_name  AS name,
+               status,
+               note,
+               date,
+               batch
+             FROM attendance
+             WHERE date = $1 AND batch = $2`,
+            [date, batch]
+        );
+
+        return NextResponse.json({ records: rows });
     } catch (err) {
         console.error('[GET /api/teacher/attendance]', err);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

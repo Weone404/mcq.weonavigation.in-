@@ -1,18 +1,20 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '../../../lib/mongoose';
-import { ResultModel } from '../../../lib/models';
+import pool from '../../../lib/db';
 
 export const dynamic = 'force-dynamic';
 
 // GET /api/stats?email=... — compute stats for a user
 export async function GET(request) {
   try {
-    await connectDB();
     const { searchParams } = request.nextUrl;
     const email = searchParams.get('email');
     if (!email) return NextResponse.json({ error: 'email is required.' }, { status: 400 });
 
-    const results = await ResultModel.find({ userEmail: email.toLowerCase().trim() }).lean();
+    const { rows: results } = await pool.query(
+      `SELECT score, total FROM test_results
+       WHERE LOWER(student_email) = LOWER($1)`,
+      [email.trim()]
+    );
 
     if (results.length === 0) {
       return NextResponse.json({ testsAttempted: 0, avgScore: 0, bestScore: 0, totalQuestions: 0 });

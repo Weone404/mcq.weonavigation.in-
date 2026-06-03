@@ -1,10 +1,8 @@
-import { NextResponse } from 'next/server';
-import { connectDB } from '../../../../../lib/mongoose';
-import mongoose from 'mongoose';
+﻿import { NextResponse } from 'next/server';
+import pool from '../../../../lib/db';
 
 export async function GET(request) {
     try {
-        await connectDB();
         const { searchParams } = new URL(request.url);
         const email = searchParams.get('email');
 
@@ -12,8 +10,7 @@ export async function GET(request) {
             return NextResponse.json({ error: 'Missing email query param' }, { status: 400 });
         }
 
-        const collection = mongoose.connection.db.collection('attendance');
-
+        const emailNormalized = email.toLowerCase().trim();
         const now = new Date();
         const year = now.getFullYear();
         const mon = String(now.getMonth() + 1).padStart(2, '0');
@@ -21,9 +18,14 @@ export async function GET(request) {
         const lastDay = new Date(year, now.getMonth() + 1, 0).getDate();
         const dateEnd = `${year}-${mon}-${String(lastDay).padStart(2, '0')}`;
 
-        const monthRecords = await collection
-            .find({ email, date: { $gte: dateStart, $lte: dateEnd } })
-            .toArray();
+        const { rows: monthRecords } = await pool.query(
+            `SELECT date, status, batch, note FROM attendance
+             WHERE LOWER(email) = LOWER($1)
+               AND date >= $2
+               AND date <= $3
+             ORDER BY date ASC`,
+            [emailNormalized, dateStart, dateEnd]
+        );
 
         const days = {};
         let present = 0, absent = 0, late = 0;
@@ -37,11 +39,13 @@ export async function GET(request) {
         const total = present + absent + late;
         const monthPct = total > 0 ? Math.round((present / total) * 100) : 0;
 
-        const recentDocs = await collection
-            .find({ email })
-            .sort({ date: -1 })
-            .limit(10)
-            .toArray();
+        const { rows: recentDocs } = await pool.query(
+            `SELECT date, batch, status, note FROM attendance
+             WHERE LOWER(email) = LOWER($1)
+             ORDER BY date DESC
+             LIMIT 10`,
+            [emailNormalized]
+        );
 
         const recent = recentDocs.map(r => ({
             date: r.date,

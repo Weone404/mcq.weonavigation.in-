@@ -1,50 +1,64 @@
-import mongoose from 'mongoose';
+import pool from '../lib/db';
 
-const DeductionSchema = new mongoose.Schema({
-    reason: String,
-    points: Number,
-}, { _id: false });
+// Lightweight replacement for the old Mongoose model using Postgres.
+// Provides `create(obj)` and `find(query)` to match previous usage.
+export default {
+    async create(obj) {
+        const {
+            userId,
+            mode,
+            scenarioId,
+            callsign,
+            departure,
+            destination,
+            phases,
+            totalScore,
+            maxTotalScore,
+            percentage,
+            passed,
+            examinerRemarks,
+            duration,
+        } = obj;
 
-const PhaseResultSchema = new mongoose.Schema({
-    phaseId: String,
-    phaseLabel: String,
-    pilotTranscript: { type: String, default: '' },
-    expectedReadback: String,
-    score: { type: Number, default: 0 },
-    maxScore: Number,
-    deductions: [DeductionSchema],
-    missingKeywords: [String],
-    criticalMistake: { type: Boolean, default: false },
-    timeTaken: { type: Number, default: 0 },
-    passed: { type: Boolean, default: false },
-}, { _id: false });
+        const { rows } = await pool.query(
+            `INSERT INTO rtr_attempts
+                (user_id, mode, scenario_id, callsign, departure, destination, phases, total_score, max_total_score, percentage, passed, examiner_remarks, duration, created_at)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,NOW())
+             RETURNING id`,
+            [
+                userId,
+                mode,
+                scenarioId,
+                callsign,
+                departure,
+                destination,
+                JSON.stringify(phases || []),
+                totalScore || 0,
+                maxTotalScore || 0,
+                percentage || 0,
+                passed || false,
+                examinerRemarks || '',
+                duration || 0,
+            ]
+        );
 
-const RtrAttemptSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+        return { _id: rows[0].id.toString() };
     },
-    mode: {
-        type: String,
-        enum: ['practice', 'mock'],
-        default: 'practice',
-    },
-    scenarioId: { type: String, required: true },
-    callsign: String,
-    departure: String,
-    destination: String,
-    phases: [PhaseResultSchema],
-    totalScore: { type: Number, default: 0 },
-    maxTotalScore: { type: Number, default: 100 },
-    percentage: { type: Number, default: 0 },
-    passed: { type: Boolean, default: false },
-    duration: { type: Number, default: 0 },
-    examinerRemarks: { type: String, default: '' },
-}, { timestamps: true });
 
-RtrAttemptSchema.index({ userId: 1, createdAt: -1 });
-RtrAttemptSchema.index({ userId: 1, mode: 1 });
-
-export default mongoose.models.RtrAttempt ||
-    mongoose.model('RtrAttempt', RtrAttemptSchema);
+    async find(query) {
+        const userId = query.userId;
+        const { rows } = await pool.query(
+            `SELECT id, user_id, mode, scenario_id, callsign, departure, destination, phases, total_score, max_total_score, percentage, passed, examiner_remarks, duration, created_at
+             FROM rtr_attempts
+             WHERE user_id = $1
+             ORDER BY created_at DESC
+             LIMIT 10`,
+            [userId]
+        );
+        return rows.map(r => ({
+            ...r,
+            _id: r.id.toString(),
+            phases: r.phases,
+        }));
+    }
+};

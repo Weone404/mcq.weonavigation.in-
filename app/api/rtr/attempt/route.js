@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '../../../../lib/mongoose';
 import RtrAttempt from '../../../../models/RtrAttempt';
 import { scoreSession } from '../../../../lib/rtr/scorer';
 import { getScenarioById } from '../../../../lib/rtr/scenarios';

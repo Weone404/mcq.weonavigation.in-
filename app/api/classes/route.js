@@ -1,33 +1,28 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '../../../lib/mongoose';
-import mongoose from 'mongoose';
-
-// ── Mongoose Schema for Live Classes ─────────────────────────────────────────
-const classSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String, default: '' },
-    startDateTime: { type: Date, required: true },
-    endDateTime: { type: Date, required: true },
-    meetLink: { type: String, required: true },
-    batch: { type: String, default: 'All Batches' },
-    createdAt: { type: Date, default: Date.now },
-});
-
-// Avoid model re-registration during hot reload in dev
-const LiveClass = mongoose.models.LiveClass || mongoose.model('LiveClass', classSchema);
+import pool from '../../../lib/db';
 
 // ── GET: students fetch all upcoming classes ──────────────────────────────────
 export async function GET() {
     try {
-        await connectDB();
+        const now = new Date().toISOString();
 
-        const now = new Date();
-        const classes = await LiveClass
-            .find({ endDateTime: { $gte: now } })
-            .sort({ startDateTime: 1 })
-            .lean();
+        const { rows } = await pool.query(
+            `SELECT
+                id,
+                title,
+                description,
+                start_date_time  AS "startDateTime",
+                end_date_time    AS "endDateTime",
+                meet_link        AS "meetLink",
+                batch,
+                created_at       AS "createdAt"
+             FROM live_classes
+             WHERE end_date_time >= $1
+             ORDER BY start_date_time ASC`,
+            [now]
+        );
 
-        return NextResponse.json({ success: true, events: classes });
+        return NextResponse.json({ success: true, events: rows });
     } catch (err) {
         console.error('GET /api/classes error:', err.message);
         return NextResponse.json({ success: false, events: [], error: err.message });
@@ -37,8 +32,6 @@ export async function GET() {
 // ── POST: teacher creates a new class ────────────────────────────────────────
 export async function POST(request) {
     try {
-        await connectDB();
-
         const body = await request.json();
         const { title, description, date, time, duration, meetLink, batch } = body;
 
@@ -70,15 +63,29 @@ export async function POST(request) {
         const durationMins = parseInt(duration) || 60;
         const endDateTime = new Date(startDateTime.getTime() + durationMins * 60000);
 
-        const newClass = await LiveClass.create({
-            title: title.trim(),
-            description: (description || '').trim(),
-            startDateTime,
-            endDateTime,
-            meetLink: meetLink.trim(),
-            batch: batch || 'All Batches',
-        });
+        const { rows } = await pool.query(
+            `INSERT INTO live_classes (title, description, start_date_time, end_date_time, meet_link, batch)
+             VALUES ($1, $2, $3, $4, $5, $6)
+             RETURNING
+                id,
+                title,
+                description,
+                start_date_time  AS "startDateTime",
+                end_date_time    AS "endDateTime",
+                meet_link        AS "meetLink",
+                batch,
+                created_at       AS "createdAt"`,
+            [
+                title.trim(),
+                (description || '').trim(),
+                startDateTime.toISOString(),
+                endDateTime.toISOString(),
+                meetLink.trim(),
+                batch || 'All Batches',
+            ]
+        );
 
+        const newClass = rows[0];
         console.log('Class scheduled:', newClass.title, 'at', newClass.startDateTime);
 
         return NextResponse.json({ success: true, event: newClass });
@@ -91,10 +98,26 @@ export async function POST(request) {
 // ── DELETE: teacher removes a class ──────────────────────────────────────────
 export async function DELETE(request) {
     try {
-        await connectDB();
-
         const { id } = await request.json();
-        await LiveClass.findByIdAndDelete(id);
+
+        if (!id) {
+            return NextResponse.json(
+                { success: false, error: 'Missing class id' },
+                { status: 400 }
+            );
+        }
+
+        const { rowCount } = await pool.query(
+            `DELETE FROM live_classes WHERE id = $1`,
+            [id]
+        );
+
+        if (rowCount === 0) {
+            return NextResponse.json(
+                { success: false, error: 'Class not found' },
+                { status: 404 }
+            );
+        }
 
         return NextResponse.json({ success: true });
     } catch (err) {

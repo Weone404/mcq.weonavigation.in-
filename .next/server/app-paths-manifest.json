@@ -1,3 +1,4 @@
 {
-  "/teacher/page": "app/teacher/page.js"
+  "/dashboard/page": "app/dashboard/page.js",
+  "/api/classes/route": "app/api/classes/route.js"
 }

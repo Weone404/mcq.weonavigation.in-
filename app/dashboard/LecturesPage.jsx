@@ -68,12 +68,8 @@ const SUBJECTS_DATA = {
       { title: 'Met: Climatology of India', chapter: 'Chapter 18', description: 'Climatology of India.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/JK7yJnBFANs?si=H3I0EiHZwUl3AR5h" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Met: General Circulation of the Atmosphere', chapter: 'Chapter 19', description: 'General Circulation of the Atmosphere.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/8hbpbHX7KiU?si=LpoxGAwEMrk97tVO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Met: Air Masses, Fronts, and Western Disturbances', chapter: 'Chapter 20', description: 'Air masses, fronts, and western disturbances in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Air Masses, Fronts, and Western Disturbances', chapter: 'Chapter 21', description: 'Air masses, fronts, and western disturbances in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Air Masses, Fronts, and Western Disturbances', chapter: 'Chapter 22', description: 'Air masses, fronts, and western disturbances in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Air Masses, Fronts, and Western Disturbances', chapter: 'Chapter 23', description: 'Air masses, fronts, and western disturbances in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Air Masses, Fronts, and Western Disturbances', chapter: 'Chapter 24', description: 'Air masses, fronts, and western disturbances in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/D29mYN0vxLw?si=S0Vhi7BK0t8FnWWQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Radar Reports, SIGMET Messages, and Satellite Bulletins', chapter: 'Chapter 25', description: 'Radar reports, SIGMET messages, and satellite bulletins in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/I_seSfqO59w?si=kKrKyA1h6Cj4sTvw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Aviation Meteorological Documentation and Briefing Procedures', chapter: 'Chapter 26', description: 'Documentation and briefing procedures in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/a3C39KMMsqE?si=r8_jD_XIcaub8VxO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: Radar Reports, SIGMET Messages, and Satellite Bulletins', chapter: 'Chapter 21', description: 'Radar reports, SIGMET messages, and satellite bulletins in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/I_seSfqO59w?si=kKrKyA1h6Cj4sTvw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: Aviation Meteorological Documentation and Briefing Procedures', chapter: 'Chapter 22', description: 'Documentation and briefing procedures in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/a3C39KMMsqE?si=r8_jD_XIcaub8VxO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
     ]),
   },
   'Air Regulations': {
@@ -125,10 +121,7 @@ const SUBJECTS_DATA = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SHORT VIDEOS CONFIG — Subject-folder structure (same as SUBJECTS_DATA)
-// Each subject has an icon, subtitle, tags, color, and videos[] array.
-// Use makeSlots() with a custom count to define how many slots per subject.
-// Paste YouTube <iframe> embed codes into iframeCode fields.
+// SHORT VIDEOS CONFIG — free for everyone
 // ─────────────────────────────────────────────────────────────────────────────
 const SHORT_VIDEOS_DATA = {
   Meteorology: {
@@ -156,9 +149,9 @@ const SHORT_VIDEOS_DATA = {
       { title: 'Met: Air Masses, Fronts, and Western Disturbances', chapter: 'Chapter 17', description: 'Air masses, fronts, and western disturbances in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/wvw6B4UBv1c?si=2S7oOj0TMhFXiXju" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Met: Climatology of India', chapter: 'Chapter 18', description: 'Climatology of India.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/JK7yJnBFANs?si=H3I0EiHZwUl3AR5h" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Met: General Circulation of the Atmosphere', chapter: 'Chapter 19', description: 'General Circulation of the Atmosphere.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/8hbpbHX7KiU?si=LpoxGAwEMrk97tVO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Radar Reports, SIGMET Messages, and Satellite Bulletins', chapter: 'Chapter 25', description: 'Radar reports, SIGMET messages, and satellite bulletins in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/I_seSfqO59w?si=kKrKyA1h6Cj4sTvw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Met: Aviation Meteorological Documentation and Briefing Procedures', chapter: 'Chapter 26', description: 'Documentation and briefing procedures in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/a3C39KMMsqE?si=r8_jD_XIcaub8VxO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-    ], 26),
+      { title: 'Met: Radar Reports, SIGMET Messages, and Satellite Bulletins', chapter: 'Chapter 20', description: 'Radar reports, SIGMET messages, and satellite bulletins in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/I_seSfqO59w?si=kKrKyA1h6Cj4sTvw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: Aviation Meteorological Documentation and Briefing Procedures', chapter: 'Chapter 21', description: 'Documentation and briefing procedures in aviation meteorology.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/a3C39KMMsqE?si=r8_jD_XIcaub8VxO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+    ], 21),
   },
   'Air Regulations': {
     icon: '📋',
@@ -191,8 +184,7 @@ const SHORT_VIDEOS_DATA = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PERSONALYSIS LECTURES CONFIG — Subject-folder structure (same as SUBJECTS_DATA)
-// Each subject has an icon, subtitle, tags, color, and videos[] array.
+// PERSONALYSIS CONFIG — premium/locked
 // ─────────────────────────────────────────────────────────────────────────────
 const PERSONALYSIS_DATA = {
   Meteorology: {
@@ -200,11 +192,7 @@ const PERSONALYSIS_DATA = {
     subtitle: 'Met paper analysis & exam insights',
     examTags: ['ATPL', 'CPL'],
     color: '#0EA5E9',
-    videos: makeSlots([
-      // ── ADD YOUR PERSONALYSIS ENTRIES HERE ──
-      // Example:
-      // { title: 'Met Paper Analysis 2023', chapter: 'Analysis 1', description: 'Deep-dive into 2023 Met paper patterns.', iframeCode: '<iframe ...></iframe>', duration: '42:00', uploadedAt: '2024-06-01T00:00:00Z' },
-    ], 10),
+    videos: makeSlots([], 10),
   },
   'Air Regulations': {
     icon: '📋',
@@ -452,8 +440,7 @@ function PaywallModal({ user, totalLectures, onSuccess, onClose }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// GENERIC FOLDER CARD — works for Lectures, Short Videos, AND Personalysis
-// Pass `sectionLabel` e.g. "Short Videos" or "Lectures" for the open button text
+// SUBJECT FOLDER CARD
 // ─────────────────────────────────────────────────────────────────────────────
 function SubjectFolderCard({ subjectKey, cfg, subscribed, globalOffset, onClick, sectionLabel, videoKey }) {
   const items = cfg[videoKey] || cfg.lectures || [];
@@ -505,7 +492,7 @@ function SubjectFolderCard({ subjectKey, cfg, subscribed, globalOffset, onClick,
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LECTURE CARD (inside Full Lectures subject — keeps paywall logic)
+// LECTURE CARD (Full Lectures — with paywall logic)
 // ─────────────────────────────────────────────────────────────────────────────
 function LectureCard({ lecture, slotNumber, globalIndex, subjectColor, subscribed, onPlay, onLock }) {
   const isLocked = !subscribed && globalIndex >= FREE_LIMIT;
@@ -563,36 +550,77 @@ function LectureCard({ lecture, slotNumber, globalIndex, subjectColor, subscribe
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SIMPLE VIDEO CARD — for Short Videos and Personalysis (no paywall)
+// SIMPLE VIDEO CARD
+// Now accepts isLocked + onLock props for Personalysis paywall.
+// When isLocked=false (default), behaves exactly as before (free).
 // ─────────────────────────────────────────────────────────────────────────────
-function SimpleVideoCard({ video, slotNumber, accentColor, onPlay }) {
+function SimpleVideoCard({ video, slotNumber, accentColor, onPlay, isLocked = false, onLock }) {
   const src = extractSrc(video.iframeCode);
   const hasVideo = !!video.iframeCode;
   const thumbUrl = getYtThumb(src);
 
+  function handleClick() {
+    if (!hasVideo) return;
+    if (isLocked) { onLock && onLock(); return; }
+    onPlay(video);
+  }
+
   return (
     <div
-      onClick={() => { if (hasVideo) onPlay(video); }}
-      style={{ background: C.card, borderRadius: 16, border: `1.5px solid ${C.border}`, overflow: 'hidden', cursor: hasVideo ? 'pointer' : 'default', transition: 'all .2s', opacity: hasVideo ? 1 : 0.6 }}
-      onMouseEnter={(e) => { if (!hasVideo) return; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 10px 28px ${accentColor}33`; e.currentTarget.style.borderColor = accentColor + '66'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = C.border; }}
+      onClick={handleClick}
+      style={{
+        background: isLocked ? '#FDFAFF' : C.card,
+        borderRadius: 16,
+        border: `1.5px solid ${isLocked ? C.purple + '40' : C.border}`,
+        overflow: 'hidden',
+        cursor: hasVideo ? 'pointer' : 'default',
+        transition: 'all .2s',
+        opacity: hasVideo ? 1 : 0.6,
+      }}
+      onMouseEnter={(e) => {
+        if (!hasVideo) return;
+        e.currentTarget.style.transform = 'translateY(-3px)';
+        e.currentTarget.style.boxShadow = isLocked
+          ? '0 10px 28px rgba(139,92,246,.2)'
+          : `0 10px 28px ${accentColor}33`;
+        e.currentTarget.style.borderColor = isLocked ? C.purple + '66' : accentColor + '66';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'none';
+        e.currentTarget.style.boxShadow = 'none';
+        e.currentTarget.style.borderColor = isLocked ? C.purple + '40' : C.border;
+      }}
     >
       <div style={{ position: 'relative', paddingBottom: '56.25%', background: '#0F172A', overflow: 'hidden' }}>
         {hasVideo && thumbUrl ? (
-          <img src={thumbUrl} alt={video.title} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img
+            src={thumbUrl}
+            alt={video.title}
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: isLocked ? 0.35 : 1 }}
+          />
         ) : (
-          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg,${accentColor}22,${C.sidebar})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36 }}>
-            {hasVideo ? '🎬' : '⏳'}
+          <div style={{ position: 'absolute', inset: 0, background: isLocked ? 'linear-gradient(135deg,#2D1B69,#1E0A3C)' : `linear-gradient(135deg,${accentColor}22,${C.sidebar})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36 }}>
+            {hasVideo ? (isLocked ? '🔒' : '🎬') : '⏳'}
           </div>
+        )}
+        {isLocked && hasVideo && (
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(139,92,246,.4) 0%, transparent 60%)' }} />
         )}
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {hasVideo ? (
-            <div style={{ width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, boxShadow: '0 4px 20px rgba(0,0,0,.45)' }}>▶</div>
+            <div style={{ width: 50, height: 50, borderRadius: '50%', background: isLocked ? `linear-gradient(135deg,${C.purple},#6D28D9)` : 'rgba(255,255,255,.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, boxShadow: '0 4px 20px rgba(0,0,0,.45)' }}>
+              {isLocked ? '🔒' : '▶'}
+            </div>
           ) : (
             <div style={{ background: 'rgba(0,0,0,.5)', color: '#64748B', fontSize: 11, fontWeight: 700, padding: '6px 12px', borderRadius: 20, border: '1px solid rgba(255,255,255,.1)' }}>Coming Soon</div>
           )}
         </div>
-        {hasVideo && <div style={{ position: 'absolute', top: 8, left: 8, background: C.green, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>🆓 FREE</div>}
+        {/* Badge top-left */}
+        {hasVideo && (
+          isLocked
+            ? <div style={{ position: 'absolute', top: 8, left: 8, background: `linear-gradient(135deg,${C.purple},#6D28D9)`, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>👑 PREMIUM</div>
+            : <div style={{ position: 'absolute', top: 8, left: 8, background: C.green, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>🆓 FREE</div>
+        )}
         <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,.7)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>#{slotNumber}</div>
         {video.duration && <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,.8)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>{video.duration}</div>}
       </div>
@@ -600,11 +628,18 @@ function SimpleVideoCard({ video, slotNumber, accentColor, onPlay }) {
         <div style={{ display: 'flex', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 10, fontWeight: 700, background: accentColor + '15', color: accentColor, padding: '2px 8px', borderRadius: 20, border: `1px solid ${accentColor}30` }}>{video.chapter}</span>
         </div>
-        <div style={{ fontWeight: 800, fontSize: 14, color: C.text, lineHeight: 1.4, marginBottom: 6 }}>{video.title}</div>
+        <div style={{ fontWeight: 800, fontSize: 14, color: isLocked ? C.muted : C.text, lineHeight: 1.4, marginBottom: 6 }}>{video.title}</div>
         {video.description && <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5, marginBottom: 8, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{video.description}</div>}
+        {/* Lock CTA */}
+        {isLocked && hasVideo && (
+          <div style={{ background: `linear-gradient(135deg,${C.purple}15,${C.primary}12)`, border: `1px solid ${C.purple}35`, borderRadius: 10, padding: '10px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, color: C.purple, fontWeight: 700 }}>🔒 Subscribe to watch</div>
+            <div style={{ fontSize: 11, color: C.purple, fontWeight: 700, whiteSpace: 'nowrap' }}>from ₹299 →</div>
+          </div>
+        )}
         {!hasVideo && <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px 12px', fontSize: 11, color: C.muted, textAlign: 'center' }}>⏳ Video will be uploaded soon</div>}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-          <div style={{ fontSize: 11, color: C.muted }}>{hasVideo ? 'Available' : 'Upcoming'}</div>
+          <div style={{ fontSize: 11, color: C.muted }}>{hasVideo ? (isLocked ? 'Premium' : 'Available') : 'Upcoming'}</div>
           <div style={{ fontSize: 11, color: C.muted }}>{fmtDate(video.uploadedAt)}</div>
         </div>
       </div>
@@ -617,7 +652,7 @@ function SimpleVideoCard({ video, slotNumber, accentColor, onPlay }) {
 // ─────────────────────────────────────────────────────────────────────────────
 const CONTENT_TABS = [
   { id: 'lectures', label: '📚 Full Lectures', desc: 'Chapter-by-chapter deep dives' },
-  { id: 'shorts', label: '⚡ Short Videos', desc: 'Quick concept bursts' },
+  { id: 'shorts', label: '⚡ Short Videos', desc: 'Quick concept bursts — Free' },
   { id: 'personalysis', label: '🔬 Personalysis', desc: 'Paper analysis & insights' },
 ];
 
@@ -674,19 +709,25 @@ function FreeLimitBanner({ total, onUpgrade }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// REUSABLE SECTION — renders folder grid + drill-down for Shorts & Personalysis
-// Props: dataConfig, videoKey, accentColor, sectionIcon, sectionTitle, 
-//        sectionDesc, addHintBg, addHintBorder, addHintTitle, addHintTitleColor,
-//        addHintBody, addHintBodyColor, addHintCodeBg, dataName, setActiveVideo
+// VIDEO SECTION WITH FOLDERS
+// New props: requiresSubscription, subscribed, onLock
+// When requiresSubscription=true and !subscribed, all videos show as locked.
 // ─────────────────────────────────────────────────────────────────────────────
 function VideoSectionWithFolders({
   dataConfig, videoKey, accentColor,
   sectionIcon, sectionTitle, sectionDesc,
   addHintBg, addHintBorder, addHintTitleColor, addHintBodyColor, addHintCodeBg,
   dataName, setActiveVideo,
+  // Access control — new props
+  requiresSubscription = false,
+  subscribed = true,
+  onLock,
 }) {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [search, setSearch] = useState('');
+
+  // If requiresSubscription is true and user is not subscribed, every video is locked.
+  const effectiveLocked = requiresSubscription && !subscribed;
 
   const KEYS = Object.keys(dataConfig);
   const totalSlots = KEYS.reduce((acc, k) => acc + (dataConfig[k][videoKey] || []).length, 0);
@@ -710,6 +751,14 @@ function VideoSectionWithFolders({
             <div style={{ fontWeight: 900, fontSize: 18, color: C.text, display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ width: 36, height: 36, borderRadius: 10, background: accentColor + '20', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{sectionIcon}</span>
               {sectionTitle}
+              {/* Premium badge for locked sections */}
+              {requiresSubscription && !subscribed && (
+                <span style={{ background: `linear-gradient(135deg,${C.purple},#6D28D9)`, color: '#fff', fontSize: 11, fontWeight: 800, padding: '3px 12px', borderRadius: 20 }}>👑 Premium</span>
+              )}
+              {/* Free badge for open sections */}
+              {!requiresSubscription && (
+                <span style={{ background: C.green, color: '#fff', fontSize: 11, fontWeight: 800, padding: '3px 12px', borderRadius: 20 }}>🆓 Free</span>
+              )}
             </div>
             <div style={{ fontSize: 13, color: C.muted, marginTop: 4 }}>{sectionDesc}</div>
           </div>
@@ -731,8 +780,21 @@ function VideoSectionWithFolders({
         </div>
       )}
 
-      {/* Add hint — shown always on folder view */}
-      {!selectedSubject && (
+      {/* Personalysis lock banner */}
+      {!selectedSubject && effectiveLocked && (
+        <div style={{ background: `linear-gradient(135deg,${C.purple}15,${C.primary}15)`, border: `1px solid ${C.purple}30`, borderRadius: 14, padding: '18px 22px', marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
+          <div>
+            <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 4 }}>🔒 Personalysis is a Premium Feature</div>
+            <div style={{ fontSize: 13, color: C.muted }}>Subscribe to unlock in-depth paper analysis, exam pattern insights, and strategic breakdowns.</div>
+          </div>
+          <button onClick={onLock} style={{ background: `linear-gradient(135deg,${C.purple},#6D28D9)`, color: '#fff', border: 'none', borderRadius: 12, padding: '12px 24px', fontWeight: 800, fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            👑 Unlock Now →
+          </button>
+        </div>
+      )}
+
+      {/* Add hint */}
+      {!selectedSubject && !effectiveLocked && (
         <div style={{ background: addHintBg, border: `1px solid ${addHintBorder}`, borderRadius: 12, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'flex-start', gap: 10 }}>
           <span style={{ fontSize: 20, flexShrink: 0 }}>💡</span>
           <div>
@@ -744,7 +806,7 @@ function VideoSectionWithFolders({
         </div>
       )}
 
-      {/* Section heading divider */}
+      {/* Section heading */}
       {!selectedSubject && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
           <div style={{ height: 3, width: 28, borderRadius: 99, background: accentColor }} />
@@ -762,7 +824,7 @@ function VideoSectionWithFolders({
               key={key}
               subjectKey={key}
               cfg={dataConfig[key]}
-              subscribed={true}
+              subscribed={!effectiveLocked}
               globalOffset={0}
               videoKey={videoKey}
               onClick={() => { setSelectedSubject(key); setSearch(''); }}
@@ -771,10 +833,10 @@ function VideoSectionWithFolders({
         </div>
       )}
 
-      {/* DRILL-DOWN — videos inside a subject */}
+      {/* DRILL-DOWN */}
       {selectedSubject && selectedCfg && (
         <>
-          {/* Breadcrumb header */}
+          {/* Breadcrumb */}
           <div style={{ background: C.card, border: `1.5px solid ${selectedCfg.color}40`, borderRadius: 16, padding: '18px 22px', marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{ width: 52, height: 52, borderRadius: 16, background: selectedCfg.color + '18', border: `1.5px solid ${selectedCfg.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0 }}>{selectedCfg.icon}</div>
@@ -789,6 +851,14 @@ function VideoSectionWithFolders({
             <button onClick={() => { setSelectedSubject(null); setSearch(''); }} style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px 16px', fontSize: 13, color: C.muted, cursor: 'pointer', fontWeight: 600 }}>← All Subjects</button>
           </div>
 
+          {/* Lock banner inside subject drill-down (Personalysis) */}
+          {effectiveLocked && (
+            <div style={{ background: `linear-gradient(135deg,${C.purple}15,${C.primary}15)`, border: `1px solid ${C.purple}30`, borderRadius: 12, padding: '14px 18px', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <div style={{ fontSize: 13, color: C.purple, fontWeight: 700 }}>🔒 Subscribe to unlock all {selectedSubject} Personalysis videos</div>
+              <button onClick={onLock} style={{ background: `linear-gradient(135deg,${C.purple},#6D28D9)`, color: '#fff', border: 'none', borderRadius: 10, padding: '9px 20px', fontWeight: 800, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap' }}>👑 Subscribe →</button>
+            </div>
+          )}
+
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 12, color: C.muted }}>
               {selectedVideos.filter((v) => !!v.iframeCode).length} uploaded · {selectedVideos.filter((v) => !v.iframeCode).length} coming soon
@@ -802,8 +872,8 @@ function VideoSectionWithFolders({
             {search && <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', color: C.muted, cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>}
           </div>
 
-          {/* Add hint for empty slots */}
-          {selectedVideos.some((v) => !v.iframeCode) && (
+          {/* Add hint for empty slots (only when not locked) */}
+          {!effectiveLocked && selectedVideos.some((v) => !v.iframeCode) && (
             <div style={{ background: addHintBg, border: `1px solid ${addHintBorder}`, borderRadius: 12, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'flex-start', gap: 10 }}>
               <span style={{ fontSize: 20, flexShrink: 0 }}>💡</span>
               <div>
@@ -830,6 +900,8 @@ function VideoSectionWithFolders({
                   slotNumber={idx + 1}
                   accentColor={selectedCfg.color}
                   onPlay={(v) => setActiveVideo({ lecture: v, subjectKey: selectedSubject })}
+                  isLocked={effectiveLocked}
+                  onLock={onLock}
                 />
               ))}
             </div>
@@ -914,7 +986,7 @@ export default function LecturesPage() {
             <p style={{ margin: '5px 0 0', color: C.muted, fontSize: 13 }}>
               {subscribed
                 ? `👑 Premium — Full access · ${totalFilled} lectures live, ${totalSlots} total slots across ${SUBJECT_KEYS.length} subjects`
-                : `First ${FREE_LIMIT} lectures free · Subscribe to unlock all ${totalSlots} slots`}
+                : `First ${FREE_LIMIT} lectures free · Short Videos free for all · Subscribe to unlock full lectures & Personalysis`}
             </p>
           </div>
           {!subscribed && (
@@ -1035,7 +1107,7 @@ export default function LecturesPage() {
         </>
       )}
 
-      {/* ══ TAB: SHORT VIDEOS ══ */}
+      {/* ══ TAB: SHORT VIDEOS — free for everyone ══ */}
       {contentTab === 'shorts' && (
         <VideoSectionWithFolders
           dataConfig={SHORT_VIDEOS_DATA}
@@ -1043,7 +1115,7 @@ export default function LecturesPage() {
           accentColor={C.accent}
           sectionIcon="⚡"
           sectionTitle="Short Videos"
-          sectionDesc="Quick concept explainers — perfect for rapid revision before your exam."
+          sectionDesc="Quick concept explainers — free for everyone, no subscription needed."
           addHintBg="#FFFBEB"
           addHintBorder="#FDE68A"
           addHintTitleColor="#92400E"
@@ -1051,10 +1123,13 @@ export default function LecturesPage() {
           addHintCodeBg="#FEF3C7"
           dataName="SHORT_VIDEOS_DATA"
           setActiveVideo={setActiveVideo}
+          requiresSubscription={false}
+          subscribed={subscribed}
+          onLock={() => setShowPaywall(true)}
         />
       )}
 
-      {/* ══ TAB: PERSONALYSIS ══ */}
+      {/* ══ TAB: PERSONALYSIS — premium only ══ */}
       {contentTab === 'personalysis' && (
         <VideoSectionWithFolders
           dataConfig={PERSONALYSIS_DATA}
@@ -1070,6 +1145,9 @@ export default function LecturesPage() {
           addHintCodeBg="#EDE9FE"
           dataName="PERSONALYSIS_DATA"
           setActiveVideo={setActiveVideo}
+          requiresSubscription={true}
+          subscribed={subscribed}
+          onLock={() => setShowPaywall(true)}
         />
       )}
 

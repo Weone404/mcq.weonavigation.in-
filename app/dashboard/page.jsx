@@ -264,7 +264,6 @@ export const SUBJECTS = [
     icon: '🗺️',
     color: '#10B981',
     gradient: 'linear-gradient(135deg,#10B981,#34D399)',
-    // parts here represent the 3 sub-subject groups shown on the sub-selector
     parts: [
       {
         label: 'Part I – General Navigation',
@@ -291,7 +290,6 @@ export const SUBJECTS = [
         ],
       },
     ],
-    // all chapter IDs combined (used for mock test pool & overall stats)
     chapterIds: [
       'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
       'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
@@ -300,8 +298,8 @@ export const SUBJECTS = [
     stats: '28 Chapters · 550+ MCQs',
     exam: 'ATPL / CPL',
     comingSoon: false,
-    hasSubjects: true,          // ← flag: show sub-subject selector on click
-    subSubjects: NAV_SUB_SUBJECTS, // ← reference to sub-subjects array
+    hasSubjects: true,
+    subSubjects: NAV_SUB_SUBJECTS,
   },
 
   {
@@ -364,27 +362,19 @@ export const SUBJECTS = [
     color: '#8B5CF6',
     gradient: 'linear-gradient(135deg,#8B5CF6,#A78BFA)',
     parts: [],
-    // all chapter IDs from every subject for full mock pool
     chapterIds: [
-      // Air Regulations
       'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10',
       'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch19', 'ch20',
       'ch21', 'ch22', 'ch23', 'ch24', 'ch25', 'ch26',
       'qb01', 'qb02', 'qb03', 'qb04', 'qb05', 'qb06', 'qb07',
       'qb08', 'qb09', 'qb10', 'qb11', 'qb12', 'qb13',
-      // Meteorology
       'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
       'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
       'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
-      // General Navigation
       'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
-      // Radio Navigation
       'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
-      // Instrument Navigation
       'in01', 'in02', 'in03', 'in04', 'in05', 'in06', 'in07', 'in08',
-      // Technical General
       'tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08',
-      // Radio Telephony
       'rt01', 'rt02', 'rt03',
     ],
     stats: '100 Questions · 120 Mins',
@@ -406,7 +396,6 @@ export function getQuestionsForSubject(subjectId, questions, limit = null) {
   return pool;
 }
 
-// ─── MOCK ALL OPTION (used inside MockSubjectSelector) ────────────────────────
 export const MOCK_ALL_OPTION = {
   id: 'all',
   title: 'All Subjects',
@@ -477,9 +466,9 @@ const Badge = ({ label, color = C.primary }) => (
   <span style={{
     background: hexAlpha(color, 0.13),
     color,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: 700,
-    padding: '2px 9px',
+    padding: '3px 10px',
     borderRadius: 99,
     letterSpacing: 0.3,
     display: 'inline-block',
@@ -500,7 +489,7 @@ const StatCard = ({ icon, label, value, color = C.primary, delay = 0 }) => {
     <div style={{
       background: C.card,
       borderRadius: 16,
-      padding: '16px 18px',
+      padding: '20px 22px',
       border: `1px solid ${C.border}`,
       display: 'flex',
       alignItems: 'center',
@@ -510,24 +499,24 @@ const StatCard = ({ icon, label, value, color = C.primary, delay = 0 }) => {
       transition: 'opacity .5s ease, transform .5s ease',
     }}>
       <div style={{
-        width: 44,
-        height: 44,
-        borderRadius: 12,
+        width: 52,
+        height: 52,
+        borderRadius: 14,
         background: hexAlpha(color, 0.08),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 20,
+        fontSize: 24,
         flexShrink: 0,
-        marginRight: 12,
+        marginRight: 16,
         WebkitAnimation: 'iconPop .5s ease',
         animation: 'iconPop .5s ease',
       }}>{icon}</div>
       <div>
-        <div style={{ fontSize: 22, fontWeight: 800, color, lineHeight: 1 }}>
+        <div style={{ fontSize: 28, fontWeight: 800, color, lineHeight: 1 }}>
           {isNum ? `${counted}${suffix}` : value}
         </div>
-        <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>{label}</div>
+        <div style={{ fontSize: 13, color: C.muted, marginTop: 4, fontWeight: 500 }}>{label}</div>
       </div>
     </div>
   );
@@ -564,8 +553,8 @@ function ComingSoonPage({ subject, onBack }) {
         WebkitAnimation: 'float 3s ease-in-out infinite',
         animation: 'float 3s ease-in-out infinite',
       }}>{subject.icon}</div>
-      <div style={{ fontSize: 24, fontWeight: 900, color: C.text, marginBottom: 8 }}>{subject.title}</div>
-      <div style={{ fontSize: 14, color: C.muted, marginBottom: 24, maxWidth: 360, lineHeight: 1.7 }}>
+      <div style={{ fontSize: 26, fontWeight: 900, color: C.text, marginBottom: 8 }}>{subject.title}</div>
+      <div style={{ fontSize: 15, color: C.muted, marginBottom: 24, maxWidth: 360, lineHeight: 1.7 }}>
         {subject.subtitle} — this subject is being prepared by our content team.
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginBottom: 28 }}>
@@ -573,14 +562,14 @@ function ComingSoonPage({ subject, onBack }) {
           <span key={label} style={{
             background: hexAlpha(subject.color, 0.08), color: subject.color,
             border: `1px solid ${hexAlpha(subject.color, 0.18)}`,
-            padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700,
+            padding: '7px 16px', borderRadius: 20, fontSize: 13, fontWeight: 700,
             margin: '0 6px 6px 0', display: 'inline-block',
           }}>{icon} {label}</span>
         ))}
       </div>
       <button onClick={onBack} style={{
         background: subject.gradient, color: '#fff', border: 'none', borderRadius: 12,
-        padding: '12px 28px', fontWeight: 700, fontSize: 14, cursor: 'pointer',
+        padding: '13px 30px', fontWeight: 700, fontSize: 15, cursor: 'pointer',
         WebkitAppearance: 'none', appearance: 'none',
         WebkitTransition: 'transform .15s, box-shadow .15s',
         transition: 'transform .15s, box-shadow .15s',
@@ -620,7 +609,7 @@ function LbProgressBar({ value, color = C.primary, height = 5 }) {
 
 function LbBadge({ label, color = C.primary }) {
   return (
-    <span style={{ background: hexAlpha(color, 0.13), color, fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 99, letterSpacing: 0.3, display: 'inline-block' }}>
+    <span style={{ background: hexAlpha(color, 0.13), color, fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 99, letterSpacing: 0.3, display: 'inline-block' }}>
       {label}
     </span>
   );
@@ -642,8 +631,8 @@ function MiniPodium({ top3, user }) {
   return (
     <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: '20px 16px 0', marginBottom: 16 }}>
       <div style={{ textAlign: 'center', marginBottom: 14 }}>
-        <div style={{ fontSize: 14, fontWeight: 800, color: C.text }}>🏆 Top Performers</div>
-        <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>Best accuracy in mock tests</div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: C.text }}>🏆 Top Performers</div>
+        <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>Best accuracy in mock tests</div>
       </div>
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10 }}>
         {order.map(({ e, rank, h }, idx) => {
@@ -656,13 +645,13 @@ function MiniPodium({ top3, user }) {
               animation: `slideUp .5s ease ${idx * 0.12}s both`,
             }}>
               {isYou && (
-                <span style={{ background: hexAlpha(C.green, 0.15), color: C.green, fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 20, marginBottom: 3, display: 'inline-block' }}>You</span>
+                <span style={{ background: hexAlpha(C.green, 0.15), color: C.green, fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, marginBottom: 3, display: 'inline-block' }}>You</span>
               )}
               <div style={{
-                width: 44, height: 44, borderRadius: 22,
+                width: 48, height: 48, borderRadius: 24,
                 background: `linear-gradient(135deg,${color},${color}cc)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: '#fff', fontWeight: 800, fontSize: 13, marginBottom: 6,
+                color: '#fff', fontWeight: 800, fontSize: 14, marginBottom: 6,
                 border: `2px solid ${isYou ? C.green : '#fff'}`,
                 boxShadow: `0 3px 10px ${hexAlpha(color, 0.3)}`,
                 WebkitTransition: 'transform .2s',
@@ -673,11 +662,11 @@ function MiniPodium({ top3, user }) {
               >
                 {getInitials(e.name)}
               </div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: 1 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: 1 }}>
                 {e.name.split(' ')[0]}
               </div>
-              <div style={{ fontSize: 13, fontWeight: 800, color, marginBottom: 3 }}>{e.accuracy}%</div>
-              <div style={{ fontSize: 16, marginBottom: 6 }}>{LB_MEDALS[rank - 1]}</div>
+              <div style={{ fontSize: 14, fontWeight: 800, color, marginBottom: 3 }}>{e.accuracy}%</div>
+              <div style={{ fontSize: 18, marginBottom: 6 }}>{LB_MEDALS[rank - 1]}</div>
               <div style={{
                 width: '100%', height: h,
                 background: hexAlpha(color, 0.1),
@@ -685,7 +674,7 @@ function MiniPodium({ top3, user }) {
                 borderRadius: '6px 6px 0 0',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ color, fontSize: 13, fontWeight: 900 }}>#{rank}</span>
+                <span style={{ color, fontSize: 14, fontWeight: 900 }}>#{rank}</span>
               </div>
             </div>
           );
@@ -699,9 +688,9 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
   if (loading) {
     return (
       <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, overflow: 'hidden' }}>
-        <div style={{ padding: '14px 18px', borderBottom: `1px solid ${C.border}` }}><LbSkeleton h={16} w="40%" /></div>
+        <div style={{ padding: '16px 20px', borderBottom: `1px solid ${C.border}` }}><LbSkeleton h={16} w="40%" /></div>
         {Array(5).fill(0).map((_, i) => (
-          <div key={i} style={{ padding: '12px 18px', borderTop: i > 0 ? `1px solid ${C.border}` : 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div key={i} style={{ padding: '14px 20px', borderTop: i > 0 ? `1px solid ${C.border}` : 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
             <LbSkeleton w={32} h={32} r={16} /><LbSkeleton w={36} h={36} r={18} />
             <div style={{ flex: 1 }}><LbSkeleton h={13} style={{ marginBottom: 5 }} /><LbSkeleton h={10} w="50%" /></div>
             <LbSkeleton w={60} h={14} />
@@ -715,8 +704,8 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
     return (
       <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: '36px 20px', textAlign: 'center' }}>
         <div style={{ fontSize: 36, marginBottom: 10, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>🏆</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 4 }}>No mock test scores yet!</div>
-        <div style={{ fontSize: 12, color: C.muted }}>Complete a mock test to appear on the leaderboard.</div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 5 }}>No mock test scores yet!</div>
+        <div style={{ fontSize: 13, color: C.muted }}>Complete a mock test to appear on the leaderboard.</div>
       </div>
     );
   }
@@ -725,20 +714,20 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
 
   return (
     <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, overflow: 'hidden' }}>
-      <div style={{ padding: '14px 18px', borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>All Rankings</div>
+      <div style={{ padding: '16px 20px', borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>All Rankings</div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <span style={{ fontSize: 11, color: C.muted }}>{board.length} pilots</span>
-          <div style={{ width: 7, height: 7, borderRadius: '50%', background: C.green, WebkitAnimation: 'pulse 2s ease-in-out infinite', animation: 'pulse 2s ease-in-out infinite' }} />
+          <span style={{ fontSize: 12, color: C.muted }}>{board.length} pilots</span>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: C.green, WebkitAnimation: 'pulse 2s ease-in-out infinite', animation: 'pulse 2s ease-in-out infinite' }} />
         </div>
       </div>
 
-      <div style={{ padding: '6px 18px', background: C.bg, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ width: 32, fontSize: 10, color: C.muted, fontWeight: 700, flexShrink: 0 }}>Rank</div>
+      <div style={{ padding: '7px 20px', background: C.bg, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ width: 32, fontSize: 11, color: C.muted, fontWeight: 700, flexShrink: 0, letterSpacing: 0.5 }}>Rank</div>
         <div style={{ width: 36, flexShrink: 0 }} />
-        <div style={{ flex: 1, fontSize: 10, color: C.muted, fontWeight: 700 }}>Student</div>
-        <div style={{ width: 72, fontSize: 10, color: C.muted, fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Score</div>
-        <div style={{ width: 90, fontSize: 10, color: C.muted, fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Accuracy</div>
+        <div style={{ flex: 1, fontSize: 11, color: C.muted, fontWeight: 700, letterSpacing: 0.5 }}>Student</div>
+        <div style={{ width: 72, fontSize: 11, color: C.muted, fontWeight: 700, textAlign: 'right', flexShrink: 0, letterSpacing: 0.5 }}>Score</div>
+        <div style={{ width: 90, fontSize: 11, color: C.muted, fontWeight: 700, textAlign: 'right', flexShrink: 0, letterSpacing: 0.5 }}>Accuracy</div>
       </div>
 
       {visible.map((entry, i) => {
@@ -747,7 +736,7 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
         return (
           <div key={`${entry.email}-${entry.subject}-${i}`}
             style={{
-              padding: '12px 18px', borderTop: `1px solid ${C.border}`,
+              padding: '14px 20px', borderTop: `1px solid ${C.border}`,
               display: 'flex', alignItems: 'center', gap: 10,
               background: isYou ? C.primaryLight : 'transparent',
               WebkitTransition: 'background .15s, transform .15s',
@@ -762,34 +751,34 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
               width: 32, height: 32, borderRadius: 8, flexShrink: 0,
               background: isYou ? `linear-gradient(135deg,${C.primary},${C.purple})` : rank <= 3 ? 'transparent' : C.bg,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: rank <= 3 ? 18 : 11, fontWeight: 700, color: isYou ? '#fff' : C.text,
+              fontSize: rank <= 3 ? 18 : 12, fontWeight: 700, color: isYou ? '#fff' : C.text,
             }}>
               {rank <= 3 ? LB_MEDALS[rank - 1] : `#${rank}`}
             </div>
             <div style={{
-              width: 36, height: 36, borderRadius: 18, flexShrink: 0,
+              width: 38, height: 38, borderRadius: 19, flexShrink: 0,
               background: `linear-gradient(135deg,${C.primary},${C.purple})`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontWeight: 800, fontSize: 12,
+              color: '#fff', fontWeight: 800, fontSize: 13,
             }}>
               {getInitials(entry.name)}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontWeight: 700, fontSize: 13, color: C.text, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              <div style={{ fontWeight: 700, fontSize: 14, color: C.text, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.name}</span>
                 {isYou && <LbBadge label="You" color={C.green} />}
                 {rank === 1 && <LbBadge label="Top" color={C.accent} />}
               </div>
-              <div style={{ fontSize: 10, color: C.muted, marginTop: 1 }}>
+              <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>
                 {entry.subjectLabel || entry.subject} · {entry.attempts || 1} attempt{(entry.attempts || 1) !== 1 ? 's' : ''} · {lbFormatDate(entry.submittedAt)}
               </div>
             </div>
             <div style={{ width: 72, textAlign: 'right', flexShrink: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: C.text }}>{entry.score}/{entry.total}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{entry.score}/{entry.total}</div>
             </div>
             <div style={{ width: 90, flexShrink: 0 }}>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 3 }}>
-                <span style={{ fontSize: 13, fontWeight: 800, color: lbGetAccuracyColor(entry.accuracy) }}>{entry.accuracy}%</span>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                <span style={{ fontSize: 14, fontWeight: 800, color: lbGetAccuracyColor(entry.accuracy) }}>{entry.accuracy}%</span>
               </div>
               <LbProgressBar value={entry.accuracy} color={lbGetAccuracyColor(entry.accuracy)} />
             </div>
@@ -798,10 +787,10 @@ function LbRankingsTable({ board, user, loading, onViewFull }) {
       })}
 
       {board.length > 10 && (
-        <div style={{ padding: '12px 18px', borderTop: `1px solid ${C.border}`, textAlign: 'center' }}>
+        <div style={{ padding: '14px 20px', borderTop: `1px solid ${C.border}`, textAlign: 'center' }}>
           <button onClick={onViewFull} style={{
             background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
-            padding: '8px 20px', fontSize: 12, fontWeight: 700, color: C.primary,
+            padding: '9px 20px', fontSize: 13, fontWeight: 700, color: C.primary,
             cursor: 'pointer', width: '100%', WebkitAppearance: 'none', appearance: 'none',
             WebkitTransition: 'background .15s, color .15s',
             transition: 'background .15s, color .15s',
@@ -858,10 +847,10 @@ function MockLeaderboardWidget({ user, onViewFull }) {
 
   return (
     <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 10 }}>
         <div>
-          <div style={{ fontSize: 18, fontWeight: 800, color: C.text }}>🏆 Mock Test Leaderboard</div>
-          <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>
+          <div style={{ fontSize: 20, fontWeight: 800, color: C.text }}>🏆 Mock Test Leaderboard</div>
+          <div style={{ fontSize: 13, color: C.muted, marginTop: 3 }}>
             {loading
               ? 'Loading…'
               : `${board.length} students · ranked by best accuracy${lastRefresh ? ` · updated ${lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}`
@@ -869,25 +858,25 @@ function MockLeaderboardWidget({ user, onViewFull }) {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: 9, padding: '6px 10px', gap: 6, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
+          <div style={{ display: 'flex', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: 9, padding: '7px 12px', gap: 6, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
             onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(C.primary, 0.25)}`; }}
             onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
           >
-            <span style={{ color: C.muted, fontSize: 13 }}>🔍</span>
+            <span style={{ color: C.muted, fontSize: 14 }}>🔍</span>
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search…"
-              style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 12, color: C.text, width: 120 }}
+              style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: 120 }}
             />
             {search && (
-              <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.muted, fontSize: 12, padding: 0, WebkitAppearance: 'none', appearance: 'none' }}>✕</button>
+              <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.muted, fontSize: 13, padding: 0, WebkitAppearance: 'none', appearance: 'none' }}>✕</button>
             )}
           </div>
           <button onClick={() => fetchBoard(activeSubject)} title="Refresh" style={{
-            width: 32, height: 32, borderRadius: 8, background: C.card,
+            width: 36, height: 36, borderRadius: 8, background: C.card,
             border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', cursor: 'pointer', fontSize: 14, flexShrink: 0,
+            justifyContent: 'center', cursor: 'pointer', fontSize: 15, flexShrink: 0,
             WebkitAppearance: 'none', appearance: 'none',
             WebkitTransition: 'transform .2s',
             transition: 'transform .2s',
@@ -897,9 +886,9 @@ function MockLeaderboardWidget({ user, onViewFull }) {
           >🔄</button>
           {onViewFull && (
             <button onClick={onViewFull} style={{
-              height: 32, borderRadius: 8, background: C.primary,
-              border: 'none', color: '#fff', fontSize: 12, fontWeight: 700,
-              padding: '0 14px', cursor: 'pointer', whiteSpace: 'nowrap',
+              height: 36, borderRadius: 8, background: C.primary,
+              border: 'none', color: '#fff', fontSize: 13, fontWeight: 700,
+              padding: '0 16px', cursor: 'pointer', whiteSpace: 'nowrap',
               WebkitAppearance: 'none', appearance: 'none',
             }}>Full View →</button>
           )}
@@ -908,10 +897,10 @@ function MockLeaderboardWidget({ user, onViewFull }) {
 
       <div style={{
         background: `linear-gradient(120deg,${C.sidebar} 0%,${C.primary} 100%)`,
-        borderRadius: 14, padding: '18px 22px', marginBottom: 16,
+        borderRadius: 16, padding: '20px 24px', marginBottom: 18,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap',
       }}>
-        <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
           {[
             { icon: '👥', label: 'Students', value: loading ? '…' : board.length },
             { icon: '🥇', label: 'Top Score', value: loading ? '…' : (board[0] ? `${board[0].accuracy}%` : '—') },
@@ -919,18 +908,18 @@ function MockLeaderboardWidget({ user, onViewFull }) {
             { icon: '📝', label: 'Your Attempts', value: loading ? '…' : (userEntry?.attempts || 0) },
           ].map(s => (
             <div key={s.label}>
-              <div style={{ color: '#93C5FD', fontSize: 10, marginBottom: 2 }}>{s.icon} {s.label}</div>
-              <div style={{ color: '#fff', fontSize: 20, fontWeight: 900, lineHeight: 1 }}>{s.value}</div>
+              <div style={{ color: '#93C5FD', fontSize: 11, marginBottom: 3, letterSpacing: 0.5 }}>{s.icon} {s.label}</div>
+              <div style={{ color: '#fff', fontSize: 24, fontWeight: 900, lineHeight: 1 }}>{s.value}</div>
             </div>
           ))}
         </div>
         <div style={{ textAlign: 'right', flexShrink: 0 }}>
-          <div style={{ color: '#93C5FD', fontSize: 11, marginBottom: 2 }}>Your Rank</div>
-          <div style={{ color: '#fff', fontSize: 34, fontWeight: 900, lineHeight: 1 }}>
+          <div style={{ color: '#93C5FD', fontSize: 12, marginBottom: 2 }}>Your Rank</div>
+          <div style={{ color: '#fff', fontSize: 38, fontWeight: 900, lineHeight: 1 }}>
             {userRank > 0 ? `#${userRank}` : '–'}
           </div>
           {userEntry && (
-            <div style={{ color: '#93C5FD', fontSize: 11, marginTop: 6 }}>
+            <div style={{ color: '#93C5FD', fontSize: 12, marginTop: 6 }}>
               Best: <span style={{ color: '#fff', fontWeight: 800 }}>{userEntry.accuracy}%</span>
             </div>
           )}
@@ -942,11 +931,11 @@ function MockLeaderboardWidget({ user, onViewFull }) {
           const isActive = activeSubject === tab.id;
           return (
             <button key={tab.id} onClick={() => setActiveSubject(tab.id)} style={{
-              padding: '6px 13px', borderRadius: 20,
+              padding: '7px 14px', borderRadius: 20,
               border: isActive ? `2px solid ${tab.color}` : `1px solid ${C.border}`,
               background: isActive ? hexAlpha(tab.color, 0.1) : C.card,
               color: isActive ? tab.color : C.muted,
-              fontWeight: isActive ? 700 : 400, fontSize: 12, cursor: 'pointer',
+              fontWeight: isActive ? 700 : 400, fontSize: 13, cursor: 'pointer',
               display: 'flex', alignItems: 'center', gap: 5,
               WebkitTransition: 'all .2s',
               transition: 'all .2s',
@@ -956,7 +945,7 @@ function MockLeaderboardWidget({ user, onViewFull }) {
               <span>{tab.icon}</span>
               <span>{tab.label}</span>
               {isActive && !loading && (
-                <span style={{ background: hexAlpha(tab.color, 0.15), color: tab.color, fontSize: 9, fontWeight: 800, padding: '1px 5px', borderRadius: 8 }}>
+                <span style={{ background: hexAlpha(tab.color, 0.15), color: tab.color, fontSize: 10, fontWeight: 800, padding: '1px 6px', borderRadius: 8 }}>
                   {filteredBoard.length}
                 </span>
               )}
@@ -973,31 +962,31 @@ function MockLeaderboardWidget({ user, onViewFull }) {
 
       {!loading && userEntry && userRank > 10 && (
         <div style={{
-          marginTop: 12, background: C.primaryLight,
+          marginTop: 14, background: C.primaryLight,
           border: `1px solid ${hexAlpha(C.primary, 0.25)}`,
-          borderRadius: 12, padding: '12px 16px',
+          borderRadius: 12, padding: '14px 18px',
           display: 'flex', alignItems: 'center', gap: 12,
           WebkitAnimation: 'slideUp .4s ease',
           animation: 'slideUp .4s ease',
         }}>
           <div style={{
-            width: 38, height: 38, borderRadius: 19,
+            width: 42, height: 42, borderRadius: 21,
             background: `linear-gradient(135deg,${C.primary},${C.purple})`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: 800, fontSize: 13, flexShrink: 0,
+            color: '#fff', fontWeight: 800, fontSize: 14, flexShrink: 0,
           }}>{getInitials(user.name)}</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 700, fontSize: 13, color: C.text, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ fontWeight: 700, fontSize: 14, color: C.text, display: 'flex', alignItems: 'center', gap: 6 }}>
               {user.name}
               <LbBadge label="You" color={C.green} />
             </div>
-            <div style={{ fontSize: 11, color: C.muted, marginTop: 1 }}>
+            <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>
               Rank #{userRank} · {userEntry.accuracy}% accuracy · {userEntry.score}/{userEntry.total} correct
             </div>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
-            <div style={{ fontSize: 15, fontWeight: 800, color: C.primary }}>#{userRank}</div>
-            <div style={{ fontSize: 10, color: C.muted }}>Your position</div>
+            <div style={{ fontSize: 17, fontWeight: 800, color: C.primary }}>#{userRank}</div>
+            <div style={{ fontSize: 11, color: C.muted }}>Your position</div>
           </div>
         </div>
       )}
@@ -1014,8 +1003,6 @@ const NAV_ITEMS = [
   { icon: '📅', label: 'Live Classes', id: 'classes', badge: 'LIVE' },
   { icon: '🎬', label: 'Lectures', id: 'lectures' },
   { icon: '📝', label: 'Mock Tests', id: 'mocktests' },
-  { icon: '🏆', label: 'Leaderboard', id: 'leaderboard' },
-  { icon: '🥇', label: 'Mock Leaderboard', id: 'mockleaderboard' },
   { icon: '📁', label: 'Resources', id: 'resources' },
   { icon: '👤', label: 'My Profile', id: 'profile' },
 ];
@@ -1027,7 +1014,7 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
         <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99, WebkitTapHighlightColor: 'transparent', WebkitAnimation: 'fadeIn .2s ease', animation: 'fadeIn .2s ease' }} />
       )}
       <div style={{
-        width: 220, minHeight: '100vh', background: C.sidebar,
+        width: 232, minHeight: '100vh', background: C.sidebar,
         display: 'flex', flexDirection: 'column',
         position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 100, overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
@@ -1037,48 +1024,48 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
         transition: 'transform .28s cubic-bezier(.4,0,.2,1)',
         boxShadow: isMobile && isOpen ? '4px 0 24px rgba(0,0,0,0.3)' : 'none',
       }}>
-        <div style={{ padding: '20px 16px 14px', borderBottom: '1px solid #1E3A5F' }}>
+        <div style={{ padding: '22px 18px 16px', borderBottom: '1px solid #1E3A5F' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, marginRight: 10 }}>
-                <img src="/Logo.webp" alt="DGCA Prep Logo" style={{ width: 28, height: 28, objectFit: 'contain' }}
-                  onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<span style="font-size:18px">✈️</span>'; }} />
+              <div style={{ width: 40, height: 40, borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, marginRight: 12 }}>
+                <img src="/Logo.webp" alt="DGCA Prep Logo" style={{ width: 32, height: 32, objectFit: 'contain' }}
+                  onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<span style="font-size:20px">✈️</span>'; }} />
               </div>
               <div>
-                <div style={{ color: '#fff', fontWeight: 800, fontSize: 14, lineHeight: 1.1 }}>DGCA</div>
-                <div style={{ color: C.accent, fontWeight: 700, fontSize: 11, letterSpacing: 1 }}>PREP</div>
+                <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, lineHeight: 1.1, letterSpacing: 0.3 }}>DGCA</div>
+                <div style={{ color: C.accent, fontWeight: 800, fontSize: 12, letterSpacing: 2 }}>PREP</div>
               </div>
             </div>
             {isMobile && (
               <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#8BA3C5', fontSize: 20, cursor: 'pointer', padding: 4 }}>✕</button>
             )}
           </div>
-          <div style={{ color: '#8BA3C5', fontSize: 10, marginTop: 6, fontStyle: 'italic' }}>Your Flight. Our Passion.</div>
+          <div style={{ color: '#8BA3C5', fontSize: 11, marginTop: 8, fontStyle: 'italic', letterSpacing: 0.3 }}>Your Flight. Our Passion.</div>
         </div>
 
         {user && (
-          <div style={{ padding: '12px 14px', borderBottom: '1px solid #1E3A5F', display: 'flex', alignItems: 'center' }}>
+          <div style={{ padding: '14px 16px', borderBottom: '1px solid #1E3A5F', display: 'flex', alignItems: 'center' }}>
             <div style={{
-              width: 34, height: 34, borderRadius: 9,
+              width: 38, height: 38, borderRadius: 10,
               background: `linear-gradient(135deg,${C.primary},${C.purple})`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontWeight: 700, fontSize: 12, flexShrink: 0, marginRight: 10,
+              color: '#fff', fontWeight: 700, fontSize: 14, flexShrink: 0, marginRight: 11,
             }}>{getInitials(user.name)}</div>
             <div style={{ overflow: 'hidden' }}>
-              <div style={{ color: '#fff', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
-              <div style={{ color: '#8BA3C5', fontSize: 10 }}>Student</div>
+              <div style={{ color: '#fff', fontWeight: 700, fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
+              <div style={{ color: '#8BA3C5', fontSize: 11, marginTop: 1 }}>Student Pilot</div>
             </div>
           </div>
         )}
 
-        <nav style={{ padding: '8px 10px', flex: 1 }}>
-          <div style={{ color: '#4B6785', fontSize: 9, fontWeight: 700, letterSpacing: 1.2, padding: '8px 10px 4px', textTransform: 'uppercase' }}>Main Menu</div>
+        <nav style={{ padding: '10px 10px', flex: 1 }}>
+          <div style={{ color: '#4B6785', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, padding: '8px 10px 6px', textTransform: 'uppercase' }}>Main Menu</div>
           {NAV_ITEMS.map((item, idx) => (
             <button key={item.id}
               onClick={() => { onChange(item.id); if (isMobile) onClose(); }}
               style={{
                 width: '100%', display: 'flex', alignItems: 'center',
-                padding: '9px 12px', borderRadius: 10, border: 'none',
+                padding: '10px 12px', borderRadius: 10, border: 'none',
                 cursor: 'pointer', textAlign: 'left', marginBottom: 2,
                 background: active === item.id ? C.primary : 'transparent',
                 color: active === item.id ? '#fff' : '#8BA3C5',
@@ -1091,20 +1078,20 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
               onMouseEnter={e => { if (active !== item.id) { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#CBD5E1'; e.currentTarget.style.paddingLeft = '16px'; } }}
               onMouseLeave={e => { if (active !== item.id) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#8BA3C5'; e.currentTarget.style.paddingLeft = '12px'; } }}
             >
-              <span style={{ fontSize: 15, marginRight: 10 }}>{item.icon}</span>
-              <span style={{ fontSize: 13, fontWeight: active === item.id ? 700 : 400 }}>{item.label}</span>
+              <span style={{ fontSize: 16, marginRight: 11 }}>{item.icon}</span>
+              <span style={{ fontSize: 14, fontWeight: active === item.id ? 700 : 400 }}>{item.label}</span>
               {item.badge && (
-                <span style={{ marginLeft: 'auto', background: C.red, color: '#fff', fontSize: 8, fontWeight: 800, padding: '2px 5px', borderRadius: 4, display: 'inline-block', WebkitAnimation: 'pulse 2s ease-in-out infinite', animation: 'pulse 2s ease-in-out infinite' }}>{item.badge}</span>
+                <span style={{ marginLeft: 'auto', background: C.red, color: '#fff', fontSize: 9, fontWeight: 800, padding: '2px 6px', borderRadius: 4, display: 'inline-block', WebkitAnimation: 'pulse 2s ease-in-out infinite', animation: 'pulse 2s ease-in-out infinite' }}>{item.badge}</span>
               )}
             </button>
           ))}
         </nav>
 
-        <div style={{ margin: '10px', borderRadius: 12, background: `linear-gradient(135deg,${C.primary},${C.purple})`, padding: '12px 14px' }}>
-          <div style={{ color: C.accent, fontSize: 11, fontWeight: 800, marginBottom: 4 }}>👑 Go Premium</div>
-          <div style={{ color: '#CBD5E1', fontSize: 11, lineHeight: 1.5, marginBottom: 8 }}>Unlock all mock tests & 1-on-1 mentoring.</div>
+        <div style={{ margin: '10px', borderRadius: 14, background: `linear-gradient(135deg,${C.primary},${C.purple})`, padding: '14px 16px' }}>
+          <div style={{ color: C.accent, fontSize: 12, fontWeight: 800, marginBottom: 5, letterSpacing: 0.5 }}>👑 Go Premium</div>
+          <div style={{ color: '#CBD5E1', fontSize: 12, lineHeight: 1.6, marginBottom: 10 }}>Unlock all mock tests & 1-on-1 mentoring.</div>
           <button style={{
-            background: '#fff', color: C.primary, border: 'none', borderRadius: 8, padding: '7px 14px', fontSize: 11, fontWeight: 700, cursor: 'pointer', width: '100%', WebkitAppearance: 'none', appearance: 'none',
+            background: '#fff', color: C.primary, border: 'none', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', width: '100%', WebkitAppearance: 'none', appearance: 'none',
             WebkitTransition: 'transform .15s',
             transition: 'transform .15s',
           }}
@@ -1118,7 +1105,7 @@ function Sidebar({ active, onChange, onLogout, user, isOpen, onClose, isMobile }
             <button onClick={onLogout} style={{
               width: '100%', background: hexAlpha(C.red, 0.1),
               border: `1px solid ${hexAlpha(C.red, 0.3)}`, borderRadius: 10,
-              padding: '8px 0', color: C.red, fontSize: 12, fontWeight: 700, cursor: 'pointer',
+              padding: '9px 0', color: C.red, fontSize: 13, fontWeight: 700, cursor: 'pointer',
               WebkitAppearance: 'none', appearance: 'none',
               WebkitTransition: 'background .15s',
               transition: 'background .15s',
@@ -1155,15 +1142,15 @@ function BottomNav({ active, onChange }) {
         <button key={item.id} onClick={() => onChange(item.id)} style={{
           flex: 1, display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          padding: '8px 4px', background: 'transparent', border: 'none',
+          padding: '9px 4px', background: 'transparent', border: 'none',
           cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
           color: active === item.id ? C.accent : '#8BA3C5',
           WebkitTransition: 'color .18s, transform .18s',
           transition: 'color .18s, transform .18s',
           transform: active === item.id ? 'translateY(-2px)' : 'none',
         }}>
-          <span style={{ fontSize: 20, marginBottom: 2 }}>{item.icon}</span>
-          <span style={{ fontSize: 9, fontWeight: active === item.id ? 700 : 400 }}>{item.label}</span>
+          <span style={{ fontSize: 22, marginBottom: 2 }}>{item.icon}</span>
+          <span style={{ fontSize: 10, fontWeight: active === item.id ? 700 : 400 }}>{item.label}</span>
         </button>
       ))}
     </div>
@@ -1182,17 +1169,17 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, onLogin, isMob
   const title = sub[subPage] || base[page] || 'Dashboard';
   return (
     <div style={{
-      position: 'fixed', top: 0, left: isMobile ? 0 : 220, right: 0, height: 56,
+      position: 'fixed', top: 0, left: isMobile ? 0 : 232, right: 0, height: 62,
       background: 'rgba(255,255,255,0.97)',
       WebkitBackdropFilter: 'blur(10px)', backdropFilter: 'blur(10px)',
       borderBottom: `1px solid ${C.border}`,
-      display: 'flex', alignItems: 'center', padding: '0 16px', zIndex: 89, gap: 10,
+      display: 'flex', alignItems: 'center', padding: '0 20px', zIndex: 89, gap: 12,
     }}>
       {isMobile && (
         <button onClick={onMenuOpen} style={{
-          width: 36, height: 36, borderRadius: 9, background: C.bg, border: `1px solid ${C.border}`,
+          width: 38, height: 38, borderRadius: 10, background: C.bg, border: `1px solid ${C.border}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: 'pointer', flexShrink: 0, fontSize: 18,
+          cursor: 'pointer', flexShrink: 0, fontSize: 19,
           WebkitAppearance: 'none', appearance: 'none',
           WebkitTransition: 'transform .15s',
           transition: 'transform .15s',
@@ -1202,9 +1189,9 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, onLogin, isMob
         >☰</button>
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: isMobile ? 15 : 17, fontWeight: 800, color: C.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
+        <div style={{ fontSize: isMobile ? 16 : 19, fontWeight: 800, color: C.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: -0.2 }}>{title}</div>
         {!isMobile && (
-          <div style={{ fontSize: 11, color: C.muted }}>
+          <div style={{ fontSize: 12, color: C.muted, marginTop: 1, letterSpacing: 0.2 }}>
             Home › {base[page]}
             {subPage === 'subject' && ' › Air Regulations'}
             {subPage === 'mock' && ' › Mock Test'}
@@ -1212,18 +1199,18 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, onLogin, isMob
         )}
       </div>
       {!isMobile && (
-        <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '7px 12px', border: `1px solid ${C.border}`, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
+        <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
           onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(C.primary, 0.25)}`; }}
           onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
         >
-          <span style={{ color: C.muted, marginRight: 8 }}>🔍</span>
-          <input placeholder="Search anything..." style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: 160 }} />
+          <span style={{ color: C.muted, marginRight: 8, fontSize: 14 }}>🔍</span>
+          <input placeholder="Search anything..." style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 14, color: C.text, width: 170 }} />
         </div>
       )}
       <button onClick={onLeaderboard} style={{
-        width: 36, height: 36, borderRadius: 9, background: C.bg,
+        width: 38, height: 38, borderRadius: 10, background: C.bg,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        cursor: 'pointer', border: `1px solid ${C.border}`, fontSize: 17,
+        cursor: 'pointer', border: `1px solid ${C.border}`, fontSize: 18,
         WebkitAppearance: 'none', appearance: 'none', flexShrink: 0,
         WebkitTransition: 'transform .2s',
         transition: 'transform .2s',
@@ -1233,10 +1220,10 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, onLogin, isMob
       >🏆</button>
       {!user ? (
         <button onClick={onLogin} style={{
-          display: 'flex', alignItems: 'center', gap: 6, padding: '0 12px',
-          height: 36, borderRadius: 10, border: `1px solid ${C.border}`,
+          display: 'flex', alignItems: 'center', gap: 7, padding: '0 16px',
+          height: 38, borderRadius: 10, border: `1px solid ${C.border}`,
           background: '#fff', color: C.text, cursor: 'pointer',
-          fontSize: 13, fontWeight: 700,
+          fontSize: 14, fontWeight: 700,
           WebkitAppearance: 'none', appearance: 'none', flexShrink: 0,
           WebkitTransition: 'transform .2s',
           transition: 'transform .2s',
@@ -1250,10 +1237,10 @@ function TopBar({ user, page, subPage, onLeaderboard, onMenuOpen, onLogin, isMob
       ) : (
         <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', flexShrink: 0 }}>
           <div style={{
-            width: 32, height: 32, borderRadius: 9,
+            width: 36, height: 36, borderRadius: 10,
             background: `linear-gradient(135deg,${C.primary},${C.purple})`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: 700, fontSize: 12,
+            color: '#fff', fontWeight: 700, fontSize: 13,
             WebkitTransition: 'transform .2s',
             transition: 'transform .2s',
           }}
@@ -1277,7 +1264,7 @@ function RTRSimulatorCard() {
         style={{
           background: C.sidebar,
           border: `1px solid ${hovered ? C.primary : '#1E3A5F'}`,
-          borderRadius: 14, padding: '18px 18px 16px', cursor: 'pointer',
+          borderRadius: 16, padding: '20px 20px 18px', cursor: 'pointer',
           WebkitTransition: 'border-color .2s, box-shadow .2s, transform .2s',
           transition: 'border-color .2s, box-shadow .2s, transform .2s',
           boxShadow: hovered ? `0 8px 28px ${hexAlpha(C.primary, 0.22)}` : 'none',
@@ -1287,18 +1274,18 @@ function RTRSimulatorCard() {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
           <span style={{
-            fontSize: 24, lineHeight: 1,
+            fontSize: 26, lineHeight: 1,
             WebkitAnimation: hovered ? 'headphoneBounce .6s ease infinite alternate' : 'none',
             animation: hovered ? 'headphoneBounce .6s ease infinite alternate' : 'none',
           }}>🎧</span>
           <div>
-            <div style={{ fontFamily: 'monospace', fontWeight: 600, fontSize: 14, color: hovered ? '#93C5FD' : '#fff', WebkitTransition: 'color .2s', transition: 'color .2s', lineHeight: 1.2 }}>
+            <div style={{ fontFamily: 'monospace', fontWeight: 600, fontSize: 15, color: hovered ? '#93C5FD' : '#fff', WebkitTransition: 'color .2s', transition: 'color .2s', lineHeight: 1.2 }}>
               RTR(A) Simulator
             </div>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: '#64748B', marginTop: 2 }}>Part 2 · Practical Exam</div>
+            <div style={{ fontFamily: 'monospace', fontSize: 12, color: '#64748B', marginTop: 3 }}>Part 2 · Practical Exam</div>
           </div>
         </div>
-        <div style={{ fontFamily: 'monospace', fontSize: 12, color: '#8BA3C5', lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontFamily: 'monospace', fontSize: 13, color: '#8BA3C5', lineHeight: 1.7, marginBottom: 13 }}>
           Practice ATC radio telephony with voice recognition. 6 phases — startup to landing.
         </div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -1307,7 +1294,7 @@ function RTRSimulatorCard() {
             { label: 'ICAO Phraseology', bg: hexAlpha('#10B981', 0.25), color: '#6EE7B7' },
             { label: 'AI Scoring', bg: hexAlpha('#8B5CF6', 0.3), color: '#C4B5FD' },
           ].map(tag => (
-            <span key={tag.label} style={{ fontFamily: 'monospace', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 6, background: tag.bg, color: tag.color, display: 'inline-block' }}>{tag.label}</span>
+            <span key={tag.label} style={{ fontFamily: 'monospace', fontSize: 11, fontWeight: 700, padding: '3px 9px', borderRadius: 6, background: tag.bg, color: tag.color, display: 'inline-block' }}>{tag.label}</span>
           ))}
         </div>
       </div>
@@ -1326,7 +1313,7 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
     { icon: '❓', value: stats.totalQuestions, label: 'Questions Done', color: C.purple },
   ];
   const statCols = isMobile ? '1fr 1fr' : 'repeat(4,1fr)';
-  const mainCols = (isMobile || isTablet) ? '1fr' : '1fr 340px';
+  const mainCols = (isMobile || isTablet) ? '1fr' : '1fr 360px';
 
   return (
     <div style={{
@@ -1338,33 +1325,32 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
       {/* Hero */}
       <div style={{
         background: `linear-gradient(120deg,${C.sidebar} 0%,${C.primary} 100%)`,
-        borderRadius: 18, padding: isMobile ? '22px 18px' : '26px 28px', marginBottom: 20,
+        borderRadius: 20, padding: isMobile ? '24px 20px' : '30px 32px', marginBottom: 22,
         display: 'flex', flexDirection: isMobile ? 'column' : 'row',
         justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'center', gap: 16,
         overflow: 'hidden',
         position: 'relative',
       }}>
-        {/* subtle animated plane */}
         <div style={{
           position: 'absolute', right: isMobile ? -20 : 160, top: '50%',
           WebkitTransform: 'translateY(-50%)',
           transform: 'translateY(-50%)',
-          fontSize: 80, opacity: 0.04,
+          fontSize: 90, opacity: 0.04,
           WebkitAnimation: 'planeDrift 8s ease-in-out infinite',
           animation: 'planeDrift 8s ease-in-out infinite',
           pointerEvents: 'none',
         }}>✈️</div>
         <div>
-          <div style={{ color: '#93C5FD', fontSize: 13, fontWeight: 600, marginBottom: 5 }}>Welcome back, Pilot 👋</div>
-          <div style={{ color: '#fff', fontSize: isMobile ? 20 : 24, fontWeight: 800, lineHeight: 1.2, marginBottom: 8 }}>
+          <div style={{ color: '#93C5FD', fontSize: 14, fontWeight: 600, marginBottom: 6, letterSpacing: 0.3 }}>Welcome back, Pilot 👋</div>
+          <div style={{ color: '#fff', fontSize: isMobile ? 22 : 28, fontWeight: 900, lineHeight: 1.2, marginBottom: 8, letterSpacing: -0.5 }}>
             Ready for your next DGCA exam session?
           </div>
-          <div style={{ color: '#93C5FD', fontSize: 12, marginBottom: 16 }}>
+          <div style={{ color: '#93C5FD', fontSize: 13, marginBottom: 18 }}>
             {loading ? 'Loading…' : `${stats.testsAttempted} tests done · ${stats.avgScore}% avg accuracy`}
           </div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             <button onClick={() => onNavigate('tests')} style={{
-              background: C.accent, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
+              background: C.accent, color: '#fff', border: 'none', borderRadius: 11, padding: '11px 20px', fontWeight: 700, fontSize: 14, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
               WebkitTransition: 'transform .15s, box-shadow .15s',
               transition: 'transform .15s, box-shadow .15s',
             }}
@@ -1372,7 +1358,7 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
             >📚 Start Test</button>
             <button onClick={() => onNavigate('resources')} style={{
-              background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.3)}`, borderRadius: 10, padding: '10px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
+              background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.3)}`, borderRadius: 11, padding: '11px 20px', fontWeight: 700, fontSize: 14, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
               WebkitTransition: 'background .15s',
               transition: 'background .15s',
             }}
@@ -1384,44 +1370,44 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
         {!isMobile && (
           <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0 }}>
             <div style={{
-              background: hexAlpha(badge.color, 0.15), border: `1px solid ${hexAlpha(badge.color, 0.31)}`, borderRadius: 12, padding: '10px 18px', textAlign: 'center', marginBottom: 6,
+              background: hexAlpha(badge.color, 0.15), border: `1px solid ${hexAlpha(badge.color, 0.31)}`, borderRadius: 14, padding: '12px 20px', textAlign: 'center', marginBottom: 6,
               WebkitAnimation: 'float 3s ease-in-out infinite',
               animation: 'float 3s ease-in-out infinite',
             }}>
-              <div style={{ fontSize: 28 }}>{badge.icon}</div>
-              <div style={{ color: '#fff', fontWeight: 800, fontSize: 13 }}>{badge.label}</div>
+              <div style={{ fontSize: 32 }}>{badge.icon}</div>
+              <div style={{ color: '#fff', fontWeight: 800, fontSize: 14, marginTop: 4 }}>{badge.label}</div>
             </div>
-            <div style={{ color: '#93C5FD', fontSize: 11 }}>Your rank badge</div>
+            <div style={{ color: '#93C5FD', fontSize: 12 }}>Your rank badge</div>
           </div>
         )}
       </div>
 
       {/* Stat cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: statCols, gap: 12, marginBottom: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: statCols, gap: 14, marginBottom: 22 }}>
         {loading
-          ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.card, borderRadius: 14, padding: 16, border: `1px solid ${C.border}` }}><Skeleton h={40} /></div>)
+          ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.card, borderRadius: 16, padding: 18, border: `1px solid ${C.border}` }}><Skeleton h={44} /></div>)
           : statCards.map((s, i) => <StatCard key={i} icon={s.icon} label={s.label} value={s.value} color={s.color} delay={i * 80} />)
         }
       </div>
 
       {/* Main grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: mainCols, gap: 18 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mainCols, gap: 20 }}>
         {/* Subject tests */}
-        <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, overflow: 'hidden' }}>
-          <div style={{ padding: '16px 18px', borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>📚 Chapter-wise Tests</div>
-            <button onClick={() => onNavigate('tests')} style={{ color: C.primary, background: C.primaryLight, border: 'none', borderRadius: 8, padding: '5px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>View All →</button>
+        <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden' }}>
+          <div style={{ padding: '18px 20px', borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>📚 Chapter-wise Tests</div>
+            <button onClick={() => onNavigate('tests')} style={{ color: C.primary, background: C.primaryLight, border: 'none', borderRadius: 9, padding: '6px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>View All →</button>
           </div>
-          <div style={{ padding: 14, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10 }}>
+          <div style={{ padding: 16, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 }}>
             {loading
-              ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.bg, borderRadius: 10, padding: 14 }}><Skeleton h={12} /></div>)
+              ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.bg, borderRadius: 12, padding: 14 }}><Skeleton h={12} /></div>)
               : chapters.slice(0, isMobile ? 6 : 12).map((ch, idx) => {
                 const rs = allResults.filter(r => r.chapterId === ch.id);
                 const best = rs.length ? Math.max(...rs.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)) : null;
                 return (
                   <div key={ch.id} onClick={() => onNavigate('tests', ch.id)}
                     style={{
-                      background: C.bg, borderRadius: 12, padding: '12px 14px', cursor: 'pointer', border: `1px solid ${C.border}`, borderLeft: `4px solid ${ch.color || C.primary}`,
+                      background: C.bg, borderRadius: 13, padding: '14px 16px', cursor: 'pointer', border: `1px solid ${C.border}`, borderLeft: `4px solid ${ch.color || C.primary}`,
                       WebkitTransition: 'transform .18s, box-shadow .18s',
                       transition: 'transform .18s, box-shadow .18s',
                       WebkitAnimation: `fadeIn .4s ease ${idx * 0.06}s both`,
@@ -1430,14 +1416,14 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 4px 14px ${hexAlpha(ch.color || C.primary, 0.14)}`; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                      <span style={{ fontSize: 18 }}>{ch.icon}</span>
-                      <span style={{ fontSize: 11, color: C.muted }}>→</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontSize: 20 }}>{ch.icon}</span>
+                      <span style={{ fontSize: 12, color: C.muted }}>→</span>
                     </div>
-                    <div style={{ fontWeight: 700, fontSize: 12, color: C.text, marginBottom: 2 }}>{ch.title}</div>
-                    <div style={{ fontSize: 11, color: C.muted, marginBottom: 7 }}>{ch.questionCount || 10} Questions</div>
-                    {best !== null && <div style={{ fontSize: 11, fontWeight: 700, color: getScoreColor(best), marginBottom: 5 }}>Best: {best}%</div>}
-                    <ProgressBar value={best ?? 0} color={ch.color || C.primary} height={4} />
+                    <div style={{ fontWeight: 700, fontSize: 13, color: C.text, marginBottom: 3 }}>{ch.title}</div>
+                    <div style={{ fontSize: 12, color: C.muted, marginBottom: 8 }}>{ch.questionCount || 10} Questions</div>
+                    {best !== null && <div style={{ fontSize: 12, fontWeight: 700, color: getScoreColor(best), marginBottom: 6 }}>Best: {best}%</div>}
+                    <ProgressBar value={best ?? 0} color={ch.color || C.primary} height={5} />
                   </div>
                 );
               })}
@@ -1445,29 +1431,29 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
         </div>
 
         {/* Right column */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div onClick={() => onNavigate('resources')} style={{
-            background: `linear-gradient(135deg,#1D4ED8,#7C3AED)`, borderRadius: 14, padding: '16px 18px', cursor: 'pointer',
+            background: `linear-gradient(135deg,#1D4ED8,#7C3AED)`, borderRadius: 16, padding: '18px 20px', cursor: 'pointer',
             WebkitTransition: 'transform .2s, box-shadow .2s',
             transition: 'transform .2s, box-shadow .2s',
           }}
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 10px 28px rgba(29,78,216,0.3)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
           >
-            <div style={{ fontSize: 26, marginBottom: 6 }}>📖</div>
-            <div style={{ color: '#fff', fontWeight: 800, fontSize: 14, marginBottom: 4 }}>Air Regulations Notes</div>
-            <div style={{ color: '#CBD5E1', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>All 26 chapters · Definitions, rules, HF, procedures.</div>
-            <div style={{ background: hexAlpha('#ffffff', 0.2), color: '#fff', borderRadius: 8, padding: '6px 12px', fontSize: 12, fontWeight: 700, display: 'inline-block' }}>Open Notes →</div>
+            <div style={{ fontSize: 28, marginBottom: 7 }}>📖</div>
+            <div style={{ color: '#fff', fontWeight: 800, fontSize: 15, marginBottom: 5 }}>Air Regulations Notes</div>
+            <div style={{ color: '#CBD5E1', fontSize: 13, lineHeight: 1.6, marginBottom: 12 }}>All 26 chapters · Definitions, rules, HF, procedures.</div>
+            <div style={{ background: hexAlpha('#ffffff', 0.2), color: '#fff', borderRadius: 9, padding: '7px 14px', fontSize: 13, fontWeight: 700, display: 'inline-block' }}>Open Notes →</div>
           </div>
 
           <RTRSimulatorCard />
 
           {user && (
-            <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: 16 }}>
-              <div style={{ fontWeight: 800, fontSize: 13, color: C.text, marginBottom: 12 }}>👤 Your Profile</div>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+            <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: 18 }}>
+              <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 14 }}>👤 Your Profile</div>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14 }}>
                 <div style={{
-                  width: 46, height: 46, borderRadius: 12, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 16, marginRight: 10, flexShrink: 0,
+                  width: 50, height: 50, borderRadius: 14, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 18, marginRight: 12, flexShrink: 0,
                   WebkitTransition: 'transform .2s',
                   transition: 'transform .2s',
                 }}
@@ -1475,37 +1461,37 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
                   onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
                 >{getInitials(user.name)}</div>
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>{user.name}</div>
-                  <div style={{ fontSize: 11, color: C.muted }}>{user.email}</div>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>{user.name}</div>
+                  <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{user.email}</div>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                <div style={{ background: C.bg, borderRadius: 10, padding: '8px 10px', textAlign: 'center' }}>
-                  <div style={{ fontWeight: 800, fontSize: 15, color: C.primary }}>{stats.testsAttempted}</div>
-                  <div style={{ fontSize: 10, color: C.muted }}>Tests Done</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div style={{ background: C.bg, borderRadius: 11, padding: '10px 12px', textAlign: 'center' }}>
+                  <div style={{ fontWeight: 800, fontSize: 18, color: C.primary }}>{stats.testsAttempted}</div>
+                  <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>Tests Done</div>
                 </div>
-                <div style={{ background: C.bg, borderRadius: 10, padding: '8px 10px', textAlign: 'center' }}>
-                  <div style={{ fontWeight: 800, fontSize: 15, color: C.accent }}>{stats.avgScore}%</div>
-                  <div style={{ fontSize: 10, color: C.muted }}>Avg Score</div>
+                <div style={{ background: C.bg, borderRadius: 11, padding: '10px 12px', textAlign: 'center' }}>
+                  <div style={{ fontWeight: 800, fontSize: 18, color: C.accent }}>{stats.avgScore}%</div>
+                  <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>Avg Score</div>
                 </div>
               </div>
             </div>
           )}
 
-          <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, overflow: 'hidden', flex: 1 }}>
-            <div style={{ padding: '14px 16px', borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ fontWeight: 800, fontSize: 13, color: C.text }}>📈 Recent Tests</div>
+          <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, overflow: 'hidden', flex: 1 }}>
+            <div style={{ padding: '16px 18px', borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>📈 Recent Tests</div>
             </div>
             {loading
-              ? Array(3).fill(0).map((_, i) => <div key={i} style={{ padding: '10px 16px', borderTop: `1px solid ${C.border}` }}><Skeleton h={12} /></div>)
+              ? Array(3).fill(0).map((_, i) => <div key={i} style={{ padding: '12px 18px', borderTop: `1px solid ${C.border}` }}><Skeleton h={12} /></div>)
               : recentResults.length === 0
-                ? <div style={{ padding: '24px 16px', textAlign: 'center', color: C.muted, fontSize: 13 }}>No tests yet!</div>
+                ? <div style={{ padding: '28px 18px', textAlign: 'center', color: C.muted, fontSize: 14 }}>No tests yet!</div>
                 : recentResults.map((r, idx) => {
                   const pct = r.total > 0 ? Math.round((r.score / r.total) * 100) : 0;
                   const ch = chapters.find(c => c.id === r.chapterId);
                   return (
                     <div key={r.id} style={{
-                      padding: '10px 16px', borderTop: `1px solid ${C.border}`, display: 'flex', alignItems: 'center',
+                      padding: '12px 18px', borderTop: `1px solid ${C.border}`, display: 'flex', alignItems: 'center',
                       WebkitTransition: 'background .15s',
                       transition: 'background .15s',
                       WebkitAnimation: `slideInRow .3s ease ${idx * 0.07}s both`,
@@ -1514,12 +1500,12 @@ function HomePage({ user, stats, recentResults, allResults, loading, onNavigate,
                       onMouseEnter={e => { e.currentTarget.style.background = C.bg; }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
                     >
-                      <div style={{ width: 32, height: 32, borderRadius: 9, background: hexAlpha(ch?.color || C.primary, 0.13), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, marginRight: 10 }}>{ch?.icon ?? '📝'}</div>
+                      <div style={{ width: 36, height: 36, borderRadius: 10, background: hexAlpha(ch?.color || C.primary, 0.13), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, marginRight: 12 }}>{ch?.icon ?? '📝'}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 12, fontWeight: 700, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ch?.title ?? r.chapterId}</div>
-                        <div style={{ fontSize: 10, color: C.muted }}>{formatDate(r.date)}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ch?.title ?? r.chapterId}</div>
+                        <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{formatDate(r.date)}</div>
                       </div>
-                      <div style={{ fontSize: 12, fontWeight: 800, color: getScoreColor(pct), whiteSpace: 'nowrap' }}>{r.score}/{r.total}</div>
+                      <div style={{ fontSize: 13, fontWeight: 800, color: getScoreColor(pct), whiteSpace: 'nowrap' }}>{r.score}/{r.total}</div>
                     </div>
                   );
                 })}
@@ -1535,11 +1521,11 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
   const visible = useFadeIn(0);
   return (
     <div style={{ opacity: visible ? 1 : 0, WebkitTransition: 'opacity .4s ease', transition: 'opacity .4s ease' }}>
-      <div style={{ marginBottom: 22 }}>
-        <h2 style={{ margin: 0, fontSize: isMobile ? 18 : 20, fontWeight: 800, color: C.text }}>Select a Subject</h2>
-        <p style={{ margin: '5px 0 0', color: C.muted, fontSize: 13 }}>Choose a subject below to start chapter-wise tests.</p>
+      <div style={{ marginBottom: 24 }}>
+        <h2 style={{ margin: 0, fontSize: isMobile ? 20 : 24, fontWeight: 800, color: C.text, letterSpacing: -0.3 }}>Select a Subject</h2>
+        <p style={{ margin: '6px 0 0', color: C.muted, fontSize: 14 }}>Choose a subject below to start chapter-wise tests.</p>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(300px,1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(300px,1fr))', gap: 18 }}>
         {SUBJECTS.map((sub, idx) => {
           const subChapters = chapters.filter(c => sub.chapterIds.includes(c.id));
           const attempted = subChapters.filter(c => allResults.some(r => r.chapterId === c.id)).length;
@@ -1550,7 +1536,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
             <div key={sub.id}
               onClick={() => sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
               style={{
-                background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer',
+                background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer',
                 WebkitTransition: 'transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s',
                 transition: 'transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s',
                 WebkitAnimation: `fadeIn .4s ease ${idx * 0.08}s both`,
@@ -1558,36 +1544,36 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
               }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = `0 12px 32px ${hexAlpha(sub.color, 0.18)}`; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
-              <div style={{ background: sub.gradient, padding: '20px 20px 16px' }}>
+              <div style={{ background: sub.gradient, padding: '22px 22px 18px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ width: 50, height: 50, borderRadius: 14, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{sub.icon}</div>
+                  <div style={{ width: 54, height: 54, borderRadius: 15, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{sub.icon}</div>
                   {sub.comingSoon
-                    ? <span style={{ background: hexAlpha('#000000', 0.25), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}>🚧 Coming Soon</span>
+                    ? <span style={{ background: hexAlpha('#000000', 0.25), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20, display: 'inline-block' }}>🚧 Coming Soon</span>
                     : sub.isMock
-                      ? <span style={{ background: hexAlpha('#ffffff', 0.3), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}>🎯 Full Paper</span>
+                      ? <span style={{ background: hexAlpha('#ffffff', 0.3), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20, display: 'inline-block' }}>🎯 Full Paper</span>
                       : attempted > 0
-                        ? <span style={{ background: hexAlpha('#ffffff', 0.3), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}>{attempted}/{subChapters.length} done</span>
-                        : <span style={{ background: hexAlpha('#ffffff', 0.2), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}></span>}
+                        ? <span style={{ background: hexAlpha('#ffffff', 0.3), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20, display: 'inline-block' }}>{attempted}/{subChapters.length} done</span>
+                        : <span style={{ background: hexAlpha('#ffffff', 0.2), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20, display: 'inline-block' }}></span>}
                 </div>
-                <div style={{ color: '#fff', fontWeight: 800, fontSize: 17, marginTop: 12, marginBottom: 3 }}>{sub.title}</div>
-                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{sub.subtitle}</div>
+                <div style={{ color: '#fff', fontWeight: 800, fontSize: 18, marginTop: 14, marginBottom: 4, letterSpacing: -0.3 }}>{sub.title}</div>
+                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 13 }}>{sub.subtitle}</div>
               </div>
-              <div style={{ padding: '14px 20px 18px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                  <span style={{ fontSize: 12, color: C.muted }}>{sub.stats}</span>
-                  <span style={{ fontSize: 11, background: hexAlpha(sub.color, 0.08), color: sub.color, padding: '3px 10px', borderRadius: 20, fontWeight: 700, display: 'inline-block' }}>{sub.exam}</span>
+              <div style={{ padding: '16px 22px 20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ fontSize: 13, color: C.muted }}>{sub.stats}</span>
+                  <span style={{ fontSize: 12, background: hexAlpha(sub.color, 0.08), color: sub.color, padding: '4px 12px', borderRadius: 20, fontWeight: 700, display: 'inline-block' }}>{sub.exam}</span>
                 </div>
                 {!sub.comingSoon && !sub.isMock && subChapters.length > 0 && (
                   <>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                      <span style={{ fontSize: 11, color: C.muted }}>Avg Score</span>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: avgPct > 0 ? getScoreColor(avgPct) : C.muted }}>{avgPct > 0 ? `${avgPct}%` : '—'}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontSize: 12, color: C.muted }}>Avg Score</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: avgPct > 0 ? getScoreColor(avgPct) : C.muted }}>{avgPct > 0 ? `${avgPct}%` : '—'}</span>
                     </div>
-                    <ProgressBar value={avgPct} color={sub.color} height={5} />
+                    <ProgressBar value={avgPct} color={sub.color} height={6} />
                   </>
                 )}
                 <button style={{
-                  marginTop: 12, width: '100%', padding: '10px 0', background: sub.gradient, color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
+                  marginTop: 14, width: '100%', padding: '11px 0', background: sub.gradient, color: '#fff', border: 'none', borderRadius: 11, fontWeight: 700, fontSize: 14, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none',
                   WebkitTransition: 'opacity .15s',
                   transition: 'opacity .15s',
                 }}>
@@ -1632,32 +1618,32 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
 
   return (
     <div style={{ opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(10px)', WebkitTransition: 'opacity .4s ease, transform .4s ease', transition: 'opacity .4s ease, transform .4s ease' }}>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 22, gap: 14 }}>
         <button onClick={onBack} style={{
-          width: 38, height: 38, borderRadius: 10, background: C.card, border: `1px solid ${C.border}`, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, WebkitAppearance: 'none', appearance: 'none',
+          width: 40, height: 40, borderRadius: 11, background: C.card, border: `1px solid ${C.border}`, fontSize: 17, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, WebkitAppearance: 'none', appearance: 'none',
           WebkitTransition: 'transform .15s',
           transition: 'transform .15s',
         }}
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(-3px)'; }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
         >←</button>
-        <div style={{ width: 40, height: 40, borderRadius: 11, flexShrink: 0, background: subject.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{subject.icon}</div>
+        <div style={{ width: 46, height: 46, borderRadius: 13, flexShrink: 0, background: subject.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{subject.icon}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h2 style={{ margin: 0, fontSize: isMobile ? 17 : 20, fontWeight: 800, color: C.text }}>{subject.icon} {subject.title}</h2>
-          <p style={{ margin: '2px 0 0', color: C.muted, fontSize: 12 }}>{subjectChapters.length} chapters · Click to start MCQ test</p>
+          <h2 style={{ margin: 0, fontSize: isMobile ? 18 : 22, fontWeight: 800, color: C.text, letterSpacing: -0.3 }}>{subject.icon} {subject.title}</h2>
+          <p style={{ margin: '3px 0 0', color: C.muted, fontSize: 13 }}>{subjectChapters.length} chapters · Click to start MCQ test</p>
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', background: C.card, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, marginBottom: 18, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
+      <div style={{ display: 'flex', alignItems: 'center', background: C.card, borderRadius: 11, padding: '9px 16px', border: `1px solid ${C.border}`, marginBottom: 20, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
         onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(subject.color, 0.25)}`; }}
         onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
       >
-        <span style={{ color: C.muted, marginRight: 8 }}>🔍</span>
+        <span style={{ color: C.muted, marginRight: 10, fontSize: 15 }}>🔍</span>
         <input placeholder="Search chapters…" value={search} onChange={e => setSearch(e.target.value)}
-          style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: '100%' }} />
+          style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 14, color: C.text, width: '100%' }} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10, marginBottom: 22 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12, marginBottom: 24 }}>
         {[
           { icon: '📚', val: subjectChapters.length, label: 'Total Chapters' },
           { icon: '✅', val: attempted, label: 'Attempted' },
@@ -1665,28 +1651,28 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
           { icon: '🏆', val: bestScore !== null ? `${bestScore}%` : '—', label: 'Best Score' },
         ].map((s, i) => (
           <div key={s.label} style={{
-            background: C.card, borderRadius: 12, padding: '10px 14px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10,
+            background: C.card, borderRadius: 13, padding: '12px 16px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 12,
             WebkitAnimation: `fadeIn .4s ease ${i * 0.07}s both`,
             animation: `fadeIn .4s ease ${i * 0.07}s both`,
           }}>
-            <span style={{ fontSize: 18 }}>{s.icon}</span>
+            <span style={{ fontSize: 20 }}>{s.icon}</span>
             <div>
-              <div style={{ fontWeight: 800, fontSize: 16, color: C.text, lineHeight: 1 }}>{s.val}</div>
-              <div style={{ fontSize: 11, color: C.muted }}>{s.label}</div>
+              <div style={{ fontWeight: 800, fontSize: 18, color: C.text, lineHeight: 1 }}>{s.val}</div>
+              <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>{s.label}</div>
             </div>
           </div>
         ))}
       </div>
 
       {groups.map(group => (
-        <div key={group.label} style={{ marginBottom: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}>
-            <div style={{ height: 3, width: 24, borderRadius: 99, background: group.color, flexShrink: 0 }} />
-            <span style={{ fontWeight: 800, fontSize: 14, color: group.color }}>{group.label}</span>
+        <div key={group.label} style={{ marginBottom: 30 }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16, gap: 10 }}>
+            <div style={{ height: 3, width: 26, borderRadius: 99, background: group.color, flexShrink: 0 }} />
+            <span style={{ fontWeight: 800, fontSize: 15, color: group.color }}>{group.label}</span>
             <div style={{ flex: 1, height: 1, background: C.border }} />
-            <span style={{ fontSize: 11, color: C.muted, flexShrink: 0 }}>{group.chapters.length} ch.</span>
+            <span style={{ fontSize: 12, color: C.muted, flexShrink: 0 }}>{group.chapters.length} ch.</span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(260px,1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(260px,1fr))', gap: 14 }}>
             {group.chapters.map((ch, idx) => {
               const best = getBest(ch.id);
               const attempts = allResults.filter(r => r.chapterId === ch.id).length;
@@ -1694,7 +1680,7 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
               return (
                 <div key={ch.id} onClick={() => onStartTest(ch.id)}
                   style={{
-                    background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, borderLeft: `4px solid ${group.color}`, padding: 16, cursor: 'pointer',
+                    background: C.card, borderRadius: 15, border: `1px solid ${C.border}`, borderLeft: `4px solid ${group.color}`, padding: 18, cursor: 'pointer',
                     WebkitTransition: 'transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s',
                     transition: 'transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s',
                     WebkitAnimation: `fadeIn .35s ease ${idx * 0.04}s both`,
@@ -1702,23 +1688,23 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
                   }}
                   onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${hexAlpha(group.color, 0.15)}`; }}
                   onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 40, height: 40, borderRadius: 10, background: hexAlpha(group.color, 0.08), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{ch.icon || subject.icon}</div>
-                      <div style={{ width: 22, height: 22, borderRadius: 6, background: group.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 9, fontWeight: 800 }}>{chNum}</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                      <div style={{ width: 44, height: 44, borderRadius: 12, background: hexAlpha(group.color, 0.08), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{ch.icon || subject.icon}</div>
+                      <div style={{ width: 24, height: 24, borderRadius: 7, background: group.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10, fontWeight: 800 }}>{chNum}</div>
                     </div>
                     {best !== null
                       ? <Badge label={`${best}%`} color={getScoreColor(best)} />
-                      : <span style={{ fontSize: 10, color: C.muted, background: C.bg, padding: '2px 8px', borderRadius: 20, display: 'inline-block' }}>New</span>}
+                      : <span style={{ fontSize: 11, color: C.muted, background: C.bg, padding: '3px 9px', borderRadius: 20, display: 'inline-block' }}>New</span>}
                   </div>
-                  <div style={{ fontWeight: 800, fontSize: 13, color: C.text, marginBottom: 3, lineHeight: 1.3 }}>{ch.title}</div>
-                  <div style={{ fontSize: 11, color: C.muted, marginBottom: 10 }}>{ch.part || subject.title} · {attempts} attempt{attempts !== 1 ? 's' : ''}</div>
-                  <ProgressBar value={best ?? 0} color={group.color} height={4} />
-                  <div style={{ marginTop: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 11, color: best !== null ? getScoreColor(best) : C.muted, fontWeight: best !== null ? 700 : 400 }}>
+                  <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 4, lineHeight: 1.3 }}>{ch.title}</div>
+                  <div style={{ fontSize: 12, color: C.muted, marginBottom: 12 }}>{ch.part || subject.title} · {attempts} attempt{attempts !== 1 ? 's' : ''}</div>
+                  <ProgressBar value={best ?? 0} color={group.color} height={5} />
+                  <div style={{ marginTop: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 12, color: best !== null ? getScoreColor(best) : C.muted, fontWeight: best !== null ? 700 : 400 }}>
                       {best !== null ? `Best: ${best}%` : 'Not attempted'}
                     </span>
-                    <span style={{ fontSize: 11, color: group.color, fontWeight: 700 }}>Start →</span>
+                    <span style={{ fontSize: 12, color: group.color, fontWeight: 700 }}>Start →</span>
                   </div>
                 </div>
               );
@@ -1728,7 +1714,7 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
       ))}
 
       {filtered.length === 0 && (
-        <div style={{ textAlign: 'center', color: C.muted, padding: '48px 0', fontSize: 14 }}>No chapters match "{search}"</div>
+        <div style={{ textAlign: 'center', color: C.muted, padding: '48px 0', fontSize: 15 }}>No chapters match "{search}"</div>
       )}
     </div>
   );
@@ -1742,33 +1728,33 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', opacity: visible ? 1 : 0, WebkitTransition: 'opacity .4s ease', transition: 'opacity .4s ease' }}>
-      <button onClick={onBack} style={{ ...btnBase, marginBottom: 20, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '7px 16px', fontSize: 13, color: C.text, display: 'flex', alignItems: 'center', gap: 6, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+      <button onClick={onBack} style={{ ...btnBase, marginBottom: 22, background: C.card, border: `1px solid ${C.border}`, borderRadius: 11, padding: '8px 18px', fontSize: 14, color: C.text, display: 'flex', alignItems: 'center', gap: 6, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
         onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(-3px)'; }}
         onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
       >← Back to Tests</button>
 
-      <div style={{ background: `linear-gradient(120deg,${C.sidebar} 0%,${C.purple} 100%)`, borderRadius: 18, padding: isMobile ? '20px 18px' : '24px 28px', marginBottom: 24 }}>
-        <div style={{ fontSize: isMobile ? 22 : 28, marginBottom: 8 }}>🎯</div>
-        <div style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? 18 : 22, marginBottom: 6 }}>Mock Test — Choose a Subject</div>
-        <div style={{ color: '#C4B5FD', fontSize: 13, lineHeight: 1.6 }}>
+      <div style={{ background: `linear-gradient(120deg,${C.sidebar} 0%,${C.purple} 100%)`, borderRadius: 20, padding: isMobile ? '22px 20px' : '28px 32px', marginBottom: 26 }}>
+        <div style={{ fontSize: isMobile ? 24 : 32, marginBottom: 10 }}>🎯</div>
+        <div style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? 20 : 26, marginBottom: 7, letterSpacing: -0.5 }}>Mock Test — Choose a Subject</div>
+        <div style={{ color: '#C4B5FD', fontSize: 14, lineHeight: 1.7 }}>
           Select a subject below to generate a 100-question DGCA-style mock paper from that topic.
           Choose "All Subjects" for a mixed paper covering every chapter.
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
           {[['❓', '100 Questions'], ['⏱️', '120 Minutes'], ['💡', 'Instant Results'], ['🔀', 'Randomised']].map(([icon, label]) => (
-            <span key={label} style={{ background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.2)}`, padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, display: 'inline-block' }}>{icon} {label}</span>
+            <span key={label} style={{ background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.2)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>{icon} {label}</span>
           ))}
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(230px,1fr))', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(240px,1fr))', gap: 16 }}>
         {options.map((sub, idx) => {
           const isAll = sub.id === 'all';
           const isComingSoon = sub.comingSoon;
           return (
             <div key={sub.id} onClick={() => !isComingSoon && onSelectSubject(sub)}
               style={{
-                background: C.card, borderRadius: 16, border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : `1px solid ${C.border}`, overflow: 'hidden', cursor: isComingSoon ? 'not-allowed' : 'pointer', opacity: isComingSoon ? 0.55 : 1,
+                background: C.card, borderRadius: 18, border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : `1px solid ${C.border}`, overflow: 'hidden', cursor: isComingSoon ? 'not-allowed' : 'pointer', opacity: isComingSoon ? 0.55 : 1,
                 WebkitTransition: 'transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s',
                 transition: 'transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s',
                 WebkitAnimation: `fadeIn .4s ease ${idx * 0.07}s both`,
@@ -1776,22 +1762,22 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
               }}
               onMouseEnter={e => { if (isComingSoon) return; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 30px ${hexAlpha(sub.color, 0.18)}`; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
-              <div style={{ background: sub.gradient, padding: '18px 18px 14px' }}>
+              <div style={{ background: sub.gradient, padding: '20px 20px 16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ width: 46, height: 46, borderRadius: 12, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>{sub.icon}</div>
-                  <span style={{ background: hexAlpha('#ffffff', 0.25), color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20, display: 'inline-block' }}>
+                  <div style={{ width: 50, height: 50, borderRadius: 14, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{sub.icon}</div>
+                  <span style={{ background: hexAlpha('#ffffff', 0.25), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20, display: 'inline-block' }}>
                     {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎲 Mixed' : sub.exam}
                   </span>
                 </div>
-                <div style={{ color: '#fff', fontWeight: 800, fontSize: 15, marginTop: 10, marginBottom: 2 }}>{sub.title}</div>
-                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 11 }}>{sub.subtitle}</div>
+                <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3, letterSpacing: -0.2 }}>{sub.title}</div>
+                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{sub.subtitle}</div>
               </div>
-              <div style={{ padding: '12px 18px 16px' }}>
-                <div style={{ fontSize: 11, color: C.muted, marginBottom: 12 }}>
+              <div style={{ padding: '14px 20px 18px' }}>
+                <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>
                   {isComingSoon ? 'Questions being prepared by our content team' : sub.stats}
                 </div>
                 <button onClick={e => { e.stopPropagation(); if (!isComingSoon) onSelectSubject(sub); }} disabled={isComingSoon}
-                  style={{ ...btnBase, width: '100%', padding: '9px 0', background: isComingSoon ? C.border : sub.gradient, borderRadius: 10, color: isComingSoon ? C.muted : '#fff', fontWeight: 700, fontSize: 13, cursor: isComingSoon ? 'not-allowed' : 'pointer', WebkitTransition: 'opacity .15s', transition: 'opacity .15s' }}>
+                  style={{ ...btnBase, width: '100%', padding: '10px 0', background: isComingSoon ? C.border : sub.gradient, borderRadius: 11, color: isComingSoon ? C.muted : '#fff', fontWeight: 700, fontSize: 14, cursor: isComingSoon ? 'not-allowed' : 'pointer', WebkitTransition: 'opacity .15s', transition: 'opacity .15s' }}>
                   {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎯 Start Combined Test →' : `📝 Start ${sub.title} Test →`}
                 </button>
               </div>
@@ -1938,46 +1924,45 @@ function MockTestPage({ onBack, isMobile }) {
   if (screen === 'subjectSelect') return <MockSubjectSelector onSelectSubject={handleSubjectSelect} onBack={onBack} isMobile={isMobile} />;
 
   if (screen === 'intro') {
-    const visible = true;
     return (
       <div style={{ maxWidth: 520, margin: '0 auto', padding: isMobile ? '0 4px' : 0, WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>
-        <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginBottom: 18, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '7px 14px', fontSize: 13, color: C.text }}>← Change Subject</button>
+        <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginBottom: 20, background: C.card, border: `1px solid ${C.border}`, borderRadius: 11, padding: '8px 16px', fontSize: 14, color: C.text }}>← Change Subject</button>
 
-        <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, padding: isMobile ? '24px 18px' : '32px 28px', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '5px 14px', marginBottom: 16 }}>
-            <span style={{ fontSize: 16 }}>{selectedSubject?.icon}</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title || 'All Subjects'}</span>
+        <div style={{ background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, padding: isMobile ? '26px 20px' : '36px 32px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '6px 16px', marginBottom: 18 }}>
+            <span style={{ fontSize: 17 }}>{selectedSubject?.icon}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title || 'All Subjects'}</span>
           </div>
 
-          <div style={{ fontSize: 48, marginBottom: 14, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>🎯</div>
-          <h2 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 900, color: C.text }}>DGCA Mock Test</h2>
-          <p style={{ color: C.muted, fontSize: 13, marginBottom: 20 }}>
+          <div style={{ fontSize: 52, marginBottom: 16, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>🎯</div>
+          <h2 style={{ margin: '0 0 8px', fontSize: 24, fontWeight: 900, color: C.text, letterSpacing: -0.4 }}>DGCA Mock Test</h2>
+          <p style={{ color: C.muted, fontSize: 14, marginBottom: 22, lineHeight: 1.6 }}>
             {selectedSubject?.id === 'all' ? 'Full-length paper combining all subjects & chapters.' : `100 questions from ${selectedSubject?.title} — DGCA exam style.`}
           </p>
 
           {pool.length < TOTAL_Q && (
-            <div style={{ background: hexAlpha(C.accent, 0.08), border: `1px solid ${hexAlpha(C.accent, 0.25)}`, borderRadius: 10, padding: '10px 14px', marginBottom: 16, fontSize: 12, color: C.text }}>
+            <div style={{ background: hexAlpha(C.accent, 0.08), border: `1px solid ${hexAlpha(C.accent, 0.25)}`, borderRadius: 11, padding: '11px 16px', marginBottom: 18, fontSize: 13, color: C.text }}>
               ⚠️ Only {pool.length} questions available for this subject. The test will use all of them.
             </div>
           )}
 
-          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 7, marginBottom: 26 }}>
             {[['❓', `${pool.length} Questions`], ['⏱️', '100 Minutes'], ['📚', selectedSubject?.id === 'all' ? 'All Chapters' : selectedSubject?.title], ['💡', 'Instant Results']].map(([icon, label]) => (
-              <span key={label} style={{ background: C.primaryLight, color: C.primary, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>{icon} {label}</span>
+              <span key={label} style={{ background: C.primaryLight, color: C.primary, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, padding: '6px 14px', borderRadius: 20, fontSize: 13, fontWeight: 700, display: 'inline-block' }}>{icon} {label}</span>
             ))}
           </div>
 
-          <ul style={{ textAlign: 'left', listStyle: 'none', padding: 0, margin: '0 0 24px' }}>
+          <ul style={{ textAlign: 'left', listStyle: 'none', padding: 0, margin: '0 0 26px' }}>
             {['Each question has 4 options — choose the best answer', 'Click the same option again to deselect', 'Test auto-submits when timer reaches zero', 'Score summary shown at the end'].map((r, i) => (
-              <li key={r} style={{ background: C.bg, borderRadius: 8, padding: '9px 13px', fontSize: 13, color: C.text, marginBottom: 7, WebkitAnimation: `fadeIn .35s ease ${i * 0.07}s both`, animation: `fadeIn .35s ease ${i * 0.07}s both` }}>✔ {r}</li>
+              <li key={r} style={{ background: C.bg, borderRadius: 10, padding: '10px 15px', fontSize: 14, color: C.text, marginBottom: 8, WebkitAnimation: `fadeIn .35s ease ${i * 0.07}s both`, animation: `fadeIn .35s ease ${i * 0.07}s both` }}>✔ {r}</li>
             ))}
           </ul>
 
           <button onClick={() => pool.length > 0 ? setScreen('test') : null} disabled={pool.length === 0}
             style={{
-              ...btnBase, width: '100%', padding: '13px',
+              ...btnBase, width: '100%', padding: '14px',
               background: pool.length === 0 ? C.border : `linear-gradient(135deg,${selectedSubject?.color || C.primary},${C.purple})`,
-              borderRadius: 12, color: pool.length === 0 ? C.muted : '#fff', fontSize: 15, fontWeight: 800,
+              borderRadius: 13, color: pool.length === 0 ? C.muted : '#fff', fontSize: 16, fontWeight: 800,
               cursor: pool.length === 0 ? 'not-allowed' : 'pointer',
               WebkitTransition: 'transform .15s, box-shadow .15s',
               transition: 'transform .15s, box-shadow .15s',
@@ -1988,7 +1973,7 @@ function MockTestPage({ onBack, isMobile }) {
             {pool.length === 0 ? '⚠️ No questions available' : '🚀 Start Mock Test →'}
           </button>
 
-          <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginTop: 10, width: '100%', padding: '11px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 12, color: C.muted, fontSize: 13 }}>← Choose Different Subject</button>
+          <button onClick={() => setScreen('subjectSelect')} style={{ ...btnBase, marginTop: 11, width: '100%', padding: '12px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 13, color: C.muted, fontSize: 14 }}>← Choose Different Subject</button>
         </div>
       </div>
     );
@@ -2000,38 +1985,38 @@ function MockTestPage({ onBack, isMobile }) {
     return (
       <div>
         {/* Sticky header */}
-        <div style={{ position: 'sticky', top: 56, zIndex: 80, background: 'rgba(255,255,255,0.97)', WebkitBackdropFilter: 'blur(10px)', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', marginBottom: 16, gap: 10 }}>
-          <button onClick={onBack} style={{ ...btnBase, background: 'none', border: `1px solid ${C.border}`, borderRadius: 8, padding: '6px 12px', color: C.text, fontSize: 13, flexShrink: 0 }}>← Exit</button>
+        <div style={{ position: 'sticky', top: 62, zIndex: 80, background: 'rgba(255,255,255,0.97)', WebkitBackdropFilter: 'blur(10px)', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 0', marginBottom: 18, gap: 10 }}>
+          <button onClick={onBack} style={{ ...btnBase, background: 'none', border: `1px solid ${C.border}`, borderRadius: 9, padding: '7px 14px', color: C.text, fontSize: 14, flexShrink: 0 }}>← Exit</button>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
             {!isMobile && (
-              <span style={{ fontSize: 11, fontWeight: 700, background: hexAlpha(selectedSubject?.color || C.purple, 0.1), color: selectedSubject?.color || C.purple, padding: '3px 10px', borderRadius: 20, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, background: hexAlpha(selectedSubject?.color || C.purple, 0.1), color: selectedSubject?.color || C.purple, padding: '4px 12px', borderRadius: 20, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                 {selectedSubject?.icon} {selectedSubject?.title}
               </span>
             )}
-            <span style={{ fontSize: 12, color: C.muted, whiteSpace: 'nowrap' }}>{answered}/{pool.length} answered</span>
+            <span style={{ fontSize: 13, color: C.muted, whiteSpace: 'nowrap' }}>{answered}/{pool.length} answered</span>
           </div>
           {/* Timer ring */}
-          <div style={{ position: 'relative', width: 50, height: 50, flexShrink: 0 }}>
-            <svg width="50" height="50" viewBox="0 0 52 52">
+          <div style={{ position: 'relative', width: 52, height: 52, flexShrink: 0 }}>
+            <svg width="52" height="52" viewBox="0 0 52 52">
               <circle cx="26" cy="26" r="22" fill="none" stroke={C.border} strokeWidth="4" />
               <circle cx="26" cy="26" r="22" fill="none" stroke={tColor} strokeWidth="4" strokeLinecap="round"
                 strokeDasharray={circ} strokeDashoffset={circ * (1 - pct)}
                 transform="rotate(-90 26 26)"
                 style={{ WebkitTransition: 'stroke-dashoffset 1s linear, stroke .5s', transition: 'stroke-dashoffset 1s linear, stroke .5s' }} />
             </svg>
-            <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', WebkitTransform: 'translate(-50%,-50%)', fontSize: 9, fontWeight: 800, color: tColor, WebkitTransition: 'color .5s', transition: 'color .5s' }}>
+            <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', WebkitTransform: 'translate(-50%,-50%)', fontSize: 10, fontWeight: 800, color: tColor, WebkitTransition: 'color .5s', transition: 'color .5s' }}>
               {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
             </span>
           </div>
         </div>
 
         {/* Progress bar */}
-        <div style={{ height: 3, background: C.border, borderRadius: 99, marginBottom: 16 }}>
+        <div style={{ height: 4, background: C.border, borderRadius: 99, marginBottom: 18 }}>
           <div style={{ height: '100%', width: `${pool.length > 0 ? ((currentQ + 1) / pool.length) * 100 : 0}%`, background: selectedSubject?.color || C.primary, borderRadius: 99, WebkitTransition: 'width .4s cubic-bezier(.4,0,.2,1)', transition: 'width .4s cubic-bezier(.4,0,.2,1)' }} />
         </div>
 
         {/* Question navigator dots */}
-        <div style={{ display: 'flex', flexWrap: isMobile ? 'nowrap' : 'wrap', overflowX: isMobile ? 'auto' : 'visible', gap: 6, marginBottom: 16, paddingBottom: isMobile ? 6 : 0 }}>
+        <div style={{ display: 'flex', flexWrap: isMobile ? 'nowrap' : 'wrap', overflowX: isMobile ? 'auto' : 'visible', gap: 6, marginBottom: 18, paddingBottom: isMobile ? 6 : 0 }}>
           {pool.map((_, i) => {
             const ds = getDotState(i);
             const isJustAnswered = lastAnswered === i;
@@ -2040,7 +2025,7 @@ function MockTestPage({ onBack, isMobile }) {
             const br = ds === 'active' ? `2px solid ${C.primary}` : ds === 'answered' ? `1px solid ${hexAlpha(C.primary, 0.3)}` : `1px solid ${C.border}`;
             return (
               <button key={i} onClick={() => setCurrentQ(i)} style={{
-                ...btnBase, width: 30, height: 30, borderRadius: 7, border: br, background: bg, color: co, fontSize: 10, fontWeight: 700, flexShrink: 0,
+                ...btnBase, width: 32, height: 32, borderRadius: 8, border: br, background: bg, color: co, fontSize: 11, fontWeight: 700, flexShrink: 0,
                 WebkitTransition: 'all .15s',
                 transition: 'all .15s',
                 WebkitAnimation: isJustAnswered ? 'dotPop .25s ease' : undefined,
@@ -2053,20 +2038,20 @@ function MockTestPage({ onBack, isMobile }) {
 
         {/* Question card */}
         <div style={{
-          background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: isMobile ? '18px 16px' : '22px 24px', marginBottom: 14,
+          background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: isMobile ? '20px 18px' : '26px 28px', marginBottom: 16,
           WebkitAnimation: 'slideInCard .25s ease',
           animation: 'slideInCard .25s ease',
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-            <span style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: .8 }}>Q {currentQ + 1} / {pool.length}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+            <span style={{ fontSize: 12, color: C.muted, textTransform: 'uppercase', letterSpacing: 1 }}>Q {currentQ + 1} / {pool.length}</span>
             {q && (
-              <span style={{ fontSize: 11, padding: '2px 9px', borderRadius: 20, fontWeight: 700, display: 'inline-block', background: hexAlpha(selectedSubject?.color || C.primary, 0.1), color: selectedSubject?.color || C.primary }}>
+              <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 20, fontWeight: 700, display: 'inline-block', background: hexAlpha(selectedSubject?.color || C.primary, 0.1), color: selectedSubject?.color || C.primary }}>
                 {selectedSubject?.icon} {selectedSubject?.title}
               </span>
             )}
           </div>
-          <div style={{ fontSize: isMobile ? 15 : 16, fontWeight: 700, color: C.text, lineHeight: 1.6, marginBottom: 18 }}>{q?.question}</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ fontSize: isMobile ? 16 : 18, fontWeight: 700, color: C.text, lineHeight: 1.65, marginBottom: 20 }}>{q?.question}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {q?.options.map((opt, idx) => {
               const isSelected = selected === idx;
               return (
@@ -2074,7 +2059,7 @@ function MockTestPage({ onBack, isMobile }) {
                   ...btnBase, display: 'flex', alignItems: 'center',
                   background: isSelected ? C.primaryLight : C.bg,
                   border: isSelected ? `1px solid ${C.primary}` : `1px solid ${C.border}`,
-                  borderRadius: 10, padding: '11px 14px', cursor: 'pointer', textAlign: 'left', color: C.text, fontSize: 13, fontWeight: 400,
+                  borderRadius: 11, padding: '13px 16px', cursor: 'pointer', textAlign: 'left', color: C.text, fontSize: 14, fontWeight: 400,
                   WebkitTransition: 'all .18s',
                   transition: 'all .18s',
                   WebkitTapHighlightColor: 'transparent', userSelect: 'none', WebkitUserSelect: 'none',
@@ -2085,9 +2070,9 @@ function MockTestPage({ onBack, isMobile }) {
                   onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = C.primaryLight; e.currentTarget.style.borderColor = hexAlpha(C.primary, 0.4); }}
                   onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = C.bg; e.currentTarget.style.borderColor = C.border; }}
                 >
-                  <span style={{ width: 28, height: 28, borderRadius: 7, background: isSelected ? C.primary : hexAlpha(C.primary, 0.08), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, color: isSelected ? '#fff' : C.primary, flexShrink: 0, marginRight: 10, WebkitTransition: 'background .18s', transition: 'background .18s' }}>{['A', 'B', 'C', 'D'][idx]}</span>
-                  <span style={{ flex: 1 }}>{opt}</span>
-                  {isSelected && <span style={{ marginLeft: 8, color: C.primary, fontSize: 14, WebkitAnimation: 'checkPop .2s ease', animation: 'checkPop .2s ease' }}>✓</span>}
+                  <span style={{ width: 32, height: 32, borderRadius: 9, background: isSelected ? C.primary : hexAlpha(C.primary, 0.08), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, color: isSelected ? '#fff' : C.primary, flexShrink: 0, marginRight: 12, WebkitTransition: 'background .18s', transition: 'background .18s' }}>{['A', 'B', 'C', 'D'][idx]}</span>
+                  <span style={{ flex: 1, lineHeight: 1.5 }}>{opt}</span>
+                  {isSelected && <span style={{ marginLeft: 10, color: C.primary, fontSize: 16, WebkitAnimation: 'checkPop .2s ease', animation: 'checkPop .2s ease' }}>✓</span>}
                 </button>
               );
             })}
@@ -2097,17 +2082,17 @@ function MockTestPage({ onBack, isMobile }) {
         {/* Navigation buttons */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
           <button onClick={() => setCurrentQ(c => c - 1)} disabled={currentQ === 0}
-            style={{ ...btnBase, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: '10px 16px', color: C.text, fontSize: 13, cursor: currentQ === 0 ? 'not-allowed' : 'pointer', opacity: currentQ === 0 ? .4 : 1, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+            style={{ ...btnBase, background: C.card, border: `1px solid ${C.border}`, borderRadius: 11, padding: '11px 18px', color: C.text, fontSize: 14, cursor: currentQ === 0 ? 'not-allowed' : 'pointer', opacity: currentQ === 0 ? .4 : 1, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
             onMouseEnter={e => { if (currentQ > 0) e.currentTarget.style.transform = 'translateX(-3px)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
           >← Prev</button>
-          {!isMobile && <span style={{ fontSize: 12, color: C.muted }}>{answered}/{pool.length} answered</span>}
+          {!isMobile && <span style={{ fontSize: 13, color: C.muted }}>{answered}/{pool.length} answered</span>}
           {currentQ === pool.length - 1
-            ? <button onClick={submit} style={{ ...btnBase, background: `linear-gradient(135deg,${C.accent},#D97706)`, borderRadius: 10, padding: '10px 18px', color: '#fff', fontSize: 13, fontWeight: 700, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+            ? <button onClick={submit} style={{ ...btnBase, background: `linear-gradient(135deg,${C.accent},#D97706)`, borderRadius: 11, padding: '11px 20px', color: '#fff', fontSize: 14, fontWeight: 700, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
             >Submit ✓</button>
-            : <button onClick={() => setCurrentQ(c => c + 1)} style={{ ...btnBase, background: C.primaryLight, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, borderRadius: 10, padding: '10px 18px', color: C.primary, fontSize: 13, fontWeight: 700, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
+            : <button onClick={() => setCurrentQ(c => c + 1)} style={{ ...btnBase, background: C.primaryLight, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, borderRadius: 11, padding: '11px 20px', color: C.primary, fontSize: 14, fontWeight: 700, WebkitTransition: 'transform .15s', transition: 'transform .15s' }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(3px)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
             >Next →</button>}
@@ -2119,52 +2104,52 @@ function MockTestPage({ onBack, isMobile }) {
   // ── Screen: Finish / Results
   return (
     <div style={{ maxWidth: 560, margin: '0 auto', padding: isMobile ? '0 4px' : 0, WebkitAnimation: 'fadeIn .5s ease', animation: 'fadeIn .5s ease' }}>
-      <div style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, padding: isMobile ? '24px 18px' : '32px 28px', textAlign: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '4px 12px', marginBottom: 14 }}>
-          <span style={{ fontSize: 14 }}>{selectedSubject?.icon}</span>
-          <span style={{ fontSize: 11, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title}</span>
+      <div style={{ background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, padding: isMobile ? '26px 20px' : '36px 32px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '5px 14px', marginBottom: 16 }}>
+          <span style={{ fontSize: 15 }}>{selectedSubject?.icon}</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title}</span>
         </div>
 
-        <div style={{ fontSize: 48, marginBottom: 10, WebkitAnimation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)', animation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)' }}>{scorePct >= 80 ? '🏆' : scorePct >= 50 ? '✈️' : '📚'}</div>
-        <h2 style={{ margin: '0 0 4px', fontWeight: 900, fontSize: 20, color: C.text }}>{scorePct >= 80 ? 'Excellent!' : scorePct >= 50 ? 'Good Effort!' : 'Keep Practicing!'}</h2>
-        <div style={{ fontSize: 44, fontWeight: 900, color: getScoreColor(scorePct), lineHeight: 1, WebkitAnimation: 'countUp .8s ease', animation: 'countUp .8s ease' }}>{score}/{pool.length}</div>
-        <div style={{ fontSize: 20, fontWeight: 700, color: getScoreColor(scorePct), marginBottom: 16 }}>{scorePct}%</div>
+        <div style={{ fontSize: 52, marginBottom: 12, WebkitAnimation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)', animation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)' }}>{scorePct >= 80 ? '🏆' : scorePct >= 50 ? '✈️' : '📚'}</div>
+        <h2 style={{ margin: '0 0 5px', fontWeight: 900, fontSize: 22, color: C.text, letterSpacing: -0.3 }}>{scorePct >= 80 ? 'Excellent!' : scorePct >= 50 ? 'Good Effort!' : 'Keep Practicing!'}</h2>
+        <div style={{ fontSize: 48, fontWeight: 900, color: getScoreColor(scorePct), lineHeight: 1, WebkitAnimation: 'countUp .8s ease', animation: 'countUp .8s ease' }}>{score}/{pool.length}</div>
+        <div style={{ fontSize: 22, fontWeight: 700, color: getScoreColor(scorePct), marginBottom: 18 }}>{scorePct}%</div>
 
         {/* Save status badge */}
-        <div style={{ marginBottom: 20, minHeight: 32 }}>
+        <div style={{ marginBottom: 22, minHeight: 34 }}>
           {submitStatus === 'saving' && (
-            <span style={{ background: hexAlpha(C.accent, 0.1), color: C.accent, border: `1px solid ${hexAlpha(C.accent, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block', WebkitAnimation: 'pulse 1.5s ease-in-out infinite', animation: 'pulse 1.5s ease-in-out infinite' }}>⏳ Saving to leaderboard…</span>
+            <span style={{ background: hexAlpha(C.accent, 0.1), color: C.accent, border: `1px solid ${hexAlpha(C.accent, 0.25)}`, padding: '6px 16px', borderRadius: 20, fontSize: 13, fontWeight: 700, display: 'inline-block', WebkitAnimation: 'pulse 1.5s ease-in-out infinite', animation: 'pulse 1.5s ease-in-out infinite' }}>⏳ Saving to leaderboard…</span>
           )}
           {submitStatus === 'saved' && (
-            <span style={{ background: hexAlpha(C.green, 0.1), color: C.green, border: `1px solid ${hexAlpha(C.green, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block', WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>✅ Score saved to leaderboard!</span>
+            <span style={{ background: hexAlpha(C.green, 0.1), color: C.green, border: `1px solid ${hexAlpha(C.green, 0.25)}`, padding: '6px 16px', borderRadius: 20, fontSize: 13, fontWeight: 700, display: 'inline-block', WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>✅ Score saved to leaderboard!</span>
           )}
           {submitStatus === 'error' && (
-            <span style={{ background: hexAlpha(C.red, 0.1), color: C.red, border: `1px solid ${hexAlpha(C.red, 0.25)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, display: 'inline-block' }}>⚠️ Could not save score. Check connection.</span>
+            <span style={{ background: hexAlpha(C.red, 0.1), color: C.red, border: `1px solid ${hexAlpha(C.red, 0.25)}`, padding: '6px 16px', borderRadius: 20, fontSize: 13, fontWeight: 700, display: 'inline-block' }}>⚠️ Could not save score. Check connection.</span>
           )}
         </div>
 
-        <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+        <div style={{ display: 'flex', gap: 12, marginBottom: 22 }}>
           {[
             { icon: '✓', val: score, label: 'Correct', bg: '#EFF6FF', co: C.primary, br: hexAlpha(C.primary, 0.25) },
             { icon: '✗', val: wrong, label: 'Wrong', bg: '#FEF2F2', co: C.red, br: hexAlpha(C.red, 0.25) },
             { icon: '–', val: notAnswered, label: 'Skipped', bg: '#F5F3FF', co: C.purple, br: hexAlpha(C.purple, 0.25) },
           ].map((b, i) => (
-            <div key={b.label} style={{ flex: 1, background: b.bg, border: `1px solid ${b.br}`, borderRadius: 12, padding: '12px 8px', WebkitAnimation: `fadeIn .4s ease ${i * 0.1}s both`, animation: `fadeIn .4s ease ${i * 0.1}s both` }}>
-              <div style={{ fontSize: 18, color: b.co }}>{b.icon}</div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: C.text }}>{b.val}</div>
-              <div style={{ fontSize: 10, color: C.muted }}>{b.label}</div>
+            <div key={b.label} style={{ flex: 1, background: b.bg, border: `1px solid ${b.br}`, borderRadius: 14, padding: '14px 8px', WebkitAnimation: `fadeIn .4s ease ${i * 0.1}s both`, animation: `fadeIn .4s ease ${i * 0.1}s both` }}>
+              <div style={{ fontSize: 20, color: b.co }}>{b.icon}</div>
+              <div style={{ fontSize: 26, fontWeight: 900, color: C.text }}>{b.val}</div>
+              <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{b.label}</div>
             </div>
           ))}
         </div>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '4px 4px', marginBottom: 20 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px 5px', marginBottom: 22 }}>
           {pool.map((_, i) => {
             const ds = getDotState(i);
             const bg = ds === 'correct' ? C.primary : ds === 'wrong' ? C.red : ds === 'unanswered' ? hexAlpha(C.purple, 0.3) : C.bg;
             const co = ds === 'correct' || ds === 'wrong' ? '#fff' : ds === 'unanswered' ? C.purple : C.muted;
             return (
               <span key={i} style={{
-                width: 26, height: 26, borderRadius: 6, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, background: bg, color: co, border: `1px solid ${C.border}`,
+                width: 28, height: 28, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, background: bg, color: co, border: `1px solid ${C.border}`,
                 WebkitAnimation: `dotReveal .3s ease ${i * 0.01}s both`,
                 animation: `dotReveal .3s ease ${i * 0.01}s both`,
               }}>{i + 1}</span>
@@ -2172,17 +2157,17 @@ function MockTestPage({ onBack, isMobile }) {
           })}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 14, marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginBottom: 22 }}>
           {[{ color: C.primary, label: 'Correct' }, { color: C.red, label: 'Wrong' }, { color: hexAlpha(C.purple, 0.3), label: 'Skipped' }].map(l => (
-            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: l.color, display: 'inline-block' }} />
-              <span style={{ fontSize: 11, color: C.muted }}>{l.label}</span>
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ width: 14, height: 14, borderRadius: 4, background: l.color, display: 'inline-block' }} />
+              <span style={{ fontSize: 12, color: C.muted }}>{l.label}</span>
             </div>
           ))}
         </div>
 
         <button onClick={onBack} style={{
-          width: '100%', padding: '12px', background: `linear-gradient(135deg,${C.primary},${C.purple})`, border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', marginBottom: 10, WebkitAppearance: 'none', appearance: 'none',
+          width: '100%', padding: '13px', background: `linear-gradient(135deg,${C.primary},${C.purple})`, border: 'none', borderRadius: 13, color: '#fff', fontSize: 15, fontWeight: 800, cursor: 'pointer', marginBottom: 11, WebkitAppearance: 'none', appearance: 'none',
           WebkitTransition: 'transform .15s, box-shadow .15s',
           transition: 'transform .15s, box-shadow .15s',
         }}
@@ -2192,12 +2177,12 @@ function MockTestPage({ onBack, isMobile }) {
 
         {submitStatus === 'saved' && (
           <button onClick={() => { window.location.href = `/mock-leaderboard?subject=${selectedSubject?.id || 'all'}`; }}
-            style={{ width: '100%', padding: '11px', background: hexAlpha(C.green, 0.1), border: `1px solid ${hexAlpha(C.green, 0.3)}`, borderRadius: 12, color: C.green, fontSize: 13, fontWeight: 700, cursor: 'pointer', marginBottom: 10, WebkitAppearance: 'none', appearance: 'none', WebkitAnimation: 'fadeIn .5s ease', animation: 'fadeIn .5s ease' }}>
+            style={{ width: '100%', padding: '12px', background: hexAlpha(C.green, 0.1), border: `1px solid ${hexAlpha(C.green, 0.3)}`, borderRadius: 13, color: C.green, fontSize: 14, fontWeight: 700, cursor: 'pointer', marginBottom: 11, WebkitAppearance: 'none', appearance: 'none', WebkitAnimation: 'fadeIn .5s ease', animation: 'fadeIn .5s ease' }}>
             🏆 View Leaderboard →
           </button>
         )}
 
-        <button onClick={resetMock} style={{ width: '100%', padding: '11px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 12, color: C.muted, fontSize: 13, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>🔄 Try Another Subject</button>
+        <button onClick={resetMock} style={{ width: '100%', padding: '12px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 13, color: C.muted, fontSize: 14, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>🔄 Try Another Subject</button>
       </div>
     </div>
   );
@@ -2247,8 +2232,8 @@ function ProgressPage({ stats, allResults, loading, isMobile }) {
 
   return (
     <div style={{ opacity: visible ? 1 : 0, WebkitTransition: 'opacity .4s ease', transition: 'opacity .4s ease' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12, marginBottom: 20 }}>
-        {loading ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.card, borderRadius: 14, padding: 16, border: `1px solid ${C.border}` }}><Skeleton h={40} /></div>) : (
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 14, marginBottom: 22 }}>
+        {loading ? Array(4).fill(0).map((_, i) => <div key={i} style={{ background: C.card, borderRadius: 16, padding: 18, border: `1px solid ${C.border}` }}><Skeleton h={44} /></div>) : (
           <>
             <StatCard icon="📊" label="Overall Avg" value={`${stats.avgScore}%`} color={C.primary} delay={0} />
             <StatCard icon="📋" label="Tests Done" value={stats.testsAttempted} color={C.green} delay={80} />
@@ -2257,40 +2242,40 @@ function ProgressPage({ stats, allResults, loading, isMobile }) {
           </>
         )}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 18 }}>
-        <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: 20 }}>
-          <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 16 }}>Chapter Progress</div>
-          {loading ? Array(5).fill(0).map((_, i) => <div key={i} style={{ marginBottom: 14 }}><Skeleton h={10} /></div>) :
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 20 }}>
+        <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: 22 }}>
+          <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 18 }}>Chapter Progress</div>
+          {loading ? Array(5).fill(0).map((_, i) => <div key={i} style={{ marginBottom: 16 }}><Skeleton h={10} /></div>) :
             chapterStats.map((ch, idx) => (
-              <div key={ch.id} style={{ marginBottom: 16, WebkitAnimation: `fadeIn .35s ease ${idx * 0.04}s both`, animation: `fadeIn .35s ease ${idx * 0.04}s both` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                    <span style={{ fontSize: 14 }}>{ch.icon}</span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ch.title}</span>
+              <div key={ch.id} style={{ marginBottom: 18, WebkitAnimation: `fadeIn .35s ease ${idx * 0.04}s both`, animation: `fadeIn .35s ease ${idx * 0.04}s both` }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7, minWidth: 0 }}>
+                    <span style={{ fontSize: 16 }}>{ch.icon}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ch.title}</span>
                   </div>
-                  <span style={{ fontSize: 12, fontWeight: 800, color: ch.best !== null ? getScoreColor(ch.best) : C.muted }}>{ch.best !== null ? `${ch.best}%` : '—'}</span>
+                  <span style={{ fontSize: 13, fontWeight: 800, color: ch.best !== null ? getScoreColor(ch.best) : C.muted }}>{ch.best !== null ? `${ch.best}%` : '—'}</span>
                 </div>
-                <ProgressBar value={ch.best ?? 0} color={ch.color || C.primary} height={6} />
+                <ProgressBar value={ch.best ?? 0} color={ch.color || C.primary} height={7} />
               </div>
             ))
           }
         </div>
-        <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: 20 }}>
-          <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 16 }}>Performance Overview</div>
+        <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: 22 }}>
+          <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 18 }}>Performance Overview</div>
           {[
             { label: 'Accuracy Rate', value: stats.avgScore, color: C.primary, icon: '🎯' },
             { label: 'Best Performance', value: stats.bestScore, color: C.green, icon: '🏆' },
             { label: 'Completion Rate', value: Math.min(Math.round((stats.testsAttempted / Math.max(chapters.length, 1)) * 100), 100), color: C.accent, icon: '📋' },
           ].map((item, idx) => (
-            <div key={item.label} style={{ marginBottom: 20, WebkitAnimation: `fadeIn .4s ease ${idx * 0.1}s both`, animation: `fadeIn .4s ease ${idx * 0.1}s both` }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                  <span>{item.icon}</span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{item.label}</span>
+            <div key={item.label} style={{ marginBottom: 24, WebkitAnimation: `fadeIn .4s ease ${idx * 0.1}s both`, animation: `fadeIn .4s ease ${idx * 0.1}s both` }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 16 }}>{item.icon}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{item.label}</span>
                 </div>
-                <span style={{ fontSize: 18, fontWeight: 900, color: item.color }}>{loading ? '…' : `${item.value}%`}</span>
+                <span style={{ fontSize: 20, fontWeight: 900, color: item.color }}>{loading ? '…' : `${item.value}%`}</span>
               </div>
-              <ProgressBar value={loading ? 0 : item.value} color={item.color} height={8} />
+              <ProgressBar value={loading ? 0 : item.value} color={item.color} height={9} />
             </div>
           ))}
         </div>
@@ -2303,10 +2288,10 @@ function Placeholder({ page }) {
   const icons = { classes: '📅', lectures: '🎬', mocktests: '📝' };
   const labels = { classes: 'Live Classes', lectures: 'Recorded Lectures', mocktests: 'Mock Tests' };
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 360, color: C.muted, background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>
-      <div style={{ fontSize: 48, marginBottom: 12, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>{icons[page] || '📄'}</div>
-      <div style={{ fontWeight: 800, fontSize: 17, color: C.text, marginBottom: 5 }}>{labels[page] || page}</div>
-      <div style={{ fontSize: 13 }}>Coming soon in the full build.</div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 360, color: C.muted, background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, WebkitAnimation: 'fadeIn .4s ease', animation: 'fadeIn .4s ease' }}>
+      <div style={{ fontSize: 52, marginBottom: 14, WebkitAnimation: 'float 3s ease-in-out infinite', animation: 'float 3s ease-in-out infinite' }}>{icons[page] || '📄'}</div>
+      <div style={{ fontWeight: 800, fontSize: 18, color: C.text, marginBottom: 6 }}>{labels[page] || page}</div>
+      <div style={{ fontSize: 14, color: C.muted }}>Coming soon in the full build.</div>
     </div>
   );
 }
@@ -2325,37 +2310,40 @@ export default function DashboardPage() {
   const [subPage, setSubPage] = useState('subjects');
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    // No token — guest mode, tests still work freely
+    setLoading(false);
+    return;
+  }
 
-    fetch("/api/v1/auth/[...path]/route.js", {
-      headers: { Authorization: `Bearer ${token}` }
+  fetch("/api/v1/auth/me", {   // ✅ correct proxied endpoint
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Auth failed");
+      return res.json();
     })
-      .then(res => {
-        if (!res.ok) { return null; }
-        return res.json();
-      })
-      .then(userData => {
-        if (!userData) return;
-        localStorage.setItem("user", JSON.stringify(userData));
-        setUserState(userData);
-        const email = userData.email;
-        return Promise.all([getStats(email), getResults(email)])
-          .then(([s, r]) => {
-            setStats(s);
-            setAll(r);
-            setRecent(r.slice(0, 5));
-          });
-      })
-      .catch(err => {
-        console.error("Auth error:", err);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
+    .then(userData => {
+      if (!userData || userData.detail) throw new Error("Invalid user data");
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUserState(userData);
+      const email = userData.email;
+      return Promise.all([getStats(email), getResults(email)]);
+    })
+    .then(([s, r]) => {
+      setStats(s);
+      setAll(r);
+      setRecent(r.slice(0, 5));
+    })
+    .catch(err => {
+      console.warn("Auth skipped:", err.message);
+      // Don't redirect — just continue as guest
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+    })
+    .finally(() => setLoading(false));
+}, []);
   function handleLogout() { clearUser(); setUserState(null); }
 
   function handleNav(newPage, chapterId) {
@@ -2374,17 +2362,12 @@ export default function DashboardPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  const sidebarWidth = isDesktop ? 220 : 0;
-  const topBarHeight = 56;
-  const bottomNavHeight = isMobile ? 56 : 0;
+  const sidebarWidth = isDesktop ? 232 : 0;
+  const topBarHeight = 62;
+  const bottomNavHeight = isMobile ? 60 : 0;
   const activeNavItem = (page === 'tests' && subPage === 'mock') ? 'mocktests' : page;
 
   function renderPage() {
-
-
-
-
-
     switch (page) {
       case 'profile':
         return <StudentProfilePage
@@ -2404,8 +2387,6 @@ export default function DashboardPage() {
       case 'lectures':
       case 'classes':
         return <LecturesPage user={user} />;
-
-        return <Placeholder page={page} />;
       case 'doubt':
         return <div style={{ minHeight: 500 }}><DoubtChat studentId={user?.id} /></div>;
       case 'mockleaderboard':
@@ -2427,7 +2408,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif", background: C.bg, minHeight: '100vh' }}>
+    <div style={{ fontFamily: "'DM Sans','Segoe UI',system-ui,sans-serif", background: C.bg, minHeight: '100vh' }}>
       <style>{`
         @-webkit-keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         @keyframes shimmer          { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
@@ -2473,6 +2454,7 @@ export default function DashboardPage() {
         ::-webkit-scrollbar-thumb { background:#CBD5E1; border-radius:99px; }
         ::-webkit-scrollbar-thumb:hover { background:#94A3B8; }
         body { overflow-x:hidden; }
+        input { font-family: inherit; }
       `}</style>
 
       <Sidebar
@@ -2495,13 +2477,14 @@ export default function DashboardPage() {
 
       <main style={{ marginLeft: sidebarWidth, paddingTop: topBarHeight, paddingBottom: isMobile ? bottomNavHeight + 16 : 0, minHeight: '100vh' }}>
         {page === 'resources'
-          ? <div style={{ padding: isMobile ? '16px 14px' : '20px 24px' }}><ResourcesPage /></div>
-          : <div style={{ padding: isMobile ? '16px 14px' : isTablet ? '20px 24px' : '24px 28px', maxWidth: 1280 }}>{renderPage()}</div>
+          ? <div style={{ padding: isMobile ? '18px 16px' : '22px 28px' }}><ResourcesPage /></div>
+          : <div style={{ padding: isMobile ? '18px 16px' : isTablet ? '22px 28px' : '28px 32px', maxWidth: 1300 }}>{renderPage()}</div>
         }
       </main>
 
+      {/* Footer stats bar */}
       {!isMobile && (
-        <div style={{ marginLeft: sidebarWidth, background: C.sidebar, padding: '14px 28px', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ marginLeft: sidebarWidth, background: C.sidebar, padding: '16px 32px', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 10 }}>
           {[
             ['📋', `${stats.testsAttempted}`, 'Tests Taken'],
             ['🎯', `${stats.avgScore}%`, 'Avg Accuracy'],
@@ -2510,10 +2493,10 @@ export default function DashboardPage() {
             ['📚', `${chapters.length}`, 'Chapters'],
             ['✈️', '24/7', 'DGCA Prep'],
           ].map(([icon, val, label]) => (
-            <div key={label} style={{ textAlign: 'center', padding: '3px 10px' }}>
-              <div style={{ fontSize: 14 }}>{icon}</div>
-              <div style={{ color: '#fff', fontWeight: 800, fontSize: 14 }}>{val}</div>
-              <div style={{ color: '#8BA3C5', fontSize: 10 }}>{label}</div>
+            <div key={label} style={{ textAlign: 'center', padding: '4px 14px' }}>
+              <div style={{ fontSize: 16 }}>{icon}</div>
+              <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 2 }}>{val}</div>
+              <div style={{ color: '#8BA3C5', fontSize: 11, marginTop: 1 }}>{label}</div>
             </div>
           ))}
         </div>

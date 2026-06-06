@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUser, saveResult, updateLeaderboard } from '../../../lib/storage';
+import { saveResult, updateLeaderboard } from '../../../lib/storage';
 import { chapters, questions as allQuestions } from '../../../data/questions';
 
 const TOTAL_TIME = 300;
-const MAX_QUESTIONS = 10;
 
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -14,14 +13,16 @@ function shuffleArray(arr) {
 
 function pickQuestions(chapterId) {
   const raw = allQuestions[chapterId] || [];
-  return shuffleArray(raw);  // ← returns all questions, still shuffled
+  return shuffleArray(raw);
 }
+
+// Guest user — no login required
+const GUEST_USER = { email: 'guest@dgca.test', name: 'Guest' };
 
 export default function TestPage({ params }) {
   const { chapterId } = params;
   const router = useRouter();
 
-  const [user, setUser] = useState(null);
   const [chapter, setChapter] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [screen, setScreen] = useState('start');
@@ -64,9 +65,6 @@ export default function TestPage({ params }) {
   // ─────────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    const u = getUser();
-    if (!u) { router.replace('/login'); return; }
-    setUser(u);
     const ch = chapters.find(c => c.id === chapterId);
     if (!ch) { router.replace('/dashboard'); return; }
     setChapter(ch);
@@ -129,8 +127,8 @@ export default function TestPage({ params }) {
       isCorrect: answers[i] === q.correct,
     }));
     try {
-      await saveResult({ userEmail: user.email, chapterId, score, total, answers: answerDetails });
-      await updateLeaderboard(user, score, total, chapterId);
+      await saveResult({ userEmail: GUEST_USER.email, chapterId, score, total, answers: answerDetails });
+      await updateLeaderboard(GUEST_USER, score, total, chapterId);
     } catch (err) {
       console.error('Failed to save result:', err);
     }
@@ -177,7 +175,7 @@ export default function TestPage({ params }) {
     return 'default';
   }
 
-  if (!user || !chapter) return null;
+  if (!chapter) return null;
 
   // ──────────────────────────────────────────────────────────────────
   // SCREEN 1: START
@@ -191,7 +189,7 @@ export default function TestPage({ params }) {
             <h1 className="start-title">{chapter.title}</h1>
             <p className="start-sub">DGCA MCQ Test</p>
             <div className="meta-badges">
-              <span className="meta-badge">❓ {Math.min((allQuestions[chapterId] || []).length, MAX_QUESTIONS)} Questions</span>
+              <span className="meta-badge">❓ {(allQuestions[chapterId] || []).length} Questions</span>
               <span className="meta-badge">⏱️ 10 Minutes</span>
               <span className="meta-badge">💡 Instant Explanations</span>
             </div>

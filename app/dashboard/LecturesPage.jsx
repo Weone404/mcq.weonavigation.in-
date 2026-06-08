@@ -78,6 +78,36 @@ const SUBJECTS_DATA = {
     examTags: ['ATPL', 'CPL', 'DGCA'],
     color: '#6366F1',
     lectures: makeSlots([
+      {
+        title: 'Air Regulations – Definitions & Abbreviations',
+        chapter: 'Chapter 1',
+        description: 'Key definitions and abbreviations used in Indian Air Regulations.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Categories',
+        chapter: 'Chapter 2',
+        description: 'Classification of aircraft under DGCA regulations.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Registration Part-1',
+        chapter: 'Chapter 3',
+        description: 'Registration requirements, nationality marks, DGCA procedures.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Registration Part-2',
+        chapter: 'Chapter 3 Part-2',
+        description: 'Continued registration topics.',
+        iframeCode: '',
+      },
+      {
+        title: 'Air Regulations – Aircraft Registration Part-3',
+        chapter: 'Chapter 3 Part-3',
+        description: 'Advanced registration procedures.',
+        iframeCode: '',
+      },
       { title: 'Air Regulations – Definitions & Abbreviations', chapter: 'Chapter 1', description: 'Key definitions and abbreviations used in Indian Air Regulations.', iframeCode: '' },
       { title: 'Air Regulations – Aircraft Categories', chapter: 'Chapter 2', description: 'Classification of aircraft under DGCA regulations.', iframeCode: '' },
       { title: 'Air Regulations – Aircraft Registration Part-1', chapter: 'Chapter 3', description: 'Registration requirements, nationality marks, DGCA procedures.', iframeCode: '' },
@@ -187,7 +217,7 @@ const SHORT_VIDEOS_DATA = {
 // PERSONALYSIS CONFIG — premium/locked
 // ─────────────────────────────────────────────────────────────────────────────
 const PERSONALYSIS_DATA = {
-  Meteorology: {
+  'Meteorology': {
     icon: '🌤️',
     subtitle: 'Met paper analysis & exam insights',
     examTags: ['ATPL', 'CPL'],
@@ -201,11 +231,33 @@ const PERSONALYSIS_DATA = {
     color: '#6366F1',
     videos: makeSlots([], 10),
   },
-  Navigation: {
+  'General Navigation': {
     icon: '🧭',
-    subtitle: 'Nav paper analysis & exam insights',
+    subtitle: 'Charts, Maps, Time & Earth Geometry',
     examTags: ['ATPL', 'CPL'],
     color: '#10B981',
+    // FIX 2: Renamed key from "lectures" → "videos" to match videoKey prop
+    videos: makeSlots([
+      { title: 'Nav: Scale – Ch 7', chapter: 'Chapter 7', description: 'Understanding map and chart scales used in aviation navigation.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WnSSqaffoB0?si=mIXzhIxupjOxvUeC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Departure – Ch 6', chapter: 'Chapter 6', description: 'Departure calculations and east-west distance measurement.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WnSSqaffoB0?si=mIXzhIxupjOxvUeC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: 1 in 60 and 1/14 Rule – Ch 8', chapter: 'Chapter 8', description: 'The 1 in 60 rule and 1/14 rule for track error and heading corrections.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WnSSqaffoB0?si=mIXzhIxupjOxvUeC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Convergency and Conversion Angle', chapter: 'Chapter 4', description: 'Convergency of meridians and conversion angle on charts.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/RHWrdDJz_fY?si=wjsgh_lB6sJmdWME" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Polar Stereographic Projection – Ch 11', chapter: 'Chapter 11', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/95zN5KuWeLA?si=jZWEFqGnegEZ1_4T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Time Conversion – Ch 12', chapter: 'Chapter 12', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/QCJ8eIvKzEo?si=LPcMsQz-ZCx9MabY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+    ], 10),
+  },
+  'Instrument Navigation': {
+    icon: '🛩️',
+    subtitle: 'Instrument Nav paper analysis & exam insights',
+    examTags: ['ATPL', 'CPL'],
+    color: '#06B6D4',
+    videos: makeSlots([], 10),
+  },
+  'Radio Navigation': {
+    icon: '📻',
+    subtitle: 'Radio Nav paper analysis & exam insights',
+    examTags: ['ATPL', 'CPL'],
+    color: '#8B5CF6',
     videos: makeSlots([], 10),
   },
   'Technical General': {

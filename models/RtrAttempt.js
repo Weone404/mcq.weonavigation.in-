@@ -45,20 +45,32 @@ export default {
         return { _id: rows[0].id.toString() };
     },
 
-    async find(query) {
+    find(query) {
         const userId = query.userId;
-        const { rows } = await pool.query(
-            `SELECT id, user_id, mode, scenario_id, callsign, departure, destination, phases, total_score, max_total_score, percentage, passed, examiner_remarks, duration, created_at
-             FROM rtr_attempts
-             WHERE user_id = $1
-             ORDER BY created_at DESC
-             LIMIT 10`,
-            [userId]
-        );
-        return rows.map(r => ({
-            ...r,
-            _id: r.id.toString(),
-            phases: r.phases,
-        }));
+        return {
+            sort(field) {
+                this.sortField = field;
+                return this;
+            },
+            limit(n) {
+                this.limitN = n;
+                return this;
+            },
+            async exec() {
+                const { rows } = await pool.query(
+                    `SELECT id, user_id, mode, scenario_id, callsign, departure, destination, phases, total_score, max_total_score, percentage, passed, examiner_remarks, duration, created_at
+                     FROM rtr_attempts
+                     WHERE user_id = $1
+                     ORDER BY ${this.sortField || 'created_at DESC'}
+                     LIMIT $2`,
+                    [userId, this.limitN || 10]
+                );
+                return rows.map(r => ({
+                    ...r,
+                    _id: r.id.toString(),
+                    phases: r.phases,
+                }));
+            }
+        };
     }
 };

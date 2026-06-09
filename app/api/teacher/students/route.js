@@ -5,7 +5,7 @@ export async function GET() {
     try {
         // 1. Get all students
         const { rows: users } = await pool.query(`
-            SELECT * FROM students ORDER BY joined_at DESC
+            SELECT * FROM users ORDER BY created_at DESC
         `);
 
         // 2. Get all results
@@ -47,7 +47,7 @@ export async function GET() {
                 email: user.email,
                 phone: user.phone,
                 batch: user.batch,
-                joinedAt: user.joined_at,   // ← only change: MongoDB joinedAt → PG joined_at
+                joinedAt: user.created_at,   // ← PostgreSQL: created_at not joined_at
                 testsAttempted: userResults.length,
                 avgScore,
                 bestScore,

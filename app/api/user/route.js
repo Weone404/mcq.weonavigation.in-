@@ -30,11 +30,13 @@ export async function POST(request) {
     }
 
     return NextResponse.json({
+      id: user.id,
       name: user.name,
       email: user.email,
       phone: user.phone,
+      batch: user.batch,
       is_verified: user.is_verified ?? false,
-      joinedAt: user.joined_at || user.joinedAt,
+      created_at: user.created_at,
     });
   } catch (err) {
     console.error('POST /api/user error:', err);
@@ -53,11 +55,13 @@ export async function GET(request) {
     if (!user) return NextResponse.json(null);
 
     return NextResponse.json({
+      id: user.id,
       name: user.name,
       email: user.email,
       phone: user.phone,
+      batch: user.batch,
       is_verified: user.is_verified ?? false,
-      joinedAt: user.joined_at || user.joinedAt,
+      created_at: user.created_at,
     });
   } catch (err) {
     console.error('GET /api/user error:', err);

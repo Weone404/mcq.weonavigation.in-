@@ -5,8 +5,6 @@ import { getScenarioById } from '../../../../lib/rtr/scenarios';
 
 export async function POST(req) {
     try {
-        await dbConnect();
-
         const body = await req.json();
         const { scenarioId, mode, transcripts, userId, duration } = body;
 
@@ -58,8 +56,6 @@ export async function POST(req) {
 
 export async function GET(req) {
     try {
-        await dbConnect();
-
         const { searchParams } = new URL(req.url);
         const userId = searchParams.get('userId');
 
@@ -70,7 +66,7 @@ export async function GET(req) {
         const attempts = await RtrAttempt.find({ userId })
             .sort({ createdAt: -1 })
             .limit(10)
-            .lean();
+            .exec();
 
         return NextResponse.json({ attempts });
 

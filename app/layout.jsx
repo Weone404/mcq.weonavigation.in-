@@ -20,7 +20,6 @@ export default function RootLayout({ children }) {
         {children}
         <AliaWidget />
       </body>
-
     </html>
   );
 }

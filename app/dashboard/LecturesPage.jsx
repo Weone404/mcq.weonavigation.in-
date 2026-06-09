@@ -712,10 +712,11 @@ const CONTENT_TABS = [
   { id: 'personalysis', label: '🔬 Personalysis', desc: 'Paper analysis & insights' },
 ];
 
-function ContentTabBar({ active, onChange }) {
+function ContentTabBar({ active, onChange, user }) {
+  const tabs = CONTENT_TABS.filter((t) => t.id !== 'personalysis' || user?.is_verified);
   return (
     <div style={{ display: 'flex', gap: 0, background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: 6, marginBottom: 24, flexWrap: 'wrap' }}>
-      {CONTENT_TABS.map((tab) => {
+      {tabs.map((tab) => {
         const isActive = active === tab.id;
         return (
           <button key={tab.id} onClick={() => onChange(tab.id)} style={{ flex: '1 1 auto', minWidth: 120, padding: '11px 16px', borderRadius: 12, border: 'none', cursor: 'pointer', background: isActive ? `linear-gradient(135deg,${C.primary},${C.purple})` : 'transparent', color: isActive ? '#fff' : C.muted, fontWeight: isActive ? 800 : 600, fontSize: 13, transition: 'all .2s', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
@@ -1017,6 +1018,10 @@ export default function LecturesPage() {
     setSearch('');
   }
 
+  useEffect(() => {
+    if (contentTab === 'personalysis' && !user?.is_verified) setContentTab('lectures');
+  }, [user, contentTab]);
+
   const SUBJECT_KEYS = Object.keys(SUBJECTS_DATA);
 
   function getGlobalOffset(subjectKey) {
@@ -1077,7 +1082,7 @@ export default function LecturesPage() {
       <LiveClassesSection />
 
       {/* TAB BAR */}
-      <ContentTabBar active={contentTab} onChange={handleTabChange} />
+      <ContentTabBar active={contentTab} onChange={handleTabChange} user={user} />
 
       {/* ══ TAB: FULL LECTURES ══ */}
       {contentTab === 'lectures' && (
@@ -1204,7 +1209,7 @@ export default function LecturesPage() {
       )}
 
       {/* ══ TAB: PERSONALYSIS — premium only ══ */}
-      {contentTab === 'personalysis' && (
+      {contentTab === 'personalysis' && user?.is_verified && (
         <VideoSectionWithFolders
           dataConfig={PERSONALYSIS_DATA}
           videoKey="videos"

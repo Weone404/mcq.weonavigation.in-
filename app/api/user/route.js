@@ -32,6 +32,7 @@ export async function POST(request) {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      is_verified: user.is_verified ?? false,
       joinedAt: user.joined_at || user.joinedAt,
     });
   } catch (err) {
@@ -54,6 +55,7 @@ export async function GET(request) {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      is_verified: user.is_verified ?? false,
       joinedAt: user.joined_at || user.joinedAt,
     });
   } catch (err) {

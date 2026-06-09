@@ -238,13 +238,17 @@ const PERSONALYSIS_DATA = {
     color: '#10B981',
     // FIX 2: Renamed key from "lectures" → "videos" to match videoKey prop
     videos: makeSlots([
-      { title: 'Nav: Scale – Ch 7', chapter: 'Chapter 7', description: 'Understanding map and chart scales used in aviation navigation.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WnSSqaffoB0?si=mIXzhIxupjOxvUeC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Scalech – Ch 7', chapter: 'Chapter 7', description: 'Understanding map and chart scales used in aviation navigation.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WnSSqaffoB0?si=PfV8s1HRvdf8_sIp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: Departure – Ch 6', chapter: 'Chapter 6', description: 'Departure calculations and east-west distance measurement.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WnSSqaffoB0?si=mIXzhIxupjOxvUeC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: 1 in 60 and 1/14 Rule – Ch 8', chapter: 'Chapter 8', description: 'The 1 in 60 rule and 1/14 rule for track error and heading corrections.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WnSSqaffoB0?si=mIXzhIxupjOxvUeC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: Convergency and Conversion Angle', chapter: 'Chapter 4', description: 'Convergency of meridians and conversion angle on charts.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/RHWrdDJz_fY?si=wjsgh_lB6sJmdWME" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: Polar Stereographic Projection – Ch 11', chapter: 'Chapter 11', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/95zN5KuWeLA?si=jZWEFqGnegEZ1_4T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-      { title: 'Nav: Time Conversion – Ch 12', chapter: 'Chapter 12', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/QCJ8eIvKzEo?si=LPcMsQz-ZCx9MabY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-    ], 10),
+      { title: 'Nav: General properties chart  – Ch 5', chapter: 'Chapter 5', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/GNDCdCMy0yY?si=r0yATJ5PBZWBN7Gn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Great Circle and Rumbling – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/OhYnZJjpRgQ?si=e87gLl9CdGY2IkYG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Lembart chart 1 – Ch 10', chapter: 'Chapter 10', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/UkmJuHTbIjo?si=TBG1uXTciVRksDlQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Lembert chart part 2 – Ch 10', chapter: 'Chapter 10', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/8GhYrIXVtdM?si=_tCpyQkTPvIj1Tc_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: MEGNETISM – Ch 3', chapter: 'Chapter 3', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/NDaEWTdDImM?si=VCLd6Bl0PIX_UT-d" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+    ], 20),
   },
   'Instrument Navigation': {
     icon: '🛩️',
@@ -978,11 +982,29 @@ export default function LecturesPage() {
   const [contentTab, setContentTab] = useState('lectures');
 
   useEffect(() => {
-    setUser(getUser());
-    setSub(getSubscription());
-    setSubscribed(isSubscribed());
-  }, []);
+  const loggedUser = getUser();
+  setUser(loggedUser);
+  setSub(getSubscription());
 
+  if (loggedUser?.email) {
+    // Fetch fresh user data from DB to get is_verified
+    fetch(`/api/user?email=${encodeURIComponent(loggedUser.email)}`)
+      .then(r => r.json())
+      .then(dbUser => {
+        if (dbUser && dbUser.email) {
+          // Save updated user with is_verified back to localStorage
+          localStorage.setItem('user', JSON.stringify(dbUser));
+          setUser(dbUser);
+          setSubscribed(dbUser.is_verified === true);
+        } else {
+          setSubscribed(false);
+        }
+      })
+      .catch(() => setSubscribed(false));
+  } else {
+    setSubscribed(false);
+  }
+}, []);
   function handlePaySuccess(newSub) {
     setSub(newSub);
     setSubscribed(true);

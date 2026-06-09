@@ -2311,8 +2311,9 @@ export default function DashboardPage() {
 
   useEffect(() => {
   const token = localStorage.getItem("access_token");
+  const storedUser = JSON.parse(localStorage.getItem("user") || localStorage.getItem("dgca_user") || 'null');
   if (!token) {
-    // No token — guest mode, tests still work freely
+    if (storedUser) setUserState(storedUser);
     setLoading(false);
     return;
   }
@@ -2338,9 +2339,12 @@ export default function DashboardPage() {
     })
     .catch(err => {
       console.warn("Auth skipped:", err.message);
-      // Don't redirect — just continue as guest
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("user");
+      if (storedUser) {
+        setUserState(storedUser);
+      } else {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user");
+      }
     })
     .finally(() => setLoading(false));
 }, []);

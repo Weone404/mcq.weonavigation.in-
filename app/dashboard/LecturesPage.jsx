@@ -712,8 +712,8 @@ const CONTENT_TABS = [
   { id: 'personalysis', label: '🔬 Personalysis', desc: 'Paper analysis & insights' },
 ];
 
-function ContentTabBar({ active, onChange, user }) {
-  const tabs = CONTENT_TABS.filter((t) => t.id !== 'personalysis' || user?.is_verified);
+function ContentTabBar({ active, onChange }) {
+  const tabs = CONTENT_TABS;
   return (
     <div style={{ display: 'flex', gap: 0, background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: 6, marginBottom: 24, flexWrap: 'wrap' }}>
       {tabs.map((tab) => {
@@ -1018,9 +1018,9 @@ export default function LecturesPage() {
     setSearch('');
   }
 
-  useEffect(() => {
-    if (contentTab === 'personalysis' && !user?.is_verified) setContentTab('lectures');
-  }, [user, contentTab]);
+  // useEffect(() => {
+  //   if (contentTab === 'personalysis' && !user?.is_verified) setContentTab('lectures');
+  // }, [user, contentTab]);
 
   const SUBJECT_KEYS = Object.keys(SUBJECTS_DATA);
 
@@ -1082,7 +1082,7 @@ export default function LecturesPage() {
       <LiveClassesSection />
 
       {/* TAB BAR */}
-      <ContentTabBar active={contentTab} onChange={handleTabChange} user={user} />
+      <ContentTabBar active={contentTab} onChange={handleTabChange} />
 
       {/* ══ TAB: FULL LECTURES ══ */}
       {contentTab === 'lectures' && (
@@ -1209,7 +1209,7 @@ export default function LecturesPage() {
       )}
 
       {/* ══ TAB: PERSONALYSIS — premium only ══ */}
-      {contentTab === 'personalysis' && user?.is_verified && (
+      {contentTab === 'personalysis' && (
         <VideoSectionWithFolders
           dataConfig={PERSONALYSIS_DATA}
           videoKey="videos"

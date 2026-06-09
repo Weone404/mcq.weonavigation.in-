@@ -17,8 +17,9 @@ export async function POST(request) {
     let user = await findUserByEmail(emailNormalized);
 
     if (user) {
+      // ✅ Fixed: 'users' not 'students'
       const { rows } = await pool.query(
-        `UPDATE students SET name = $1, phone = $2
+        `UPDATE users SET name = $1, phone = $2
          WHERE LOWER(email) = LOWER($3)
          RETURNING *`,
         [name, phone.trim(), emailNormalized]

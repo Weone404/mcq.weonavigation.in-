@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { fetchAndStoreUser } from "@/lib/storage";
+import { fetchAndStoreUser } from "../../lib/storage";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');

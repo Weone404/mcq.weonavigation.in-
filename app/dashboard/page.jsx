@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUser, clearUser, getStats, getResults } from '../../lib/storage';
+import { getUser, clearUser, getStats, getResults, fetchAndStoreUser } from '../../lib/storage';
 import { chapters, questions as allQuestions } from '../../data/questions';
 import LecturesPage from './LecturesPage.jsx';
 import ResourcesPage from './ResourcesPage.jsx';
@@ -2327,15 +2327,21 @@ export default function DashboardPage() {
     })
     .then(userData => {
       if (!userData || userData.detail) throw new Error("Invalid user data");
+      // Save token-derived user, then attempt to fetch canonical DB record
       localStorage.setItem("user", JSON.stringify(userData));
       setUserState(userData);
       const email = userData.email;
-      return Promise.all([getStats(email), getResults(email)]);
+      // Also fetch fresh user data from DB (may include full name, profile fields)
+      return Promise.all([getStats(email), getResults(email), fetchAndStoreUser(email)]);
     })
-    .then(([s, r]) => {
+    .then(([s, r, dbUser]) => {
       setStats(s);
       setAll(r);
       setRecent(r.slice(0, 5));
+      if (dbUser && dbUser.email) {
+        // Replace transient user with canonical DB user
+        setUserState(dbUser);
+      }
     })
     .catch(err => {
       console.warn("Auth skipped:", err.message);

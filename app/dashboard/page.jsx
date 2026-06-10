@@ -2327,20 +2327,32 @@ export default function DashboardPage() {
     })
     .then(userData => {
       if (!userData || userData.detail) throw new Error("Invalid user data");
-      // Save token-derived user, then attempt to fetch canonical DB record
+      // Save token-derived user immediately, then fetch the canonical record by email or phone.
       localStorage.setItem("user", JSON.stringify(userData));
       setUserState(userData);
-      const email = userData.email;
-      // Also fetch fresh user data from DB (may include full name, profile fields)
-      return Promise.all([getStats(email), getResults(email), fetchAndStoreUser(email)]);
+      const lookup = { email: userData.email, phone: userData.phone };
+      return fetchAndStoreUser(lookup).then(dbUser => ({ userData, dbUser }));
     })
-    .then(([s, r, dbUser]) => {
+    .then(({ userData, dbUser }) => {
+      const profile = dbUser && (dbUser.email || dbUser.phone) ? dbUser : userData;
+      localStorage.setItem("user", JSON.stringify(profile));
+      setUserState(profile);
+
+      if (!profile.email) {
+        return Promise.all([
+          Promise.resolve({ testsAttempted: 0, avgScore: 0, bestScore: 0, totalQuestions: 0 }),
+          Promise.resolve([]),
+          profile,
+        ]);
+      }
+      return Promise.all([getStats(profile.email), getResults(profile.email), profile]);
+    })
+    .then(([s, r, profile]) => {
       setStats(s);
       setAll(r);
       setRecent(r.slice(0, 5));
-      if (dbUser && dbUser.email) {
-        // Replace transient user with canonical DB user
-        setUserState(dbUser);
+      if (profile && (profile.email || profile.phone)) {
+        setUserState(profile);
       }
     })
     .catch(err => {

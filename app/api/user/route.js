@@ -1,6 +1,6 @@
 ﻿import { NextResponse } from 'next/server';
 import pool from '../../../lib/db';
-import { createUser, findUserByEmail } from '../../../lib/queries';
+import { createUser, findUserByEmail, findUserByPhone } from '../../../lib/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,14 +44,17 @@ export async function POST(request) {
   }
 }
 
-// GET /api/user?email=... — fetch user by email
+// GET /api/user?email=... or /api/user?phone=... — fetch user by email or phone
 export async function GET(request) {
   try {
     const { searchParams } = request.nextUrl;
     const email = searchParams.get('email');
-    if (!email) return NextResponse.json({ error: 'email is required.' }, { status: 400 });
+    const phone = searchParams.get('phone');
+    if (!email && !phone) return NextResponse.json({ error: 'email or phone is required.' }, { status: 400 });
 
-    const user = await findUserByEmail(email.toLowerCase().trim());
+    const user = email
+      ? await findUserByEmail(email.toLowerCase().trim())
+      : await findUserByPhone(phone.trim());
     if (!user) return NextResponse.json(null);
 
     return NextResponse.json({

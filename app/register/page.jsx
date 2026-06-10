@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { fetchAndStoreUser } from "@/lib/storage";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -306,7 +307,10 @@ const API_BASE = "https://nextauth-my1u.onrender.com/api/v1/auth";
 function saveTokens(data) {
     if (data?.access_token) localStorage.setItem("access_token", data.access_token);
     if (data?.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
-    if (data?.user) localStorage.setItem("user", JSON.stringify(data.user));
+    if (data?.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("dgca_user", JSON.stringify(data.user));
+    }
 }
 
 export default function RegisterPage() {
@@ -358,6 +362,10 @@ export default function RegisterPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.detail || "Registration failed");
             saveTokens(data);
+            await fetchAndStoreUser({
+                email,
+                phone: `${dialCode}${phone.replace(/\D/g, "")}`,
+            });
             window.location.href = "/dashboard";
         } catch (err) {
             setServerError(err.message);

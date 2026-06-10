@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { getUser } from '../../lib/storage';
+import { getUser, fetchAndStoreUser } from '../../lib/storage';
 import { openPayment, getSubscription, isSubscribed, daysRemaining, PLANS, grantSubscription } from '../../lib/payment';
 
 const C = {
@@ -995,16 +995,14 @@ export default function LecturesPage() {
   setUser(loggedUser);
   setSub(getSubscription());
 
-  if (loggedUser?.email) {
-    // Fetch fresh user data from DB to get is_verified
-    fetch(`/api/user?email=${encodeURIComponent(loggedUser.email)}`)
-      .then(r => r.json())
+  const lookup = { email: loggedUser?.email, phone: loggedUser?.phone };
+  if (lookup.email || lookup.phone) {
+    fetchAndStoreUser(lookup)
       .then(dbUser => {
-        if (dbUser && dbUser.email) {
-          // Save updated user with is_verified back to localStorage
-          localStorage.setItem('user', JSON.stringify(dbUser));
-          setUser(dbUser);
-          setSubscribed(dbUser.is_verified === true);
+        const profile = dbUser && (dbUser.email || dbUser.phone) ? dbUser : loggedUser;
+        if (profile) {
+          setUser(profile);
+          setSubscribed(profile.is_verified === true);
         } else {
           setSubscribed(false);
         }

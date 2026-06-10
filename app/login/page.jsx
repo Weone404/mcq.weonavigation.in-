@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { fetchAndStoreUser } from "@/lib/storage";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -351,6 +352,16 @@ function saveSession(data, credential) {
 
   // 'dgca_user' is the key getUser() in lib/storage.js reads
   localStorage.setItem("dgca_user", JSON.stringify(userObj));
+  localStorage.setItem("user", JSON.stringify(userObj));
+}
+
+async function saveSessionAndHydrateUser(data, credential) {
+  saveSession(data, credential);
+  if (!credential) return;
+  const lookup = credential.includes("@")
+    ? { email: credential }
+    : { phone: credential };
+  await fetchAndStoreUser(lookup);
 }
 
 // ── FIX 3: Token refresh utility.
@@ -483,7 +494,7 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Login failed");
 
-      saveSession(data, id);
+      await saveSessionAndHydrateUser(data, id);
       window.location.href = "/dashboard";
     } catch (e) {
       setError(e.message);
@@ -528,7 +539,7 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Invalid OTP");
 
-      saveSession(data, id);
+      await saveSessionAndHydrateUser(data, id);
       window.location.href = "/dashboard";
     } catch (e) {
       setError(e.message);

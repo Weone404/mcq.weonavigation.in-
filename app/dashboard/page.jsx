@@ -383,6 +383,23 @@ export const SUBJECTS = [
     comingSoon: false,
     hasSubjects: false,
   },
+  // After the mock subject object, before the closing ];
+{
+  id: 'aptl',
+  title: 'APTL',
+  subtitle: 'Meteorology & Navigation Mock Tests',
+  icon: '✈️',
+  color: '#0EA5E9',
+  gradient: 'linear-gradient(135deg,#0EA5E9,#6366F1)',
+  parts: [],
+  chapterIds: [],
+  stats: '2 Subjects · Mock Only',
+  exam: 'ATPL / CPL',
+  isMock: true,
+  isAptl: true,
+  comingSoon: false,
+  hasSubjects: false,
+},
 ];
 
 
@@ -1534,7 +1551,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
 
           return (
             <div key={sub.id}
-              onClick={() => sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
+              onClick={() => sub.isAptl ? onMockTest('aptl') : sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
               style={{
                 background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer',
                 WebkitTransition: 'transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s',
@@ -1591,6 +1608,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
 // ─── GENERIC SUBJECT CHAPTER LIST ─────────────────────────────────────────────
 function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest, onBack, isMobile }) {
   const [search, setSearch] = useState('');
+  const [activeSubSubject, setActiveSubSubject] = useState(null);
   const visible = useFadeIn(0);
 
   function getBest(chapterId) {
@@ -1599,20 +1617,24 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
     return Math.max(...rs.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0));
   }
 
-  const filtered = subjectChapters.filter(c => !search || c.title.toLowerCase().includes(search.toLowerCase()));
+  const displaySubject = activeSubSubject || subject;
+  const chapterPool = activeSubSubject
+    ? subjectChapters.filter(c => displaySubject.chapterIds.includes(c.id))
+    : subjectChapters;
+  const filtered = chapterPool.filter(c => !search || c.title.toLowerCase().includes(search.toLowerCase()));
 
   function getGroups() {
-    if (!subject.parts || subject.parts.length === 0) {
-      return [{ label: subject.title, color: subject.color, chapters: filtered }];
+    if (!displaySubject.parts || displaySubject.parts.length === 0) {
+      return [{ label: displaySubject.title, color: displaySubject.color, chapters: filtered }];
     }
-    return subject.parts
+    return displaySubject.parts
       .map(part => ({ label: part.label, color: part.color, chapters: filtered.filter(c => part.chapterIds && part.chapterIds.includes(c.id)) }))
       .filter(g => g.chapters.length > 0);
   }
 
   const groups = getGroups();
-  const attempted = subjectChapters.filter(c => allResults.some(r => r.chapterId === c.id)).length;
-  const allPcts = allResults.filter(r => subject.chapterIds.includes(r.chapterId) && r.total > 0).map(r => Math.round((r.score / r.total) * 100));
+  const attempted = chapterPool.filter(c => allResults.some(r => r.chapterId === c.id)).length;
+  const allPcts = allResults.filter(r => displaySubject.chapterIds.includes(r.chapterId) && r.total > 0).map(r => Math.round((r.score / r.total) * 100));
   const avgScore = allPcts.length ? Math.round(allPcts.reduce((a, b) => a + b, 0) / allPcts.length) : null;
   const bestScore = allPcts.length ? Math.max(...allPcts) : null;
 
@@ -1627,15 +1649,15 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(-3px)'; }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
         >←</button>
-        <div style={{ width: 46, height: 46, borderRadius: 13, flexShrink: 0, background: subject.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{subject.icon}</div>
+        <div style={{ width: 46, height: 46, borderRadius: 13, flexShrink: 0, background: displaySubject.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{displaySubject.icon}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h2 style={{ margin: 0, fontSize: isMobile ? 18 : 22, fontWeight: 800, color: C.text, letterSpacing: -0.3 }}>{subject.icon} {subject.title}</h2>
-          <p style={{ margin: '3px 0 0', color: C.muted, fontSize: 13 }}>{subjectChapters.length} chapters · Click to start MCQ test</p>
+          <h2 style={{ margin: 0, fontSize: isMobile ? 18 : 22, fontWeight: 800, color: C.text, letterSpacing: -0.3 }}>{displaySubject.icon} {displaySubject.title}</h2>
+          <p style={{ margin: '3px 0 0', color: C.muted, fontSize: 13 }}>{chapterPool.length} chapters · Click to start MCQ test</p>
         </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', background: C.card, borderRadius: 11, padding: '9px 16px', border: `1px solid ${C.border}`, marginBottom: 20, WebkitTransition: 'box-shadow .15s', transition: 'box-shadow .15s' }}
-        onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(subject.color, 0.25)}`; }}
+        onFocus={e => { e.currentTarget.style.boxShadow = `0 0 0 2px ${hexAlpha(displaySubject.color, 0.25)}`; }}
         onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
       >
         <span style={{ color: C.muted, marginRight: 10, fontSize: 15 }}>🔍</span>
@@ -1645,7 +1667,7 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12, marginBottom: 24 }}>
         {[
-          { icon: '📚', val: subjectChapters.length, label: 'Total Chapters' },
+          { icon: '📚', val: chapterPool.length, label: 'Total Chapters' },
           { icon: '✅', val: attempted, label: 'Attempted' },
           { icon: '🎯', val: avgScore !== null ? `${avgScore}%` : '—', label: 'Avg Score' },
           { icon: '🏆', val: bestScore !== null ? `${bestScore}%` : '—', label: 'Best Score' },
@@ -1663,6 +1685,49 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
           </div>
         ))}
       </div>
+
+      {subject.hasSubjects && !activeSubSubject && subject.subSubjects && (
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, gap: 12, flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 16, color: C.text }}>Navigation Topics</div>
+              <div style={{ color: C.muted, fontSize: 13 }}>Pick a nested subject for focused practice.</div>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 16 }}>
+            {subject.subSubjects.map((sub, idx) => (
+              <div key={sub.id} onClick={() => setActiveSubSubject(sub)}
+                style={{
+                  background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, cursor: 'pointer', padding: 18,
+                  WebkitTransition: 'transform .2s ease, box-shadow .2s ease', transition: 'transform .2s ease, box-shadow .2s ease',
+                  WebkitAnimation: `fadeIn .4s ease ${idx * 0.06}s both`, animation: `fadeIn .4s ease ${idx * 0.06}s both`,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 12px 28px ${hexAlpha(sub.color, 0.16)}`; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ width: 46, height: 46, borderRadius: 14, background: hexAlpha(sub.color, 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{sub.icon}</div>
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: 16, color: C.text }}>{sub.title}</div>
+                      <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>{sub.subtitle}</div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 12, color: C.muted }}>{sub.stats}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: sub.color }}>{sub.exam}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeSubSubject && (
+        <button onClick={() => setActiveSubSubject(null)} style={{ marginBottom: 22, background: C.card, border: `1px solid ${C.border}`, borderRadius: 11, padding: '10px 14px', color: C.text, cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' }}>
+          ← Back to {subject.title}
+        </button>
+      )}
 
       {groups.map(group => (
         <div key={group.label} style={{ marginBottom: 30 }}>
@@ -1723,7 +1788,16 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
 // ─── MOCK TEST SUBJECT SELECTOR ───────────────────────────────────────────────
 function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
-  const options = [...SUBJECTS.filter(s => !s.isMock), MOCK_ALL_OPTION];
+  const directSubjects = SUBJECTS.filter(s => !s.isMock && !s.isAptl);
+  const nestedSubjects = SUBJECTS.filter(s => !s.isMock && !s.isAptl && s.subSubjects)
+    .flatMap(s => s.subSubjects.map(sub => ({ ...sub, parentTitle: s.title })));
+  const aptlSubject = SUBJECTS.find(s => s.isAptl);
+  const options = [
+    ...directSubjects,
+    ...nestedSubjects,
+    ...(aptlSubject ? [aptlSubject] : []),
+    MOCK_ALL_OPTION,
+  ];
   const visible = useFadeIn(0);
 
   return (
@@ -1770,7 +1844,7 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
                   </span>
                 </div>
                 <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3, letterSpacing: -0.2 }}>{sub.title}</div>
-                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{sub.subtitle}</div>
+                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{sub.parentTitle ? `${sub.subtitle} · ${sub.parentTitle}` : sub.subtitle}</div>
               </div>
               <div style={{ padding: '14px 20px 18px' }}>
                 <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>
@@ -1790,7 +1864,102 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
 }
 
 // ─── MOCK TEST PAGE ───────────────────────────────────────────────────────────
-function MockTestPage({ onBack, isMobile }) {
+function AptlMockSelector({ onSelectSubject, onBack, isMobile }) {
+  const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
+  const visible = useFadeIn(0);
+
+  const metSub = SUBJECTS.find(s => s.id === 'meteorology');
+  const navSub = SUBJECTS.find(s => s.id === 'navigation');
+  const sections = [
+    { subject: metSub, children: [] },
+    { subject: navSub, children: NAV_SUB_SUBJECTS },
+  ].filter(s => s.subject);
+
+  return (
+    <div style={{ maxWidth: 800, margin: '0 auto', opacity: visible ? 1 : 0, transition: 'opacity .4s ease' }}>
+      <button onClick={onBack} style={{ ...btnBase, marginBottom: 22, background: C.card, border: `1px solid ${C.border}`, borderRadius: 11, padding: '8px 18px', fontSize: 14, color: C.text }}>← Back to Tests</button>
+
+      <div style={{ background: 'linear-gradient(120deg,#0EA5E9,#6366F1)', borderRadius: 20, padding: isMobile ? '22px 20px' : '28px 32px', marginBottom: 26 }}>
+        <div style={{ fontSize: isMobile ? 24 : 32, marginBottom: 10 }}>✈️</div>
+        <div style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? 20 : 26, marginBottom: 7, letterSpacing: -0.5 }}>APTL Mock Test</div>
+        <div style={{ color: '#BAE6FD', fontSize: 14, lineHeight: 1.7 }}>Choose Meteorology or a Navigation topic to begin your mock test.</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+          {[['❓', '100 Questions'], ['⏱️', '100 Minutes'], ['💡', 'Instant Results'], ['🔀', 'Randomised']].map(([icon, label]) => (
+            <span key={label} style={{ background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.2)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>{icon} {label}</span>
+          ))}
+        </div>
+      </div>
+
+      {sections.map(({ subject: sub, children }) => (
+        <div key={sub.id} style={{ marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+            <div style={{ height: 3, width: 26, borderRadius: 99, background: sub.color }} />
+            <span style={{ fontWeight: 800, fontSize: 15, color: sub.color }}>{sub.title}</span>
+            <div style={{ flex: 1, height: 1, background: C.border }} />
+          </div>
+
+          {children.length === 0 ? (
+            // Meteorology — single card
+            <div onClick={() => onSelectSubject(sub)}
+              style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer', transition: 'transform .2s, box-shadow .2s' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 30px ${hexAlpha(sub.color, 0.18)}`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
+              <div style={{ background: sub.gradient, padding: '20px 20px 16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div style={{ width: 50, height: 50, borderRadius: 14, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{sub.icon}</div>
+                  <span style={{ background: hexAlpha('#ffffff', 0.25), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>{sub.exam}</span>
+                </div>
+                <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3 }}>{sub.title}</div>
+                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{sub.subtitle}</div>
+              </div>
+              <div style={{ padding: '14px 20px 18px' }}>
+                <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{sub.stats}</div>
+                <button onClick={e => { e.stopPropagation(); onSelectSubject(sub); }}
+                  style={{ ...btnBase, width: '100%', padding: '10px 0', background: sub.gradient, borderRadius: 11, color: '#fff', fontWeight: 700, fontSize: 14 }}>
+                  📝 Start {sub.title} Test →
+                </button>
+              </div>
+            </div>
+          ) : (
+            // Navigation — parent info + 3 sub-cards
+            <div>
+              <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: '14px 20px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 13, background: hexAlpha(sub.color, 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>{sub.icon}</div>
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>{sub.title}</div>
+                  <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>Pick a topic below</div>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 14, paddingLeft: 12 }}>
+                {children.map((child, idx) => (
+                  <div key={child.id} onClick={() => onSelectSubject(child)}
+                    style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer', transition: 'transform .2s, box-shadow .2s', animation: `fadeIn .4s ease ${idx * 0.07}s both` }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 30px ${hexAlpha(child.color, 0.18)}`; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
+                    <div style={{ background: child.gradient, padding: '20px 20px 16px' }}>
+                      <div style={{ width: 50, height: 50, borderRadius: 14, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{child.icon}</div>
+                      <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3 }}>{child.title}</div>
+                      <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{child.subtitle}</div>
+                    </div>
+                    <div style={{ padding: '14px 20px 18px' }}>
+                      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{child.stats}</div>
+                      <button onClick={e => { e.stopPropagation(); onSelectSubject(child); }}
+                        style={{ ...btnBase, width: '100%', padding: '10px 0', background: child.gradient, borderRadius: 11, color: '#fff', fontWeight: 700, fontSize: 14 }}>
+                        📝 Start {child.title} →
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
   const TOTAL_TIME = 6000;
   const TOTAL_Q = 100;
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
@@ -1921,7 +2090,10 @@ function MockTestPage({ onBack, isMobile }) {
     return 'default';
   }
 
-  if (screen === 'subjectSelect') return <MockSubjectSelector onSelectSubject={handleSubjectSelect} onBack={onBack} isMobile={isMobile} />;
+  if (screen === 'subjectSelect') {
+  if (isAptlMode) return <AptlMockSelector onSelectSubject={handleSubjectSelect} onBack={onBack} isMobile={isMobile} />;
+  return <MockSubjectSelector onSelectSubject={handleSubjectSelect} onBack={onBack} isMobile={isMobile} />;
+}
 
   if (screen === 'intro') {
     return (
@@ -2198,7 +2370,7 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 
 
   if (activeSubject?.comingSoon) return <ComingSoonPage subject={activeSubject} onBack={() => setSubView('subjects')} />;
   if (subView === 'mock') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} />;
-
+  if (subView === 'aptl') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} isAptlMode />;
   if (activeSubject && activeSubject.chapterIds.length > 0) {
     const known = chapters.filter(c => activeSubject.chapterIds.includes(c.id));
     const knownIds = known.map(c => c.id);
@@ -2218,7 +2390,7 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 
     );
   }
 
-  return <SubjectSelector allResults={allResults} onSelectSubject={id => setSubView(id)} onMockTest={() => setSubView('mock')} isMobile={isMobile} />;
+  return <SubjectSelector allResults={allResults} onSelectSubject={id => setSubView(id)} onMockTest={(mode) => setSubView(mode === 'aptl' ? 'aptl' : 'mock')} isMobile={isMobile} />;
 }
 
 // ─── PROGRESS PAGE ────────────────────────────────────────────────────────────

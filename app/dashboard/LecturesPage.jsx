@@ -222,7 +222,21 @@ const PERSONALYSIS_DATA = {
     subtitle: 'Met paper analysis & exam insights',
     examTags: ['ATPL', 'CPL'],
     color: '#0EA5E9',
-    videos: makeSlots([], 10),
+    videos: makeSlots([
+      { title: 'Met: Temprature 3 – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/PfEBY2yYCKA?si=Z_VGf5PF3Su0I-69" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: IC Density 4 – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Jpm8m4uDcAA?si=hxwILX-ERRlauxfo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: IC 2– Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/l17FL8NS2p4?si=09JWPUCS6AJcA-PJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: Humidity 5 – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Hrno1TrkhFs?si=tyh-ZhyzB1cDm-mZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: Atmosphere 1 IC – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/37QmsGWjfl0?si=BXzzqKQnBZet9OfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: WINDS – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/FAoLwmtB6v4?si=3AhA7_GadJeavkk8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: VISIBILTY AND FOG – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/F8rfU_ajod0?si=nftR32Zks_8HpOr6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: Vertical Motion and Clouds – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/txKwiYc4TJI?si=1JL6fi5oqxXPpKEk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Met: Humidity 5 – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '' },
+
+
+
+      
+    ], 10),
   },
   'Air Regulations': {
     icon: '📋',

@@ -104,6 +104,8 @@ function buildMockPool(count = 50, subjectChapterIds = null) {
   return shuffleArray(pool).slice(0, Math.min(count, pool.length));
 }
 
+
+
 export const NAV_SUB_SUBJECTS = [
   {
     id: 'general_navigation',
@@ -179,6 +181,82 @@ export const NAV_SUB_SUBJECTS = [
     stats: '8 Chapters · 150+ MCQs',
     exam: 'ATPL / CPL',
     comingSoon: false,
+  },
+];
+
+export const APTL_SUB_SUBJECTS = [
+  {
+    id: 'aptl_meteorology',
+    title: 'Meteorology',
+    subtitle: 'Weather, Clouds, Pressure Systems',
+    icon: '🌦️',
+    color: '#0EA5E9',
+    gradient: 'linear-gradient(135deg,#0EA5E9,#38BDF8)',
+    parts: [
+      {
+        label: 'Meteorology',
+        color: '#0EA5E9',
+        chapterIds: [
+          'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
+          'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
+          'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
+        ],
+      },
+    ],
+    chapterIds: [
+      'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
+      'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
+      'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
+    ],
+    stats: '23 Chapters · 300+ MCQs',
+    exam: 'ATPL / CPL',
+    comingSoon: false,
+    isMock: true,
+  },
+  {
+    id: 'aptl_navigation',
+    title: 'Navigation',
+    subtitle: 'General, Radio & Instrument Navigation',
+    icon: '🗺️',
+    color: '#10B981',
+    gradient: 'linear-gradient(135deg,#10B981,#34D399)',
+    parts: [
+      {
+        label: 'Part I – General Navigation',
+        color: '#10B981',
+        chapterIds: [
+          'gn01', 'gn02', 'gn03', 'gn04', 'gn05',
+          'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
+        ],
+      },
+      {
+        label: 'Part II – Radio Navigation',
+        color: '#059669',
+        chapterIds: [
+          'rn01', 'rn02', 'rn03', 'rn04', 'rn05',
+          'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+        ],
+      },
+      {
+        label: 'Part III – Instrument Navigation',
+        color: '#0284C7',
+        chapterIds: [
+          'in01', 'in02', 'in03', 'in04',
+          'in05', 'in06', 'in07', 'in08',
+        ],
+      },
+    ],
+    chapterIds: [
+      'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
+      'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+      'in01', 'in02', 'in03', 'in04', 'in05', 'in06', 'in07', 'in08',
+    ],
+    stats: '28 Chapters · 550+ MCQs',
+    exam: 'ATPL / CPL',
+    comingSoon: false,
+    isMock: true,
+    hasSubjects: true,
+    subSubjects: NAV_SUB_SUBJECTS, // reuses existing NAV_SUB_SUBJECTS
   },
 ];
 
@@ -392,13 +470,21 @@ export const SUBJECTS = [
   color: '#0EA5E9',
   gradient: 'linear-gradient(135deg,#0EA5E9,#6366F1)',
   parts: [],
-  chapterIds: [],
+  chapterIds: [
+    'met01', 'met02', 'met03', 'met04', 'met05', 'met06', 'met07', 'met08',
+    'met09', 'met10', 'met11', 'met12', 'met13', 'met14', 'met15', 'met16',
+    'met17', 'met18', 'met19', 'met20', 'met21', 'met22', 'met23',
+    'gn01', 'gn02', 'gn03', 'gn04', 'gn05', 'gn06', 'gn07', 'gn08', 'gn09', 'gn10', 'gn11',
+    'rn01', 'rn02', 'rn03', 'rn04', 'rn05', 'rn06', 'rn07', 'rn08', 'rn09', 'rn10',
+    'in01', 'in02', 'in03', 'in04', 'in05', 'in06', 'in07', 'in08',
+  ],
   stats: '2 Subjects · Mock Only',
   exam: 'ATPL / CPL',
   isMock: true,
   isAptl: true,
   comingSoon: false,
-  hasSubjects: false,
+  hasSubjects: true,         // ← changed to true
+  subSubjects: APTL_SUB_SUBJECTS,  // ← added
 },
 ];
 
@@ -1019,6 +1105,7 @@ const NAV_ITEMS = [
   { icon: '📈', label: 'My Progress', id: 'progress' },
   { icon: '📅', label: 'Live Classes', id: 'classes', badge: 'LIVE' },
   { icon: '🎬', label: 'Lectures', id: 'lectures' },
+  { icon: '🖥️', label: 'Interview', id: 'interview' },
   { icon: '📝', label: 'Mock Tests', id: 'mocktests' },
   { icon: '📁', label: 'Resources', id: 'resources' },
   { icon: '👤', label: 'My Profile', id: 'profile' },
@@ -2541,6 +2628,10 @@ export default function DashboardPage() {
   function handleLogout() { clearUser(); setUserState(null); }
 
   function handleNav(newPage, chapterId) {
+    if (newPage === 'interview') {
+      window.location.href = 'https://avi-assess-io5m.vercel.app/';
+      return;
+    }
     if (newPage === 'results') { router.push('/results'); return; }
     if (newPage === 'leaderboard') { router.push('/leaderboard'); return; }
     if (newPage === 'mockleaderboard') { setPage('mockleaderboard'); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
@@ -2579,11 +2670,13 @@ export default function DashboardPage() {
       case 'resources':
         return <ResourcesPage />;
       case 'lectures':
+      case 'Interview':
       case 'classes':
         return <LecturesPage user={user} />;
       case 'doubt':
         return <div style={{ minHeight: 500 }}><DoubtChat studentId={user?.id} /></div>;
       case 'mockleaderboard':
+        
         return (
           <MockLeaderboardWidget
             user={user}

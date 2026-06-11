@@ -22,7 +22,7 @@ const C = {
 const FREE_LIMIT = 2;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SUBJECT CONFIG — Full Lectures
+// SUBJECT CONFIG —  s
 // ─────────────────────────────────────────────────────────────────────────────
 
 function makeSlots(overrides = [], count = 26) {
@@ -190,12 +190,32 @@ const SHORT_VIDEOS_DATA = {
     color: '#6366F1',
     videos: makeSlots([], 10),
   },
-  Navigation: {
+  'Navigation': {
     icon: '🧭',
     subtitle: 'Quick Nav concept bursts',
     examTags: ['ATPL', 'CPL'],
     color: '#10B981',
     videos: makeSlots([], 10),
+  },
+  'Instrument Navigation': {
+    icon: '🧭',
+    subtitle: 'Quick Nav concept bursts',
+    examTags: ['ATPL', 'CPL'],
+    color: '#10B981',
+    videos: makeSlots([
+
+      { title: 'IN: Fundamentals of Aircraft Instrumentation and Display Characteristics', chapter: '1', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/vYwMIMddzQM?si=xClxkc58Ur5SsTbV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: Pitot and Static Pressure Systems', chapter: '2', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/mQj5tj37FQA?si=lIE4mYyk7Ai1qask" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: Principles of Aviation Air Temperature Measurement', chapter: '3', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/DdUtOxwd2Ao?si=n8mMLXWiJ4P1wI3n" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: The Vertical Speed Indicator ', chapter: '6', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/eakWL3CuxPM?si=S5Mbi852n-keVPgv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: The Principles and Mechanics of the Machmeter', chapter: '7', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/cSsbmwhHvlk?si=kJ9VJoRqnZEu91di" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN:  Air Data Computer and Instrumentation Systems', chapter: '8', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/mf6PpoKYsXg?si=BCX5BXlfM_YKkOFY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN:  The Direct Indicating Compass', chapter: '10', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/kIcfhDAulJ0?si=HXAZ3EK2kD3QdcWs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: Principles and Applications of Aircraft Gyroscopes', chapter: '11', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/ZM4xJjzT5qM?si=STR48zIGCso6U6Ha" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN:  Directional Gyro Indicator', chapter: '12', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/VY1z4DTIbAc?si=mDfnBy2VyzzIEBQ0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: Inertial Navigation Systems', chapter: '18', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/kU0y4PUwv6k?si=FowA6EzyFwF45mJI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      
+    ], 10),
   },
   'Technical General': {
     icon: '⚙️',
@@ -570,62 +590,8 @@ function SubjectFolderCard({ subjectKey, cfg, subscribed, globalOffset, onClick,
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LECTURE CARD (Full Lectures — with paywall logic)
+// LECTURE CARD ( s — with paywall logic)
 // ─────────────────────────────────────────────────────────────────────────────
-function LectureCard({ lecture, slotNumber, globalIndex, subjectColor, subscribed, onPlay, onLock }) {
-  const isLocked = !subscribed && globalIndex >= FREE_LIMIT;
-  const hasVideo = !!lecture.iframeCode;
-  const src = extractSrc(lecture.iframeCode);
-  const thumbUrl = getYtThumb(src);
-
-  return (
-    <div onClick={() => { if (!hasVideo) return; if (isLocked) onLock(); else onPlay(lecture); }}
-      style={{ background: C.card, borderRadius: 16, border: `2px solid ${isLocked ? C.purple + '40' : C.border}`, overflow: 'hidden', cursor: hasVideo ? 'pointer' : 'default', transition: 'all .2s', opacity: hasVideo ? 1 : 0.6 }}
-      onMouseEnter={(e) => { if (!hasVideo) return; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = isLocked ? '0 10px 28px rgba(139,92,246,.2)' : `0 10px 28px ${subjectColor}33`; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
-      <div style={{ position: 'relative', paddingBottom: '56.25%', background: '#0F172A', overflow: 'hidden' }}>
-        {hasVideo && thumbUrl ? (
-          <img src={thumbUrl} alt={lecture.title} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: isLocked ? 0.35 : 1 }} />
-        ) : (
-          <div style={{ position: 'absolute', inset: 0, background: hasVideo ? (isLocked ? 'linear-gradient(135deg,#2D1B69,#1E0A3C)' : `linear-gradient(135deg,${subjectColor}22,${C.sidebar})`) : 'linear-gradient(135deg,#1E293B,#0F172A)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36 }}>
-            {hasVideo ? (isLocked ? '🔒' : '🎬') : '⏳'}
-          </div>
-        )}
-        {isLocked && hasVideo && <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(139,92,246,.4) 0%, transparent 60%)' }} />}
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {hasVideo ? (
-            <div style={{ width: 50, height: 50, borderRadius: '50%', background: isLocked ? `linear-gradient(135deg,${C.purple},#6D28D9)` : 'rgba(255,255,255,.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, boxShadow: '0 4px 20px rgba(0,0,0,.45)' }}>{isLocked ? '🔒' : '▶'}</div>
-          ) : (
-            <div style={{ background: 'rgba(0,0,0,.5)', color: '#64748B', fontSize: 11, fontWeight: 700, padding: '6px 12px', borderRadius: 20, border: '1px solid rgba(255,255,255,.1)' }}>Coming Soon</div>
-          )}
-        </div>
-        {hasVideo ? (isLocked
-          ? <div style={{ position: 'absolute', top: 8, left: 8, background: `linear-gradient(135deg,${C.purple},#6D28D9)`, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>👑 PREMIUM</div>
-          : <div style={{ position: 'absolute', top: 8, left: 8, background: C.green, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>🆓 FREE</div>) : null}
-        <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,.7)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>#{slotNumber}</div>
-        {lecture.duration && <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,.8)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>{lecture.duration}</div>}
-      </div>
-      <div style={{ padding: '14px 16px', background: isLocked ? '#FDFAFF' : C.card }}>
-        <div style={{ display: 'flex', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 10, fontWeight: 700, background: subjectColor + '15', color: subjectColor, padding: '2px 8px', borderRadius: 20, border: `1px solid ${subjectColor}30` }}>{lecture.chapter}</span>
-        </div>
-        <div style={{ fontWeight: 800, fontSize: 14, color: isLocked ? C.muted : C.text, lineHeight: 1.4, marginBottom: 6 }}>{lecture.title}</div>
-        {lecture.description && <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5, marginBottom: 10, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{lecture.description}</div>}
-        {isLocked && hasVideo && (
-          <div style={{ background: `linear-gradient(135deg,${C.purple}15,${C.primary}12)`, border: `1px solid ${C.purple}35`, borderRadius: 10, padding: '10px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, color: C.purple, fontWeight: 700 }}>🔒 Subscribe to watch</div>
-            <div style={{ fontSize: 11, color: C.purple, fontWeight: 700, whiteSpace: 'nowrap' }}>from ₹299 →</div>
-          </div>
-        )}
-        {!hasVideo && <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px 12px', fontSize: 11, color: C.muted, textAlign: 'center' }}>⏳ Video will be uploaded soon</div>}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-          <div style={{ fontSize: 11, color: C.muted }}>{hasVideo ? 'Available' : 'Upcoming'}</div>
-          <div style={{ fontSize: 11, color: C.muted }}>{fmtDate(lecture.uploadedAt)}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SIMPLE VIDEO CARD
@@ -729,7 +695,7 @@ function SimpleVideoCard({ video, slotNumber, accentColor, onPlay, isLocked = fa
 // CONTENT SECTION TABS
 // ─────────────────────────────────────────────────────────────────────────────
 const CONTENT_TABS = [
-  { id: 'lectures', label: '📚 Full Lectures', desc: 'Chapter-by-chapter deep dives' },
+  
   { id: 'shorts', label: '⚡ Short Videos', desc: 'Quick concept bursts — Free' },
   { id: 'personalysis', label: '🔬 Personalysis', desc: 'Paper analysis & insights' },
 ];
@@ -1002,7 +968,7 @@ export default function LecturesPage() {
   const [showPaywall, setShowPaywall] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [search, setSearch] = useState('');
-  const [contentTab, setContentTab] = useState('lectures');
+  const [contentTab, setContentTab] = useState('shorts');
 
   useEffect(() => {
   const loggedUser = getUser();
@@ -1085,7 +1051,7 @@ export default function LecturesPage() {
             <p style={{ margin: '5px 0 0', color: C.muted, fontSize: 13 }}>
               {subscribed
                 ? `👑 Premium — Full access · ${totalFilled} lectures live, ${totalSlots} total slots across ${SUBJECT_KEYS.length} subjects`
-                : `First ${FREE_LIMIT} lectures free · Short Videos free for all · Subscribe to unlock full lectures & Personalysis`}
+                : `First ${FREE_LIMIT} lectures free · Short Videos free for all · Subscribe to unlock  s & Personalysis`}
             </p>
           </div>
           {!subscribed && (
@@ -1104,107 +1070,8 @@ export default function LecturesPage() {
       {/* TAB BAR */}
       <ContentTabBar active={contentTab} onChange={handleTabChange} />
 
-      {/* ══ TAB: FULL LECTURES ══ */}
-      {contentTab === 'lectures' && (
-        <>
-          {!selectedSubject && (
-            <>
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
-                {[
-                  { icon: '📚', val: SUBJECT_KEYS.length, label: 'Subjects' },
-                  { icon: '🎬', val: totalFilled, label: 'Uploaded' },
-                  { icon: '⏳', val: totalSlots - totalFilled, label: 'Coming Soon' },
-                  { icon: '🆓', val: FREE_LIMIT, label: 'Free Slots' },
-                  { icon: '👑', val: Math.max(0, totalSlots - FREE_LIMIT), label: 'Premium' },
-                ].map((s) => (
-                  <div key={s.label} style={{ background: C.card, borderRadius: 12, padding: '10px 16px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 18 }}>{s.icon}</span>
-                    <div>
-                      <div style={{ fontWeight: 800, fontSize: 16, color: C.text, lineHeight: 1 }}>{s.val}</div>
-                      <div style={{ fontSize: 11, color: C.muted }}>{s.label}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                <div style={{ height: 3, width: 28, borderRadius: 99, background: C.primary }} />
-                <span style={{ fontWeight: 800, fontSize: 15, color: C.text }}>All Subjects</span>
-                <div style={{ flex: 1, height: 1, background: C.border }} />
-                <span style={{ fontSize: 12, color: C.muted }}>{SUBJECT_KEYS.length} subjects · 26 slots each</span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
-                {SUBJECT_KEYS.map((key) => (
-                  <SubjectFolderCard
-                    key={key}
-                    subjectKey={key}
-                    cfg={SUBJECTS_DATA[key]}
-                    subscribed={subscribed}
-                    globalOffset={getGlobalOffset(key)}
-                    videoKey="lectures"
-                    onClick={() => { setSelectedSubject(key); setSearch(''); }}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-          {selectedSubject && selectedCfg && (
-            <>
-              <div style={{ background: C.card, border: `1.5px solid ${selectedCfg.color}40`, borderRadius: 16, padding: '18px 22px', marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ width: 52, height: 52, borderRadius: 16, background: selectedCfg.color + '18', border: `1.5px solid ${selectedCfg.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0 }}>{selectedCfg.icon}</div>
-                  <div>
-                    <div style={{ color: C.text, fontWeight: 900, fontSize: 18 }}>{selectedSubject}</div>
-                    {selectedCfg.subtitle && <div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>{selectedCfg.subtitle}</div>}
-                    <div style={{ display: 'flex', gap: 5, marginTop: 6, flexWrap: 'wrap' }}>
-                      {selectedCfg.examTags?.map((tag) => (<span key={tag} style={{ fontSize: 10, fontWeight: 600, color: selectedCfg.color, background: selectedCfg.color + '12', border: `1px solid ${selectedCfg.color}30`, padding: '1px 8px', borderRadius: 20 }}>{tag}</span>))}
-                    </div>
-                  </div>
-                </div>
-                <button onClick={() => { setSelectedSubject(null); setSearch(''); }} style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: '8px 16px', fontSize: 13, color: C.muted, cursor: 'pointer', fontWeight: 600 }}>← All Subjects</button>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                <span style={{ fontSize: 12, color: C.muted }}>{selectedCfg.lectures.filter((l) => !!l.iframeCode).length} uploaded · {selectedCfg.lectures.filter((l) => !l.iframeCode).length} coming soon</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: C.card, borderRadius: 10, padding: '9px 14px', border: `1px solid ${C.border}`, marginBottom: 20 }}>
-                <span style={{ color: C.muted }}>🔍</span>
-                <input placeholder={`Search in ${selectedSubject}…`} value={search} onChange={(e) => setSearch(e.target.value)} style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: '100%' }} />
-                {search && <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', color: C.muted, cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>}
-              </div>
-
-              {selectedCfg.lectures.some((l) => !l.iframeCode) && (
-                <div style={{ background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: 12, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                  <span style={{ fontSize: 20, flexShrink: 0 }}>💡</span>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: 13, color: '#92400E', marginBottom: 2 }}>How to add a YouTube video to an empty slot</div>
-                    <div style={{ fontSize: 12, color: '#B45309', lineHeight: 1.6 }}>
-                      Open <code style={{ background: '#FEF3C7', padding: '1px 5px', borderRadius: 4 }}>SUBJECTS_DATA</code> → find <strong>{selectedSubject}</strong> lectures array → paste the YouTube <code>&lt;iframe&gt;</code> embed code into the <code>iframeCode</code> field.
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {filteredLectures.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '60px 20px', background: C.card, borderRadius: 16, border: `1px solid ${C.border}` }}>
-                  <div style={{ fontSize: 48, marginBottom: 12 }}>🔍</div>
-                  <div style={{ fontWeight: 800, fontSize: 18, color: C.text, marginBottom: 6 }}>No lectures found</div>
-                  <div style={{ color: C.muted, fontSize: 13 }}>Try a different search term</div>
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 18 }}>
-                  {filteredLectures.map(({ lecture, slotNumber, globalIndex }) => (
-                    <LectureCard key={slotNumber} lecture={lecture} slotNumber={slotNumber} globalIndex={globalIndex} subjectColor={selectedCfg.color} subscribed={subscribed}
-                      onPlay={(l) => setActiveVideo({ lecture: l, subjectKey: selectedSubject })}
-                      onLock={() => setShowPaywall(true)} />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </>
-      )}
+      {/* ══ TAB:  S ══ */}
+      
 
       {/* ══ TAB: SHORT VIDEOS — free for everyone ══ */}
       {contentTab === 'shorts' && (

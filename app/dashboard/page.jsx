@@ -184,9 +184,9 @@ export const NAV_SUB_SUBJECTS = [
   },
 ];
 
-export const APTL_SUB_SUBJECTS = [
+export const ATPL_SUB_SUBJECTS = [
   {
-    id: 'aptl_meteorology',
+    id: 'atpl_meteorology',
     title: 'Meteorology',
     subtitle: 'Weather, Clouds, Pressure Systems',
     icon: '🌦️',
@@ -214,7 +214,7 @@ export const APTL_SUB_SUBJECTS = [
     isMock: true,
   },
   {
-    id: 'aptl_navigation',
+    id: 'atpl_navigation',
     title: 'Navigation',
     subtitle: 'General, Radio & Instrument Navigation',
     icon: '🗺️',
@@ -463,8 +463,8 @@ export const SUBJECTS = [
   },
   // After the mock subject object, before the closing ];
 {
-  id: 'aptl',
-  title: 'APTL',
+  id: 'atpl',
+  title: 'ATPL',
   subtitle: 'Meteorology & Navigation Mock Tests',
   icon: '✈️',
   color: '#0EA5E9',
@@ -484,7 +484,7 @@ export const SUBJECTS = [
   isAptl: true,
   comingSoon: false,
   hasSubjects: true,         // ← changed to true
-  subSubjects: APTL_SUB_SUBJECTS,  // ← added
+  subSubjects: ATPL_SUB_SUBJECTS,  // ← added
 },
 ];
 
@@ -1630,7 +1630,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
         <p style={{ margin: '6px 0 0', color: C.muted, fontSize: 14 }}>Choose a subject below to start chapter-wise tests.</p>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(300px,1fr))', gap: 18 }}>
-        {SUBJECTS.map((sub, idx) => {
+        {SUBJECTS.filter(s => !s.isAptl).map((sub, idx) => {
           const subChapters = chapters.filter(c => sub.chapterIds.includes(c.id));
           const attempted = subChapters.filter(c => allResults.some(r => r.chapterId === c.id)).length;
           const allPcts = allResults.filter(r => sub.chapterIds.includes(r.chapterId) && r.total > 0).map(r => Math.round((r.score / r.total) * 100));
@@ -1638,7 +1638,7 @@ function SubjectSelector({ allResults, onSelectSubject, onMockTest, isMobile }) 
 
           return (
             <div key={sub.id}
-              onClick={() => sub.isAptl ? onMockTest('aptl') : sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
+              onClick={() => sub.isAptl ? onMockTest('atpl') : sub.isMock ? onMockTest() : onSelectSubject(sub.id)}
               style={{
                 background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer',
                 WebkitTransition: 'transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s',
@@ -1875,16 +1875,13 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
 // ─── MOCK TEST SUBJECT SELECTOR ───────────────────────────────────────────────
 function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
-  const directSubjects = SUBJECTS.filter(s => !s.isMock && !s.isAptl);
-  const nestedSubjects = SUBJECTS.filter(s => !s.isMock && !s.isAptl && s.subSubjects)
-    .flatMap(s => s.subSubjects.map(sub => ({ ...sub, parentTitle: s.title })));
-  const aptlSubject = SUBJECTS.find(s => s.isAptl);
+  const directSubjects = SUBJECTS.filter(s => !s.isMock && !s.isAptl && s.id !== 'meteorology' && s.id !== 'navigation');
+  const atplSubject = SUBJECTS.find(s => s.isAptl);
   const options = [
-    ...directSubjects,
-    ...nestedSubjects,
-    ...(aptlSubject ? [aptlSubject] : []),
-    MOCK_ALL_OPTION,
-  ];
+  ...directSubjects,
+  MOCK_ALL_OPTION,
+  ...(atplSubject ? [atplSubject] : []),
+];
   const visible = useFadeIn(0);
 
   return (
@@ -1911,11 +1908,14 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(240px,1fr))', gap: 16 }}>
         {options.map((sub, idx) => {
           const isAll = sub.id === 'all';
+          const isAptl = sub.isAptl;
           const isComingSoon = sub.comingSoon;
           return (
             <div key={sub.id} onClick={() => !isComingSoon && onSelectSubject(sub)}
               style={{
-                background: C.card, borderRadius: 18, border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : `1px solid ${C.border}`, overflow: 'hidden', cursor: isComingSoon ? 'not-allowed' : 'pointer', opacity: isComingSoon ? 0.55 : 1,
+                background: C.card, borderRadius: 18,
+                border: isAll ? `2px dashed ${hexAlpha(sub.color, 0.4)}` : isAptl ? `2px solid ${hexAlpha(sub.color, 0.5)}` : `1px solid ${C.border}`,
+                overflow: 'hidden', cursor: isComingSoon ? 'not-allowed' : 'pointer', opacity: isComingSoon ? 0.55 : 1,
                 WebkitTransition: 'transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s',
                 transition: 'transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s',
                 WebkitAnimation: `fadeIn .4s ease ${idx * 0.07}s both`,
@@ -1927,7 +1927,7 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{ width: 50, height: 50, borderRadius: 14, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{sub.icon}</div>
                   <span style={{ background: hexAlpha('#ffffff', 0.25), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20, display: 'inline-block' }}>
-                    {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎲 Mixed' : sub.exam}
+                    {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎲 Mixed' : isAptl ? '✈️ ATPL' : sub.exam}
                   </span>
                 </div>
                 <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3, letterSpacing: -0.2 }}>{sub.title}</div>
@@ -1935,11 +1935,11 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
               </div>
               <div style={{ padding: '14px 20px 18px' }}>
                 <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>
-                  {isComingSoon ? 'Questions being prepared by our content team' : sub.stats}
+                  {isComingSoon ? 'Questions being prepared by our content team' : isAptl ? 'Met · General Nav · Radio Nav · Instrument Nav' : sub.stats}
                 </div>
                 <button onClick={e => { e.stopPropagation(); if (!isComingSoon) onSelectSubject(sub); }} disabled={isComingSoon}
-                  style={{ ...btnBase, width: '100%', padding: '10px 0', background: isComingSoon ? C.border : sub.gradient, borderRadius: 11, color: isComingSoon ? C.muted : '#fff', fontWeight: 700, fontSize: 14, cursor: isComingSoon ? 'not-allowed' : 'pointer', WebkitTransition: 'opacity .15s', transition: 'opacity .15s' }}>
-                  {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎯 Start Combined Test →' : `📝 Start ${sub.title} Test →`}
+                  style={{ ...btnBase, width: '100%', padding: '10px 0', background: isComingSoon ? C.border : sub.gradient, borderRadius: 11, color: isComingSoon ? C.muted : '#fff', fontWeight: 700, fontSize: 14, cursor: isComingSoon ? 'not-allowed' : 'pointer' }}>
+                  {isComingSoon ? '🚧 Coming Soon' : isAll ? '🎯 Start Combined Test →' : isAptl ? '✈️ Choose ATPL Subject →' : `📝 Start ${sub.title} Test →`}
                 </button>
               </div>
             </div>
@@ -1954,6 +1954,7 @@ function MockSubjectSelector({ onSelectSubject, onBack, isMobile }) {
 function AptlMockSelector({ onSelectSubject, onBack, isMobile }) {
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
   const visible = useFadeIn(0);
+   const [showNavChildren, setShowNavChildren] = useState(false);
 
   const metSub = SUBJECTS.find(s => s.id === 'meteorology');
   const navSub = SUBJECTS.find(s => s.id === 'navigation');
@@ -1963,87 +1964,208 @@ function AptlMockSelector({ onSelectSubject, onBack, isMobile }) {
   ].filter(s => s.subject);
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', opacity: visible ? 1 : 0, transition: 'opacity .4s ease' }}>
-      <button onClick={onBack} style={{ ...btnBase, marginBottom: 22, background: C.card, border: `1px solid ${C.border}`, borderRadius: 11, padding: '8px 18px', fontSize: 14, color: C.text }}>← Back to Tests</button>
+  <div style={{ maxWidth: 800, margin: '0 auto', opacity: visible ? 1 : 0, transition: 'opacity .4s ease' }}>
 
-      <div style={{ background: 'linear-gradient(120deg,#0EA5E9,#6366F1)', borderRadius: 20, padding: isMobile ? '22px 20px' : '28px 32px', marginBottom: 26 }}>
-        <div style={{ fontSize: isMobile ? 24 : 32, marginBottom: 10 }}>✈️</div>
-        <div style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? 20 : 26, marginBottom: 7, letterSpacing: -0.5 }}>APTL Mock Test</div>
-        <div style={{ color: '#BAE6FD', fontSize: 14, lineHeight: 1.7 }}>Choose Meteorology or a Navigation topic to begin your mock test.</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
-          {[['❓', '100 Questions'], ['⏱️', '100 Minutes'], ['💡', 'Instant Results'], ['🔀', 'Randomised']].map(([icon, label]) => (
-            <span key={label} style={{ background: hexAlpha('#ffffff', 0.15), color: '#fff', border: `1px solid ${hexAlpha('#ffffff', 0.2)}`, padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>{icon} {label}</span>
-          ))}
-        </div>
+    {/* Back button */}
+    <button
+      onClick={() => {
+        if (showNavChildren) setShowNavChildren(false);
+        else onBack();
+      }}
+      style={{
+        ...btnBase, marginBottom: 22, background: C.card,
+        border: `1px solid ${C.border}`, borderRadius: 11,
+        padding: '8px 18px', fontSize: 14, color: C.text
+      }}
+    >
+      {showNavChildren ? '← Back to ATPL' : '← Back to Tests'}
+    </button>
+
+    {/* Header banner */}
+    <div style={{
+      background: 'linear-gradient(120deg,#0EA5E9,#6366F1)',
+      borderRadius: 20, padding: isMobile ? '22px 20px' : '28px 32px', marginBottom: 26
+    }}>
+      <div style={{ fontSize: isMobile ? 24 : 32, marginBottom: 10 }}>✈️</div>
+      <div style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? 20 : 26, marginBottom: 7 }}>
+        {showNavChildren ? 'Navigation — Choose a Topic' : 'ATPL Mock Test'}
       </div>
-
-      {sections.map(({ subject: sub, children }) => (
-        <div key={sub.id} style={{ marginBottom: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-            <div style={{ height: 3, width: 26, borderRadius: 99, background: sub.color }} />
-            <span style={{ fontWeight: 800, fontSize: 15, color: sub.color }}>{sub.title}</span>
-            <div style={{ flex: 1, height: 1, background: C.border }} />
-          </div>
-
-          {children.length === 0 ? (
-            // Meteorology — single card
-            <div onClick={() => onSelectSubject(sub)}
-              style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer', transition: 'transform .2s, box-shadow .2s' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 30px ${hexAlpha(sub.color, 0.18)}`; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
-              <div style={{ background: sub.gradient, padding: '20px 20px 16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ width: 50, height: 50, borderRadius: 14, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{sub.icon}</div>
-                  <span style={{ background: hexAlpha('#ffffff', 0.25), color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>{sub.exam}</span>
-                </div>
-                <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3 }}>{sub.title}</div>
-                <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{sub.subtitle}</div>
-              </div>
-              <div style={{ padding: '14px 20px 18px' }}>
-                <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{sub.stats}</div>
-                <button onClick={e => { e.stopPropagation(); onSelectSubject(sub); }}
-                  style={{ ...btnBase, width: '100%', padding: '10px 0', background: sub.gradient, borderRadius: 11, color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                  📝 Start {sub.title} Test →
-                </button>
-              </div>
-            </div>
-          ) : (
-            // Navigation — parent info + 3 sub-cards
-            <div>
-              <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: '14px 20px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 13, background: hexAlpha(sub.color, 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>{sub.icon}</div>
-                <div>
-                  <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>{sub.title}</div>
-                  <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>Pick a topic below</div>
-                </div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 14, paddingLeft: 12 }}>
-                {children.map((child, idx) => (
-                  <div key={child.id} onClick={() => onSelectSubject(child)}
-                    style={{ background: C.card, borderRadius: 18, border: `1px solid ${C.border}`, overflow: 'hidden', cursor: 'pointer', transition: 'transform .2s, box-shadow .2s', animation: `fadeIn .4s ease ${idx * 0.07}s both` }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 30px ${hexAlpha(child.color, 0.18)}`; }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
-                    <div style={{ background: child.gradient, padding: '20px 20px 16px' }}>
-                      <div style={{ width: 50, height: 50, borderRadius: 14, background: hexAlpha('#ffffff', 0.25), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{child.icon}</div>
-                      <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3 }}>{child.title}</div>
-                      <div style={{ color: hexAlpha('#ffffff', 0.8), fontSize: 12 }}>{child.subtitle}</div>
-                    </div>
-                    <div style={{ padding: '14px 20px 18px' }}>
-                      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{child.stats}</div>
-                      <button onClick={e => { e.stopPropagation(); onSelectSubject(child); }}
-                        style={{ ...btnBase, width: '100%', padding: '10px 0', background: child.gradient, borderRadius: 11, color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                        📝 Start {child.title} →
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+      <div style={{ color: '#BAE6FD', fontSize: 14, lineHeight: 1.7 }}>
+        {showNavChildren
+          ? 'Pick a navigation topic to begin your mock test.'
+          : 'Choose Meteorology or Navigation to begin your mock test.'}
+      </div>
     </div>
-  );
+
+    {/* ── SCREEN 1: Show Met card + Navigation parent card ── */}
+    {!showNavChildren && (
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+        gap: 18
+      }}>
+
+        {/* Meteorology — direct to test */}
+        <div
+          onClick={() => onSelectSubject(metSub)}
+          style={{
+            background: C.card, borderRadius: 18,
+            border: `1px solid ${C.border}`, overflow: 'hidden',
+            cursor: 'pointer', transition: 'transform .2s, box-shadow .2s'
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = `0 12px 30px rgba(14,165,233,0.2)`;
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'none';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          <div style={{ background: metSub.gradient, padding: '20px 20px 16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div style={{
+                width: 50, height: 50, borderRadius: 14,
+                background: 'rgba(255,255,255,0.25)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26
+              }}>{metSub.icon}</div>
+              <span style={{
+                background: 'rgba(255,255,255,0.25)', color: '#fff',
+                fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20
+              }}>{metSub.exam}</span>
+            </div>
+            <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3 }}>
+              {metSub.title}
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{metSub.subtitle}</div>
+          </div>
+          <div style={{ padding: '14px 20px 18px' }}>
+            <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{metSub.stats}</div>
+            <button
+              onClick={e => { e.stopPropagation(); onSelectSubject(metSub); }}
+              style={{
+                ...btnBase, width: '100%', padding: '10px 0',
+                background: metSub.gradient, borderRadius: 11,
+                color: '#fff', fontWeight: 700, fontSize: 14
+              }}
+            >
+              📝 Start Meteorology Test →
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation — opens sub-cards on click */}
+        <div
+          onClick={() => setShowNavChildren(true)}
+          style={{
+            background: C.card, borderRadius: 18,
+            border: `1px solid ${C.border}`, overflow: 'hidden',
+            cursor: 'pointer', transition: 'transform .2s, box-shadow .2s'
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = `0 12px 30px rgba(16,185,129,0.2)`;
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'none';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          <div style={{ background: navSub.gradient, padding: '20px 20px 16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div style={{
+                width: 50, height: 50, borderRadius: 14,
+                background: 'rgba(255,255,255,0.25)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26
+              }}>{navSub.icon}</div>
+              <span style={{
+                background: 'rgba(255,255,255,0.25)', color: '#fff',
+                fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 20
+              }}>3 Topics</span>
+            </div>
+            <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3 }}>
+              {navSub.title}
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{navSub.subtitle}</div>
+          </div>
+          <div style={{ padding: '14px 20px 18px' }}>
+            <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>
+              General · Radio · Instrument Navigation
+            </div>
+            <button
+              onClick={e => { e.stopPropagation(); setShowNavChildren(true); }}
+              style={{
+                ...btnBase, width: '100%', padding: '10px 0',
+                background: navSub.gradient, borderRadius: 11,
+                color: '#fff', fontWeight: 700, fontSize: 14
+              }}
+            >
+              🗺️ Choose Navigation Topic →
+            </button>
+          </div>
+        </div>
+
+      </div>
+    )}
+
+    {/* ── SCREEN 2: Navigation sub-cards ── */}
+    {showNavChildren && (
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+        gap: 16
+      }}>
+        {NAV_SUB_SUBJECTS.map((child, idx) => (
+          <div
+            key={child.id}
+            onClick={() => onSelectSubject(child)}
+            style={{
+              background: C.card, borderRadius: 18,
+              border: `1px solid ${C.border}`, overflow: 'hidden',
+              cursor: 'pointer',
+              transition: 'transform .2s, box-shadow .2s',
+              animation: `fadeIn .4s ease ${idx * 0.07}s both`
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = `0 12px 30px rgba(0,0,0,0.12)`;
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'none';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <div style={{ background: child.gradient, padding: '20px 20px 16px' }}>
+              <div style={{
+                width: 50, height: 50, borderRadius: 14,
+                background: 'rgba(255,255,255,0.25)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26
+              }}>{child.icon}</div>
+              <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginTop: 12, marginBottom: 3 }}>
+                {child.title}
+              </div>
+              <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{child.subtitle}</div>
+            </div>
+            <div style={{ padding: '14px 20px 18px' }}>
+              <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{child.stats}</div>
+              <button
+                onClick={e => { e.stopPropagation(); onSelectSubject(child); }}
+                style={{
+                  ...btnBase, width: '100%', padding: '10px 0',
+                  background: child.gradient, borderRadius: 11,
+                  color: '#fff', fontWeight: 700, fontSize: 14
+                }}
+              >
+                📝 Start {child.title} →
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+
+  </div>
+);
 }
 
 function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
@@ -2057,7 +2179,7 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
   const [answers, setAnswers] = useState({});
   const [currentQ, setCurrentQ] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
-  const [submitStatus, setSubmitStatus] = useState('idle');
+  const [isAptlModeLocal, setIsAptlModeLocal] = useState(isAptlMode);
   const [lastAnswered, setLastAnswered] = useState(null);
   const timerRef = useRef(null);
 
@@ -2069,7 +2191,6 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
     setAnswers({});
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
-    setSubmitStatus('idle');
     setScreen('intro');
   }
 
@@ -2081,9 +2202,9 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
     setSubmitStatus('idle');
+    setIsAptlModeLocal(isAptlMode);
     setScreen('subjectSelect');
   }
-
   useEffect(() => {
     if (screen !== 'test') return;
     timerRef.current = setInterval(() => {
@@ -2178,8 +2299,26 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
   }
 
   if (screen === 'subjectSelect') {
-  if (isAptlMode) return <AptlMockSelector onSelectSubject={handleSubjectSelect} onBack={onBack} isMobile={isMobile} />;
-  return <MockSubjectSelector onSelectSubject={handleSubjectSelect} onBack={onBack} isMobile={isMobile} />;
+  if (isAptlModeLocal) return (
+    <AptlMockSelector
+      onSelectSubject={handleSubjectSelect}
+      onBack={() => {
+        if (isAptlMode) onBack();
+        else setIsAptlModeLocal(false);
+      }}
+      isMobile={isMobile}
+    />
+  );
+  return (
+    <MockSubjectSelector
+      onSelectSubject={(sub) => {
+        if (sub.isAptl) { setIsAptlModeLocal(true); return; }
+        handleSubjectSelect(sub);
+      }}
+      onBack={onBack}
+      isMobile={isMobile}
+    />
+  );
 }
 
   if (screen === 'intro') {
@@ -2457,7 +2596,7 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 
 
   if (activeSubject?.comingSoon) return <ComingSoonPage subject={activeSubject} onBack={() => setSubView('subjects')} />;
   if (subView === 'mock') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} />;
-  if (subView === 'aptl') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} isAptlMode />;
+  if (subView === 'atpl') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} isAptlMode />;
   if (activeSubject && activeSubject.chapterIds.length > 0) {
     const known = chapters.filter(c => activeSubject.chapterIds.includes(c.id));
     const knownIds = known.map(c => c.id);
@@ -2477,7 +2616,7 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 
     );
   }
 
-  return <SubjectSelector allResults={allResults} onSelectSubject={id => setSubView(id)} onMockTest={(mode) => setSubView(mode === 'aptl' ? 'aptl' : 'mock')} isMobile={isMobile} />;
+  return <SubjectSelector allResults={allResults} onSelectSubject={id => setSubView(id)} onMockTest={(mode) => setSubView(mode === 'atpl' ? 'atpl' : 'mock')} isMobile={isMobile} />;
 }
 
 // ─── PROGRESS PAGE ────────────────────────────────────────────────────────────

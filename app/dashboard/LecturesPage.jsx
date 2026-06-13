@@ -267,9 +267,7 @@ const PERSONALYSIS_DATA = {
       { title: 'Met: Vertical Motion and Clouds – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/txKwiYc4TJI?si=1JL6fi5oqxXPpKEk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Met: Humidity 5 – Ch 2', chapter: 'Chapter 2', description: 'UTC, LMT, standard time, and time zone conversions.', iframeCode: '' },
 
-
-
-      
+ 
     ], 10),
   },
   'Air Regulations': {
@@ -303,7 +301,6 @@ const PERSONALYSIS_DATA = {
       { title: 'Nav: Polar Stereographic Projection – Ch 11', chapter: 'Chapter 11', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/95zN5KuWeLA?si=jZWEFqGnegEZ1_4T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
 
 
-    
     ], 10),
   },
   'Instrument Navigation': {

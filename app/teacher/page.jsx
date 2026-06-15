@@ -1068,6 +1068,193 @@ function AttStudentTab({ students }) {
 // LEADERBOARD HELPERS & COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
 const LB_MEDALS = ['🥇', '🥈', '🥉'];
+// ═══════════════════════════════════════════════════════════════════════════════
+// ALL RESULTS TAB — Show all exam results from all students
+// ═══════════════════════════════════════════════════════════════════════════════
+function AllResultsTab({ students }) {
+    const [searchStudent, setSearchStudent] = useState('');
+    const [searchChapter, setSearchChapter] = useState('');
+    const [sortBy, setSortBy] = useState('date-desc');
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => { setTimeout(() => setMounted(true), 20); }, []);
+
+    // Flatten all results with student info
+    const allResults = students.flatMap(student =>
+        (student.results || []).map(result => ({
+            ...result,
+            studentName: student.name,
+            studentEmail: student.email,
+            studentPhone: student.phone,
+            chapterTitle: getChapterTitle(result.chapterId),
+            correctCount: (result.answers || []).filter(a => a.isCorrect).length,
+            wrongCount: (result.answers || []).filter(a => !a.isCorrect).length,
+        }))
+    );
+
+    // Filter results
+    let filtered = allResults.filter(r => {
+        const matchStudent = searchStudent.trim() === '' || 
+            r.studentName.toLowerCase().includes(searchStudent.toLowerCase()) ||
+            r.studentEmail.toLowerCase().includes(searchStudent.toLowerCase());
+        const matchChapter = searchChapter === '' || r.chapterId === searchChapter;
+        return matchStudent && matchChapter;
+    });
+
+    // Sort results
+    if (sortBy === 'date-desc') filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+    else if (sortBy === 'date-asc') filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+    else if (sortBy === 'score-desc') filtered.sort((a, b) => b.pct - a.pct);
+    else if (sortBy === 'score-asc') filtered.sort((a, b) => a.pct - b.pct);
+
+    const chapters = [...new Set(allResults.map(r => r.chapterId))];
+    const totalResults = allResults.length;
+    const avgScore = totalResults > 0 ? Math.round(allResults.reduce((sum, r) => sum + r.pct, 0) / totalResults) : 0;
+    const bestScore = totalResults > 0 ? Math.max(...allResults.map(r => r.pct)) : 0;
+
+    return (
+        <div className={`all-results-wrap${mounted ? ' all-results-in' : ''}`}>
+            <div className="results-summary-row">
+                {[
+                    { icon: '📝', label: 'Total Results', value: totalResults },
+                    { icon: '👥', label: 'Students', value: students.length },
+                    { icon: '🎯', label: 'Avg Accuracy', value: `${avgScore}%` },
+                    { icon: '🏆', label: 'Best Score', value: `${bestScore}%` },
+                ].map((stat, i) => (
+                    <div key={stat.label} className="result-stat-card" style={{ animationDelay: `${i * 60}ms` }}>
+                        <div className="stat-icon">{stat.icon}</div>
+                        <div className="stat-value">{stat.value}</div>
+                        <div className="stat-label">{stat.label}</div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="results-controls">
+                <div className="control-group">
+                    <label>Search Student</label>
+                    <div className="search-input-wrap">
+                        <span className="search-icon">🔍</span>
+                        <input type="text" placeholder="By name or email…" value={searchStudent} onChange={e => setSearchStudent(e.target.value)} />
+                        {searchStudent && <button className="clear-btn" onClick={() => setSearchStudent('')}>×</button>}
+                    </div>
+                </div>
+                <div className="control-group">
+                    <label>Filter by Chapter</label>
+                    <select value={searchChapter} onChange={e => setSearchChapter(e.target.value)}>
+                        <option value="">All Chapters</option>
+                        {chapters.map(ch => <option key={ch} value={ch}>{getChapterTitle(ch)}</option>)}
+                    </select>
+                </div>
+                <div className="control-group">
+                    <label>Sort By</label>
+                    <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                        <option value="date-desc">Newest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="score-desc">Highest Score</option>
+                        <option value="score-asc">Lowest Score</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className="results-panel">
+                <div className="panel-header"><h2>All Exam Results</h2><span>{filtered.length} of {totalResults} results</span></div>
+                <div className="results-table-wrap">
+                    {filtered.length === 0 ? (
+                        <div className="empty-state empty-state-in">No results matching your filters.</div>
+                    ) : (
+                        <div className="results-timeline">
+                            {filtered.map((result, i) => {
+                                const [bg, fg] = avatarColors(i);
+                                return (
+                                    <div key={`${result.studentEmail}-${result.id}-${i}`} className="timeline-item timeline-item-anim" style={{ animationDelay: `${i * 25}ms` }}>
+                                        <div className="timeline-dot" style={{ background: getScoreColor(result.pct) }} />
+                                        <div className="timeline-content">
+                                            <div className="result-card">
+                                                <div className="result-card-left">
+                                                    <div className="result-avatar" style={{ background: bg, color: fg }}>{initials(result.studentName)}</div>
+                                                    <div className="result-info">
+                                                        <div className="result-student"><strong>{result.studentName}</strong></div>
+                                                        <div className="result-email">{result.studentEmail}</div>
+                                                    </div>
+                                                </div>
+                                                <div className="result-card-center">
+                                                    <div className="result-chapter">{result.chapterTitle}</div>
+                                                    <div className="result-datetime">{formatDateTime(result.date)}</div>
+                                                </div>
+                                                <div className="result-card-right">
+                                                    <div className="result-score-box">
+                                                        <div className="score-pct" style={{ color: getScoreColor(result.pct) }}>{result.pct}%</div>
+                                                        <div className="score-fraction">{result.score}/{result.total}</div>
+                                                    </div>
+                                                    <div className="result-breakdown">
+                                                        <div className="correct"><span style={{ color: '#16a34a' }}>✓</span> {result.correctCount}</div>
+                                                        <div className="wrong"><span style={{ color: '#ef4444' }}>✗</span> {result.wrongCount}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <style jsx>{`
+        .all-results-wrap{opacity:0;transform:translateY(14px);transition:opacity .35s cubic-bezier(0.16,1,0.3,1),transform .35s cubic-bezier(0.16,1,0.3,1)}
+        .all-results-in{opacity:1;transform:none}
+        .results-summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+        .result-stat-card{background:#fff;border:1px solid #dbeafe;border-radius:18px;padding:1.25rem 1.15rem;text-align:center;box-shadow:0 10px 30px rgba(15,23,42,.04);animation:statPop .45s cubic-bezier(0.34,1.56,.64,1) both;transition:transform .2s,box-shadow .2s}
+        .result-stat-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(15,23,42,.08)}
+        @keyframes statPop{from{opacity:0;transform:scale(.8) translateY(12px)}to{opacity:1;transform:none}}
+        .stat-icon{font-size:1.8rem;margin-bottom:.5rem}
+        .stat-value{font-size:1.8rem;font-weight:800;color:#0f172a;margin-bottom:.25rem}
+        .stat-label{font-size:.78rem;color:#64748b;font-weight:600}
+        .results-controls{display:grid;grid-template-columns:2fr 1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;background:#fff;padding:1.25rem;border:1px solid #dbeafe;border-radius:18px;box-shadow:0 8px 24px rgba(15,23,42,.04)}
+        .control-group{display:flex;flex-direction:column;gap:.5rem}
+        .control-group label{font-size:.82rem;font-weight:700;color:#474747;text-transform:uppercase;letter-spacing:.04em}
+        .control-group select,.search-input-wrap input{border:1px solid #dbeafe;background:#f8fafc;color:#0f172a;border-radius:12px;padding:.75rem 1rem;font-size:.9rem;outline:none;width:100%;box-sizing:border-box;transition:border-color .2s,box-shadow .2s}
+        .search-input-wrap{position:relative}
+        .search-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:.85rem;pointer-events:none}
+        .search-input-wrap input{padding-left:2.5rem;padding-right:2.5rem}
+        .clear-btn{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.2rem;color:#94a3b8;transition:color .2s}
+        .clear-btn:hover{color:#475569}
+        .control-group select:focus,.control-group select:hover{border-color:#2563eb;box-shadow:0 0 0 3px rgba(59,130,246,.15);background:#fff}
+        .results-panel{background:#fff;border:1px solid #dbeafe;border-radius:20px;padding:1.5rem;box-shadow:0 18px 40px rgba(15,23,42,.05)}
+        .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+        .panel-header h2{margin:0;font-size:1.05rem;color:#0f172a}.panel-header span{color:#64748b;font-size:.9rem}
+        .results-table-wrap{max-height:700px;overflow-y:auto}
+        .results-timeline{display:flex;flex-direction:column;gap:.75rem;position:relative;padding-left:20px}
+        .results-timeline::before{content:'';position:absolute;left:4px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,#2563eb,transparent);pointer-events:none}
+        .timeline-item{display:flex;gap:.75rem;position:relative;animation:timelineIn .3s cubic-bezier(0.16,1,0.3,1) both}
+        @keyframes timelineIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+        .timeline-dot{width:12px;height:12px;border-radius:50%;position:absolute;left:-18px;top:16px;border:2px solid #fff;box-shadow:0 0 0 2px #2563eb;flex-shrink:0}
+        .timeline-content{flex:1;min-width:0}
+        .result-card{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;transition:all .25s cubic-bezier(0.16,1,0.3,1)}
+        .result-card:hover{background:#eff6ff;border-color:#dbeafe;box-shadow:0 8px 20px rgba(37,99,235,.08)}
+        .result-card-left{display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+        .result-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+        .result-info{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+        .result-student{font-size:.95rem;font-weight:700;color:#0f172a;white-space:nowrap}
+        .result-email{font-size:.78rem;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .result-card-center{flex:1;min-width:0;display:flex;flex-direction:column;gap:.25rem}
+        .result-chapter{font-size:.92rem;font-weight:700;color:#0f172a}
+        .result-datetime{font-size:.78rem;color:#64748b}
+        .result-card-right{display:flex;align-items:center;gap:1.25rem;flex-shrink:0}
+        .result-score-box{background:#fff;padding:.6rem 1rem;border-radius:12px;text-align:center;border:1px solid #dbeafe}
+        .score-pct{font-size:1.25rem;font-weight:800;display:block;line-height:1}
+        .score-fraction{font-size:.75rem;color:#64748b;margin-top:.2rem}
+        .result-breakdown{display:flex;flex-direction:column;gap:.35rem;text-align:center;font-size:.8rem}
+        .result-breakdown .correct{color:#16a34a;font-weight:600}
+        .result-breakdown .wrong{color:#ef4444;font-weight:600}
+        @media(max-width:1024px){.results-controls{grid-template-columns:1fr 1fr;gap:1rem}.result-card{flex-wrap:wrap;gap:.85rem}.result-card-right{width:100%;justify-content:space-between}}
+        @media(max-width:640px){.results-summary-row{grid-template-columns:repeat(2,1fr)}.results-controls{grid-template-columns:1fr}.result-card{flex-direction:column;gap:.75rem}.result-card-left{width:100%}.result-card-center{width:100%}.result-card-right{width:100%}}
+      `}</style>
+        </div>
+    );
+}
+
+
 const MOCK_LB_SUBJECT_TABS = [
     { id: 'all', label: 'All', icon: '🎯', color: '#8B5CF6' },
     { id: 'air_regulations', label: 'Air Regs', icon: '📋', color: '#1D4ED8' },
@@ -1404,6 +1591,7 @@ export default function TeacherPage() {
     // ── Main dashboard ──
     const NAV_TABS = [
         { id: 'students', label: '📊 Students' },
+        { id: 'allresults', label: '📝 All Results' },
         { id: 'attendance', label: '✅ Attendance' },
         { id: 'schedule', label: '📅 Schedule Meeting' },
         { id: 'manage', label: '👥 Manage Students' },
@@ -1429,13 +1617,14 @@ export default function TeacherPage() {
                 {activeTab === 'students' && (
                     <div className="tab-content tab-content-in">
                         <header className="teacher-hero hero-slide-in">
-                            <div><h1>All Students &amp; Test Performance</h1><p>Live data from Supabase for every student, including performance scores, results, and joined date..</p></div>
+                            <div><h1>All Students &amp; Test Performance</h1><p>Live data from Supabase for every student, including performance scores, results, and joined date.</p></div>
                             <div className="teacher-summary">
                                 <div className="stat-card-pop" style={{ animationDelay: '0ms' }}><span><AnimatedCounter value={summary.totalStudents} /></span><small>Students</small></div>
                                 <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span><AnimatedCounter value={summary.totalTests} /></span><small>Total Tests</small></div>
                                 <div className="stat-card-pop" style={{ animationDelay: '160ms' }}><span><AnimatedCounter value={summary.avgAccuracy} suffix="%" /></span><small>Avg Accuracy</small></div>
                             </div>
                         </header>
+
                         {loading ? <div className="teacher-loading"><span className="loading-dots"><span /><span /><span /></span>Loading student data from the database...</div>
                             : error ? <div className="teacher-error-card">{error}</div>
                                 : (
@@ -1456,6 +1645,7 @@ export default function TeacherPage() {
                                                 </table>
                                             </div>
                                         </section>
+
                                         <section className="teacher-panel teacher-detail-panel panel-slide-up" style={{ animationDelay: '80ms' }}>
                                             <div className="panel-header"><h2>Student Details</h2><span>{selectedStudent ? selectedStudent.email : 'Select a student'}</span></div>
                                             {selectedStudent ? (
@@ -1467,13 +1657,30 @@ export default function TeacherPage() {
                                                         <div className="insight-block"><h3>Clear Topics</h3>{clearTopics.length === 0 ? <div className="empty-state">No strong topics yet.</div> : <div className="topic-grid">{clearTopics.map((t, i) => <div key={t.chapterId} className="topic-chip clear chip-in" style={{ animationDelay: `${i * 50}ms` }}>{t.title}: {t.accuracy}%</div>)}</div>}</div>
                                                         <div className="insight-block"><h3>Topics to Review</h3>{weakTopics.length === 0 ? <div className="empty-state">No weak topics yet.</div> : <div className="topic-grid">{weakTopics.map((t, i) => <div key={t.chapterId} className="topic-chip weak chip-in" style={{ animationDelay: `${i * 50}ms` }}>{t.title}: {t.accuracy}%</div>)}</div>}</div>
                                                     </div>
-                                                    <div className="results-section"><h3>Recent Results</h3><div className="results-list">{selectedStudent.results.length === 0 ? <div className="empty-state">No results found for this student.</div> : selectedStudent.results.map((result, i) => <div key={result.id} className="result-row result-row-anim" style={{ animationDelay: `${i * 50}ms` }}><div><strong>{getChapterTitle(result.chapterId)}</strong><span>{formatDate(result.date)}</span></div><div style={{ color: getScoreColor(result.pct) }}>{result.score}/{result.total} ({result.pct}%)</div></div>)}</div></div>
+                                                    <div className="results-section"><h3>All Exam Results ({selectedStudent.results.length} total)</h3><div className="results-list">{selectedStudent.results.length === 0 ? <div className="empty-state">No results found for this student.</div> : selectedStudent.results.sort((a, b) => new Date(b.date) - new Date(a.date)).map((result, i) => <div key={result.id} className="result-row result-row-anim result-row-detail" style={{ animationDelay: `${i * 30}ms` }}><div className="result-content"><div><strong style={{ fontSize: '.98rem' }}>{getChapterTitle(result.chapterId)}</strong><span style={{ fontSize: '.8rem' }}>{formatDateTime(result.date)}</span></div><div style={{ fontSize: '.82rem', color: '#64748b', marginTop: '.4rem' }}>Answered {(result.answers || []).length} questions</div></div><div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}><div style={{ background: '#eff6ff', padding: '.5rem 1rem', borderRadius: '12px' }}><div style={{ color: getScoreColor(result.pct), fontWeight: 800, fontSize: '1.1rem' }}>{result.pct}%</div><div style={{ fontSize: '.7rem', color: '#64748b', fontWeight: 600 }}>{result.score}/{result.total}</div></div><div style={{ textAlign: 'center', fontSize: '.8rem', color: '#64748b' }}><div style={{ fontSize: '.75rem' }}>{(result.answers || []).filter(a => a.isCorrect).length} correct</div><div style={{ fontSize: '.75rem' }}>{(result.answers || []).filter(a => !a.isCorrect).length} wrong</div></div></div></div>)}</div></div>
                                                     <div className="wrong-questions-section"><h3>Recent Wrong Questions</h3>{wrongQuestions.length === 0 ? <div className="empty-state">No wrong answers recorded yet.</div> : <div className="wrong-list">{wrongQuestions.slice(0, 6).map((item, index) => <div key={`${item.question}-${index}`} className="wrong-row wrong-row-anim" style={{ animationDelay: `${index * 55}ms` }}><div><strong>{item.chapterTitle}</strong><p>{item.question}</p></div><div className="wrong-meta"><span className="wrong-label">Selected: {item.selected}</span><span className="correct-label">Correct: {item.correct}</span></div></div>)}</div>}</div>
                                                 </div>
                                             ) : <div className="empty-state empty-state-in">Select a student to review their performance details.</div>}
                                         </section>
                                     </div>
                                 )}
+                    </div>
+                )}
+
+                {/* ── ALL RESULTS TAB ── */}
+                {activeTab === 'allresults' && (
+                    <div className="tab-content tab-content-in">
+                        <header className="teacher-hero hero-slide-in">
+                            <div><h1>📝 All Exam Results</h1><p>Complete record of every test result from every student. Filter by student or subject, and sort by date or score.</p></div>
+                            <div className="teacher-summary">
+                                <div className="stat-card-pop"><span><AnimatedCounter value={students.flatMap(s => s.results || []).length} /></span><small>Total Results</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '80ms' }}><span><AnimatedCounter value={students.length} /></span><small>Students</small></div>
+                                <div className="stat-card-pop" style={{ animationDelay: '160ms' }}><span><AnimatedCounter value={students.length ? Math.round(students.flatMap(s => s.results || []).reduce((sum, r) => sum + (r.pct || 0), 0) / (students.flatMap(s => s.results || []).length || 1)) : 0} suffix="%" /></span><small>Avg Accuracy</small></div>
+                            </div>
+                        </header>
+                        {loading ? <div className="teacher-loading"><span className="loading-dots"><span /><span /><span /></span>Loading all results…</div>
+                            : error ? <div className="teacher-error-card">{error}</div>
+                                : <AllResultsTab students={students} />}
                     </div>
                 )}
 
@@ -1629,6 +1836,9 @@ export default function TeacherPage() {
         .result-row-anim{animation:resultIn .35s cubic-bezier(0.16,1,0.3,1) both}
         @keyframes resultIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
         .result-row strong{display:block;font-size:.95rem;color:#0f172a}.result-row span{color:#64748b;font-size:.85rem}
+            .result-row-detail{display:flex;justify-content:space-between;align-items:center;gap:1.25rem;padding:1.15rem 1.25rem}
+            .result-content{flex:1}.result-content>div:first-child{display:flex;flex-direction:column;gap:.2rem}
+            .result-content strong{display:block;font-size:.98rem;color:#0f172a}.result-content span{font-size:.8rem;color:#64748b}
         .wrong-questions-section{margin-top:1rem}
         .wrong-questions-section h3{margin:0 0 .75rem;font-size:1rem;color:#0f172a}
         .wrong-list{display:grid;gap:.75rem}

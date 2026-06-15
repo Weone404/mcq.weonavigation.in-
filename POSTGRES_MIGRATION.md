@@ -71,38 +71,54 @@ CREATE INDEX idx_rtr_attempts_date ON rtr_attempts(created_at);
 ```sql
 CREATE TABLE IF NOT EXISTS attendance (
     id SERIAL PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
+    student_email VARCHAR(255) NOT NULL,
+    student_name VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
+    batch VARCHAR(255) NOT NULL,
     status VARCHAR(50),
-    batch VARCHAR(255),
     note TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (student_email, date, batch)
 );
 
 -- Create indexes
-CREATE INDEX idx_attendance_email ON attendance(LOWER(email));
+CREATE INDEX idx_attendance_email ON attendance(LOWER(student_email));
 CREATE INDEX idx_attendance_date ON attendance(date);
 CREATE INDEX idx_attendance_batch ON attendance(batch);
 ```
 
-## 5. Create the `classes` table (if using Live Classes feature)
+## 5. Create the `live_classes` table (scheduled classes)
 
 ```sql
-CREATE TABLE IF NOT EXISTS classes (
+CREATE TABLE IF NOT EXISTS live_classes (
     id SERIAL PRIMARY KEY,
-    subject VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
-    meeting_link VARCHAR(500),
-    batch VARCHAR(255),
+    start_date_time TIMESTAMP NOT NULL,
+    end_date_time TIMESTAMP NOT NULL,
+    meet_link VARCHAR(500) NOT NULL,
+    batch VARCHAR(255) DEFAULT 'All Batches',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create indexes
-CREATE INDEX idx_classes_subject ON classes(subject);
-CREATE INDEX idx_classes_start_time ON classes(start_time);
+CREATE INDEX idx_live_classes_start_date_time ON live_classes(start_date_time);
+CREATE INDEX idx_live_classes_batch ON live_classes(batch);
+```
+
+## 6. Create the `live_links` table (instant live session link)
+
+```sql
+CREATE TABLE IF NOT EXISTS live_links (
+    id SERIAL PRIMARY KEY,
+    url VARCHAR(500) NOT NULL,
+    label VARCHAR(255) DEFAULT 'Live Class',
+    set_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes
+CREATE INDEX idx_live_links_set_at ON live_links(set_at);
 ```
 
 ## 6. Create the `doubt_sessions` table (if using Doubt Chat feature)

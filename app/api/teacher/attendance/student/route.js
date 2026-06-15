@@ -20,7 +20,7 @@ export async function GET(request) {
 
         const { rows: monthRecords } = await pool.query(
             `SELECT date, status, batch, note FROM attendance
-             WHERE LOWER(email) = LOWER($1)
+             WHERE LOWER(student_email) = LOWER($1)
                AND date >= $2
                AND date <= $3
              ORDER BY date ASC`,
@@ -41,7 +41,7 @@ export async function GET(request) {
 
         const { rows: recentDocs } = await pool.query(
             `SELECT date, batch, status, note FROM attendance
-             WHERE LOWER(email) = LOWER($1)
+             WHERE LOWER(student_email) = LOWER($1)
              ORDER BY date DESC
              LIMIT 10`,
             [emailNormalized]

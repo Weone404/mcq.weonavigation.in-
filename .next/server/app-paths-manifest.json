@@ -1,7 +1,4 @@
 {
-  "/api/mock-leaderboard/route": "app/api/mock-leaderboard/route.js",
-  "/api/classes/route": "app/api/classes/route.js",
-  "/api/teacher/attendance/[batch]/route": "app/api/teacher/attendance/[batch]/route.js",
-  "/teacher/page": "app/teacher/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/dashboard/page": "app/dashboard/page.js",
+  "/teacher/page": "app/teacher/page.js"
 }

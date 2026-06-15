@@ -234,7 +234,7 @@ const SHORT_VIDEOS_DATA = {
       // { title: 'IN: ', chapter: '', description: '.', iframeCode: '' },
 
       
-    ], 30),
+    ], 21),
   },
   'Technical General': {
     icon: '⚙️',

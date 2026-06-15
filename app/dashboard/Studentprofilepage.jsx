@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-
+import { getUser, getResults, clearUser } from '../../lib/storage';// adjust path
 // ─── COLOUR TOKENS (matching dashboard) ──────────────────────────────────────
 const C = {
     bg: '#F0F4FF',
@@ -255,7 +255,7 @@ export default function StudentProfilePage({ user: propUser, stats: propStats, a
         target: 'CPL', bio: 'Aspiring commercial pilot. Preparing for DGCA CPL exams. Passionate about aviation and meteorology.',
         joinedAt: '2024-08-15T00:00:00.000Z',
     };
-    const stats = propStats || { testsAttempted: 18, avgScore: 73, bestScore: 91, totalQuestions: 342 };
+    const stats = propStats ?? { testsAttempted: 0, avgScore: 0, bestScore: 0, totalQuestions: 0 };
     const allResults = propResults || [];
 
     const [editOpen, setEditOpen] = useState(false);

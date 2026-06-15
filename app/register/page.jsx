@@ -302,7 +302,7 @@ const DIAL_CODES = [
     { code: "+86", label: "🇨🇳 +86" },
 ];
 
-const API_BASE = "https://nextauth-my1u.onrender.com/api/v1/auth";
+const API_BASE = "/api/auth";
 
 function saveTokens(data) {
     if (data?.access_token) localStorage.setItem("access_token", data.access_token);

@@ -303,11 +303,8 @@ const IconSend = () => (
   </svg>
 );
 
-// ── FIX 1: All API calls now go through the Next.js proxy (/api/auth/...)
-// This keeps the backend URL server-side only and avoids CORS issues.
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://nextauth-my1u.onrender.com/api/v1/auth";
+// ── API proxy base — use Next.js local proxy to avoid CORS and keep backend URL server-side.
+const API_BASE = "/api/auth";
 
 // ── FIX 2: saveSession now stores a clean, display-safe user object.
 // For phone-only logins where the backend doesn't return a user.name,

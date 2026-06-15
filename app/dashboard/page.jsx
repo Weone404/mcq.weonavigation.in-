@@ -2179,6 +2179,7 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
   const [answers, setAnswers] = useState({});
   const [currentQ, setCurrentQ] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
+  const [submitStatus, setSubmitStatus] = useState('idle');
   const [isAptlModeLocal, setIsAptlModeLocal] = useState(isAptlMode);
   const [lastAnswered, setLastAnswered] = useState(null);
   const timerRef = useRef(null);
@@ -2708,62 +2709,43 @@ export default function DashboardPage() {
   const [subPage, setSubPage] = useState('subjects');
 
   useEffect(() => {
-  const token = localStorage.getItem("access_token");
-  const storedUser = JSON.parse(localStorage.getItem("user") || localStorage.getItem("dgca_user") || 'null');
-  if (!token) {
-    if (storedUser) setUserState(storedUser);
-    setLoading(false);
-    return;
-  }
+    const storedUser = getUser();
+    if (!storedUser) {
+      setLoading(false);
+      return;
+    }
 
-  fetch("/api/v1/auth/me", {   // ✅ correct proxied endpoint
-    headers: { Authorization: `Bearer ${token}` }
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Auth failed");
-      return res.json();
-    })
-    .then(userData => {
-      if (!userData || userData.detail) throw new Error("Invalid user data");
-      // Save token-derived user immediately, then fetch the canonical record by email or phone.
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUserState(userData);
-      const lookup = { email: userData.email, phone: userData.phone };
-      return fetchAndStoreUser(lookup).then(dbUser => ({ userData, dbUser }));
-    })
-    .then(({ userData, dbUser }) => {
-      const profile = dbUser && (dbUser.email || dbUser.phone) ? dbUser : userData;
-      localStorage.setItem("user", JSON.stringify(profile));
-      setUserState(profile);
+    setUserState(storedUser);
 
-      if (!profile.email) {
-        return Promise.all([
-          Promise.resolve({ testsAttempted: 0, avgScore: 0, bestScore: 0, totalQuestions: 0 }),
-          Promise.resolve([]),
-          profile,
-        ]);
-      }
-      return Promise.all([getStats(profile.email), getResults(profile.email), profile]);
-    })
-    .then(([s, r, profile]) => {
-      setStats(s);
-      setAll(r);
-      setRecent(r.slice(0, 5));
-      if (profile && (profile.email || profile.phone)) {
+    const loadProfile = async () => {
+      try {
+        const lookup = { email: storedUser.email, phone: storedUser.phone };
+        const dbUser = await fetchAndStoreUser(lookup);
+        const profile = dbUser && (dbUser.email || dbUser.phone) ? dbUser : storedUser;
+
+        localStorage.setItem("user", JSON.stringify(profile));
         setUserState(profile);
+
+        if (!profile.email) {
+          setStats({ testsAttempted: 0, avgScore: 0, bestScore: 0, totalQuestions: 0 });
+          setAll([]);
+          setRecent([]);
+          return;
+        }
+
+        const [s, r] = await Promise.all([getStats(profile.email), getResults(profile.email)]);
+        setStats(s);
+        setAll(r);
+        setRecent(r.slice(0, 5));
+      } catch (err) {
+        console.warn("Dashboard data load skipped:", err.message);
+      } finally {
+        setLoading(false);
       }
-    })
-    .catch(err => {
-      console.warn("Auth skipped:", err.message);
-      if (storedUser) {
-        setUserState(storedUser);
-      } else {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("user");
-      }
-    })
-    .finally(() => setLoading(false));
-}, []);
+    };
+
+    loadProfile();
+  }, []);
   function handleLogout() { clearUser(); setUserState(null); }
 
   function handleNav(newPage, chapterId) {

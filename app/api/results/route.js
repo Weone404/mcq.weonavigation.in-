@@ -3,7 +3,6 @@ import pool from '../../../lib/db';
 
 export const dynamic = 'force-dynamic';
 
-// GET /api/results?email=... — fetch results for a user (latest 50)
 export async function GET(request) {
   try {
     const { searchParams } = request.nextUrl;
@@ -23,6 +22,7 @@ export async function GET(request) {
         id: r.id.toString(),
         userEmail: r.student_email,
         chapterId: r.chapter_id,
+        subjectId: r.subject_id || null,  // ✅ ADDED
         score: r.score,
         total: r.total,
         answers: r.answers || [],
@@ -35,11 +35,10 @@ export async function GET(request) {
   }
 }
 
-// POST /api/results — save a new result
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { userEmail, chapterId, score, total } = body;
+    const { userEmail, chapterId, subjectId, score, total } = body;  // ✅ added subjectId
 
     if (!userEmail || !chapterId || score == null || total == null) {
       return NextResponse.json(
@@ -57,14 +56,14 @@ export async function POST(request) {
         }))
       : [];
 
-    // Insert new result
     const { rows } = await pool.query(
-      `INSERT INTO test_results (student_email, chapter_id, score, total, answers, date)
-       VALUES ($1, $2, $3, $4, $5, NOW())
+      `INSERT INTO test_results (student_email, chapter_id, subject_id, score, total, answers, date)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW())
        RETURNING id, date`,
       [
         userEmail.toLowerCase().trim(),
         chapterId,
+        subjectId || null,   // ✅ ADDED
         Number(score),
         Number(total),
         JSON.stringify(answers),
@@ -73,7 +72,6 @@ export async function POST(request) {
 
     const saved = rows[0];
 
-    // Enforce max 50 results per user — delete oldest beyond that
     const { rows: countRows } = await pool.query(
       `SELECT COUNT(*) as count FROM test_results 
        WHERE LOWER(student_email) = LOWER($1)`,

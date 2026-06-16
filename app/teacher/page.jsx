@@ -83,7 +83,7 @@ export function LiveClassButton() {
     const [loading, setLoading] = useState(true);
     const prevUrl = useRef(null);
     const timerRef = useRef(null);
-
+   
     async function fetchLiveLink() {
         try {
             const res = await fetch('/api/live-link', { cache: 'no-store' });
@@ -1306,63 +1306,270 @@ function LbMiniPodium({ top3 }) {
 }
 
 function TeacherLeaderboardTab() {
-    const [board, setBoard] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [activeSubject, setActiveSubject] = useState('all');
-    const [search, setSearch] = useState('');
-    const [lastRefresh, setLastRefresh] = useState(null);
+    const [activeBoard, setActiveBoard] = useState('exam'); // 'exam' | 'mock'
 
-    const fetchBoard = useCallback(async (subject) => {
-        setLoading(true);
+    // ── Exam Leaderboard State ──
+    const [examBoard, setExamBoard] = useState([]);
+    const [examLoading, setExamLoading] = useState(true);
+    const [examSearch, setExamSearch] = useState('');
+    const [examLastRefresh, setExamLastRefresh] = useState(null);
+    const [expandedExamRow, setExpandedExamRow] = useState(null);
+
+    // ── Mock Leaderboard State ──
+    const [mockBoard, setMockBoard] = useState([]);
+    const [mockLoading, setMockLoading] = useState(true);
+    const [mockSearch, setMockSearch] = useState('');
+    const [mockLastRefresh, setMockLastRefresh] = useState(null);
+    const [activeMockSubject, setActiveMockSubject] = useState('all');
+    const [expandedMockRow, setExpandedMockRow] = useState(null);
+
+    const MOCK_SUBJECTS = [
+        { id: 'all',            label: 'All',          icon: '🎯', color: '#8B5CF6' },
+        { id: 'air_regulations',label: 'Air Regs',     icon: '📋', color: '#1D4ED8' },
+        { id: 'meteorology',    label: 'Meteorology',  icon: '🌦️', color: '#0EA5E9' },
+        { id: 'navigation',     label: 'Navigation',   icon: '🗺️', color: '#10B981' },
+        { id: 'technical',      label: 'Technical',    icon: '🔧', color: '#F59E0B' },
+        { id: 'rtfm',           label: 'Radio Tel.',   icon: '📻', color: '#EF4444' },
+    ];
+
+    const SUBJECT_COLOR_MAP = {
+        'Air Regulations':       '#1D4ED8',
+        'Meteorology':           '#0EA5E9',
+        'Navigation':            '#10B981',
+        'General Navigation':    '#6366F1',
+        'Instrument Navigation': '#EC4899',
+        'Radio Navigation':      '#EF4444',
+        'Technical General':     '#F59E0B',
+        'Technical':             '#F59E0B',
+        'Radio Tel.':            '#EF4444',
+    };
+    const subjectColor = (s) => SUBJECT_COLOR_MAP[s] || '#8B5CF6';
+
+    // ── Fetch Exam Board ──
+    const fetchExamBoard = useCallback(async () => {
+        setExamLoading(true);
+        try {
+            const res = await fetch('/api/leaderboard');
+            const data = await res.json();
+            if (Array.isArray(data)) { setExamBoard(data); setExamLastRefresh(new Date()); }
+        } catch (err) { console.error('Exam leaderboard fetch failed:', err); }
+        finally { setExamLoading(false); }
+    }, []);
+
+    // ── Fetch Mock Board ──
+    const fetchMockBoard = useCallback(async (subject) => {
+        setMockLoading(true);
         try {
             const url = subject === 'all' ? '/api/mock-leaderboard' : `/api/mock-leaderboard?subject=${subject}`;
             const res = await fetch(url);
             const data = await res.json();
-            if (data.success) { setBoard(data.entries); setLastRefresh(new Date()); }
-        } catch (err) { console.error('Leaderboard fetch failed:', err); }
-        finally { setLoading(false); }
+            if (data.success) { setMockBoard(data.entries); setMockLastRefresh(new Date()); }
+        } catch (err) { console.error('Mock leaderboard fetch failed:', err); }
+        finally { setMockLoading(false); }
     }, []);
 
-    useEffect(() => { fetchBoard(activeSubject); }, [activeSubject, fetchBoard]);
+    useEffect(() => { fetchExamBoard(); }, [fetchExamBoard]);
+    useEffect(() => { fetchMockBoard(activeMockSubject); }, [activeMockSubject, fetchMockBoard]);
 
-    const filtered = search.trim() ? board.filter(e => e.name.toLowerCase().includes(search.toLowerCase())) : board;
-    const top3 = filtered.slice(0, 3);
-    const avgAccuracy = board.length ? Math.round(board.reduce((s, e) => s + e.accuracy, 0) / board.length) : 0;
-    const totalAttempts = board.reduce((s, e) => s + (e.attempts || 1), 0);
+    const examFiltered = examSearch.trim()
+        ? examBoard.filter(e => e.name.toLowerCase().includes(examSearch.toLowerCase()))
+        : examBoard;
+    const mockFiltered = mockSearch.trim()
+        ? mockBoard.filter(e => e.name.toLowerCase().includes(mockSearch.toLowerCase()))
+        : mockBoard;
 
-    return (
-        <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif" }}>
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
-                <div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: '#0F172A' }}>🏆 Mock Test Leaderboard</div>
-                    <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
-                        {loading ? 'Loading…' : `${board.length} students · ranked by best accuracy${lastRefresh ? ` · updated ${lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}`}
-                    </div>
+    const medals      = { 1: '🥇', 2: '🥈', 3: '🥉' };
+    const podiumColors = { 1: '#F59E0B', 2: '#1D4ED8', 3: '#8B5CF6' };
+    const aColor = (pct) => pct >= 80 ? '#10B981' : pct >= 50 ? '#F59E0B' : '#EF4444';
+    const circ   = 2 * Math.PI * 11;
+
+    function hexA(hex, alpha) {
+        const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    // ── Chapter Tag ──────────────────────────────────────────────────────────
+    function ChapterTag({ subject, chapter, accuracy, tests }) {
+        const color = subjectColor(subject);
+        const ac    = aColor(accuracy);
+        return (
+            <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 4,
+                background: color + '12', border: `1px solid ${color}30`,
+                borderRadius: 7, padding: '3px 7px',
+            }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: color, flexShrink: 0 }} />
+                <span style={{ fontSize: 9, color, fontWeight: 700, whiteSpace: 'nowrap', maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {subject}
+                </span>
+                <span style={{ fontSize: 9, color: '#CBD5E0' }}>›</span>
+                <span style={{ fontSize: 9, color: '#64748B', whiteSpace: 'nowrap', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {chapter}
+                </span>
+                <span style={{ fontSize: 8, fontWeight: 800, color: ac, background: ac + '18', borderRadius: 4, padding: '1px 4px', whiteSpace: 'nowrap' }}>
+                    {accuracy}%
+                </span>
+                {tests !== undefined && (
+                    <span style={{ fontSize: 8, color: '#94A3B8', whiteSpace: 'nowrap' }}>·{tests}t</span>
+                )}
+            </div>
+        );
+    }
+
+    // ── Subject Accuracy Bars (expanded panel) ───────────────────────────────
+    function SubjectBars({ breakdown }) {
+        if (!breakdown?.length) return null;
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 12 }}>
+                {breakdown.map((s, i) => {
+                    const color = subjectColor(s.subject);
+                    const ac    = aColor(s.accuracy);
+                    return (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <div style={{ width: 130, fontSize: 10, color: '#64748B', flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: color, marginRight: 5, verticalAlign: 'middle' }} />
+                                {s.subject}
+                            </div>
+                            <div style={{ flex: 1, background: '#E2E8F0', borderRadius: 99, height: 6, overflow: 'hidden' }}>
+                                <div style={{ width: `${Math.min(s.accuracy, 100)}%`, height: '100%', background: ac, borderRadius: 99, transition: 'width .6s ease' }} />
+                            </div>
+                            <div style={{ width: 34, fontSize: 10, fontWeight: 800, color: ac, textAlign: 'right', flexShrink: 0 }}>{s.accuracy}%</div>
+                            <div style={{ width: 24, fontSize: 9, color: '#94A3B8', textAlign: 'right', flexShrink: 0 }}>{s.tests}t</div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
+    // ── Chapter Detail Table (expanded panel) ────────────────────────────────
+    function ChapterTable({ breakdown }) {
+        if (!breakdown?.length) return null;
+        return (
+            <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #E2E8F0' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 110px 50px 50px', background: '#F0F4FF', padding: '6px 12px', fontSize: 9, fontWeight: 700, color: '#64748B', gap: 8 }}>
+                    <div>CHAPTER</div>
+                    <div>SUBJECT</div>
+                    <div style={{ textAlign: 'center' }}>ACC</div>
+                    <div style={{ textAlign: 'center' }}>TESTS</div>
                 </div>
-                <div style={{ display: 'flex', gap: 8 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #E2E8F0', borderRadius: 9, padding: '6px 10px', gap: 6 }}>
-                        <span style={{ color: '#64748B', fontSize: 13 }}>🔍</span>
-                        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search student…"
-                            style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 12, color: '#0F172A', width: 140 }} />
-                        {search && <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: 12, padding: 0 }}>✕</button>}
+                {breakdown.map((s, i) => (
+                    <div key={i} style={{
+                        display: 'grid', gridTemplateColumns: '1fr 110px 50px 50px',
+                        padding: '8px 12px', gap: 8,
+                        borderTop: '1px solid #E2E8F0',
+                        background: i % 2 === 0 ? '#fff' : '#FAFBFF',
+                        alignItems: 'center',
+                    }}>
+                        <div style={{ fontSize: 10, color: '#0F172A', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: subjectColor(s.subject), marginRight: 5, verticalAlign: 'middle' }} />
+                            {s.chapter}
+                        </div>
+                        <div style={{ fontSize: 9, color: subjectColor(s.subject), fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {s.subject}
+                        </div>
+                        <div style={{ textAlign: 'center', fontSize: 11, fontWeight: 800, color: aColor(s.accuracy) }}>
+                            {s.accuracy}%
+                        </div>
+                        <div style={{ textAlign: 'center', fontSize: 10, color: '#64748B' }}>
+                            {s.tests}
+                        </div>
                     </div>
-                    <button onClick={() => fetchBoard(activeSubject)} title="Refresh"
-                        style={{ width: 34, height: 34, borderRadius: 9, background: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform .2s' }}
-                        onMouseEnter={e => { e.currentTarget.style.transform = 'rotate(180deg)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.transform = 'rotate(0)'; }}
-                    >🔄</button>
+                ))}
+            </div>
+        );
+    }
+
+    // ── Expanded Detail Panel ────────────────────────────────────────────────
+    function ExpandedPanel({ entry }) {
+        const hasBreakdown = entry.subjectBreakdown?.length > 0;
+        return (
+            <div style={{
+                borderTop: '1px solid #E2E8F0',
+                background: '#F8FAFF',
+                padding: '14px 18px 16px 96px',
+                borderBottom: '2px solid #EFF6FF',
+            }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#0F172A', marginBottom: 10 }}>
+                    📊 Subject-wise Performance
+                </div>
+                {hasBreakdown ? (
+                    <>
+                        <SubjectBars breakdown={entry.subjectBreakdown} />
+                        <ChapterTable breakdown={entry.subjectBreakdown} />
+                    </>
+                ) : (
+                    <div style={{ fontSize: 11, color: '#94A3B8', padding: '10px 0' }}>
+                        No chapter breakdown available yet.
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    // ── Shared Podium ────────────────────────────────────────────────────────
+    function Podium({ top3 }) {
+        if (top3.length < 2) return null;
+        const order = top3.length >= 3
+            ? [{ e: top3[1], rank: 2, h: 80 }, { e: top3[0], rank: 1, h: 110 }, { e: top3[2], rank: 3, h: 60 }]
+            : [{ e: top3[1], rank: 2, h: 80 }, { e: top3[0], rank: 1, h: 110 }];
+        return (
+            <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E2E8F0', padding: '20px 16px 0', marginBottom: 16 }}>
+                <div style={{ textAlign: 'center', marginBottom: 14 }}>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: '#0F172A' }}>🏆 Top Performers</div>
+                    <div style={{ fontSize: 11, color: '#64748B', marginTop: 2 }}>Highest accuracy scores</div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10 }}>
+                    {order.map(({ e, rank, h }) => {
+                        const color = podiumColors[rank];
+                        // strongest subject for podium pill
+                        const strongest = e.subjectBreakdown?.length
+                            ? [...e.subjectBreakdown].sort((a, b) => b.accuracy - a.accuracy)[0]
+                            : null;
+                        return (
+                            <div key={e.email} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: 130 }}>
+                                <div style={{ width: 50, height: 50, borderRadius: 25, background: `linear-gradient(135deg,${color},${color}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 14, marginBottom: 6, boxShadow: `0 4px 12px ${color}44` }}>
+                                    {initials(e.name)}
+                                </div>
+                                <div style={{ fontSize: 12, fontWeight: 700, color: '#0F172A', textAlign: 'center', marginBottom: 2 }}>{e.name.split(' ')[0]}</div>
+                                <div style={{ fontSize: 14, fontWeight: 800, color, marginBottom: strongest ? 3 : 4 }}>{e.accuracy}%</div>
+                                {/* strongest subject pill */}
+                                {strongest && (
+                                    <div style={{
+                                        fontSize: 8, fontWeight: 700, marginBottom: 4,
+                                        background: subjectColor(strongest.subject) + '18',
+                                        color: subjectColor(strongest.subject),
+                                        border: `1px solid ${subjectColor(strongest.subject)}30`,
+                                        borderRadius: 5, padding: '2px 6px',
+                                        maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: 'center',
+                                    }}>
+                                        ⭐ {strongest.subject}
+                                    </div>
+                                )}
+                                <div style={{ fontSize: 20, marginBottom: 6 }}>{medals[rank]}</div>
+                                <div style={{ width: '100%', height: h, background: color + '20', border: `2px solid ${color}`, borderBottom: 'none', borderRadius: '6px 6px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ color, fontSize: 13, fontWeight: 900 }}>#{rank}</span>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
+        );
+    }
 
-            {/* Stats banner */}
+    // ── Shared Stats Banner ──────────────────────────────────────────────────
+    function StatsBanner({ board, loading, topSubLabel }) {
+        const avg        = board.length ? Math.round(board.reduce((s, e) => s + e.accuracy, 0) / board.length) : 0;
+        const totalTests = board.reduce((s, e) => s + (e.testsAttempted || e.attempts || 0), 0);
+        return (
             <div style={{ background: 'linear-gradient(120deg,#0A1628 0%,#1D4ED8 100%)', borderRadius: 14, padding: '18px 22px', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
                     {[
-                        { icon: '👥', label: 'Students', value: loading ? '…' : board.length },
-                        { icon: '🥇', label: 'Top Score', value: loading ? '…' : (board[0] ? `${board[0].accuracy}%` : '—') },
-                        { icon: '🎯', label: 'Avg Accuracy', value: loading ? '…' : `${avgAccuracy}%` },
-                        { icon: '📝', label: 'Total Tests', value: loading ? '…' : totalAttempts },
+                        { icon: '👥', label: 'Students',     value: loading ? '…' : board.length },
+                        { icon: '🥇', label: 'Top Score',    value: loading ? '…' : (board[0] ? `${board[0].accuracy}%` : '—') },
+                        { icon: '🎯', label: 'Avg Accuracy', value: loading ? '…' : `${avg}%` },
+                        { icon: '📝', label: 'Total Tests',  value: loading ? '…' : totalTests },
                     ].map(s => (
                         <div key={s.label}>
                             <div style={{ color: '#93C5FD', fontSize: 10, marginBottom: 2 }}>{s.icon} {s.label}</div>
@@ -1372,116 +1579,380 @@ function TeacherLeaderboardTab() {
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
                     <div style={{ color: '#93C5FD', fontSize: 11, marginBottom: 2 }}>Top Student</div>
-                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 800, lineHeight: 1 }}>{board[0]?.name || '—'}</div>
-                    {board[0] && <div style={{ color: '#93C5FD', fontSize: 11, marginTop: 4 }}>{board[0].accuracy}% accuracy · {board[0].subjectLabel || board[0].subject}</div>}
+                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 800 }}>{board[0]?.name || '—'}</div>
+                    {board[0] && <div style={{ color: '#93C5FD', fontSize: 11, marginTop: 4 }}>{board[0].accuracy}% · {topSubLabel}</div>}
                 </div>
             </div>
+        );
+    }
 
-            {/* Subject filter tabs */}
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
-                {MOCK_LB_SUBJECT_TABS.map(tab => {
-                    const isActive = activeSubject === tab.id;
-                    return (
-                        <button key={tab.id} onClick={() => setActiveSubject(tab.id)} style={{
-                            padding: '6px 13px', borderRadius: 20,
-                            border: isActive ? `2px solid ${tab.color}` : '1px solid #E2E8F0',
-                            background: isActive ? hexA(tab.color, 0.1) : '#fff',
-                            color: isActive ? tab.color : '#64748B',
-                            fontWeight: isActive ? 700 : 400, fontSize: 12, cursor: 'pointer',
-                            display: 'flex', alignItems: 'center', gap: 5, transition: 'all .2s',
-                            transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                        }}>
-                            <span>{tab.icon}</span><span>{tab.label}</span>
-                            {isActive && !loading && (
-                                <span style={{ background: hexA(tab.color, 0.15), color: tab.color, fontSize: 9, fontWeight: 800, padding: '1px 5px', borderRadius: 8 }}>{filtered.length}</span>
-                            )}
-                        </button>
-                    );
-                })}
+    // ── Shared Loading Skeleton ──────────────────────────────────────────────
+    function SkeletonRows() {
+        return Array(5).fill(0).map((_, i) => (
+            <div key={i} style={{ padding: '12px 18px', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 8,  background: '#E2E8F0' }} />
+                <div style={{ width: 40, height: 40, borderRadius: 20, background: '#E2E8F0' }} />
+                <div style={{ flex: 1 }}>
+                    <div style={{ height: 12, borderRadius: 6, background: '#E2E8F0', marginBottom: 6 }} />
+                    <div style={{ height: 9,  borderRadius: 6, background: '#E2E8F0', width: '60%' }} />
+                </div>
+                <div style={{ width: 60, height: 13, borderRadius: 6, background: '#E2E8F0' }} />
+            </div>
+        ));
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    return (
+        <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif" }}>
+
+            {/* ── Board Switcher ── */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 20, background: '#E2E8F0', borderRadius: 14, padding: 4 }}>
+                {[
+                    { id: 'exam', label: '📝 Exam Leaderboard',      desc: 'Chapter test scores' },
+                    { id: 'mock', label: '🎯 Mock Test Leaderboard', desc: 'Mock test scores by subject' },
+                ].map(tab => (
+                    <button key={tab.id} onClick={() => setActiveBoard(tab.id)} style={{
+                        flex: 1, padding: '10px 16px', borderRadius: 10, border: 'none', cursor: 'pointer',
+                        background: activeBoard === tab.id ? '#fff' : 'transparent',
+                        boxShadow: activeBoard === tab.id ? '0 2px 8px rgba(15,23,42,.08)' : 'none',
+                        transition: 'all .2s',
+                    }}>
+                        <div style={{ fontSize: 13, fontWeight: 800, color: activeBoard === tab.id ? '#1D4ED8' : '#64748B' }}>{tab.label}</div>
+                        <div style={{ fontSize: 11, color: activeBoard === tab.id ? '#64748B' : '#94A3B8', marginTop: 2 }}>{tab.desc}</div>
+                    </button>
+                ))}
             </div>
 
-            {/* Podium */}
-            {!loading && !search && top3.length >= 2 && <LbMiniPodium top3={top3} />}
-
-            {/* Rankings table */}
-            <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
-                {/* Table header */}
-                <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontWeight: 800, fontSize: 14, color: '#0F172A' }}>All Rankings</div>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                        <span style={{ fontSize: 11, color: '#64748B' }}>{filtered.length} pilots</span>
-                        <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981', animation: 'lbPulse 2s ease-in-out infinite' }} />
-                    </div>
-                </div>
-                {/* Column labels */}
-                <div style={{ padding: '6px 18px', background: '#F0F4FF', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 32, fontSize: 10, color: '#64748B', fontWeight: 700, flexShrink: 0 }}>Rank</div>
-                    <div style={{ width: 36, flexShrink: 0 }} />
-                    <div style={{ flex: 1, fontSize: 10, color: '#64748B', fontWeight: 700 }}>Student</div>
-                    <div style={{ width: 72, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Score</div>
-                    <div style={{ width: 90, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Accuracy</div>
-                </div>
-
-                {loading ? (
-                    Array(6).fill(0).map((_, i) => (
-                        <div key={i} style={{ padding: '12px 18px', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <div style={{ width: 32, height: 32, borderRadius: 8, background: '#E2E8F0' }} />
-                            <div style={{ width: 36, height: 36, borderRadius: 18, background: '#E2E8F0' }} />
-                            <div style={{ flex: 1, height: 13, borderRadius: 6, background: '#E2E8F0' }} />
-                            <div style={{ width: 60, height: 13, borderRadius: 6, background: '#E2E8F0' }} />
-                        </div>
-                    ))
-                ) : filtered.length === 0 ? (
-                    <div style={{ padding: '36px 20px', textAlign: 'center', color: '#64748B', fontSize: 13 }}>
-                        <div style={{ fontSize: 32, marginBottom: 8 }}>🏆</div>
-                        No mock test entries yet.
-                    </div>
-                ) : (
-                    filtered.slice(0, 50).map((entry, i) => {
-                        const rank = i + 1;
-                        const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
-                        const aColor = lbAccuracyColor(entry.accuracy);
-                        const circ = 2 * Math.PI * 11;
-                        return (
-                            <div key={`${entry.email}-${i}`}
-                                style={{
-                                    padding: '12px 18px', borderTop: '1px solid #E2E8F0',
-                                    display: 'flex', alignItems: 'center', gap: 10,
-                                    background: rank === 1 ? '#FFFBEB' : 'transparent',
-                                    transition: 'background .15s',
-                                }}
-                                onMouseEnter={e => { if (rank > 1) e.currentTarget.style.background = '#F8FAFC'; }}
-                                onMouseLeave={e => { if (rank > 1) e.currentTarget.style.background = 'transparent'; }}
-                            >
-                                <div style={{ width: 32, height: 32, borderRadius: 8, flexShrink: 0, background: rank <= 3 ? 'transparent' : '#F0F4FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: rank <= 3 ? 18 : 11, fontWeight: 700, color: '#0F172A' }}>
-                                    {rank <= 3 ? medals[rank] : `#${rank}`}
-                                </div>
-                                <div style={{ width: 36, height: 36, borderRadius: 18, flexShrink: 0, background: 'linear-gradient(135deg,#1D4ED8,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 12 }}>
-                                    {initials(entry.name)}
-                                </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ fontWeight: 700, fontSize: 13, color: '#0F172A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.name}</div>
-                                    <div style={{ fontSize: 10, color: '#64748B', marginTop: 1 }}>
-                                        {entry.subjectLabel || entry.subject} · {entry.attempts || 1} attempt{(entry.attempts || 1) !== 1 ? 's' : ''} · {lbFmtDate(entry.submittedAt)}
-                                    </div>
-                                </div>
-                                <div style={{ width: 72, textAlign: 'right', flexShrink: 0, fontSize: 12, fontWeight: 700, color: '#0F172A' }}>{entry.score}/{entry.total}</div>
-                                <div style={{ width: 90, flexShrink: 0 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-                                        <span style={{ fontSize: 13, fontWeight: 800, color: aColor }}>{entry.accuracy}%</span>
-                                        <svg width={26} height={26} style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
-                                            <circle cx={13} cy={13} r={11} fill="none" stroke="#E2E8F0" strokeWidth={3} />
-                                            <circle cx={13} cy={13} r={11} fill="none" stroke={aColor} strokeWidth={3}
-                                                strokeDasharray={`${circ * entry.accuracy / 100} ${circ}`} strokeLinecap="round"
-                                                style={{ transition: 'stroke-dasharray .5s ease' }} />
-                                        </svg>
-                                    </div>
-                                </div>
+            {/* ════════════════════════════════════════════════════════════ */}
+            {/* EXAM LEADERBOARD                                            */}
+            {/* ════════════════════════════════════════════════════════════ */}
+            {activeBoard === 'exam' && (
+                <div>
+                    {/* Header */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+                        <div>
+                            <div style={{ fontSize: 16, fontWeight: 800, color: '#0F172A' }}>📝 Exam Leaderboard</div>
+                            <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
+                                {examLoading ? 'Loading…' : `${examBoard.length} students · ranked by accuracy${examLastRefresh ? ` · updated ${examLastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}`}
                             </div>
-                        );
-                    })
-                )}
-            </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #E2E8F0', borderRadius: 9, padding: '6px 10px', gap: 6 }}>
+                                <span style={{ color: '#64748B' }}>🔍</span>
+                                <input value={examSearch} onChange={e => setExamSearch(e.target.value)} placeholder="Search student…"
+                                    style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 12, color: '#0F172A', width: 140 }} />
+                                {examSearch && <button onClick={() => setExamSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: 12, padding: 0 }}>✕</button>}
+                            </div>
+                            <button onClick={fetchExamBoard}
+                                style={{ width: 34, height: 34, borderRadius: 9, background: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform .2s' }}
+                                onMouseEnter={e => e.currentTarget.style.transform = 'rotate(180deg)'}
+                                onMouseLeave={e => e.currentTarget.style.transform = 'rotate(0)'}>🔄</button>
+                        </div>
+                    </div>
+
+                    <StatsBanner board={examBoard} loading={examLoading} topSubLabel={`${examBoard[0]?.testsAttempted || 0} tests taken`} />
+                    {!examLoading && !examSearch && <Podium top3={examFiltered.slice(0, 3)} />}
+
+                    {/* Table */}
+                    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                        {/* Table header bar */}
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ fontWeight: 800, fontSize: 14, color: '#0F172A' }}>All Rankings</div>
+                            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                <span style={{ fontSize: 11, color: '#64748B' }}>{examFiltered.length} students</span>
+                                <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981', animation: 'lbPulse 2s ease-in-out infinite' }} />
+                            </div>
+                        </div>
+                        {/* Column headers */}
+                        <div style={{ padding: '8px 18px', background: '#F0F4FF', borderBottom: '1px solid #E2E8F0', display: 'flex', gap: 10 }}>
+                            <div style={{ width: 36, fontSize: 10, color: '#64748B', fontWeight: 700 }}>Rank</div>
+                            <div style={{ width: 40 }} />
+                            <div style={{ flex: 1, fontSize: 10, color: '#64748B', fontWeight: 700 }}>Student & Chapters</div>
+                            <div style={{ width: 70, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'center' }}>Tests</div>
+                            <div style={{ width: 90, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right' }}>Score</div>
+                            <div style={{ width: 90, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right' }}>Accuracy</div>
+                        </div>
+
+                        {examLoading ? <SkeletonRows /> : examFiltered.length === 0 ? (
+                            <div style={{ padding: '40px 20px', textAlign: 'center', color: '#64748B', fontSize: 13 }}>
+                                <div style={{ fontSize: 36, marginBottom: 10 }}>📝</div>
+                                {examSearch ? `No students matching "${examSearch}"` : 'No exam entries yet. Students appear here after taking chapter tests.'}
+                            </div>
+                        ) : examFiltered.map((entry, i) => {
+                            const rank       = i + 1;
+                            const ac         = aColor(entry.accuracy);
+                            const [bg, fg]   = avatarColors(i);
+                            const isExpanded = expandedExamRow === entry.email;
+                            const strongest  = entry.subjectBreakdown?.length
+                                ? [...entry.subjectBreakdown].sort((a, b) => b.accuracy - a.accuracy)[0]
+                                : null;
+
+                            return (
+                                <div key={entry.email}>
+                                    {/* Main row — clickable to expand */}
+                                    <div
+                                        onClick={() => setExpandedExamRow(isExpanded ? null : entry.email)}
+                                        style={{
+                                            padding: '12px 18px', borderTop: '1px solid #E2E8F0',
+                                            display: 'flex', alignItems: 'flex-start', gap: 10,
+                                            background: rank === 1 ? '#FFFBEB' : isExpanded ? '#F8FAFF' : 'transparent',
+                                            cursor: 'pointer', transition: 'background .15s',
+                                        }}
+                                        onMouseEnter={e => { if (rank > 1 && !isExpanded) e.currentTarget.style.background = '#F8FAFC'; }}
+                                        onMouseLeave={e => { if (rank > 1 && !isExpanded) e.currentTarget.style.background = 'transparent'; }}
+                                    >
+                                        {/* Rank */}
+                                        <div style={{ width: 36, height: 36, borderRadius: 8, flexShrink: 0, marginTop: 2, background: rank <= 3 ? 'transparent' : '#F0F4FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: rank <= 3 ? 20 : 11, fontWeight: 700, color: '#0F172A' }}>
+                                            {rank <= 3 ? medals[rank] : `#${rank}`}
+                                        </div>
+                                        {/* Avatar */}
+                                        <div style={{ width: 40, height: 40, borderRadius: 20, flexShrink: 0, marginTop: 2, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: fg, fontWeight: 800, fontSize: 12 }}>
+                                            {initials(entry.name)}
+                                        </div>
+                                        {/* Name + email + chapter tags */}
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                                                <span style={{ fontWeight: 700, fontSize: 13, color: '#0F172A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.name}</span>
+                                                {strongest && (
+                                                    <span style={{
+                                                        fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 5,
+                                                        background: subjectColor(strongest.subject) + '18',
+                                                        color: subjectColor(strongest.subject),
+                                                        border: `1px solid ${subjectColor(strongest.subject)}30`,
+                                                        whiteSpace: 'nowrap',
+                                                    }}>
+                                                        ⭐ {strongest.subject}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div style={{ fontSize: 10, color: '#64748B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: 1 }}>{entry.email}</div>
+
+                                            {/* Chapter tags — up to 3 inline */}
+                                            {entry.subjectBreakdown?.length > 0 && (
+                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 5 }}>
+                                                    {entry.subjectBreakdown.slice(0, 3).map((s, idx) => (
+                                                        <ChapterTag key={idx} subject={s.subject} chapter={s.chapter} accuracy={s.accuracy} tests={s.tests} />
+                                                    ))}
+                                                    {entry.subjectBreakdown.length > 3 && (
+                                                        <span style={{ fontSize: 9, color: '#64748B', alignSelf: 'center', background: '#F0F4FF', border: '1px solid #E2E8F0', borderRadius: 5, padding: '2px 6px' }}>
+                                                            +{entry.subjectBreakdown.length - 3} more
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {/* Last chapter if no breakdown */}
+                                            {!entry.subjectBreakdown?.length && entry.lastTestChapter && (
+                                                <div style={{ fontSize: 9, color: '#94A3B8', marginTop: 4 }}>
+                                                    📖 Last: <span style={{ color: '#0F172A', fontWeight: 600 }}>{entry.lastTestChapter}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* Tests */}
+                                        <div style={{ width: 70, textAlign: 'center', flexShrink: 0, paddingTop: 2 }}>
+                                            <div style={{ fontSize: 13, fontWeight: 700, color: '#0F172A' }}>{entry.testsAttempted}</div>
+                                            <div style={{ fontSize: 10, color: '#64748B' }}>tests</div>
+                                        </div>
+                                        {/* Score */}
+                                        <div style={{ width: 90, textAlign: 'right', flexShrink: 0, paddingTop: 2 }}>
+                                            <div style={{ fontSize: 12, fontWeight: 700, color: '#0F172A' }}>{entry.totalScore}/{entry.totalQuestions}</div>
+                                            <div style={{ fontSize: 10, color: '#64748B' }}>score</div>
+                                        </div>
+                                        {/* Accuracy + ring + expand hint */}
+                                        <div style={{ width: 90, flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                                                <span style={{ fontSize: 13, fontWeight: 800, color: ac }}>{entry.accuracy}%</span>
+                                                <svg width={26} height={26} style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                                                    <circle cx={13} cy={13} r={11} fill="none" stroke="#E2E8F0" strokeWidth={3} />
+                                                    <circle cx={13} cy={13} r={11} fill="none" stroke={ac} strokeWidth={3}
+                                                        strokeDasharray={`${circ * entry.accuracy / 100} ${circ}`} strokeLinecap="round"
+                                                        style={{ transition: 'stroke-dasharray .5s ease' }} />
+                                                </svg>
+                                            </div>
+                                            <div style={{ fontSize: 9, color: '#94A3B8' }}>{isExpanded ? '▲ less' : '▼ detail'}</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Expanded detail panel */}
+                                    {isExpanded && <ExpandedPanel entry={entry} />}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
+            {/* ════════════════════════════════════════════════════════════ */}
+            {/* MOCK LEADERBOARD                                            */}
+            {/* ════════════════════════════════════════════════════════════ */}
+            {activeBoard === 'mock' && (
+                <div>
+                    {/* Header */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+                        <div>
+                            <div style={{ fontSize: 16, fontWeight: 800, color: '#0F172A' }}>🎯 Mock Test Leaderboard</div>
+                            <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
+                                {mockLoading ? 'Loading…' : `${mockBoard.length} students · ranked by best accuracy${mockLastRefresh ? ` · updated ${mockLastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}`}
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #E2E8F0', borderRadius: 9, padding: '6px 10px', gap: 6 }}>
+                                <span style={{ color: '#64748B' }}>🔍</span>
+                                <input value={mockSearch} onChange={e => setMockSearch(e.target.value)} placeholder="Search student…"
+                                    style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 12, color: '#0F172A', width: 140 }} />
+                                {mockSearch && <button onClick={() => setMockSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: 12, padding: 0 }}>✕</button>}
+                            </div>
+                            <button onClick={() => fetchMockBoard(activeMockSubject)}
+                                style={{ width: 34, height: 34, borderRadius: 9, background: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform .2s' }}
+                                onMouseEnter={e => e.currentTarget.style.transform = 'rotate(180deg)'}
+                                onMouseLeave={e => e.currentTarget.style.transform = 'rotate(0)'}>🔄</button>
+                        </div>
+                    </div>
+
+                    <StatsBanner board={mockBoard} loading={mockLoading} topSubLabel={mockBoard[0]?.subjectLabel || mockBoard[0]?.subject || ''} />
+
+                    {/* Subject Filter Tabs */}
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
+                        {MOCK_SUBJECTS.map(tab => {
+                            const isActive = activeMockSubject === tab.id;
+                            return (
+                                <button key={tab.id} onClick={() => setActiveMockSubject(tab.id)} style={{
+                                    padding: '6px 13px', borderRadius: 20,
+                                    border: isActive ? `2px solid ${tab.color}` : '1px solid #E2E8F0',
+                                    background: isActive ? hexA(tab.color, 0.1) : '#fff',
+                                    color: isActive ? tab.color : '#64748B',
+                                    fontWeight: isActive ? 700 : 400, fontSize: 12, cursor: 'pointer',
+                                    display: 'flex', alignItems: 'center', gap: 5, transition: 'all .2s',
+                                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                                }}>
+                                    <span>{tab.icon}</span><span>{tab.label}</span>
+                                    {isActive && !mockLoading && (
+                                        <span style={{ background: hexA(tab.color, 0.15), color: tab.color, fontSize: 9, fontWeight: 800, padding: '1px 5px', borderRadius: 8 }}>{mockFiltered.length}</span>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {!mockLoading && !mockSearch && <Podium top3={mockFiltered.slice(0, 3)} />}
+
+                    {/* Table */}
+                    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ fontWeight: 800, fontSize: 14, color: '#0F172A' }}>All Rankings</div>
+                            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                <span style={{ fontSize: 11, color: '#64748B' }}>{mockFiltered.length} students</span>
+                                <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981', animation: 'lbPulse 2s ease-in-out infinite' }} />
+                            </div>
+                        </div>
+                        {/* Column headers */}
+                        <div style={{ padding: '8px 18px', background: '#F0F4FF', borderBottom: '1px solid #E2E8F0', display: 'flex', gap: 10 }}>
+                            <div style={{ width: 36, fontSize: 10, color: '#64748B', fontWeight: 700 }}>Rank</div>
+                            <div style={{ width: 40 }} />
+                            <div style={{ flex: 1, fontSize: 10, color: '#64748B', fontWeight: 700 }}>Student & Chapter</div>
+                            <div style={{ width: 80, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right' }}>Score</div>
+                            <div style={{ width: 90, fontSize: 10, color: '#64748B', fontWeight: 700, textAlign: 'right' }}>Accuracy</div>
+                        </div>
+
+                        {mockLoading ? <SkeletonRows /> : mockFiltered.length === 0 ? (
+                            <div style={{ padding: '40px 20px', textAlign: 'center', color: '#64748B', fontSize: 13 }}>
+                                <div style={{ fontSize: 36, marginBottom: 10 }}>🎯</div>
+                                {mockSearch ? `No students matching "${mockSearch}"` : 'No mock test entries yet.'}
+                            </div>
+                        ) : mockFiltered.slice(0, 50).map((entry, i) => {
+                            const rank       = i + 1;
+                            const ac         = aColor(entry.accuracy);
+                            const [bg, fg]   = avatarColors(i);
+                            const isExpanded = expandedMockRow === entry.email;
+                            const subColor   = subjectColor(entry.subjectLabel || entry.subject || '');
+
+                            return (
+                                <div key={`${entry.email}-${i}`}>
+                                    {/* Main row */}
+                                    <div
+                                        onClick={() => setExpandedMockRow(isExpanded ? null : entry.email)}
+                                        style={{
+                                            padding: '12px 18px', borderTop: '1px solid #E2E8F0',
+                                            display: 'flex', alignItems: 'flex-start', gap: 10,
+                                            background: rank === 1 ? '#FFFBEB' : isExpanded ? '#F8FAFF' : 'transparent',
+                                            cursor: 'pointer', transition: 'background .15s',
+                                        }}
+                                        onMouseEnter={e => { if (rank > 1 && !isExpanded) e.currentTarget.style.background = '#F8FAFC'; }}
+                                        onMouseLeave={e => { if (rank > 1 && !isExpanded) e.currentTarget.style.background = 'transparent'; }}
+                                    >
+                                        {/* Rank */}
+                                        <div style={{ width: 36, height: 36, borderRadius: 8, flexShrink: 0, marginTop: 2, background: rank <= 3 ? 'transparent' : '#F0F4FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: rank <= 3 ? 20 : 11, fontWeight: 700, color: '#0F172A' }}>
+                                            {rank <= 3 ? medals[rank] : `#${rank}`}
+                                        </div>
+                                        {/* Avatar */}
+                                        <div style={{ width: 40, height: 40, borderRadius: 20, flexShrink: 0, marginTop: 2, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: fg, fontWeight: 800, fontSize: 12 }}>
+                                            {initials(entry.name)}
+                                        </div>
+                                        {/* Name + subject + chapter */}
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div style={{ fontWeight: 700, fontSize: 13, color: '#0F172A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.name}</div>
+                                            {/* Subject pill + attempts */}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 2, flexWrap: 'wrap' }}>
+                                                <span style={{
+                                                    fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 5,
+                                                    background: subColor + '15', color: subColor,
+                                                    border: `1px solid ${subColor}30`,
+                                                }}>
+                                                    {entry.subjectLabel || entry.subject}
+                                                </span>
+                                                <span style={{ fontSize: 9, color: '#94A3B8' }}>
+                                                    {entry.attempts || 1} attempt{(entry.attempts || 1) !== 1 ? 's' : ''}
+                                                </span>
+                                            </div>
+                                            {/* Last chapter */}
+                                            {entry.lastChapter && (
+                                                <div style={{ fontSize: 9, color: '#94A3B8', marginTop: 4 }}>
+                                                    📖 Last chapter: <span style={{ color: '#0F172A', fontWeight: 600 }}>{entry.lastChapter}</span>
+                                                </div>
+                                            )}
+                                            {/* Chapter tags if subjectBreakdown present */}
+                                            {entry.subjectBreakdown?.length > 0 && (
+                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 5 }}>
+                                                    {entry.subjectBreakdown.slice(0, 2).map((s, idx) => (
+                                                        <ChapterTag key={idx} subject={s.subject} chapter={s.chapter} accuracy={s.accuracy} tests={s.tests} />
+                                                    ))}
+                                                    {entry.subjectBreakdown.length > 2 && (
+                                                        <span style={{ fontSize: 9, color: '#64748B', alignSelf: 'center', background: '#F0F4FF', border: '1px solid #E2E8F0', borderRadius: 5, padding: '2px 6px' }}>
+                                                            +{entry.subjectBreakdown.length - 2} more
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* Score */}
+                                        <div style={{ width: 80, textAlign: 'right', flexShrink: 0, paddingTop: 2 }}>
+                                            <div style={{ fontSize: 12, fontWeight: 700, color: '#0F172A' }}>{entry.score}/{entry.total}</div>
+                                            <div style={{ fontSize: 10, color: '#64748B' }}>score</div>
+                                        </div>
+                                        {/* Accuracy + ring + expand hint */}
+                                        <div style={{ width: 90, flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                                                <span style={{ fontSize: 13, fontWeight: 800, color: ac }}>{entry.accuracy}%</span>
+                                                <svg width={26} height={26} style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                                                    <circle cx={13} cy={13} r={11} fill="none" stroke="#E2E8F0" strokeWidth={3} />
+                                                    <circle cx={13} cy={13} r={11} fill="none" stroke={ac} strokeWidth={3}
+                                                        strokeDasharray={`${circ * entry.accuracy / 100} ${circ}`} strokeLinecap="round"
+                                                        style={{ transition: 'stroke-dasharray .5s ease' }} />
+                                                </svg>
+                                            </div>
+                                            <div style={{ fontSize: 9, color: '#94A3B8' }}>{isExpanded ? '▲ less' : '▼ detail'}</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Expanded detail panel */}
+                                    {isExpanded && <ExpandedPanel entry={entry} />}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
             <style>{`@keyframes lbPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}`}</style>
         </div>
     );

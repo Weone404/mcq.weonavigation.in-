@@ -1,8 +1,30 @@
 import { NextResponse } from 'next/server';
 import pool from '../../../../lib/db';
 
+// Auto-create attendance table if it doesn't exist
+async function ensureTable() {
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS attendance (
+            id              SERIAL PRIMARY KEY,
+            student_email   TEXT NOT NULL,
+            student_name    TEXT NOT NULL,
+            date            DATE NOT NULL,
+            batch           TEXT NOT NULL,
+            status          TEXT NOT NULL DEFAULT 'absent',
+            note            TEXT DEFAULT '',
+            created_at      TIMESTAMPTZ DEFAULT NOW(),
+            updated_at      TIMESTAMPTZ DEFAULT NOW(),
+
+            CONSTRAINT attendance_student_date_batch_unique 
+                UNIQUE (student_email, date, batch)
+        );
+    `);
+}
+
 export async function POST(request) {
     try {
+        await ensureTable(); // 👈 added
+
         const body = await request.json();
         const { date, batch, records } = body;
 
@@ -36,6 +58,8 @@ export async function POST(request) {
 
 export async function GET(request) {
     try {
+        await ensureTable(); // 👈 added
+
         const { searchParams } = new URL(request.url);
         const date = searchParams.get('date');
         const batch = searchParams.get('batch');

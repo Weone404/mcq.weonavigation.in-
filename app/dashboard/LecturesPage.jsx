@@ -220,7 +220,7 @@ const SHORT_VIDEOS_DATA = {
       // { title: 'AR: ', chapter: '', description: '.', iframeCode: '' },
 
 
-    ], 10),
+    ], 25),
   },
   'Navigation': {
     icon: '🧭',

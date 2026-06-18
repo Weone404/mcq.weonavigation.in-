@@ -381,35 +381,145 @@ export const SUBJECTS = [
   },
 
   {
-    id: 'technical',
-    title: 'Technical General',
-    subtitle: 'Airframes, Engines, Systems',
-    icon: '🔧',
-    color: '#F59E0B',
-    gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
-    parts: [
-      {
-        label: 'Part I – Aerodynamics & Structures',
-        color: '#F59E0B',
-        chapterIds: ['tg01', 'tg02'],
-      },
-      {
-        label: 'Part II – Engines & Propellers',
-        color: '#D97706',
-        chapterIds: ['tg03', 'tg04'],
-      },
-      {
-        label: 'Part III – Aircraft Systems',
-        color: '#B45309',
-        chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'],
-      },
-    ],
-    chapterIds: ['tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08'],
-    stats: '8 Chapters · 200+ MCQs',
-    exam: 'AME / ATPL',
-    comingSoon: false,
-    hasSubjects: false,
-  },
+  id: 'technical',
+  title: 'Technical General',
+  subtitle: 'Airframes, Engines, Systems',
+  icon: '🔧',
+  color: '#F59E0B',
+  gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
+  parts: [
+    {
+      label: 'Part I – Principle of Flight',
+      color: '#F59E0B',
+      chapterIds: ['tg01', 'tg02'],
+    },
+    {
+      label: 'Part II – Engines',
+      color: '#D97706',
+      chapterIds: ['tg03', 'tg04'],
+    },
+    {
+      label: 'Part III – Aircraft Systems',
+      color: '#B45309',
+      chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'],
+    },
+  ],
+  chapters: [
+    {
+      id: 'tg01',
+      title: 'Principle of Flight',
+      topics: [
+        { id: 'tg01_t01', label: 'Overview and Definitions' },
+        { id: 'tg01_t02', label: 'Atmosphere' },
+        { id: 'tg01_t03', label: 'Basic Aerodynamic Theory' },
+        { id: 'tg01_t04', label: 'Subsonic Airflow' },
+        { id: 'tg01_t05', label: 'Lift' },
+        { id: 'tg01_t06', label: 'Drag' },
+        { id: 'tg01_t07', label: 'Stalling' },
+        { id: 'tg01_t08', label: 'High Lift Devices' },
+        { id: 'tg01_t09', label: 'Airframe Contamination' },
+        { id: 'tg01_t10', label: 'Stability and Control' },
+        { id: 'tg01_t11', label: 'Controls' },
+        { id: 'tg01_t12', label: 'Flight Mechanics' },
+        { id: 'tg01_t13', label: 'High Speed Flight' },
+        { id: 'tg01_t14', label: 'Limitations' },
+        { id: 'tg01_t15', label: 'Windshear' },
+        { id: 'tg01_t16', label: 'Propellers' },
+      ],
+    },
+    {
+      id: 'tg02',
+      title: 'Performance',
+      topics: [
+        { id: 'tg02_t01', label: 'Performance' },
+      ],
+    },
+    {
+      id: 'tg03',
+      title: 'Jet Engine',
+      topics: [
+        { id: 'tg03_t01', label: 'Basics of Jet Engine' },
+        { id: 'tg03_t02', label: 'Types of Engine' },
+        { id: 'tg03_t03', label: 'Compressors' },
+        { id: 'tg03_t04', label: 'Combustion Chamber' },
+        { id: 'tg03_t05', label: 'Turbine Assembly' },
+        { id: 'tg03_t06', label: 'Jet Pipe' },
+        { id: 'tg03_t07', label: 'Reverse Thrust' },
+        { id: 'tg03_t08', label: 'Engine Starting System Requirements' },
+        { id: 'tg03_t09', label: 'APU (Auxiliary Power Unit)' },
+      ],
+    },
+    {
+      id: 'tg04',
+      title: 'Piston Engine',
+      topics: [
+        { id: 'tg04_t01', label: 'Introduction' },
+        { id: 'tg04_t02', label: 'General' },
+        { id: 'tg04_t03', label: 'Lubrication' },
+        { id: 'tg04_t04', label: 'Cooling' },
+        { id: 'tg04_t05', label: 'Ignition' },
+        { id: 'tg04_t06', label: 'Fuel' },
+        { id: 'tg04_t07', label: 'Mixture' },
+        { id: 'tg04_t08', label: 'Carburettors' },
+        { id: 'tg04_t09', label: 'Icing' },
+        { id: 'tg04_t10', label: 'Fuel Injection' },
+        { id: 'tg04_t11', label: 'Performance and Power Augmentation' },
+        { id: 'tg04_t12', label: 'Propellers' },
+      ],
+    },
+    {
+      id: 'tg05',
+      title: 'Airframe Systems',
+      topics: [
+        { id: 'tg05_t01', label: 'Fuselage, Wings and Stabilizing Surfaces' },
+        { id: 'tg05_t02', label: 'Basic Hydraulics' },
+        { id: 'tg05_t03', label: 'Landing Gear' },
+        { id: 'tg05_t04', label: 'Aircraft Wheels' },
+        { id: 'tg05_t05', label: 'Aircraft Tyres' },
+        { id: 'tg05_t06', label: 'Aircraft Brakes' },
+        { id: 'tg05_t07', label: 'Flight Control System' },
+        { id: 'tg05_t08', label: 'Flight Controls' },
+        { id: 'tg05_t09', label: 'Powered Flying Controls' },
+        { id: 'tg05_t10', label: 'Aircraft Pneumatic Systems' },
+        { id: 'tg05_t11', label: 'Pressurization Systems' },
+        { id: 'tg05_t12', label: 'Ice and Rain Protection' },
+        { id: 'tg05_t13', label: 'Aircraft Oxygen Equipment' },
+        { id: 'tg05_t14', label: 'Smoke Detection' },
+        { id: 'tg05_t15', label: 'Fire Detection and Protection' },
+        { id: 'tg05_t16', label: 'Aircraft Fuel Systems' },
+      ],
+    },
+    {
+      id: 'tg06',
+      title: 'Electrical Systems',
+      topics: [
+        { id: 'tg06_t01', label: 'Electrical Systems' },
+      ],
+    },
+    {
+      id: 'tg07',
+      title: 'Instruments',
+      topics: [
+        { id: 'tg07_t01', label: 'Instruments' },
+      ],
+    },
+    {
+      id: 'tg08',
+      title: 'Avionics',
+      topics: [
+        { id: 'tg08_t01', label: 'Avionics' },
+      ],
+    },
+  ],
+  chapterIds: ['tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08'],
+  stats: '8 Chapters · 200+ MCQs',
+  exam: 'AME / ATPL',
+  comingSoon: false,
+  hasSubjects: false,
+},
+
+
+
 
   {
     id: 'rtfm',
@@ -1101,6 +1211,7 @@ function MockLeaderboardWidget({ user, onViewFull }) {
 const NAV_ITEMS = [
   { icon: '🏠', label: 'Dashboard', id: 'home' },
   { icon: '📚', label: 'Subject Tests', id: 'tests' },
+  { icon: '🎓', label: 'Class Test', id: 'class-test' },
   { icon: '🤖', label: 'AI Doubt Chat', id: 'doubt' },
   { icon: '📈', label: 'My Progress', id: 'progress' },
   { icon: '📅', label: 'Live Classes', id: 'classes', badge: 'LIVE' },
@@ -2695,6 +2806,85 @@ function Placeholder({ page }) {
   );
 }
 
+// ─── CLASS TEST SECTION ───────────────────────────────────────────────────
+function AssignedTestsSection({ user, onStartAssignedTest }) {
+    const [tests, setTests] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/assigned-tests')
+            .then(r => r.json())
+            .then(d => { if (d.success) setTests(d.tests); })
+            .catch(() => {})
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading || tests.length === 0) return null;
+
+    return (
+        <div style={{ marginBottom: 22 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div style={{ fontWeight: 800, fontSize: 16, color: C.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ background: 'linear-gradient(135deg,#EF4444,#DC2626)', color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 6, animation: 'pulse 2s ease-in-out infinite' }}>NEW</span>
+                    🎯 Class Test
+                </div>
+                <span style={{ fontSize: 12, color: C.muted }}>{tests.length} test{tests.length !== 1 ? 's' : ''} from your teacher</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {tests.map((test, idx) => {
+                    const subjectColors = {
+                        air_regulations: { color: '#1D4ED8', bg: '#EFF6FF', border: '#BFDBFE', icon: '📋' },
+                        meteorology:     { color: '#0EA5E9', bg: '#F0F9FF', border: '#BAE6FD', icon: '🌦️' },
+                        navigation:      { color: '#10B981', bg: '#F0FDF4', border: '#A7F3D0', icon: '🗺️' },
+                        technical:       { color: '#F59E0B', bg: '#FFFBEB', border: '#FDE68A', icon: '🔧' },
+                        rtfm:            { color: '#EF4444', bg: '#FFF1F2', border: '#FECACA', icon: '📻' },
+                    };
+                    const sc = subjectColors[test.subjectId] || { color: C.primary, bg: C.primaryLight, border: '#BFDBFE', icon: '📝' };
+
+                    return (
+                        <div key={test.id}
+                            style={{
+                                background: sc.bg,
+                                border: `1px solid ${sc.border}`,
+                                borderLeft: `4px solid ${sc.color}`,
+                                borderRadius: 14, padding: '14px 18px',
+                                display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap',
+                                WebkitAnimation: `fadeIn .4s ease ${idx * 0.07}s both`,
+                                animation: `fadeIn .4s ease ${idx * 0.07}s both`,
+                            }}>
+                            <div style={{ fontSize: 28, flexShrink: 0 }}>{sc.icon}</div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 3 }}>{test.title}</div>
+                                <div style={{ fontSize: 12, color: C.muted }}>
+                                    {test.subjectLabel} · ❓ {test.numQuestions} questions · ⏱️ {test.durationMins} mins
+                                </div>
+                                {test.instructions && (
+                                    <div style={{ fontSize: 11, color: C.muted, marginTop: 4, fontStyle: 'italic' }}>📌 {test.instructions}</div>
+                                )}
+                            </div>
+                            <button
+                                onClick={() => onStartAssignedTest(test)}
+                                style={{
+                                    background: sc.color, color: '#fff', border: 'none',
+                                    borderRadius: 10, padding: '9px 18px',
+                                    fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                                    flexShrink: 0, whiteSpace: 'nowrap',
+                                    boxShadow: `0 4px 14px ${sc.color}44`,
+                                    WebkitTransition: 'transform .15s, box-shadow .15s',
+                                    transition: 'transform .15s, box-shadow .15s',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
+                            >
+                                Start Test →
+                            </button>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
 // ─── ROOT DASHBOARD ───────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const router = useRouter();
@@ -2803,6 +2993,18 @@ export default function DashboardPage() {
             user={user}
             onViewFull={() => router.push('/mock-leaderboard')}
           />
+        );
+      case 'class-test':
+        return (
+          <div style={{ minHeight: 500, padding: isMobile ? '18px 16px' : '22px 28px' }}>
+            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: C.text, marginBottom: 8 }}>🎓 Class Test</div>
+                <div style={{ fontSize: 14, color: C.muted, maxWidth: 660 }}>Your teacher's prepared tests are listed here. Click any test below to start the assigned class test and answer the MCQ questions created by your teacher.</div>
+              </div>
+            </div>
+            <AssignedTestsSection user={user} onStartAssignedTest={test => router.push(`/assigned-test/${test.id}`)} />
+          </div>
         );
       default:
         return (

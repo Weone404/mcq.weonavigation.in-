@@ -1085,13 +1085,10 @@ function AllResultsTab({ students }) {
             studentName: student.name,
             studentEmail: student.email,
             studentPhone: student.phone,
-            chapterTitle: getChapterTitle(result.chapterId),
-            correctCount: (result.answers || []).filter(a => a.isCorrect).length,
-            wrongCount: (result.answers || []).filter(a => !a.isCorrect).length,
+            chapterTitle: result.title || result.subjectLabel || getChapterTitle(result.chapterId),
         }))
     );
 
-    // Filter results
     let filtered = allResults.filter(r => {
         const matchStudent = searchStudent.trim() === '' || 
             r.studentName.toLowerCase().includes(searchStudent.toLowerCase()) ||
@@ -1959,6 +1956,469 @@ function TeacherLeaderboardTab() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// ASSIGN TEST TAB
+// ═══════════════════════════════════════════════════════════════════════════════
+function AssignTestTab() {
+    const SUBJECT_OPTIONS = [
+        {
+            id: 'air_regulations',
+            label: 'Air Regulations',
+            subtitle: 'ICAO, DGCA, National Law & Procedures',
+            icon: '📋',
+            color: '#1D4ED8',
+            chapterIds: [
+                'ch01','ch02','ch03','ch04','ch05','ch06','ch07','ch08','ch09','ch10',
+                'ch11','ch12','ch13','ch14','ch15','ch16','ch17','ch18','ch19','ch20',
+                'ch21','ch22','ch23','ch24','ch25','ch26',
+                'qb01','qb02','qb03','qb04','qb05','qb06','qb07',
+                'qb08','qb09','qb10','qb11','qb12','qb13',
+            ],
+        },
+        {
+            id: 'meteorology',
+            label: 'Meteorology',
+            subtitle: 'Weather, Clouds, Pressure Systems',
+            icon: '🌦️',
+            color: '#0EA5E9',
+            chapterIds: [
+                'met01','met02','met03','met04','met05','met06','met07','met08',
+                'met09','met10','met11','met12','met13','met14','met15','met16',
+                'met17','met18','met19','met20','met21','met22','met23',
+            ],
+        },
+        {
+            id: 'navigation',
+            label: 'Navigation',
+            subtitle: 'General, Radio & Instrument Navigation',
+            icon: '🗺️',
+            color: '#10B981',
+            chapterIds: [
+                'gn01','gn02','gn03','gn04','gn05','gn06','gn07','gn08','gn09','gn10','gn11',
+                'rn01','rn02','rn03','rn04','rn05','rn06','rn07','rn08','rn09','rn10',
+                'in01','in02','in03','in04','in05','in06','in07','in08',
+            ],
+        },
+        {
+            id: 'technical',
+            label: 'Technical General',
+            subtitle: 'Airframes, Engines, Systems',
+            icon: '🔧',
+            color: '#F59E0B',
+            chapterIds: ['tg01','tg02','tg03','tg04','tg05','tg06','tg07','tg08'],
+        },
+        {
+            id: 'rtfm',
+            label: 'Radio Telephony',
+            subtitle: 'RTF Procedures & Phraseology',
+            icon: '📻',
+            color: '#EF4444',
+            chapterIds: ['rt01','rt02','rt03'],
+        },
+    ];
+
+    const [mounted, setMounted] = useState(false);
+    const [tests, setTests] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
+    const [togglingId, setTogglingId] = useState(null);
+    const [msg, setMsg] = useState({ text: '', type: '' });
+    const [selectedTest, setSelectedTest] = useState(null); // for viewing results
+    const [testResults, setTestResults] = useState([]);
+    const [loadingResults, setLoadingResults] = useState(false);
+
+    // Form state
+    const [form, setForm] = useState({
+        title: '',
+        subjectId: '',
+        numQuestions: 20,
+        durationMins: 30,
+        instructions: '',
+    });
+    const [errors, setErrors] = useState({});
+
+    useEffect(() => { setTimeout(() => setMounted(true), 20); }, []);
+
+    useEffect(() => { fetchTests(); }, []);
+
+    async function fetchTests() {
+        setLoading(true);
+        try {
+            const res = await fetch('/api/teacher/assigned-tests');
+            const data = await res.json();
+            if (data.success) setTests(data.tests);
+        } catch (err) { console.error(err); }
+        finally { setLoading(false); }
+    }
+
+    async function fetchTestResults(testId) {
+        setLoadingResults(true);
+        try {
+            const res = await fetch(`/api/assigned-tests/submit?testId=${testId}`);
+            const data = await res.json();
+            if (data.success) setTestResults(data.results);
+        } catch (err) { console.error(err); }
+        finally { setLoadingResults(false); }
+    }
+
+    function flash(text, type = 'ok') {
+        setMsg({ text, type });
+        setTimeout(() => setMsg({ text: '', type: '' }), 4000);
+    }
+
+    function setField(k, v) {
+        setForm(p => ({ ...p, [k]: v }));
+        setErrors(p => ({ ...p, [k]: '' }));
+    }
+
+    function validate() {
+        const errs = {};
+        if (!form.title.trim()) errs.title = 'Title is required';
+        if (!form.subjectId) errs.subjectId = 'Please select a subject';
+        if (form.numQuestions < 5 || form.numQuestions > 100) errs.numQuestions = 'Must be between 5 and 100';
+        if (form.durationMins < 5 || form.durationMins > 180) errs.durationMins = 'Must be between 5 and 180 minutes';
+        return errs;
+    }
+
+    async function handleCreate() {
+        const errs = validate();
+        setErrors(errs);
+        if (Object.keys(errs).length > 0) return;
+
+        setSaving(true);
+        try {
+            const subject = SUBJECT_OPTIONS.find(s => s.id === form.subjectId);
+            const res = await fetch('/api/teacher/assigned-tests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: form.title.trim(),
+                    subjectId: form.subjectId,
+                    subjectLabel: subject?.label || form.subjectId,
+                    chapterIds: subject?.chapterIds || [],
+                    numQuestions: Number(form.numQuestions),
+                    durationMins: Number(form.durationMins),
+                    instructions: form.instructions.trim(),
+                }),
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.error || 'Failed to create test');
+            setTests(prev => [data.test, ...prev]);
+            setForm({ title: '', subjectId: '', numQuestions: 20, durationMins: 30, instructions: '' });
+            flash('✓ Test created! Students can now see and take this test.', 'ok');
+        } catch (err) {
+            flash(`✗ ${err.message}`, 'err');
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    async function handleDelete(id) {
+        setDeletingId(id);
+        try {
+            const res = await fetch('/api/teacher/assigned-tests', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id }),
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.error);
+            setTests(prev => prev.filter(t => t.id !== id));
+            flash('Test deleted.', 'ok');
+        } catch (err) {
+            flash(`✗ ${err.message}`, 'err');
+        } finally {
+            setDeletingId(null);
+        }
+    }
+
+    async function handleToggle(test) {
+        setTogglingId(test.id);
+        try {
+            const res = await fetch('/api/teacher/assigned-tests', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: test.id, isActive: !test.is_active }),
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.error);
+            setTests(prev => prev.map(t => t.id === test.id ? { ...t, is_active: !t.is_active } : t));
+        } catch (err) {
+            flash(`✗ ${err.message}`, 'err');
+        } finally {
+            setTogglingId(null);
+        }
+    }
+
+    const selectedSubject = SUBJECT_OPTIONS.find(s => s.id === form.subjectId);
+    const C = {
+        primary: '#1D4ED8', text: '#0F172A', muted: '#64748B',
+        border: '#E2E8F0', bg: '#F0F4FF', card: '#FFFFFF',
+        green: '#10B981', red: '#EF4444', accent: '#F59E0B',
+    };
+
+    // ── Results Modal
+    if (selectedTest) {
+        const test = tests.find(t => t.id === selectedTest);
+        return (
+            <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif" }}>
+                <button onClick={() => { setSelectedTest(null); setTestResults([]); }}
+                    style={{ marginBottom: 20, background: '#fff', border: '1px solid #E2E8F0', borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontSize: 13, color: C.text }}>
+                    ← Back to Assigned Tests
+                </button>
+
+                <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #E2E8F0', padding: '20px 24px', marginBottom: 20 }}>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: C.text, marginBottom: 4 }}>{test?.title}</div>
+                    <div style={{ fontSize: 13, color: C.muted }}>{test?.subject_label} · {test?.num_questions} questions · {test?.duration_mins} mins</div>
+                </div>
+
+                <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                    <div style={{ padding: '16px 20px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>Student Results</div>
+                        <span style={{ fontSize: 12, color: C.muted }}>{testResults.length} submissions</span>
+                    </div>
+                    {loadingResults ? (
+                        <div style={{ padding: '32px', textAlign: 'center', color: C.muted }}>Loading results…</div>
+                    ) : testResults.length === 0 ? (
+                        <div style={{ padding: '40px', textAlign: 'center', color: C.muted }}>
+                            <div style={{ fontSize: 32, marginBottom: 10 }}>📝</div>
+                            No submissions yet. Students haven't taken this test.
+                        </div>
+                    ) : (
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 500 }}>
+                                <thead>
+                                    <tr style={{ background: '#F0F4FF' }}>
+                                        {['#', 'Student', 'Score', 'Accuracy', 'Submitted'].map(h => (
+                                            <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: 11, color: C.muted, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {testResults.map((r, i) => {
+                                        const [bg, fg] = [['#dbeafe','#2563eb'],['#dcfce7','#16a34a'],['#fef3c7','#b45309'],['#f3e8ff','#7c3aed'],['#ffe4e6','#be123c']][i % 5];
+                                        const accColor = r.accuracy >= 80 ? '#16a34a' : r.accuracy >= 60 ? '#d97706' : '#dc2626';
+                                        return (
+                                            <tr key={r.id} style={{ borderTop: '1px solid #E2E8F0' }}
+                                                onMouseEnter={e => e.currentTarget.style.background = '#F8FAFC'}
+                                                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                                                <td style={{ padding: '12px 16px', color: C.muted, fontSize: 12 }}>{i + 1}</td>
+                                                <td style={{ padding: '12px 16px' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: bg, color: fg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700 }}>
+                                                            {r.student_name?.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '??'}
+                                                        </div>
+                                                        <div>
+                                                            <div style={{ fontWeight: 600, fontSize: 13, color: C.text }}>{r.student_name}</div>
+                                                            <div style={{ fontSize: 11, color: C.muted }}>{r.student_email}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td style={{ padding: '12px 16px', fontWeight: 700, fontSize: 14, color: C.text }}>{r.score}/{r.total}</td>
+                                                <td style={{ padding: '12px 16px' }}>
+                                                    <span style={{ fontWeight: 700, fontSize: 14, color: accColor }}>{r.accuracy}%</span>
+                                                </td>
+                                                <td style={{ padding: '12px 16px', color: C.muted, fontSize: 12 }}>
+                                                    {new Date(r.submitted_at).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div style={{ opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(14px)', transition: 'opacity .4s ease, transform .4s ease', fontFamily: "'Segoe UI',system-ui,sans-serif" }}>
+
+            {msg.text && (
+                <div style={{ padding: '12px 16px', borderRadius: 12, marginBottom: 16, fontWeight: 600, fontSize: 13, background: msg.type === 'ok' ? '#f0fdf4' : '#fff1f2', color: msg.type === 'ok' ? '#15803d' : '#b91c1c', border: `1px solid ${msg.type === 'ok' ? '#86efac' : '#fca5a5'}` }}>
+                    {msg.text}
+                </div>
+            )}
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 20 }}>
+
+                {/* ── LEFT: Create Form ── */}
+                <div style={{ background: C.card, borderRadius: 18, border: '1px solid #E2E8F0', padding: 24, boxShadow: '0 8px 30px rgba(15,23,42,.05)' }}>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 20 }}>➕ Create Assigned Test</div>
+
+                    {/* Title */}
+                    <div style={{ marginBottom: 16 }}>
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>Test Title *</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Air Regulations Chapter Test – Week 3"
+                            value={form.title}
+                            onChange={e => setField('title', e.target.value)}
+                            style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.title ? '#FCA5A5' : '#E2E8F0'}`, background: errors.title ? '#FFF1F2' : '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
+                        />
+                        {errors.title && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.title}</div>}
+                    </div>
+
+                    {/* Subject selector */}
+                    <div style={{ marginBottom: 16 }}>
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 8 }}>Subject *</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {SUBJECT_OPTIONS.map(sub => (
+                                <div key={sub.id}
+                                    onClick={() => setField('subjectId', sub.id)}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
+                                        borderRadius: 10, cursor: 'pointer',
+                                        border: form.subjectId === sub.id ? `2px solid ${sub.color}` : '1px solid #E2E8F0',
+                                        background: form.subjectId === sub.id ? sub.color + '10' : '#F8FAFC',
+                                        transition: 'all .15s',
+                                    }}>
+                                    <span style={{ fontSize: 20 }}>{sub.icon}</span>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontWeight: 700, fontSize: 13, color: form.subjectId === sub.id ? sub.color : C.text }}>{sub.label}</div>
+                                        <div style={{ fontSize: 11, color: C.muted }}>{sub.subtitle}</div>
+                                    </div>
+                                    {form.subjectId === sub.id && (
+                                        <div style={{ width: 18, height: 18, borderRadius: '50%', background: sub.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <span style={{ color: '#fff', fontSize: 10, fontWeight: 800 }}>✓</span>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        {errors.subjectId && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 4 }}>{errors.subjectId}</div>}
+                    </div>
+
+                    {/* Num questions + duration */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+                        <div>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>No. of Questions *</label>
+                            <input
+                                type="number" min={5} max={100}
+                                value={form.numQuestions}
+                                onChange={e => setField('numQuestions', e.target.value)}
+                                style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.numQuestions ? '#FCA5A5' : '#E2E8F0'}`, background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
+                            />
+                            {errors.numQuestions && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.numQuestions}</div>}
+                        </div>
+                        <div>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>Duration (mins) *</label>
+                            <input
+                                type="number" min={5} max={180}
+                                value={form.durationMins}
+                                onChange={e => setField('durationMins', e.target.value)}
+                                style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.durationMins ? '#FCA5A5' : '#E2E8F0'}`, background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
+                            />
+                            {errors.durationMins && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.durationMins}</div>}
+                        </div>
+                    </div>
+
+                    {/* Instructions */}
+                    <div style={{ marginBottom: 20 }}>
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>
+                            Instructions <span style={{ fontWeight: 400, color: C.muted }}>(optional)</span>
+                        </label>
+                        <textarea
+                            rows={3}
+                            placeholder="Any special instructions for students…"
+                            value={form.instructions}
+                            onChange={e => setField('instructions', e.target.value)}
+                            style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: '1px solid #E2E8F0', background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
+                        />
+                    </div>
+
+                    {/* Preview */}
+                    {form.title && form.subjectId && (
+                        <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: 12, padding: '12px 14px', marginBottom: 16 }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: '#1D4ED8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>Preview</div>
+                            <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 2 }}>{form.title}</div>
+                            <div style={{ fontSize: 12, color: C.muted }}>
+                                {selectedSubject?.icon} {selectedSubject?.label} · ❓ {form.numQuestions} questions · ⏱️ {form.durationMins} mins
+                            </div>
+                        </div>
+                    )}
+
+                    <button
+                        onClick={handleCreate}
+                        disabled={saving}
+                        style={{ width: '100%', padding: '12px', borderRadius: 12, border: 'none', background: saving ? '#94A3B8' : 'linear-gradient(135deg,#1D4ED8,#7C3AED)', color: '#fff', fontWeight: 800, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'opacity .15s' }}
+                    >
+                        {saving ? '⏳ Creating…' : '📝 Assign Test to All Students'}
+                    </button>
+                </div>
+
+                {/* ── RIGHT: Tests list ── */}
+                <div style={{ background: C.card, borderRadius: 18, border: '1px solid #E2E8F0', padding: 24, boxShadow: '0 8px 30px rgba(15,23,42,.05)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>📋 Assigned Tests</div>
+                        <span style={{ fontSize: 12, color: C.muted, background: '#F0F4FF', padding: '3px 10px', borderRadius: 20, border: '1px solid #E2E8F0' }}>{tests.length} total</span>
+                    </div>
+
+                    {loading ? (
+                        <div style={{ padding: '32px', textAlign: 'center', color: C.muted, fontSize: 13 }}>Loading…</div>
+                    ) : tests.length === 0 ? (
+                        <div style={{ padding: '40px 20px', textAlign: 'center', border: '1.5px dashed #E2E8F0', borderRadius: 14, background: '#F8FAFC' }}>
+                            <div style={{ fontSize: 36, marginBottom: 10 }}>📝</div>
+                            <div style={{ fontWeight: 700, color: C.text, marginBottom: 4 }}>No tests assigned yet</div>
+                            <div style={{ fontSize: 12, color: C.muted }}>Create your first test using the form.</div>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto', maxHeight: 600 }}>
+                            {tests.map(test => {
+                                const sub = SUBJECT_OPTIONS.find(s => s.id === test.subject_id);
+                                return (
+                                    <div key={test.id} style={{ background: test.is_active ? '#F0FDF4' : '#F8FAFC', border: `1px solid ${test.is_active ? '#86EFAC' : '#E2E8F0'}`, borderRadius: 14, padding: '14px 16px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                                                <span style={{ fontSize: 16 }}>{sub?.icon || '📝'}</span>
+                                                <span style={{ background: test.is_active ? '#DCFCE7' : '#F1F5F9', color: test.is_active ? '#15803D' : '#64748B', fontSize: 10, fontWeight: 800, padding: '2px 9px', borderRadius: 20 }}>
+                                                    {test.is_active ? '✓ ACTIVE' : '⏸ PAUSED'}
+                                                </span>
+                                                <span style={{ background: '#EFF6FF', color: '#1D4ED8', fontSize: 10, fontWeight: 600, padding: '2px 9px', borderRadius: 20, border: '1px solid #DBEAFE' }}>
+                                                    {test.subject_label}
+                                                </span>
+                                            </div>
+                                            <button
+                                                onClick={() => handleDelete(test.id)}
+                                                disabled={deletingId === test.id}
+                                                style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid #FECACA', background: '#FFF1F2', color: '#B91C1C', cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                            >✕</button>
+                                        </div>
+                                        <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 4 }}>{test.title}</div>
+                                        <div style={{ fontSize: 12, color: C.muted, marginBottom: 8 }}>
+                                            ❓ {test.num_questions} questions · ⏱️ {test.duration_mins} mins · 📅 {new Date(test.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                        </div>
+                                        {test.instructions && (
+                                            <div style={{ fontSize: 11, color: C.muted, marginBottom: 10, fontStyle: 'italic' }}>"{test.instructions}"</div>
+                                        )}
+                                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                            <button
+                                                onClick={() => handleToggle(test)}
+                                                disabled={togglingId === test.id}
+                                                style={{ background: test.is_active ? '#FEF3C7' : '#DCFCE7', color: test.is_active ? '#92400E' : '#15803D', border: `1px solid ${test.is_active ? '#FDE68A' : '#86EFAC'}`, padding: '6px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
+                                            >
+                                                {test.is_active ? '⏸ Pause' : '▶ Activate'}
+                                            </button>
+                                            <button
+                                                onClick={() => { setSelectedTest(test.id); fetchTestResults(test.id); }}
+                                                style={{ background: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', padding: '6px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
+                                            >
+                                                📊 View Results
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+// ═══════════════════════════════════════════════════════════════════════════════
 // MAIN TEACHER PAGE  (default export)
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function TeacherPage() {
@@ -2006,7 +2466,9 @@ export default function TeacherPage() {
 
     const selectedStudent = students.find(s => s.email === selectedEmail);
     const selectedStudentChapterStats = selectedStudent ? selectedStudent.results.reduce((acc, result) => {
-        const chapter = result.chapterId, answers = Array.isArray(result.answers) ? result.answers : [];
+        const chapter = result.chapterId;
+        if (!chapter) return acc;
+        const answers = Array.isArray(result.answers) ? result.answers : [];
         if (!acc[chapter]) acc[chapter] = { correct: 0, total: 0 };
         acc[chapter].total += answers.length;
         acc[chapter].correct += answers.filter(a => a.isCorrect).length;
@@ -2018,10 +2480,16 @@ export default function TeacherPage() {
     const clearTopics = chapterStatus.filter(c => c.accuracy >= 80);
     const weakTopics = chapterStatus.filter(c => c.accuracy < 60);
     const wrongQuestions = selectedStudent ? selectedStudent.results.flatMap(result => {
-        const chapterTitle = getChapterTitle(result.chapterId);
+        const chapterTitle = result.title || result.subjectLabel || getChapterTitle(result.chapterId) || 'Class Test';
         return (Array.isArray(result.answers) ? result.answers : []).filter(a => !a.isCorrect).map(a => {
-            const question = getQuestionData(result.chapterId, a.questionId);
-            return { chapterTitle, question: question?.question || `Question ${a.questionId}`, selected: question?.options?.[a.selected] || `Option ${a.selected + 1}`, correct: question?.options?.[a.correct] || `Option ${a.correct + 1}`, date: result.date };
+            const question = result.chapterId ? getQuestionData(result.chapterId, a.questionId) : null;
+            return {
+                chapterTitle,
+                question: question?.question || `Question ${a.questionId}`,
+                selected: question?.options?.[a.selected] || `Option ${a.selected + 1}`,
+                correct: question?.options?.[a.correct] || `Option ${a.correct + 1}`,
+                date: result.date,
+            };
         });
     }) : [];
 
@@ -2061,13 +2529,14 @@ export default function TeacherPage() {
 
     // ── Main dashboard ──
     const NAV_TABS = [
-        { id: 'students', label: '📊 Students' },
-        { id: 'allresults', label: '📝 All Results' },
-        { id: 'attendance', label: '✅ Attendance' },
-        { id: 'schedule', label: '📅 Schedule Meeting' },
-        { id: 'manage', label: '👥 Manage Students' },
-        { id: 'leaderboard', label: '🏆 Leaderboard' },
-    ];
+    { id: 'students', label: '📊 Students' },
+    { id: 'allresults', label: '📝 All Results' },
+    { id: 'attendance', label: '✅ Attendance' },
+    { id: 'schedule', label: '📅 Schedule Meeting' },
+    { id: 'assigntest', label: '🎯 Assign Test' }, // 👈 NEW
+    { id: 'manage', label: '👥 Manage Students' },
+    { id: 'leaderboard', label: '🏆 Leaderboard' },
+];
 
     return (
         <div className="teacher-page">
@@ -2192,6 +2661,13 @@ export default function TeacherPage() {
                     </div>
                 )}
 
+                {/* ── ASSIGN TEST TAB ── */}
+                {activeTab === 'assigntest' && (
+                    <div className="tab-content tab-content-in">
+                        <AssignTestTab />
+                    </div>
+                )}
+
                 {/* ── MANAGE STUDENTS TAB ── */}
                 {activeTab === 'manage' && (
                     <div className="tab-content tab-content-in">
@@ -2225,7 +2701,7 @@ export default function TeacherPage() {
                         </header>
                         <div className="teacher-panel panel-slide-up">
                             <TeacherLeaderboardTab />
-                        </div>
+                        </div>w
                     </div>
                 )}
 

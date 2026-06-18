@@ -3373,4 +3373,6 @@ export const mcqBank = {
     { id: 'ch23_17', question: 'What is true of a TAF', options: ['9 hr TAF is for international dissemination', 'TAF valid for 9 hr is issued every 6 hr', 'TAF valid for 12-30 hr is issued every 3 hr', 'TAF for national use are valid for 9 hr and issued every 3 hr'], correct: 3, explanation: 'National TAF: 9 hr validity, issued every 3 hr.' },
     { id: 'ch23_18', question: 'Time of issue of ROFOR (sample ROFOR 010000Z 010610) is', options: ['0000 UTC on 1st', '0600 UTC on 1st', '1000 UTC on 1st', '0001 UTC on 1st'], correct: 0, explanation: '010000Z indicates issued at 0000 UTC on the 1st.' }
   ],
+
+  
 };

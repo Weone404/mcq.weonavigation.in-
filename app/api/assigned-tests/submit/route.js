@@ -1,0 +1,89 @@
+import { NextResponse } from 'next/server';
+import pool from '../../../../lib/db';
+
+async function ensureTable() {
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS assigned_test_results (
+            id              SERIAL PRIMARY KEY,
+            test_id         INTEGER NOT NULL,
+            student_email   TEXT NOT NULL,
+            student_name    TEXT NOT NULL,
+            score           INTEGER NOT NULL,
+            total           INTEGER NOT NULL,
+            accuracy        INTEGER NOT NULL,
+            answers         JSONB DEFAULT '[]',
+            submitted_at    TIMESTAMPTZ DEFAULT NOW()
+        );
+        CREATE INDEX IF NOT EXISTS idx_atr_test_id ON assigned_test_results(test_id);
+        CREATE INDEX IF NOT EXISTS idx_atr_email ON assigned_test_results(student_email);
+    `);
+}
+
+// POST — student submits assigned test result
+export async function POST(request) {
+    try {
+        await ensureTable();
+        const body = await request.json();
+        const { testId, studentEmail, studentName, score, total, answers } = body;
+
+        if (!testId || !studentEmail || score == null || total == null) {
+            return NextResponse.json(
+                { success: false, error: 'testId, studentEmail, score, total are required' },
+                { status: 400 }
+            );
+        }
+
+        const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
+
+        const { rows } = await pool.query(
+            `INSERT INTO assigned_test_results 
+                (test_id, student_email, student_name, score, total, accuracy, answers)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
+             RETURNING *`,
+            [
+                parseInt(testId, 10),
+                studentEmail.toLowerCase().trim(),
+                studentName || '',
+                score,
+                total,
+                accuracy,
+                JSON.stringify(answers || []),
+            ]
+        );
+
+        return NextResponse.json({ success: true, result: rows[0] });
+    } catch (err) {
+        console.error('POST /api/assigned-tests/submit error:', err);
+        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    }
+}
+
+// GET — teacher fetches results for a specific test
+export async function GET(request) {
+    try {
+        await ensureTable();
+        const { searchParams } = new URL(request.url);
+        const testId = searchParams.get('testId');
+
+        if (!testId) {
+            return NextResponse.json({ success: false, error: 'testId is required' }, { status: 400 });
+        }
+
+        const { rows } = await pool.query(
+            `SELECT 
+                r.*,
+                t.title     AS test_title,
+                t.subject_label
+             FROM assigned_test_results r
+             JOIN assigned_tests t ON t.id = r.test_id
+             WHERE r.test_id = $1
+             ORDER BY r.submitted_at DESC`,
+            [parseInt(testId, 10)]
+        );
+
+        return NextResponse.json({ success: true, results: rows });
+    } catch (err) {
+        console.error('GET /api/assigned-tests/submit error:', err);
+        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    }
+}

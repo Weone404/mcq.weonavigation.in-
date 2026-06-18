@@ -1,7 +1,11 @@
 {
-  "/results/page": "app/results/page.js",
-  "/test/[chapterId]/page": "app/test/[chapterId]/page.js",
+  "/page": "app/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/leaderboard/page": "app/leaderboard/page.js",
-  "/teacher/page": "app/teacher/page.js"
+  "/teacher/page": "app/teacher/page.js",
+  "/api/teacher/assigned-tests/route": "app/api/teacher/assigned-tests/route.js",
+  "/assigned-test/[id]/page": "app/assigned-test/[id]/page.js",
+  "/api/user/route": "app/api/user/route.js",
+  "/api/stats/route": "app/api/stats/route.js",
+  "/api/results/route": "app/api/results/route.js",
+  "/api/assigned-tests/route": "app/api/assigned-tests/route.js"
 }

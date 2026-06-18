@@ -13,6 +13,14 @@ export async function GET() {
             SELECT * FROM test_results ORDER BY date DESC
         `);
 
+        // 2b. Get all assigned class test results too
+        const { rows: assignedResults } = await pool.query(`
+            SELECT r.*, t.title AS test_title, t.subject_label
+            FROM assigned_test_results r
+            JOIN assigned_tests t ON t.id = r.test_id
+            ORDER BY r.submitted_at DESC
+        `);
+
         // 3. Group results by email (same logic as your MongoDB code)
         const resultsByEmail = results.reduce((acc, result) => {
             const email = result.student_email.toLowerCase().trim();
@@ -27,6 +35,28 @@ export async function GET() {
                 pct: result.total > 0 
                     ? Math.round((result.score / result.total) * 100) 
                     : 0,
+                source: 'normal',
+            });
+            return acc;
+        }, {});
+
+        const assignedResultsByEmail = assignedResults.reduce((acc, result) => {
+            const email = result.student_email.toLowerCase().trim();
+            if (!acc[email]) acc[email] = [];
+            acc[email].push({
+                id: `assigned-${result.id}`,
+                chapterId: null,
+                title: result.test_title,
+                subjectLabel: result.subject_label,
+                testId: result.test_id,
+                score: result.score,
+                total: result.total,
+                answers: result.answers || [],
+                date: result.submitted_at,
+                pct: result.total > 0 
+                    ? Math.round((result.score / result.total) * 100) 
+                    : 0,
+                source: 'assigned',
             });
             return acc;
         }, {});
@@ -35,12 +65,14 @@ export async function GET() {
         const students = users.map(user => {
             const email = user.email.toLowerCase().trim();
             const userResults = resultsByEmail[email] || [];
-            const scores = userResults.map(r => r.pct);
+            const assigned = assignedResultsByEmail[email] || [];
+            const combinedResults = [...userResults, ...assigned].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const scores = combinedResults.map(r => r.pct);
             const avgScore = scores.length 
                 ? Math.round(scores.reduce((sum, value) => sum + value, 0) / scores.length) 
                 : 0;
             const bestScore = scores.length ? Math.max(...scores) : 0;
-            const totalQuestions = userResults.reduce((sum, r) => sum + (r.total || 0), 0);
+            const totalQuestions = combinedResults.reduce((sum, r) => sum + (r.total || 0), 0);
 
             return {
                 name: user.name,
@@ -48,11 +80,11 @@ export async function GET() {
                 phone: user.phone,
                 batch: user.batch,
                 joinedAt: user.created_at,   // ← PostgreSQL: created_at not joined_at
-                testsAttempted: userResults.length,
+                testsAttempted: combinedResults.length,
                 avgScore,
                 bestScore,
                 totalQuestions,
-                results: userResults,
+                results: combinedResults,
             };
         });
 

@@ -391,133 +391,48 @@ export const SUBJECTS = [
     {
       label: 'Part I – Principle of Flight',
       color: '#F59E0B',
-      chapterIds: ['tg01', 'tg02'],
+      chapterIds: ['tg01', 'tg02','tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08', 'tg09', 'tg10', 'tg11', 'tg12',
+        'tg13','tg14', 'tg15', 'tg16',],
     },
     {
-      label: 'Part II – Engines',
+      label: 'Part II – Jet Engines',
       color: '#D97706',
-      chapterIds: ['tg03', 'tg04'],
+      chapterIds: [
+          'tg17', 'tg18', 'tg19', 'tg20', 'tg21', 'tg22',
+        'tg23', 'tg24', 'tg25', 'tg26',
+      ],
     },
     {
-      label: 'Part III – Aircraft Systems',
+      label: 'Part III– Piston Engines ',
       color: '#B45309',
-      chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'],
-    },
-  ],
-  chapters: [
-    {
-      id: 'tg01',
-      title: 'Principle of Flight',
-      topics: [
-        { id: 'tg01_t01', label: 'Overview and Definitions' },
-        { id: 'tg01_t02', label: 'Atmosphere' },
-        { id: 'tg01_t03', label: 'Basic Aerodynamic Theory' },
-        { id: 'tg01_t04', label: 'Subsonic Airflow' },
-        { id: 'tg01_t05', label: 'Lift' },
-        { id: 'tg01_t06', label: 'Drag' },
-        { id: 'tg01_t07', label: 'Stalling' },
-        { id: 'tg01_t08', label: 'High Lift Devices' },
-        { id: 'tg01_t09', label: 'Airframe Contamination' },
-        { id: 'tg01_t10', label: 'Stability and Control' },
-        { id: 'tg01_t11', label: 'Controls' },
-        { id: 'tg01_t12', label: 'Flight Mechanics' },
-        { id: 'tg01_t13', label: 'High Speed Flight' },
-        { id: 'tg01_t14', label: 'Limitations' },
-        { id: 'tg01_t15', label: 'Windshear' },
-        { id: 'tg01_t16', label: 'Propellers' },
+      chapterIds: [
+        'tg27', 'tg28', 'tg29', 'tg30', 'tg31', 'tg32', 'tg33', 'tg34', 'tg35', 'tg36',
+        'tg37', 'tg38',
       ],
     },
     {
-      id: 'tg02',
-      title: 'Performance',
-      topics: [
-        { id: 'tg02_t01', label: 'Performance' },
-      ],
-    },
-    {
-      id: 'tg03',
-      title: 'Jet Engine',
-      topics: [
-        { id: 'tg03_t01', label: 'Basics of Jet Engine' },
-        { id: 'tg03_t02', label: 'Types of Engine' },
-        { id: 'tg03_t03', label: 'Compressors' },
-        { id: 'tg03_t04', label: 'Combustion Chamber' },
-        { id: 'tg03_t05', label: 'Turbine Assembly' },
-        { id: 'tg03_t06', label: 'Jet Pipe' },
-        { id: 'tg03_t07', label: 'Reverse Thrust' },
-        { id: 'tg03_t08', label: 'Engine Starting System Requirements' },
-        { id: 'tg03_t09', label: 'APU (Auxiliary Power Unit)' },
-      ],
-    },
-    {
-      id: 'tg04',
-      title: 'Piston Engine',
-      topics: [
-        { id: 'tg04_t01', label: 'Introduction' },
-        { id: 'tg04_t02', label: 'General' },
-        { id: 'tg04_t03', label: 'Lubrication' },
-        { id: 'tg04_t04', label: 'Cooling' },
-        { id: 'tg04_t05', label: 'Ignition' },
-        { id: 'tg04_t06', label: 'Fuel' },
-        { id: 'tg04_t07', label: 'Mixture' },
-        { id: 'tg04_t08', label: 'Carburettors' },
-        { id: 'tg04_t09', label: 'Icing' },
-        { id: 'tg04_t10', label: 'Fuel Injection' },
-        { id: 'tg04_t11', label: 'Performance and Power Augmentation' },
-        { id: 'tg04_t12', label: 'Propellers' },
-      ],
-    },
-    {
-      id: 'tg05',
-      title: 'Airframe Systems',
-      topics: [
-        { id: 'tg05_t01', label: 'Fuselage, Wings and Stabilizing Surfaces' },
-        { id: 'tg05_t02', label: 'Basic Hydraulics' },
-        { id: 'tg05_t03', label: 'Landing Gear' },
-        { id: 'tg05_t04', label: 'Aircraft Wheels' },
-        { id: 'tg05_t05', label: 'Aircraft Tyres' },
-        { id: 'tg05_t06', label: 'Aircraft Brakes' },
-        { id: 'tg05_t07', label: 'Flight Control System' },
-        { id: 'tg05_t08', label: 'Flight Controls' },
-        { id: 'tg05_t09', label: 'Powered Flying Controls' },
-        { id: 'tg05_t10', label: 'Aircraft Pneumatic Systems' },
-        { id: 'tg05_t11', label: 'Pressurization Systems' },
-        { id: 'tg05_t12', label: 'Ice and Rain Protection' },
-        { id: 'tg05_t13', label: 'Aircraft Oxygen Equipment' },
-        { id: 'tg05_t14', label: 'Smoke Detection' },
-        { id: 'tg05_t15', label: 'Fire Detection and Protection' },
-        { id: 'tg05_t16', label: 'Aircraft Fuel Systems' },
-      ],
-    },
-    {
-      id: 'tg06',
-      title: 'Electrical Systems',
-      topics: [
-        { id: 'tg06_t01', label: 'Electrical Systems' },
-      ],
-    },
-    {
-      id: 'tg07',
-      title: 'Instruments',
-      topics: [
-        { id: 'tg07_t01', label: 'Instruments' },
-      ],
-    },
-    {
-      id: 'tg08',
-      title: 'Avionics',
-      topics: [
-        { id: 'tg08_t01', label: 'Avionics' },
+      label: 'Part IV – Aircraft Systems',
+      color: '#B45309',
+      chapterIds: [
+         'tg39', 'tg40', 'tg41', 'tg42', 'tg43', 'tg44', 'tg45', 'tg46',
+        'tg47', 'tg48', 'tg49', 'tg50', 'tg51', 'tg52', 'tg53', 'tg54', 'tg55', 'tg56',
+        'tg57',
       ],
     },
   ],
-  chapterIds: ['tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08'],
-  stats: '8 Chapters · 200+ MCQs',
+  chapterIds: [
+    'tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08', 'tg09', 'tg10',
+    'tg11', 'tg12', 'tg13', 'tg14', 'tg15', 'tg16', 'tg17', 'tg18', 'tg19', 'tg20',
+    'tg21', 'tg22', 'tg23', 'tg24', 'tg25', 'tg26', 'tg27', 'tg28', 'tg29', 'tg30',
+    'tg31', 'tg32', 'tg33', 'tg34', 'tg35', 'tg36', 'tg37', 'tg38', 'tg39', 'tg40',
+    'tg41', 'tg42', 'tg43', 'tg44', 'tg45', 'tg46', 'tg47', 'tg48', 'tg49', 'tg50',
+    'tg51', 'tg52', 'tg53', 'tg54', 'tg55', 'tg56', 'tg57',
+  ],
+  stats: '57 Chapters · 500+ MCQs',
   exam: 'AME / ATPL',
   comingSoon: false,
   hasSubjects: false,
 },
-
 
 
 
@@ -1819,7 +1734,12 @@ function SubjectChapterList({ subject, subjectChapters, allResults, onStartTest,
   const chapterPool = activeSubSubject
     ? subjectChapters.filter(c => displaySubject.chapterIds.includes(c.id))
     : subjectChapters;
-  const filtered = chapterPool.filter(c => !search || c.title.toLowerCase().includes(search.toLowerCase()));
+  const filtered = chapterPool.filter(c => {
+    const query = search.toLowerCase();
+    return !search ||
+      c.title.toLowerCase().includes(query) ||
+      (c.topics && c.topics.some(t => t.label.toLowerCase().includes(query)));
+  });
 
   function getGroups() {
     if (!displaySubject.parts || displaySubject.parts.length === 0) {
@@ -2710,16 +2630,23 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 
   if (subView === 'mock') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} />;
   if (subView === 'atpl') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} isAptlMode />;
   if (activeSubject && activeSubject.chapterIds.length > 0) {
-    const known = chapters.filter(c => activeSubject.chapterIds.includes(c.id));
-    const knownIds = known.map(c => c.id);
-    const stubs = activeSubject.chapterIds
-      .filter(id => !knownIds.includes(id))
-      .map((id, i) => ({ id, title: `Chapter ${id.replace(/^[a-z]+/i, '').replace(/^0+/, '') || i + 1}`, icon: activeSubject.icon, part: activeSubject.title, questionCount: 0, color: activeSubject.color }));
+    const subjectChapters = activeSubject.chapterIds.map(id => {
+      const chapterMeta = chapters.find(c => c.id === id);
+      if (chapterMeta) return chapterMeta;
+      return {
+        id,
+        title: `Chapter ${id.replace(/^[a-z]+/i, '').replace(/^0+/, '') || id}`,
+        icon: activeSubject.icon,
+        part: activeSubject.title,
+        questionCount: 0,
+        color: activeSubject.color,
+      };
+    });
 
     return (
       <SubjectChapterList
         subject={activeSubject}
-        subjectChapters={[...known, ...stubs]}
+        subjectChapters={subjectChapters}
         allResults={allResults}
         onStartTest={onStartTest}
         onBack={() => setSubView('subjects')}

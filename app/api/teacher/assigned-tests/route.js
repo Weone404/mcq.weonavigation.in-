@@ -8,6 +8,8 @@ async function ensureTable() {
             title           TEXT NOT NULL,
             subject_id      TEXT NOT NULL,
             subject_label   TEXT NOT NULL,
+            chapter_id      TEXT DEFAULT '',
+            chapter_label   TEXT DEFAULT '',
             chapter_ids     TEXT[] NOT NULL DEFAULT '{}',
             num_questions   INTEGER NOT NULL DEFAULT 20,
             duration_mins   INTEGER NOT NULL DEFAULT 30,
@@ -15,6 +17,8 @@ async function ensureTable() {
             is_active       BOOLEAN DEFAULT true,
             created_at      TIMESTAMPTZ DEFAULT NOW()
         );
+        ALTER TABLE assigned_tests ADD COLUMN IF NOT EXISTS chapter_id TEXT DEFAULT '';
+        ALTER TABLE assigned_tests ADD COLUMN IF NOT EXISTS chapter_label TEXT DEFAULT '';
     `);
 }
 
@@ -37,7 +41,17 @@ export async function POST(request) {
     try {
         await ensureTable();
         const body = await request.json();
-        const { title, subjectId, subjectLabel, chapterIds, numQuestions, durationMins, instructions } = body;
+        const {
+            title,
+            subjectId,
+            subjectLabel,
+            chapterId,
+            chapterLabel,
+            chapterIds,
+            numQuestions,
+            durationMins,
+            instructions,
+        } = body;
 
         if (!title || !subjectId || !subjectLabel) {
             return NextResponse.json(
@@ -48,13 +62,15 @@ export async function POST(request) {
 
         const { rows } = await pool.query(
             `INSERT INTO assigned_tests 
-                (title, subject_id, subject_label, chapter_ids, num_questions, duration_mins, instructions)
-             VALUES ($1, $2, $3, $4, $5, $6, $7)
+                (title, subject_id, subject_label, chapter_id, chapter_label, chapter_ids, num_questions, duration_mins, instructions)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
              RETURNING *`,
             [
                 title.trim(),
                 subjectId,
                 subjectLabel,
+                chapterId || '',
+                chapterLabel || '',
                 chapterIds || [],
                 numQuestions || 20,
                 durationMins || 30,

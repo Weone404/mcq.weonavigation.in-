@@ -1966,12 +1966,32 @@ function AssignTestTab() {
             subtitle: 'ICAO, DGCA, National Law & Procedures',
             icon: '📋',
             color: '#1D4ED8',
-            chapterIds: [
-                'ch01','ch02','ch03','ch04','ch05','ch06','ch07','ch08','ch09','ch10',
-                'ch11','ch12','ch13','ch14','ch15','ch16','ch17','ch18','ch19','ch20',
-                'ch21','ch22','ch23','ch24','ch25','ch26',
-                'qb01','qb02','qb03','qb04','qb05','qb06','qb07',
-                'qb08','qb09','qb10','qb11','qb12','qb13',
+            chapters: [
+                { id: 'ch01', label: 'Definitions & Abbreviations' },
+                { id: 'ch02', label: 'International Organisations & Conventions' },
+                { id: 'ch03', label: 'Aircraft Nationality & Registration Marks' },
+                { id: 'ch04', label: 'Rules of the Air' },
+                { id: 'ch05', label: 'Air Traffic Services' },
+                { id: 'ch06', label: 'Separation Methods & Minima' },
+                { id: 'ch07', label: 'Separation in the Vicinity of Aerodromes' },
+                { id: 'ch08', label: 'Procedures for Aerodrome Control Service' },
+                { id: 'ch09', label: 'ATS Surveillance System' },
+                { id: 'ch10', label: 'Aeronautical Information Services' },
+                { id: 'ch11', label: 'Search and Rescue' },
+                { id: 'ch12', label: 'Visual Aids for Navigation' },
+                { id: 'ch13', label: 'Procedures for ANS – Aircraft Operations' },
+                { id: 'ch14', label: 'National Law' },
+                { id: 'ch15', label: 'Personnel Licensing' },
+                { id: 'ch16', label: 'Airworthiness of Aircraft' },
+                { id: 'ch17', label: 'Operational Procedures' },
+                { id: 'ch18', label: 'Special Operational Procedures & Hazards' },
+                { id: 'ch19', label: 'Communications' },
+                { id: 'ch20', label: 'Aircraft Accident and Incident' },
+                { id: 'ch21', label: 'Facilitation' },
+                { id: 'ch22', label: 'Security – Safeguarding International Civil Aviation' },
+                { id: 'qb01', label: 'Question Bank 1' },
+                { id: 'qb02', label: 'Question Bank 2' },
+                { id: 'qb03', label: 'Question Bank 3' },
             ],
         },
         {
@@ -1980,10 +2000,30 @@ function AssignTestTab() {
             subtitle: 'Weather, Clouds, Pressure Systems',
             icon: '🌦️',
             color: '#0EA5E9',
-            chapterIds: [
-                'met01','met02','met03','met04','met05','met06','met07','met08',
-                'met09','met10','met11','met12','met13','met14','met15','met16',
-                'met17','met18','met19','met20','met21','met22','met23',
+            chapters: [
+                { id: 'met01', label: 'Atmosphere' },
+                { id: 'met02', label: 'Atmospheric Pressure' },
+                { id: 'met03', label: 'Temperature' },
+                { id: 'met04', label: 'Air Density' },
+                { id: 'met05', label: 'Humidity' },
+                { id: 'met06', label: 'Winds' },
+                { id: 'met07', label: 'Visibility and Fog' },
+                { id: 'met08', label: 'Vertical Motion and Clouds' },
+                { id: 'met09', label: 'Stability' },
+                { id: 'met10', label: 'Optical Phenomena' },
+                { id: 'met11', label: 'Precipitation' },
+                { id: 'met12', label: 'Ice Accretion' },
+                { id: 'met13', label: 'Thunderstorm' },
+                { id: 'met14', label: 'Air Masses and Fronts and WDs' },
+                { id: 'met15', label: 'Jet Streams' },
+                { id: 'met16', label: 'Clear Air Turbulence' },
+                { id: 'met17', label: 'Mountain Waves' },
+                { id: 'met18', label: 'Tropical Systems' },
+                { id: 'met19', label: 'Climatology of India' },
+                { id: 'met20', label: 'Met Services' },
+                { id: 'met21', label: 'Station Model' },
+                { id: 'met22', label: 'METAR, SPECI and TREND' },
+                { id: 'met23', label: 'TAF, ARFOR, ROFOR' },
             ],
         },
         {
@@ -1992,10 +2032,31 @@ function AssignTestTab() {
             subtitle: 'General, Radio & Instrument Navigation',
             icon: '🗺️',
             color: '#10B981',
-            chapterIds: [
-                'gn01','gn02','gn03','gn04','gn05','gn06','gn07','gn08','gn09','gn10','gn11',
-                'rn01','rn02','rn03','rn04','rn05','rn06','rn07','rn08','rn09','rn10',
-                'in01','in02','in03','in04','in05','in06','in07','in08',
+            chapters: [
+                { id: 'gn01', label: 'Departure, Convergency & Conversion Angle' },
+                { id: 'gn02', label: 'Scale, Distance & Velocity' },
+                { id: 'gn03', label: 'One in 60 Rule' },
+                { id: 'gn04', label: 'Climb Gradient, PNR, PSR & Critical Point' },
+                { id: 'gn05', label: 'Magnetic Compasses' },
+                { id: 'gn06', label: 'Mercator Projection' },
+                { id: 'gn07', label: 'Lambert Conical Projection' },
+                { id: 'gn08', label: 'Polar Stereographic Projection' },
+                { id: 'gn09', label: 'PNR & PSR' },
+                { id: 'gn10', label: 'Flight Planning (Fuel Planning, Weight & Balance, ROD)' },
+                { id: 'gn11', label: 'Solar System & Time' },
+                { id: 'rn01', label: 'Properties of Radio Waves' },
+                { id: 'rn02', label: 'Modulation' },
+                { id: 'rn03', label: 'VOR & ADF' },
+                { id: 'rn04', label: 'ILS (Instrument Landing System)' },
+                { id: 'rn05', label: 'VOR' },
+                { id: 'rn06', label: 'Radar Principles' },
+                { id: 'rn07', label: 'Ground Radar' },
+                { id: 'rn08', label: 'AWR (Airborne Weather Radar)' },
+                { id: 'rn09', label: 'SSR (Secondary Surveillance Radar)' },
+                { id: 'rn10', label: 'DME (Distance Measuring Equipment)' },
+                { id: 'rn11', label: 'Radio Altimeter' },
+                { id: 'rn12', label: 'GPS' },
+                { id: 'rn13', label: 'Doppler Radar' },
             ],
         },
         {
@@ -2004,15 +2065,144 @@ function AssignTestTab() {
             subtitle: 'Airframes, Engines, Systems',
             icon: '🔧',
             color: '#F59E0B',
-            chapterIds: ['tg01','tg02','tg03','tg04','tg05','tg06','tg07','tg08'],
+            gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
+            parts: [
+                {
+                    label: 'Part I – Principle of Flight',
+                    color: '#F59E0B',
+                    chapterIds: ['tg01', 'tg02'],
+                },
+                {
+                    label: 'Part II – Engines',
+                    color: '#D97706',
+                    chapterIds: ['tg03', 'tg04'],
+                },
+                {
+                    label: 'Part III – Aircraft Systems',
+                    color: '#B45309',
+                    chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'],
+                },
+            ],
+            chapters: [
+                {
+                    id: 'tg01',
+                    title: 'Principle of Flight',
+                    topics: [
+                        { id: 'tg01_t01', label: 'Overview and Definitions' },
+                        { id: 'tg01_t02', label: 'Atmosphere' },
+                        { id: 'tg01_t03', label: 'Basic Aerodynamic Theory' },
+                        { id: 'tg01_t04', label: 'Subsonic Airflow' },
+                        { id: 'tg01_t05', label: 'Lift' },
+                        { id: 'tg01_t06', label: 'Drag' },
+                        { id: 'tg01_t07', label: 'Stalling' },
+                        { id: 'tg01_t08', label: 'High Lift Devices' },
+                        { id: 'tg01_t09', label: 'Airframe Contamination' },
+                        { id: 'tg01_t10', label: 'Stability and Control' },
+                        { id: 'tg01_t11', label: 'Controls' },
+                        { id: 'tg01_t12', label: 'Flight Mechanics' },
+                        { id: 'tg01_t13', label: 'High Speed Flight' },
+                        { id: 'tg01_t14', label: 'Limitations' },
+                        { id: 'tg01_t15', label: 'Windshear' },
+                        { id: 'tg01_t16', label: 'Propellers' },
+                    ],
+                },
+                {
+                    id: 'tg02',
+                    title: 'Performance',
+                    topics: [
+                        { id: 'tg02_t01', label: 'Performance' },
+                    ],
+                },
+                {
+                    id: 'tg03',
+                    title: 'Jet Engine',
+                    topics: [
+                        { id: 'tg03_t01', label: 'Basics of Jet Engine' },
+                        { id: 'tg03_t02', label: 'Types of Engine' },
+                        { id: 'tg03_t03', label: 'Compressors' },
+                        { id: 'tg03_t04', label: 'Combustion Chamber' },
+                        { id: 'tg03_t05', label: 'Turbine Assembly' },
+                        { id: 'tg03_t06', label: 'Jet Pipe' },
+                        { id: 'tg03_t07', label: 'Reverse Thrust' },
+                        { id: 'tg03_t08', label: 'Engine Starting System Requirements' },
+                        { id: 'tg03_t09', label: 'APU (Auxiliary Power Unit)' },
+                    ],
+                },
+                {
+                    id: 'tg04',
+                    title: 'Piston Engine',
+                    topics: [
+                        { id: 'tg04_t01', label: 'Introduction' },
+                        { id: 'tg04_t02', label: 'General' },
+                        { id: 'tg04_t03', label: 'Lubrication' },
+                        { id: 'tg04_t04', label: 'Cooling' },
+                        { id: 'tg04_t05', label: 'Ignition' },
+                        { id: 'tg04_t06', label: 'Fuel' },
+                        { id: 'tg04_t07', label: 'Mixture' },
+                        { id: 'tg04_t08', label: 'Carburettors' },
+                        { id: 'tg04_t09', label: 'Icing' },
+                        { id: 'tg04_t10', label: 'Fuel Injection' },
+                        { id: 'tg04_t11', label: 'Performance and Power Augmentation' },
+                        { id: 'tg04_t12', label: 'Propellers' },
+                    ],
+                },
+                {
+                    id: 'tg05',
+                    title: 'Airframe Systems',
+                    topics: [
+                        { id: 'tg05_t01', label: 'Fuselage, Wings and Stabilizing Surfaces' },
+                        { id: 'tg05_t02', label: 'Basic Hydraulics' },
+                        { id: 'tg05_t03', label: 'Landing Gear' },
+                        { id: 'tg05_t04', label: 'Aircraft Wheels' },
+                        { id: 'tg05_t05', label: 'Aircraft Tyres' },
+                        { id: 'tg05_t06', label: 'Aircraft Brakes' },
+                        { id: 'tg05_t07', label: 'Flight Control System' },
+                        { id: 'tg05_t08', label: 'Flight Controls' },
+                        { id: 'tg05_t09', label: 'Powered Flying Controls' },
+                        { id: 'tg05_t10', label: 'Aircraft Pneumatic Systems' },
+                        { id: 'tg05_t11', label: 'Pressurization Systems' },
+                        { id: 'tg05_t12', label: 'Ice and Rain Protection' },
+                        { id: 'tg05_t13', label: 'Aircraft Oxygen Equipment' },
+                        { id: 'tg05_t14', label: 'Smoke Detection' },
+                        { id: 'tg05_t15', label: 'Fire Detection and Protection' },
+                        { id: 'tg05_t16', label: 'Aircraft Fuel Systems' },
+                    ],
+                },
+                {
+                    id: 'tg06',
+                    title: 'Electrical Systems',
+                    topics: [
+                        { id: 'tg06_t01', label: 'Electrical Systems' },
+                    ],
+                },
+                {
+                    id: 'tg07',
+                    title: 'Instruments',
+                    topics: [
+                        { id: 'tg07_t01', label: 'Instruments' },
+                    ],
+                },
+                {
+                    id: 'tg08',
+                    title: 'Avionics',
+                    topics: [
+                        { id: 'tg08_t01', label: 'Avionics' },
+                    ],
+                },
+            ],
+            chapterIds: ['tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08'],
         },
         {
             id: 'rtfm',
             label: 'Radio Telephony',
             subtitle: 'RTF Procedures & Phraseology',
             icon: '📻',
-            color: '#EF4444',
-            chapterIds: ['rt01','rt02','rt03'],
+            color: '#8B5CF6',
+            chapters: [
+                { id: 'rt01', label: 'RT Procedures – General & Phraseology' },
+                { id: 'rt02', label: 'RT – Departure, En-Route & Approach' },
+                { id: 'rt03', label: 'RT – Emergencies & Special Procedures' },
+            ],
         },
     ];
 
@@ -2023,14 +2213,15 @@ function AssignTestTab() {
     const [deletingId, setDeletingId] = useState(null);
     const [togglingId, setTogglingId] = useState(null);
     const [msg, setMsg] = useState({ text: '', type: '' });
-    const [selectedTest, setSelectedTest] = useState(null); // for viewing results
+    const [selectedTest, setSelectedTest] = useState(null);
     const [testResults, setTestResults] = useState([]);
     const [loadingResults, setLoadingResults] = useState(false);
 
-    // Form state
+    const [expandedSubject, setExpandedSubject] = useState(null);
+    const [selectedChapter, setSelectedChapter] = useState(null);
+
     const [form, setForm] = useState({
         title: '',
-        subjectId: '',
         numQuestions: 20,
         durationMins: 30,
         instructions: '',
@@ -2038,7 +2229,6 @@ function AssignTestTab() {
     const [errors, setErrors] = useState({});
 
     useEffect(() => { setTimeout(() => setMounted(true), 20); }, []);
-
     useEffect(() => { fetchTests(); }, []);
 
     async function fetchTests() {
@@ -2071,12 +2261,38 @@ function AssignTestTab() {
         setErrors(p => ({ ...p, [k]: '' }));
     }
 
+    function handleSubjectClick(subjectId) {
+        setExpandedSubject(prev => prev === subjectId ? null : subjectId);
+        setSelectedChapter(prev => {
+            if (prev?.subjectId === subjectId) return null;
+            return prev;
+        });
+    }
+
+    function handleChapterClick(subject, chapter) {
+        setSelectedChapter({
+            subjectId: subject.id,
+            chapterId: chapter.id,
+            chapterLabel: chapter.label,
+            subjectLabel: subject.label,
+            subjectIcon: subject.icon,
+            subjectColor: subject.color,
+        });
+        setErrors(p => ({ ...p, chapter: '' }));
+        setForm(p => ({
+            ...p,
+            title: p.title || `${subject.label} — ${chapter.label}`,
+        }));
+    }
+
     function validate() {
         const errs = {};
         if (!form.title.trim()) errs.title = 'Title is required';
-        if (!form.subjectId) errs.subjectId = 'Please select a subject';
-        if (form.numQuestions < 5 || form.numQuestions > 100) errs.numQuestions = 'Must be between 5 and 100';
-        if (form.durationMins < 5 || form.durationMins > 180) errs.durationMins = 'Must be between 5 and 180 minutes';
+        if (!selectedChapter) errs.chapter = 'Please select a chapter';
+        if (form.numQuestions < 5 || form.numQuestions > 100) 
+            errs.numQuestions = 'Must be between 5 and 100';
+        if (form.durationMins < 5 || form.durationMins > 180) 
+            errs.durationMins = 'Must be between 5 and 180 minutes';
         return errs;
     }
 
@@ -2087,15 +2303,16 @@ function AssignTestTab() {
 
         setSaving(true);
         try {
-            const subject = SUBJECT_OPTIONS.find(s => s.id === form.subjectId);
             const res = await fetch('/api/teacher/assigned-tests', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title: form.title.trim(),
-                    subjectId: form.subjectId,
-                    subjectLabel: subject?.label || form.subjectId,
-                    chapterIds: subject?.chapterIds || [],
+                    subjectId: selectedChapter.subjectId,
+                    subjectLabel: selectedChapter.subjectLabel,
+                    chapterId: selectedChapter.chapterId,
+                    chapterLabel: selectedChapter.chapterLabel,
+                    chapterIds: [selectedChapter.chapterId],
                     numQuestions: Number(form.numQuestions),
                     durationMins: Number(form.durationMins),
                     instructions: form.instructions.trim(),
@@ -2104,7 +2321,9 @@ function AssignTestTab() {
             const data = await res.json();
             if (!data.success) throw new Error(data.error || 'Failed to create test');
             setTests(prev => [data.test, ...prev]);
-            setForm({ title: '', subjectId: '', numQuestions: 20, durationMins: 30, instructions: '' });
+            setForm({ title: '', numQuestions: 20, durationMins: 30, instructions: '' });
+            setSelectedChapter(null);
+            setExpandedSubject(null);
             flash('✓ Test created! Students can now see and take this test.', 'ok');
         } catch (err) {
             flash(`✗ ${err.message}`, 'err');
@@ -2142,7 +2361,9 @@ function AssignTestTab() {
             });
             const data = await res.json();
             if (!data.success) throw new Error(data.error);
-            setTests(prev => prev.map(t => t.id === test.id ? { ...t, is_active: !t.is_active } : t));
+            setTests(prev => prev.map(t => 
+                t.id === test.id ? { ...t, is_active: !t.is_active } : t
+            ));
         } catch (err) {
             flash(`✗ ${err.message}`, 'err');
         } finally {
@@ -2150,26 +2371,32 @@ function AssignTestTab() {
         }
     }
 
-    const selectedSubject = SUBJECT_OPTIONS.find(s => s.id === form.subjectId);
     const C = {
         primary: '#1D4ED8', text: '#0F172A', muted: '#64748B',
         border: '#E2E8F0', bg: '#F0F4FF', card: '#FFFFFF',
-        green: '#10B981', red: '#EF4444', accent: '#F59E0B',
+        green: '#10B981', red: '#EF4444',
     };
 
-    // ── Results Modal
     if (selectedTest) {
         const test = tests.find(t => t.id === selectedTest);
         return (
             <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif" }}>
-                <button onClick={() => { setSelectedTest(null); setTestResults([]); }}
-                    style={{ marginBottom: 20, background: '#fff', border: '1px solid #E2E8F0', borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontSize: 13, color: C.text }}>
+                <button
+                    onClick={() => { setSelectedTest(null); setTestResults([]); }}
+                    style={{ marginBottom: 20, background: '#fff', border: '1px solid #E2E8F0', borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontSize: 13, color: C.text }}
+                >
                     ← Back to Assigned Tests
                 </button>
 
                 <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #E2E8F0', padding: '20px 24px', marginBottom: 20 }}>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: C.text, marginBottom: 4 }}>{test?.title}</div>
-                    <div style={{ fontSize: 13, color: C.muted }}>{test?.subject_label} · {test?.num_questions} questions · {test?.duration_mins} mins</div>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: C.text, marginBottom: 4 }}>
+                        {test?.title}
+                    </div>
+                    <div style={{ fontSize: 13, color: C.muted }}>
+                        {test?.subject_label}
+                        {test?.chapter_label ? ` › ${test.chapter_label}` : ''}
+                        {' '}· {test?.num_questions} questions · {test?.duration_mins} mins
+                    </div>
                 </div>
 
                 <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
@@ -2182,7 +2409,7 @@ function AssignTestTab() {
                     ) : testResults.length === 0 ? (
                         <div style={{ padding: '40px', textAlign: 'center', color: C.muted }}>
                             <div style={{ fontSize: 32, marginBottom: 10 }}>📝</div>
-                            No submissions yet. Students haven't taken this test.
+                            No submissions yet. Students have not taken this test.
                         </div>
                     ) : (
                         <div style={{ overflowX: 'auto' }}>
@@ -2190,18 +2417,29 @@ function AssignTestTab() {
                                 <thead>
                                     <tr style={{ background: '#F0F4FF' }}>
                                         {['#', 'Student', 'Score', 'Accuracy', 'Submitted'].map(h => (
-                                            <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: 11, color: C.muted, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                                            <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: 11, color: C.muted, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                {h}
+                                            </th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {testResults.map((r, i) => {
-                                        const [bg, fg] = [['#dbeafe','#2563eb'],['#dcfce7','#16a34a'],['#fef3c7','#b45309'],['#f3e8ff','#7c3aed'],['#ffe4e6','#be123c']][i % 5];
-                                        const accColor = r.accuracy >= 80 ? '#16a34a' : r.accuracy >= 60 ? '#d97706' : '#dc2626';
+                                        const [bg, fg] = [
+                                            ['#dbeafe','#2563eb'],
+                                            ['#dcfce7','#16a34a'],
+                                            ['#fef3c7','#b45309'],
+                                            ['#f3e8ff','#7c3aed'],
+                                            ['#ffe4e6','#be123c']
+                                        ][i % 5];
+                                        const accColor = r.accuracy >= 80 ? '#16a34a' 
+                                            : r.accuracy >= 60 ? '#d97706' : '#dc2626';
                                         return (
-                                            <tr key={r.id} style={{ borderTop: '1px solid #E2E8F0' }}
+                                            <tr key={r.id}
+                                                style={{ borderTop: '1px solid #E2E8F0' }}
                                                 onMouseEnter={e => e.currentTarget.style.background = '#F8FAFC'}
-                                                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                                                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                                            >
                                                 <td style={{ padding: '12px 16px', color: C.muted, fontSize: 12 }}>{i + 1}</td>
                                                 <td style={{ padding: '12px 16px' }}>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -2214,7 +2452,9 @@ function AssignTestTab() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td style={{ padding: '12px 16px', fontWeight: 700, fontSize: 14, color: C.text }}>{r.score}/{r.total}</td>
+                                                <td style={{ padding: '12px 16px', fontWeight: 700, fontSize: 14, color: C.text }}>
+                                                    {r.score}/{r.total}
+                                                </td>
                                                 <td style={{ padding: '12px 16px' }}>
                                                     <span style={{ fontWeight: 700, fontSize: 14, color: accColor }}>{r.accuracy}%</span>
                                                 </td>
@@ -2244,116 +2484,241 @@ function AssignTestTab() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 20 }}>
 
-                {/* ── LEFT: Create Form ── */}
                 <div style={{ background: C.card, borderRadius: 18, border: '1px solid #E2E8F0', padding: 24, boxShadow: '0 8px 30px rgba(15,23,42,.05)' }}>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 20 }}>➕ Create Assigned Test</div>
-
-                    {/* Title */}
-                    <div style={{ marginBottom: 16 }}>
-                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>Test Title *</label>
-                        <input
-                            type="text"
-                            placeholder="e.g. Air Regulations Chapter Test – Week 3"
-                            value={form.title}
-                            onChange={e => setField('title', e.target.value)}
-                            style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.title ? '#FCA5A5' : '#E2E8F0'}`, background: errors.title ? '#FFF1F2' : '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
-                        />
-                        {errors.title && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.title}</div>}
+                    <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 20 }}>
+                        ➕ Create Assigned Test
                     </div>
 
-                    {/* Subject selector */}
-                    <div style={{ marginBottom: 16 }}>
-                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 8 }}>Subject *</label>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                            {SUBJECT_OPTIONS.map(sub => (
-                                <div key={sub.id}
-                                    onClick={() => setField('subjectId', sub.id)}
-                                    style={{
-                                        display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
-                                        borderRadius: 10, cursor: 'pointer',
-                                        border: form.subjectId === sub.id ? `2px solid ${sub.color}` : '1px solid #E2E8F0',
-                                        background: form.subjectId === sub.id ? sub.color + '10' : '#F8FAFC',
-                                        transition: 'all .15s',
-                                    }}>
-                                    <span style={{ fontSize: 20 }}>{sub.icon}</span>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ fontWeight: 700, fontSize: 13, color: form.subjectId === sub.id ? sub.color : C.text }}>{sub.label}</div>
-                                        <div style={{ fontSize: 11, color: C.muted }}>{sub.subtitle}</div>
-                                    </div>
-                                    {form.subjectId === sub.id && (
-                                        <div style={{ width: 18, height: 18, borderRadius: '50%', background: sub.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <span style={{ color: '#fff', fontSize: 10, fontWeight: 800 }}>✓</span>
+                    <div style={{ marginBottom: 18 }}>
+                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 8 }}>
+                            Step 1 — Select Subject &amp; Chapter *
+                        </label>
+
+                        {errors.chapter && (
+                            <div style={{ fontSize: 11, color: '#b91c1c', marginBottom: 8 }}>
+                                {errors.chapter}
+                            </div>
+                        )}
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                            {SUBJECT_OPTIONS.map(sub => {
+                                const isExpanded = expandedSubject === sub.id;
+                                return (
+                                    <div key={sub.id}>
+                                        <div
+                                            onClick={() => handleSubjectClick(sub.id)}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: 10,
+                                                padding: '10px 12px',
+                                                borderRadius: 10,
+                                                cursor: 'pointer',
+                                                border: isExpanded
+                                                    ? `2px solid ${sub.color}`
+                                                    : '1px solid #E2E8F0',
+                                                background: isExpanded ? sub.color + '12' : '#F8FAFC',
+                                                transition: 'all .15s',
+                                            }}
+                                        >
+                                            <span style={{ fontSize: 18 }}>{sub.icon}</span>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ fontWeight: 700, fontSize: 13, color: isExpanded ? sub.color : C.text }}>
+                                                    {sub.label}
+                                                </div>
+                                                <div style={{ fontSize: 11, color: C.muted }}>{sub.subtitle}</div>
+                                            </div>
+                                            <span style={{ fontSize: 10, color: C.muted, background: '#E2E8F0', padding: '2px 7px', borderRadius: 20 }}>
+                                                {sub.chapters.length} chapters
+                                            </span>
+                                            <span style={{
+                                                fontSize: 12,
+                                                color: isExpanded ? sub.color : C.muted,
+                                                transform: isExpanded ? 'rotate(90deg)' : 'none',
+                                                transition: 'transform .2s',
+                                                display: 'inline-block',
+                                            }}>
+                                                ›
+                                            </span>
                                         </div>
+
+                                        {isExpanded && (
+                                            <div style={{
+                                                margin: '4px 0 4px 12px',
+                                                border: '1px solid #E2E8F0',
+                                                borderRadius: 10,
+                                                overflow: 'hidden',
+                                                background: '#FAFBFF',
+                                            }}>
+                                                {sub.chapters.map((ch, idx) => {
+                                                    const isChSelected = selectedChapter?.chapterId === ch.id;
+                                                    return (
+                                                        <div
+                                                            key={ch.id}
+                                                            onClick={() => handleChapterClick(sub, ch)}
+                                                            style={{
+                                                                padding: '9px 14px',
+                                                                fontSize: 12,
+                                                                cursor: 'pointer',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'space-between',
+                                                                borderBottom: idx < sub.chapters.length - 1
+                                                                    ? '1px solid #F0F4FF' : 'none',
+                                                                background: isChSelected ? sub.color + '15' : 'transparent',
+                                                                color: isChSelected ? sub.color : C.muted,
+                                                                fontWeight: isChSelected ? 700 : 400,
+                                                                transition: 'background .12s',
+                                                            }}
+                                                            onMouseEnter={e => {
+                                                                if (!isChSelected) e.currentTarget.style.background = '#F0F4FF';
+                                                            }}
+                                                            onMouseLeave={e => {
+                                                                if (!isChSelected) e.currentTarget.style.background = 'transparent';
+                                                            }}
+                                                        >
+                                                            <span>📖 {ch.label}</span>
+                                                            {isChSelected && (
+                                                                <span style={{ fontSize: 10, fontWeight: 800, background: sub.color + '20', color: sub.color, padding: '2px 8px', borderRadius: 20, border: `1px solid ${sub.color}40` }}>
+                                                                    selected ✓
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {selectedChapter && (
+                        <>
+                            <div style={{
+                                background: selectedChapter.subjectColor + '12',
+                                border: `1px solid ${selectedChapter.subjectColor}40`,
+                                borderRadius: 10,
+                                padding: '10px 14px',
+                                marginBottom: 16,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 10,
+                            }}>
+                                <span style={{ fontSize: 20 }}>{selectedChapter.subjectIcon}</span>
+                                <div>
+                                    <div style={{ fontSize: 11, color: C.muted, marginBottom: 1 }}>Selected chapter</div>
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: selectedChapter.subjectColor }}>
+                                        {selectedChapter.subjectLabel} › {selectedChapter.chapterLabel}
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedChapter(null)}
+                                    style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, color: C.muted, lineHeight: 1 }}
+                                >
+                                    ×
+                                </button>
+                            </div>
+
+                            <div style={{ marginBottom: 14 }}>
+                                <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>
+                                    Step 2 — Test Title *
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Meteorology — Wind Chapter Test"
+                                    value={form.title}
+                                    onChange={e => setField('title', e.target.value)}
+                                    style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.title ? '#FCA5A5' : '#E2E8F0'}`, background: errors.title ? '#FFF1F2' : '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
+                                />
+                                {errors.title && (
+                                    <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.title}</div>
+                                )}
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                                <div>
+                                    <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>
+                                        No. of Questions *
+                                    </label>
+                                    <input
+                                        type="number" min={5} max={100}
+                                        value={form.numQuestions}
+                                        onChange={e => setField('numQuestions', e.target.value)}
+                                        style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.numQuestions ? '#FCA5A5' : '#E2E8F0'}`, background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
+                                    />
+                                    {errors.numQuestions && (
+                                        <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.numQuestions}</div>
                                     )}
                                 </div>
-                            ))}
-                        </div>
-                        {errors.subjectId && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 4 }}>{errors.subjectId}</div>}
-                    </div>
-
-                    {/* Num questions + duration */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-                        <div>
-                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>No. of Questions *</label>
-                            <input
-                                type="number" min={5} max={100}
-                                value={form.numQuestions}
-                                onChange={e => setField('numQuestions', e.target.value)}
-                                style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.numQuestions ? '#FCA5A5' : '#E2E8F0'}`, background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
-                            />
-                            {errors.numQuestions && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.numQuestions}</div>}
-                        </div>
-                        <div>
-                            <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>Duration (mins) *</label>
-                            <input
-                                type="number" min={5} max={180}
-                                value={form.durationMins}
-                                onChange={e => setField('durationMins', e.target.value)}
-                                style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.durationMins ? '#FCA5A5' : '#E2E8F0'}`, background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
-                            />
-                            {errors.durationMins && <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.durationMins}</div>}
-                        </div>
-                    </div>
-
-                    {/* Instructions */}
-                    <div style={{ marginBottom: 20 }}>
-                        <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>
-                            Instructions <span style={{ fontWeight: 400, color: C.muted }}>(optional)</span>
-                        </label>
-                        <textarea
-                            rows={3}
-                            placeholder="Any special instructions for students…"
-                            value={form.instructions}
-                            onChange={e => setField('instructions', e.target.value)}
-                            style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: '1px solid #E2E8F0', background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
-                        />
-                    </div>
-
-                    {/* Preview */}
-                    {form.title && form.subjectId && (
-                        <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: 12, padding: '12px 14px', marginBottom: 16 }}>
-                            <div style={{ fontSize: 11, fontWeight: 700, color: '#1D4ED8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>Preview</div>
-                            <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 2 }}>{form.title}</div>
-                            <div style={{ fontSize: 12, color: C.muted }}>
-                                {selectedSubject?.icon} {selectedSubject?.label} · ❓ {form.numQuestions} questions · ⏱️ {form.durationMins} mins
+                                <div>
+                                    <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>
+                                        Duration (mins) *
+                                    </label>
+                                    <input
+                                        type="number" min={5} max={180}
+                                        value={form.durationMins}
+                                        onChange={e => setField('durationMins', e.target.value)}
+                                        style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: `1px solid ${errors.durationMins ? '#FCA5A5' : '#E2E8F0'}`, background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit' }}
+                                    />
+                                    {errors.durationMins && (
+                                        <div style={{ fontSize: 11, color: '#b91c1c', marginTop: 3 }}>{errors.durationMins}</div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+
+                            <div style={{ marginBottom: 18 }}>
+                                <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 6 }}>
+                                    Instructions <span style={{ fontWeight: 400, color: C.muted }}>(optional)</span>
+                                </label>
+                                <textarea
+                                    rows={2}
+                                    placeholder="Any special instructions for students…"
+                                    value={form.instructions}
+                                    onChange={e => setField('instructions', e.target.value)}
+                                    style={{ width: '100%', padding: '10px 12px', borderRadius: 10, boxSizing: 'border-box', border: '1px solid #E2E8F0', background: '#F8FAFC', color: C.text, fontSize: 13, outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
+                                />
+                            </div>
+
+                            {form.title && (
+                                <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: 12, padding: '12px 14px', marginBottom: 16 }}>
+                                    <div style={{ fontSize: 11, fontWeight: 700, color: '#1D4ED8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+                                        Preview
+                                    </div>
+                                    <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 2 }}>
+                                        {form.title}
+                                    </div>
+                                    <div style={{ fontSize: 12, color: C.muted }}>
+                                        {selectedChapter.subjectIcon} {selectedChapter.subjectLabel} › {selectedChapter.chapterLabel}
+                                        {' '}· ❓ {form.numQuestions} questions · ⏱️ {form.durationMins} mins
+                                    </div>
+                                </div>
+                            )}
+
+                            <button
+                                onClick={handleCreate}
+                                disabled={saving}
+                                style={{ width: '100%', padding: '12px', borderRadius: 12, border: 'none', background: saving ? '#94A3B8' : `linear-gradient(135deg, ${selectedChapter.subjectColor}, #7C3AED)`, color: '#fff', fontWeight: 800, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'opacity .15s' }}
+                            >
+                                {saving ? '⏳ Creating…' : '📝 Assign Test to All Students'}
+                            </button>
+                        </>
                     )}
 
-                    <button
-                        onClick={handleCreate}
-                        disabled={saving}
-                        style={{ width: '100%', padding: '12px', borderRadius: 12, border: 'none', background: saving ? '#94A3B8' : 'linear-gradient(135deg,#1D4ED8,#7C3AED)', color: '#fff', fontWeight: 800, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'opacity .15s' }}
-                    >
-                        {saving ? '⏳ Creating…' : '📝 Assign Test to All Students'}
-                    </button>
+                    {!selectedChapter && (
+                        <div style={{ textAlign: 'center', padding: '20px 0', color: C.muted, fontSize: 13, borderTop: '1px dashed #E2E8F0', marginTop: 8 }}>
+                            ☝️ Select a subject above, then pick a chapter to continue
+                        </div>
+                    )}
                 </div>
 
-                {/* ── RIGHT: Tests list ── */}
                 <div style={{ background: C.card, borderRadius: 18, border: '1px solid #E2E8F0', padding: 24, boxShadow: '0 8px 30px rgba(15,23,42,.05)', display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                         <div style={{ fontWeight: 800, fontSize: 15, color: C.text }}>📋 Assigned Tests</div>
-                        <span style={{ fontSize: 12, color: C.muted, background: '#F0F4FF', padding: '3px 10px', borderRadius: 20, border: '1px solid #E2E8F0' }}>{tests.length} total</span>
+                        <span style={{ fontSize: 12, color: C.muted, background: '#F0F4FF', padding: '3px 10px', borderRadius: 20, border: '1px solid #E2E8F0' }}>
+                            {tests.length} total
+                        </span>
                     </div>
 
                     {loading ? (
@@ -2386,13 +2751,27 @@ function AssignTestTab() {
                                                 style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid #FECACA', background: '#FFF1F2', color: '#B91C1C', cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                             >✕</button>
                                         </div>
-                                        <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 4 }}>{test.title}</div>
+
+                                        <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 2 }}>
+                                            {test.title}
+                                        </div>
+
+                                        {test.chapter_label && (
+                                            <div style={{ fontSize: 11, color: C.muted, marginBottom: 4 }}>
+                                                📖 {test.chapter_label}
+                                            </div>
+                                        )}
+
                                         <div style={{ fontSize: 12, color: C.muted, marginBottom: 8 }}>
                                             ❓ {test.num_questions} questions · ⏱️ {test.duration_mins} mins · 📅 {new Date(test.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                                         </div>
+
                                         {test.instructions && (
-                                            <div style={{ fontSize: 11, color: C.muted, marginBottom: 10, fontStyle: 'italic' }}>"{test.instructions}"</div>
+                                            <div style={{ fontSize: 11, color: C.muted, marginBottom: 10, fontStyle: 'italic' }}>
+                                                "{test.instructions}"
+                                            </div>
                                         )}
+
                                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                             <button
                                                 onClick={() => handleToggle(test)}

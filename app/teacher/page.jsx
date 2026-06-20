@@ -2264,20 +2264,47 @@ function AssignTestTab() {
     function handleSubjectClick(subjectId) {
         setExpandedSubject(prev => prev === subjectId ? null : subjectId);
         setSelectedChapter(prev => {
-            if (prev?.subjectId === subjectId) return null;
+            if (prev?.subjectId !== subjectId) return null;
             return prev;
         });
     }
 
     function handleChapterClick(subject, chapter) {
-        setSelectedChapter({
-            subjectId: subject.id,
-            chapterId: chapter.id,
-            chapterLabel: chapter.label,
-            subjectLabel: subject.label,
-            subjectIcon: subject.icon,
-            subjectColor: subject.color,
+        setSelectedChapter(prev => {
+            const sameSubject = prev?.subjectId === subject.id;
+            const currentIds = sameSubject ? [...prev.chapterIds] : [];
+            const currentLabels = sameSubject ? [...prev.chapterLabels] : [];
+            const existingIndex = currentIds.indexOf(chapter.id);
+
+            if (existingIndex >= 0) {
+                currentIds.splice(existingIndex, 1);
+                currentLabels.splice(existingIndex, 1);
+            } else {
+                currentIds.push(chapter.id);
+                currentLabels.push(chapter.label);
+            }
+
+            const finalIds = currentIds;
+            const finalLabels = currentLabels;
+            if (finalIds.length === 0) return null;
+
+            const titleHint = finalLabels.length === 1
+                ? `${subject.label} — ${finalLabels[0]}`
+                : `${subject.label} — ${finalLabels.join(', ')}`;
+
+            return {
+                subjectId: subject.id,
+                subjectLabel: subject.label,
+                subjectIcon: subject.icon,
+                subjectColor: subject.color,
+                chapterIds: finalIds,
+                chapterLabels: finalLabels,
+                chapterId: finalIds[0] || '',
+                chapterLabel: finalLabels.join(', '),
+                titleHint,
+            };
         });
+
         setErrors(p => ({ ...p, chapter: '' }));
         setForm(p => ({
             ...p,
@@ -2288,7 +2315,7 @@ function AssignTestTab() {
     function validate() {
         const errs = {};
         if (!form.title.trim()) errs.title = 'Title is required';
-        if (!selectedChapter) errs.chapter = 'Please select a chapter';
+        if (!selectedChapter || !selectedChapter.chapterIds?.length) errs.chapter = 'Please select at least one chapter';
         if (form.numQuestions < 5 || form.numQuestions > 100) 
             errs.numQuestions = 'Must be between 5 and 100';
         if (form.durationMins < 5 || form.durationMins > 180) 
@@ -2312,7 +2339,7 @@ function AssignTestTab() {
                     subjectLabel: selectedChapter.subjectLabel,
                     chapterId: selectedChapter.chapterId,
                     chapterLabel: selectedChapter.chapterLabel,
-                    chapterIds: [selectedChapter.chapterId],
+                    chapterIds: selectedChapter.chapterIds,
                     numQuestions: Number(form.numQuestions),
                     durationMins: Number(form.durationMins),
                     instructions: form.instructions.trim(),
@@ -2491,7 +2518,7 @@ function AssignTestTab() {
 
                     <div style={{ marginBottom: 18 }}>
                         <label style={{ fontSize: 13, fontWeight: 700, color: C.text, display: 'block', marginBottom: 8 }}>
-                            Step 1 — Select Subject &amp; Chapter *
+                                Step 1 — Select Subject &amp; Chapters *
                         </label>
 
                         {errors.chapter && (
@@ -2551,7 +2578,7 @@ function AssignTestTab() {
                                                 background: '#FAFBFF',
                                             }}>
                                                 {sub.chapters.map((ch, idx) => {
-                                                    const isChSelected = selectedChapter?.chapterId === ch.id;
+                                                    const isChSelected = selectedChapter?.chapterIds?.includes(ch.id);
                                                     return (
                                                         <div
                                                             key={ch.id}
@@ -2608,7 +2635,7 @@ function AssignTestTab() {
                             }}>
                                 <span style={{ fontSize: 20 }}>{selectedChapter.subjectIcon}</span>
                                 <div>
-                                    <div style={{ fontSize: 11, color: C.muted, marginBottom: 1 }}>Selected chapter</div>
+                                    <div style={{ fontSize: 11, color: C.muted, marginBottom: 1 }}>Selected chapters</div>
                                     <div style={{ fontSize: 13, fontWeight: 700, color: selectedChapter.subjectColor }}>
                                         {selectedChapter.subjectLabel} › {selectedChapter.chapterLabel}
                                     </div>
@@ -2681,13 +2708,13 @@ function AssignTestTab() {
                                 />
                             </div>
 
-                            {form.title && (
+                            {selectedChapter && (
                                 <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: 12, padding: '12px 14px', marginBottom: 16 }}>
                                     <div style={{ fontSize: 11, fontWeight: 700, color: '#1D4ED8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
                                         Preview
                                     </div>
                                     <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 2 }}>
-                                        {form.title}
+                                        {form.title.trim() || selectedChapter.titleHint}
                                     </div>
                                     <div style={{ fontSize: 12, color: C.muted }}>
                                         {selectedChapter.subjectIcon} {selectedChapter.subjectLabel} › {selectedChapter.chapterLabel}

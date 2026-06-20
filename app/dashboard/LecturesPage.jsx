@@ -373,7 +373,31 @@ const PERSONALYSIS_DATA = {
     subtitle: 'Tech paper analysis & exam insights',
     examTags: ['AME', 'ATPL'],
     color: '#F59E0B',
-    videos: makeSlots([], 10),
+    videos: makeSlots([
+      { title: 'TG:  pp tech Fundamentel of pisten engine', chapter: '1', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/cSqRnfnstyg?si=IyXR5VIFBNmw2J2N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: PP PRINCIPAL AND CONSTRUCTION', chapter: '2', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Z-WA5KPmar8?si=bZ0FSaYuE6hhl7KY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: PISTON ENGINE LUBRICATION ', chapter: '3', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Iej5W-oh9Vc?si=F6OdMo-CG0SgA8cr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: PISTON ENGINE COOLING', chapter: '4', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/xfZ0adsObb8?si=C-Lb7ATGCORedg3Z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: GENITION SYSTEM ', chapter: '5', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/jvp7NtaW5wU?si=MK98GjdCcJTrorrA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: PISTON ENGINE FUEL', chapter: '6', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/EFR44dhhj6w?si=aiOsZfP_NaUCY8rt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: FUEL MIXTURE CONTROL', chapter: '7', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/PZToAOx0V6I?si=ICGS7GdsYJiPss_b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: CARBURETTER', chapter: '8', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/PmADKWg6OCA?si=_SkEEZrUXwB48jZY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'TG: INDUCTION AND CARBURETTOR ICING', chapter: '9', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/-PUW9p2zAaU?si=nnu4KaJyJOo60cN2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'TG: ', chapter: '10', description: '.', iframeCode: '' },
+
+
+
+    ], 10),
   },
   'Radio Telephony': {
     icon: '📡',

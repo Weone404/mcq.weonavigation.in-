@@ -3151,6 +3151,643 @@ tg13:[
 {id:'tg13_15',q:'The mass balance weight on a control surface is located:',opts:['Always on the hinge line','Forward of the hinge line','Aft of the hinge line','At the trailing edge'],c:1,ex:'Mass balance weights are always positioned FORWARD of the hinge line to counteract the CG\'s natural tendency to sit aft of the hinge.'},
 {id:'tg13_16',q:'Control surface flutter occurs because of:',opts:['Mass imbalance (CG aft of hinge line)','Overbalance (CG too far forward)','Correct mass balancing','Excessive aerodynamic damping'],c:0,ex:'Flutter is caused by MASS IMBALANCE — when the control surface CG lies BEHIND the hinge line, inertial lag creates phased oscillation that extracts energy from the airstream.'}
 ],
+
+
+
+ tg15: [
+    { id: 'tg15_01', question: 'What is the solidity of a propeller?',
+      options: ['Ratio of total blade planform area to disc area', 'Ratio of frontal area angle to L/D ratio', 'Increasing blades increases aspect ratio', 'Ratio of blade chord to blade length'],
+      correct: 0,
+      explanation: 'Propeller solidity = total blade planform area / total disc area. High solidity absorbs more shaft power without increasing diameter.' },
+
+    { id: 'tg15_02', question: 'How is effective angle of attack maintained over the entire propeller blade?',
+      options: ['Increasing blade angle root to tip', 'Reducing blade angle root to tip (blade twist)', 'Increasing blade angle tip to root', 'Keeping blade angle constant'],
+      correct: 1,
+      explanation: 'Blade tip moves at higher tangential velocity than root. To maintain consistent AoA, blade angle must DECREASE (wash-out) from root to tip — this is geometric twist.' },
+
+    { id: 'tg15_03', question: 'The angle between the blade chord line and the plane of rotation is:',
+      options: ['The blade angle (pitch angle)', 'The geometric pitch', 'The blade angle of attack', 'The helix angle'],
+      correct: 0,
+      explanation: 'BLADE ANGLE (pitch angle) = angle between blade chord line and the plane of propeller rotation. Geometric pitch is the theoretical advance per revolution.' },
+
+    { id: 'tg15_04', question: 'A propeller which is windmilling:',
+      options: ['Rotates engine in reverse and gives drag', 'Rotates engine in reverse and gives some thrust', 'Rotates engine in normal direction and gives drag', 'Stops rotating and creates zero force'],
+      correct: 2,
+      explanation: 'A windmilling propeller rotates in the NORMAL direction driven by aerodynamic forces, but produces DRAG (negative thrust) — significant for engine-out performance calculations.' },
+
+    { id: 'tg15_05', question: 'With asymmetric thrust, which statement regarding airspeed is correct?',
+      options: ['Effectiveness of controls depends on static pressure only', 'Lower IAS reduces available rudder yawing moment', 'Both A and B are correct', 'IAS has no effect on rudder authority'],
+      correct: 1,
+      explanation: 'Rudder yawing moment ∝ dynamic pressure (½ρV²). At LOWER IAS, rudder generates less yawing moment, making asymmetric thrust increasingly difficult to control.' },
+
+    { id: 'tg15_06', question: 'Engine failure on a twin-engine aircraft places the highest structural load on:',
+      options: ['The vertical stabiliser (fin)', 'The main undercarriage', 'The horizontal stabiliser', 'All components equally'],
+      correct: 0,
+      explanation: 'The live engine\'s thrust creates a powerful yaw toward the dead engine. The high rudder force needed creates VERY HIGH LOADS on the VERTICAL STABILISER — the critical fin design case.' },
+
+    { id: 'tg15_07', question: 'The alpha range of a variable-pitch propeller is between:',
+      options: ['Feather and flight fine pitch stop', 'Feather and ground fine pitch stop', 'Flight fine pitch stop and reverse pitch stop', 'Ground fine pitch stop and reverse pitch stop'],
+      correct: 0,
+      explanation: 'The ALPHA RANGE is the normal in-flight governing range: from FEATHER (max pitch, engine-out) to the FLIGHT FINE PITCH STOP (min in-flight pitch, max RPM). Beta range is ground-only.' },
+
+    { id: 'tg15_08', question: 'The propeller blade aerodynamic force acting along the plane of rotation is:',
+      options: ['Torque (opposing engine rotation)', 'Thrust (forward propulsive force)', 'Both act equally in the plane of rotation', 'Neither — all force is perpendicular to the plane'],
+      correct: 0,
+      explanation: 'Total blade force resolves into THRUST (perpendicular to plane, forward) and TORQUE (in plane of rotation, opposing rotation). The engine overcomes torque to keep the propeller spinning.' },
+
+    { id: 'tg15_09', question: 'Ice protection for propellers on modern turboprop aircraft uses:',
+      options: ['Pneumatic de-icing boots', 'Hot air from engine bleed', 'Anti-icing fluid (TKS)', 'Electrical heating elements'],
+      correct: 3,
+      explanation: 'Modern turboprop propeller de-icing uses ELECTRICAL HEATING elements embedded in the blade leading edge. Power is supplied through slip rings and brushes — hot air ducting to rotating blades is impractical.' },
+
+    { id: 'tg15_10', question: 'What does "geometric pitch" of a propeller describe?',
+      options: ['The actual distance advanced per revolution through air', 'The theoretical distance the propeller would advance per revolution with no slip', 'The angle between the blade chord and plane of rotation', 'The ratio of tip speed to aircraft speed'],
+      correct: 1,
+      explanation: 'Geometric pitch is the THEORETICAL distance a propeller would advance per revolution if it were screwing through a solid medium with no slip. Effective pitch is the actual advance, always less due to slip.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG24 — Air Conditioning, Pressurisation & Pneumatic Systems
+  // ─────────────────────────────────────────────────────────────────
+  tg24: [
+    { id: 'tg24_01', question: 'In a turbo-compressor (air cycle machine), the cooling medium is:',
+      options: ['Ram air from outside', 'Compressor bleed air', 'Recirculated cabin air', 'Engine exhaust gas'],
+      correct: 0,
+      explanation: 'In the air conditioning pack ACM, RAM AIR from outside is the cooling medium in the heat exchangers. Hot bleed air transfers heat to ram air, which exhausts overboard.' },
+
+    { id: 'tg24_02', question: 'Aircraft cabin pressure is controlled by:',
+      options: ['Constant inflow; controlling rate of outflow via the outflow valve', 'Controlling inflow; maintaining constant outflow', 'The cabin air recirculation system alone', 'Cabin air mass flow control inlet valves only'],
+      correct: 0,
+      explanation: 'Pressurisation: CONSTANT INFLOW from air conditioning packs; OUTFLOW VALVE position varied to control air leaving. The automatic controller adjusts the outflow valve to maintain selected cabin altitude.' },
+
+    { id: 'tg24_03', question: '"Cabin differential pressure" is defined as:',
+      options: ['Approximately 5 psi maximum for all transport aircraft', 'Cabin pressure minus ambient (outside) pressure', 'Pressure difference between air entering and leaving the cabin', 'The overpressure relief valve setting'],
+      correct: 1,
+      explanation: 'Cabin differential pressure = CABIN PRESSURE − AMBIENT PRESSURE. At FL350 with an 8,000 ft cabin altitude: ΔP ≈ 7.45 psi. Max ΔP for modern transports is typically 8–9 psi.' },
+
+    { id: 'tg24_04', question: 'Most pressurisation systems maintain cabin altitude up to a maximum of:',
+      options: ['35,000 ft', '10,000 ft', '8,000 ft', '25,000 ft'],
+      correct: 2,
+      explanation: 'Regulations require cabin pressure altitude not to exceed 8,000 ft during normal operations. At 8,000 ft, oxygen partial pressure is still adequate for healthy passengers without supplemental oxygen.' },
+
+    { id: 'tg24_05', question: 'An aircraft in level flight experiences an increase in cabin altitude. Cabin differential pressure will:',
+      options: ['Remain the same', 'Increase', 'Decrease', 'First increase then decrease'],
+      correct: 2,
+      explanation: 'ΔP = Cabin pressure − Ambient. If cabin altitude INCREASES (cabin pressure falls toward ambient), the differential DECREASES. ΔP is greatest when the outflow valve is nearly closed.' },
+
+    { id: 'tg24_06', question: 'The purpose of a ditching (emergency flotation) pressurisation control is to:',
+      options: ['Achieve rapid depressurisation before water impact', 'Open outflow valves to equalise pressure quickly', 'Direct pressurisation air to flotation bags', 'Close all outflow valves to minimise water ingress'],
+      correct: 3,
+      explanation: 'DITCHING control CLOSES outflow valves and other hull openings to minimise water ingress on water contact, maximising time the aircraft remains afloat for passenger evacuation.' },
+
+    { id: 'tg24_07', question: 'Main advantage of a pneumatic system over a hydraulic system is:',
+      options: ['No fire hazard from the working fluid', 'Lighter — no fluid return lines are required', 'Both A and B are correct', 'Faster actuator response than hydraulics'],
+      correct: 2,
+      explanation: 'Pneumatic advantages: (1) NO FIRE HAZARD — compressed air is not flammable; (2) LIGHTER — air exhausts to atmosphere, so no return pipework is needed. Disadvantages include compressibility and moisture.' },
+
+    { id: 'tg24_08', question: 'The function of a shut-off valve in a bleed air system is to:',
+      options: ['Permanently shut off the entire pneumatic system', 'Isolate bleed air supply from a specific engine or APU', 'Regulate and maintain constant bleed air pressure', 'Control cabin air conditioning temperature only'],
+      correct: 1,
+      explanation: 'Each engine and APU bleed supply has a SHUT-OFF VALVE for independent isolation — used during engine fire drills, engine failure, or maintenance. It also enables cross-bleed starting.' },
+
+    { id: 'tg24_09', question: 'When air is pressurised by an engine-driven compressor, it is also:',
+      options: ['Cooled', 'Heated significantly', 'Moisturised', 'Dehumidified automatically'],
+      correct: 1,
+      explanation: 'Compressing air raises its temperature (adiabatic compression). High-pressure bleed air is very hot and passes through pre-coolers before use in air conditioning or anti-icing systems.' },
+
+    { id: 'tg24_10', question: 'An overpressure relief valve in a pressurisation system:',
+      options: ['Opens automatically if cabin differential pressure exceeds the structural design limit', 'Controls normal outflow to maintain cabin altitude schedule', 'Dumps all cabin air in an emergency descent', 'Prevents the cabin from pressurising above 8,000 ft altitude'],
+      correct: 0,
+      explanation: 'The overpressure relief valve is a safety device that opens automatically if ΔP exceeds the structural design limit, protecting the fuselage from damage. It is separate from the normal outflow valve.' },
+
+    { id: 'tg24_11', question: 'Which component in an air cycle machine (ACM) pack lowers the temperature of bleed air to sub-zero levels?',
+      options: ['The primary heat exchanger', 'The expansion turbine', 'The re-heater', 'The condenser'],
+      correct: 1,
+      explanation: 'The EXPANSION TURBINE extracts energy from high-pressure bleed air, causing it to expand rapidly and cool to sub-zero temperatures. This cold air then mixes with hot air in the mixing unit to provide the required cabin temperature.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG27 — High-Speed Aerodynamics & Compressibility
+  // ─────────────────────────────────────────────────────────────────
+  tg27: [
+    { id: 'tg27_01', question: 'Swept-back and delta wings are:',
+      options: ['Very efficient at high speed but inefficient at low speeds', 'Fairly inefficient at high speed but efficient at low speeds', 'Neither efficient at low nor high speeds', 'Equally efficient at both low and high speeds'],
+      correct: 0,
+      explanation: 'Swept/delta wings delay compressibility effects (raise Mcrit) making them efficient at high/transonic speeds but poor at low speeds, requiring complex high-lift devices.' },
+
+    { id: 'tg27_02', question: 'Airflow behind an oblique (attached) shockwave will:',
+      options: ['Always be subsonic', 'Could be subsonic or supersonic depending on wave angle', 'Always be supersonic', 'Always be exactly Mach 1'],
+      correct: 2,
+      explanation: 'Behind an oblique shockwave the airflow always remains SUPERSONIC, at a lower Mach number. Only behind a normal (perpendicular) shockwave is the flow always subsonic.' },
+
+    { id: 'tg27_03', question: 'When does the bow wave first appear ahead of the nose?',
+      options: ['At Mcrit', 'Exactly at Mach 1.0', 'Just above Mach 1.0', 'Just below Mach 1.0'],
+      correct: 2,
+      explanation: 'The bow wave (detached shockwave ahead of the nose) first forms JUST ABOVE MACH 1.0. Shockwaves over the aircraft surfaces appear at Mcrit, but the bow wave is specific to supersonic flight.' },
+
+    { id: 'tg27_04', question: '"Mach tuck" is associated with:',
+      options: ['Flying at low speed and high gross weight', 'Flying at supersonic speeds only', 'Flying at high subsonic speeds approaching Mcrit/Mmo', 'Flying at low altitude in turbulence'],
+      correct: 2,
+      explanation: 'Mach tuck (nose-down pitching tendency) develops as an aircraft approaches its critical Mach number at HIGH SUBSONIC speeds, caused by rearward centre-of-pressure shift and loss of downwash on the tailplane.' },
+
+    { id: 'tg27_05', question: 'The critical Mach number of the whole aircraft is the speed at which:',
+      options: ['Only controllability is affected', 'Only lift or drag is affected', 'Both controllability and lift/drag are affected', 'Only structural integrity is affected'],
+      correct: 2,
+      explanation: 'Beyond Mcrit, shockwaves affect BOTH lift/drag (wave drag appears, CL changes) AND controllability (control reversal, buffet, Mach tuck).' },
+
+    { id: 'tg27_06', question: 'High-speed buffet at high altitude:',
+      options: ['Can cause immediate structural damage', 'Has little structural effect but is primarily a controllability warning', 'Is the same as low-speed stall buffet', 'Only affects engines, not the airframe'],
+      correct: 1,
+      explanation: 'High-speed buffet at HIGH ALTITUDE has little structural effect — it is primarily a controllability and awareness warning. The coffin corner narrows the usable speed range at high altitude.' },
+
+    { id: 'tg27_07', question: 'Aerodynamic heating:',
+      options: ['Is not very significant up to Mach 2', 'Shortens fatigue life of the aircraft skin', 'Both of the above are correct', 'Only affects engine components, not the airframe'],
+      correct: 2,
+      explanation: 'Aerodynamic heating is NOT significant below Mach 2 for most structural alloys. However, sustained high skin temperatures DO reduce fatigue life. Both statements are correct.' },
+
+    { id: 'tg27_08', question: 'Flutter is described as:',
+      options: ['Aileron reversal caused by wing torsional flexibility', 'Rapid structural movement caused by engine vibration', 'Oscillatory motion of structural parts relative to the remainder of the structure', 'A one-time structural failure from overload'],
+      correct: 2,
+      explanation: 'Flutter is a dynamic aeroelastic instability — a self-excited, growing OSCILLATORY MOTION coupling aerodynamic forces, elastic deformation, and inertia.' },
+
+    { id: 'tg27_09', question: 'The study of the interaction between aerodynamic load and elastic deformation is called:',
+      options: ['Aeroelasticity', 'Flutter analysis', 'Control reversal study', 'Structural divergence analysis'],
+      correct: 0,
+      explanation: 'AEROELASTICITY studies the interaction of aerodynamic forces with elastic structural deformation. Flutter, structural divergence, and control reversal are all aeroelastic phenomena.' },
+
+    { id: 'tg27_10', question: 'An aircraft flying at Mach 1 at low altitude (ISA +15°C) versus at 30,000 ft (ISA −43°C). Which statement is correct?',
+      options: ['The lower aircraft has a lower TAS', 'The higher aircraft has a lower TAS', 'The lower aircraft has a higher TAS; the higher aircraft has a lower TAS', 'Both aircraft have the same TAS'],
+      correct: 2,
+      explanation: 'Speed of sound = √(γRT). Warmer air → higher speed of sound → higher TAS at Mach 1. The lower aircraft (warmer) has HIGHER TAS; the upper aircraft (colder) has LOWER TAS.' },
+
+    { id: 'tg27_11', question: 'When subsonic gases pass through a convergent duct:',
+      options: ['Velocity and temperature increase; pressure decreases', 'Velocity increases; temperature and pressure decrease', 'Velocity decreases; temperature and pressure increase', 'All three parameters remain constant'],
+      correct: 1,
+      explanation: 'In a convergent duct, velocity INCREASES (continuity equation), static PRESSURE falls (Bernoulli), and temperature also falls as kinetic energy increases at the expense of thermal energy.' },
+
+    { id: 'tg27_12', question: 'A propelling nozzle is said to be "choked" when:',
+      options: ['Gas flow through it is subsonic', 'Gas temperature at the throat rises significantly', 'Gas flow at the throat reaches sonic velocity (Mach 1)', 'The nozzle is physically blocked by ice or debris'],
+      correct: 2,
+      explanation: 'A nozzle is CHOKED when gas velocity at the throat reaches Mach 1. No further increase in mass flow is possible regardless of any downstream pressure reduction.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG28 — Fuel Systems
+  // ─────────────────────────────────────────────────────────────────
+  tg28: [
+    { id: 'tg28_01', question: 'A fuel sample that appears cloudy or hazy is most likely due to:',
+      options: ['Dirt or sediment contamination', 'Oil contamination from an engine seal failure', 'Water contamination (dissolved or free water)', 'Fuel chemical degradation over time'],
+      correct: 2,
+      explanation: 'Cloudiness or haziness is the characteristic appearance of WATER CONTAMINATION. Microscopic water droplets scatter light. Water contamination can cause fuel system icing and engine flameout.' },
+
+    { id: 'tg28_02', question: 'The purpose of a Fuel Cooled Oil Cooler (FCOC) is to:',
+      options: ['Cool engine oil using fuel as the cooling medium, and simultaneously warm the fuel', 'Cool the fuel using engine oil as the medium', 'Remove water contamination from fuel before combustion', 'Control fuel flow to the burners at high altitude'],
+      correct: 0,
+      explanation: 'The FCOC uses FUEL as a heat sink to cool ENGINE OIL. As a by-product, the fuel is warmed, which helps prevent fuel icing and improves atomisation. It is an efficient dual-purpose heat exchanger.' },
+
+    { id: 'tg28_03', question: 'Magnetic chip detectors (MCDs) are fitted in:',
+      options: ['The pressure line between pump and bearings', 'The suction line between reservoir and pump', 'The return (scavenge) line between engine and scavenge pump', 'The return line downstream of the FCOC only'],
+      correct: 2,
+      explanation: 'MCDs are in SCAVENGE RETURN lines. Metal particles from bearing/gear wear are swept out with oil. The MCD magnet captures ferrous particles, giving early warning of internal wear.' },
+
+    { id: 'tg28_04', question: 'The main reason for pressure fuelling (single-point refuelling) on large transport aircraft is:',
+      options: ['It is the only safe way to refuel jet aircraft', 'It is faster and reduces the risk of contamination compared to over-wing fuelling', 'It prevents overfilling by using a mechanical shutoff', 'It allows the crew to refuel without ground personnel'],
+      correct: 1,
+      explanation: 'Pressure refuelling (SPR) is FASTER (minutes vs hours for a wide-body), reduces CONTAMINATION risk (closed system), and reduces STATIC hazard compared to over-wing gravity fuelling with open caps.' },
+
+    { id: 'tg28_05', question: 'A crossfeed valve in a fuel system allows:',
+      options: ['Fuel to be transferred between wing tanks automatically during cruise', 'Any engine to be fed from any fuel tank', 'The APU to receive fuel from the wing tanks only', 'Fuel jettison from all tanks simultaneously'],
+      correct: 1,
+      explanation: 'A CROSSFEED valve, when open, allows ANY ENGINE to draw fuel from ANY TANK. This is essential for engine-out operations, fuel balancing, and when a boost pump in one tank fails.' },
+
+    { id: 'tg28_06', question: 'The purpose of a fuel vent system is to:',
+      options: ['Prevent fuel vapour accumulating to an explosive concentration in the wing void spaces', 'Allow air to enter and leave the tanks as fuel is consumed or added, preventing tank collapse or burst', 'Both A and B are correct', 'Provide a means of fuel jettison in an emergency'],
+      correct: 2,
+      explanation: 'Fuel vent systems serve BOTH purposes: (1) allow air in/out to prevent structural damage from pressure differential as fuel is consumed; (2) prevent fuel vapour accumulation reaching explosive limits in void spaces.' },
+
+    { id: 'tg28_07', question: 'AVGAS (aviation gasoline) is identified by:',
+      options: ['Its clear or straw colour', 'Its blue colour (100LL) or green colour (100/130)', 'Its purple colour, which is universal for all grades', 'Its smell alone — colour is not standardised'],
+      correct: 1,
+      explanation: '100LL AVGAS is BLUE; 100/130 AVGAS is GREEN. Colour coding prevents incorrect fuel from being used — jet fuel (Jet-A) is clear/straw and must never be used in piston engines (and vice versa).' },
+
+    { id: 'tg28_08', question: 'Jet-A1 fuel has a maximum freeze point of:',
+      options: ['−40°C', '−47°C', '−60°C', '−20°C'],
+      correct: 1,
+      explanation: 'Jet-A1 has a freeze point of −47°C maximum, making it suitable for long-range international operations at high altitude where temperatures can approach −60°C. Jet-A (US domestic) has a −40°C freeze point.' },
+
+    { id: 'tg28_09', question: 'The function of a fuel boost (transfer) pump is to:',
+      options: ['Supply fuel at high pressure directly to the fuel nozzles for combustion', 'Provide positive fuel pressure to the engine-driven fuel pump, preventing cavitation at altitude', 'Transfer fuel from wing tanks to the centre tank during cruise for balance', 'Pressurise the entire fuel system to prevent vapour lock at low ambient pressure'],
+      correct: 1,
+      explanation: 'Boost pumps provide POSITIVE PRESSURE to the inlet of the ENGINE-DRIVEN FUEL PUMP, preventing cavitation/vapour lock at high altitude where ambient pressure is low. They operate at relatively low pressure.' },
+
+    { id: 'tg28_10', question: 'Why is fuel jettison (fuel dump) capability fitted to some large aircraft?',
+      options: ['To reduce landing weight to below maximum structural landing weight after an emergency shortly after take-off', 'To comply with regulations requiring fuel to be dumped before any landing', 'To remove contaminated fuel quickly if water is detected in the tanks', 'To allow the aircraft to land with empty tanks for maintenance purposes'],
+      correct: 0,
+      explanation: 'Fuel jettison allows the aircraft to REDUCE WEIGHT to at or below MAXIMUM STRUCTURAL LANDING WEIGHT (MSLW) after an emergency shortly after take-off when overweight landing is not desired.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG30 — Piston Engine Systems (Carburettors, Ignition, Mixture)
+  // ─────────────────────────────────────────────────────────────────
+  tg30: [
+    { id: 'tg30_01', question: 'With increasing altitude and reducing air density, a piston engine mixture control must be moved towards:',
+      options: ['Rich position to compensate for reduced oxygen', 'Weak (lean) position to maintain the correct air/fuel ratio', 'Full rich above 5,000 ft to prevent detonation', 'Full lean immediately above 3,000 ft'],
+      correct: 1,
+      explanation: 'At altitude, air density decreases but fixed-jet carburettors meter fuel by volume, enriching the mixture. Move LEAN to reduce fuel flow and restore the correct stoichiometric air/fuel ratio.' },
+
+    { id: 'tg30_02', question: 'The primary function of a diffuser (emulsion tube) in a carburettor is to:',
+      options: ['Control mixture over the intermediate throttle range', 'Vent air from the float chamber at idle', 'Emulsify fuel during rapid throttle opening (accelerator pump function)', 'Enable slow-running idle speed adjustment'],
+      correct: 0,
+      explanation: 'The diffuser/emulsion tube allows air to bleed into fuel before the main jet, progressively leaning the mixture as throttle increases, controlling mixture over the INTERMEDIATE throttle range.' },
+
+    { id: 'tg30_03', question: 'Power output of a piston engine can be calculated by multiplying:',
+      options: ['Force by distance', 'Work by velocity', 'Pressure by moment arm', 'Torque by RPM (angular velocity)'],
+      correct: 3,
+      explanation: 'Shaft power = Torque × Angular velocity = Torque × (2π × RPM / 60). A dynamometer measures torque × RPM to give shaft power output.' },
+
+    { id: 'tg30_04', question: 'A supercharger that maintains sea-level power up to a high critical altitude is called:',
+      options: ['A ground-boosted supercharger', 'An externally driven supercharger (turbocharger)', 'An altitude-boosted supercharger', 'A turbo-normaliser'],
+      correct: 2,
+      explanation: 'An ALTITUDE-BOOSTED supercharger maintains sea-level manifold pressure (and power) up to its critical altitude. Above this, density reduction dominates and power falls despite full boost.' },
+
+    { id: 'tg30_05', question: 'The power increase with initial altitude increase on a supercharged engine is due to:',
+      options: ['Increasing charge temperature at altitude', 'Reducing exhaust back pressure at altitude', 'Decreasing atmospheric density reducing pumping losses', 'Supercharger automatically increasing manifold boost'],
+      correct: 1,
+      explanation: 'As altitude increases, ambient pressure falls, REDUCING EXHAUST BACK PRESSURE (less pumping work required on the exhaust stroke). This gives a slight power INCREASE up to the critical altitude.' },
+
+    { id: 'tg30_06', question: 'An increase in air density will _____ engine power and _____ propeller drag:',
+      options: ['Increase; decrease', 'Increase; increase', 'Decrease; increase', 'Have no effect on; increase'],
+      correct: 1,
+      explanation: 'Higher air density: (1) INCREASES engine power (more air mass per stroke, more oxygen, more fuel can be burned); (2) INCREASES propeller aerodynamic forces including drag — more force for same RPM and blade angle.' },
+
+    { id: 'tg30_07', question: 'On a flex/derated take-off, thrust would be achieved:',
+      options: ['Later than normal due to low compressor pressure ratio', 'Later than normal due to a low EPR target', 'At less than the full throttle lever forward position', 'Later than normal due to high EPR setting'],
+      correct: 2,
+      explanation: 'In a flexible/derated take-off the thrust target is below maximum. The throttle is advanced to a position SHORT OF the full forward stop to achieve the required reduced thrust setting.' },
+
+    { id: 'tg30_08', question: '"Self-sustaining speed" in a gas turbine context means:',
+      options: ['The aircraft speed above which the engine can windmill-start without the starter', 'The minimum RPM at which the engine can accelerate to idle without starter assistance', 'The RPM at which full power is reached from idle in under 5 seconds', 'The speed from which an engine can reach full power within 5 seconds'],
+      correct: 1,
+      explanation: 'Self-sustaining speed is the minimum RPM at which the engine can maintain rotation and accelerate to idle WITHOUT the starter motor. Below this speed, combustion energy is insufficient to overcome drag.' },
+
+    { id: 'tg30_09', question: 'A high-energy ignition (HEI) unit in a gas turbine ignites at a rate of:',
+      options: ['4 times in one revolution of the compressor', '60–100 times in one second', '60–100 times in one minute', 'Continuously at 400 Hz during all phases of flight'],
+      correct: 2,
+      explanation: 'Gas turbine HEI units typically fire at 60–100 sparks per MINUTE during ground starting. Each spark carries high energy (4–20 Joules) for reliable ignition in adverse conditions.' },
+
+    { id: 'tg30_10', question: 'Configuration warning sounds when the throttle is advanced if:',
+      options: ['Trim is outside take-off range only', 'Speed brakes are not retracted or armed only', 'Any one of several unsafe configuration conditions exists', 'Only if ALL unsafe conditions exist simultaneously'],
+      correct: 2,
+      explanation: 'Take-off configuration warning triggers when throttles are advanced and ANY SINGLE unsafe condition exists: trim out of range, wrong flap setting, speed brakes not stowed, slats not extended, etc.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG35 — Fire Detection & Protection Systems
+  // ─────────────────────────────────────────────────────────────────
+  tg35: [
+    { id: 'tg35_01', question: 'A fire detection system must be capable of:',
+      options: ['Automatically operating the fire extinguisher on detection', 'Auto-operating the extinguisher after a 2-minute delay with aural warning', 'Rapid detection of fire/overheat but NOT automatically operating extinguishers', 'Shutting down all engines automatically on fire detection'],
+      correct: 2,
+      explanation: 'Detection systems must RAPIDLY DETECT fire/overheat and provide AURAL AND VISUAL WARNING to crew, but must NOT automatically discharge extinguisher. Crew must VERIFY and manually select discharge.' },
+
+    { id: 'tg35_02', question: 'The reversible mechanical fire detection system incorporates:',
+      options: ['A thermal switch and copper wire sensing element', 'A carbon-based detection element', 'A small tube filled with helium gas and a titanium wire core', 'A bimetallic strip and aluminium sensing rod'],
+      correct: 2,
+      explanation: 'The Kidde pneumatic loop system: a small tube filled with HELIUM GAS at low pressure with a TITANIUM WIRE core. Heating raises gas pressure until pressure switch triggers. REVERSIBLE — resets automatically when heat source is removed.' },
+
+    { id: 'tg35_03', question: 'The key advantage of a reversible fire detection system over a fusible element system is:',
+      options: ['It is cheaper to manufacture and install', 'It automatically resets when the heat source is removed, allowing continued monitoring', 'It responds faster than any other detection method', 'It can detect smoke as well as heat'],
+      correct: 1,
+      explanation: 'The REVERSIBLE system (e.g., Kidde pneumatic loop) automatically resets when the heat source is removed. A fusible element is destroyed when it activates and requires physical replacement before the zone is again protected.' },
+
+    { id: 'tg35_04', question: 'A Class D cargo compartment (inaccessible in flight) must:',
+      options: ['Have a crew-operated hand-held extinguisher accessible from outside', 'Not be ventilated so that fire is contained by suffocation', 'Be lined with fire-resistant material with controlled ventilation', 'Be accessible by ground crew only, requiring emergency landing'],
+      correct: 2,
+      explanation: 'Class D compartments: lined with FIRE-RESISTANT material; CONTROLLED VENTILATION (enough to prevent explosive vapours, restricted enough to limit fire growth); proven by test to contain fire throughout flight.' },
+
+    { id: 'tg35_05', question: 'Ionisation smoke detectors work on the principle of:',
+      options: ['Measuring light transmissibility through a sample chamber', 'Photographing smoke particle samples', 'Continuous ionisation current in a chamber, disrupted by smoke particles', 'Measuring temperature rise from smouldering materials'],
+      correct: 2,
+      explanation: 'Ionisation detectors: a radioactive source (Americium-241) ionises air in a chamber, creating a small current. SMOKE PARTICLES attach to ions, reducing current. When current drops below threshold, alarm triggers.' },
+
+    { id: 'tg35_06', question: 'Correct sequence of actions for an engine fire after take-off:',
+      options: ['Close thrust lever → Close HP fuel lever → Pull fire handle → Discharge first bottle → Discharge second bottle after 30s if fire persists → Land ASAP', 'Pull fire handle → Close thrust lever → Close HP lever → Discharge bottle', 'Close HP lever → Pull fire handle → Discharge bottle → Close thrust lever', 'Discharge first bottle → Close thrust lever → Close HP lever → Pull fire handle'],
+      correct: 0,
+      explanation: 'Engine fire drill sequence: CLOSE thrust lever → CLOSE HP fuel lever → PULL fire handle → ROTATE LEFT (first bottle discharge) → ROTATE RIGHT after 30s if warning persists → LAND ASAP.' },
+
+    { id: 'tg35_07', question: 'The Halon fire extinguishant used in engine fire extinguisher bottles works by:',
+      options: ['Cooling the fire below ignition temperature with high-pressure CO2', 'Smothering the fire by displacing oxygen with inert gas', 'Chemically interrupting the combustion chain reaction', 'Physically separating fuel from oxidiser using foam'],
+      correct: 2,
+      explanation: 'Halon (and its replacement agents) work primarily by CHEMICAL CHAIN REACTION INTERRUPTION — they break the chemical bonds in the combustion process. They also provide some cooling and oxygen dilution.' },
+
+    { id: 'tg35_08', question: 'A "dual-loop" fire detection system provides:',
+      options: ['Twice the extinguishant capacity for larger fire zones', 'Redundancy — both loops must agree (fire) or one loop triggers a fault warning', 'Ability to detect both fire and smoke simultaneously', 'Two separate fire zones covered by one control panel'],
+      correct: 1,
+      explanation: 'Dual-loop systems provide REDUNDANCY and FAULT DETECTION. Both loops agreeing gives a fire warning. One loop failed gives a FAULT warning. This reduces false alarms while maintaining detection reliability.' },
+
+    { id: 'tg35_09', question: 'The fire protection system for an aircraft lavatory must include:',
+      options: ['A crew-accessible hand-held extinguisher only', 'An automatic smoke detector and an automatically discharging extinguisher in the waste bin', 'A crew-operable remote discharge extinguisher from the cockpit', 'Only a smoke detector — no extinguisher is required in a lavatory'],
+      correct: 1,
+      explanation: 'Lavatory fire protection requires: (1) SMOKE DETECTOR to warn crew; (2) AUTOMATIC extinguisher discharging into the WASTE BIN where most fires start, since lavatories are often unoccupied and the fire source is the bin.' },
+
+    { id: 'tg35_10', question: 'In an engine fire, the fire handle (when pulled) typically:',
+      options: ['Discharges the first fire extinguisher bottle immediately', 'Arms the extinguisher bottles, closes fuel/hydraulic/bleed valves, and disconnects the generator', 'Shuts down only the fuel supply to the affected engine', 'Sounds the aural warning and notifies ATC automatically'],
+      correct: 1,
+      explanation: 'Pulling the fire handle typically: ARMS extinguisher bottles; CLOSES the HP fuel cock, hydraulic fire shutoff valve, and bleed air valve; DISCONNECTS the engine generator. Bottle discharge requires a separate rotary action.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG36 — Aircraft Structures, Materials & Stress
+  // ─────────────────────────────────────────────────────────────────
+  tg36: [
+    { id: 'tg36_01', question: 'Longerons in a fuselage are structural members fitted:',
+      options: ['Longitudinally (along the length of the fuselage)', 'Horizontally (transversely across the fuselage)', 'Diagonally as bracing struts', 'Circumferentially as frames/formers'],
+      correct: 0,
+      explanation: 'Longerons are primary LONGITUDINAL structural members running the LENGTH of the fuselage, connecting transverse frames/formers. They carry bending, tension and compression loads.' },
+
+    { id: 'tg36_02', question: 'In true monocoque construction:',
+      options: ['All structural loads are carried entirely by the outer skin', 'This construction type is preferred for large transport aircraft', 'Loads are shared between the skin and internal members', 'Only frames carry structural loads; the skin is non-structural'],
+      correct: 0,
+      explanation: 'TRUE MONOCOQUE relies entirely on the OUTER SKIN to carry all structural loads. There are no longerons or stringers. Only practical for small/simple structures due to skin buckling limitations.' },
+
+    { id: 'tg36_03', question: 'The major structural advantage of semi-monocoque over true monocoque is:',
+      options: ['Better strength-to-weight ratio by using skin plus internal stiffeners', 'Cheaper to manufacture with fewer components', 'Lighter in all configurations regardless of size', 'Requires fewer maintenance inspections'],
+      correct: 0,
+      explanation: 'Semi-monocoque uses skin PLUS stringers, longerons, and frames. Internal stiffeners prevent skin buckling, allowing thinner/lighter skin → BETTER STRENGTH-TO-WEIGHT RATIO for a given structural requirement.' },
+
+    { id: 'tg36_04', question: 'Fail-safe structural philosophy means:',
+      options: ['The structure never breaks regardless of the stress applied', 'Any failed member can be easily replaced on the ramp', 'Adjacent structure can safely withstand the loads a failed member would have carried', 'No inspection programme is required as failures are self-correcting'],
+      correct: 2,
+      explanation: 'FAIL-SAFE: if any single element fails, REMAINING ADJACENT STRUCTURE carries redistributed loads safely until detected at scheduled inspection. Multiple load paths and crack stoppers achieve this.' },
+
+    { id: 'tg36_05', question: 'The most ideal cross-sectional shape for a pressurised fuselage is:',
+      options: ['Oval', 'Double bubble', 'Circular', 'Rectangular with large corner radii'],
+      correct: 2,
+      explanation: 'A CIRCULAR cross-section is most structurally efficient for internal pressure loading. A circle distributes pressurisation load as pure HOOP STRESS with no bending stresses, unlike oval or rectangular shapes.' },
+
+    { id: 'tg36_06', question: 'On a gust load (V-n) diagram, the extreme right-hand speed limitation is:',
+      options: ['VD (design dive speed)', 'VC (design cruise speed)', 'VB (design speed for maximum gust intensity)', 'VS (stall speed)'],
+      correct: 0,
+      explanation: 'The V-n diagram extends to VD (DESIGN DIVE SPEED) at its rightmost point. VD is the maximum structural design speed. Vmo/Mmo keeps operations well below VD with an adequate margin.' },
+
+    { id: 'tg36_07', question: 'What is the positive manoeuvre limit load factor for a transport category (normal) aircraft?',
+      options: ['2.5g', '1.75g', '3.75g', '4.4g'],
+      correct: 0,
+      explanation: 'Transport category (CS-25) positive limit load factor is 2.5g. Ultimate load = 1.5 × 2.5 = 3.75g. Utility category is 4.4g and aerobatic category is 6.0g.' },
+
+    { id: 'tg36_08', question: 'Why does a transport aircraft windshield consist of multiple layers?',
+      options: ['To prevent metal fatigue in the windshield frame', 'To enable effective electrical heating of the windshield', 'Primarily for impact resistance against bird strikes, hail, and runway debris', 'To provide better optical clarity and reduce distortion'],
+      correct: 2,
+      explanation: 'Multiple layers are primarily for IMPACT RESISTANCE — outer layers absorb/distribute bird strike, hail, and debris energy. Additional layers provide electrical heating, structural interlayers, and anti-scratch coatings.' },
+
+    { id: 'tg36_09', question: 'Damage-tolerant structural design philosophy requires:',
+      options: ['Structures to be so strong that cracks cannot initiate under any load', 'That detected damage can be repaired between scheduled inspections without compromising safety', 'That all cracks are immediately repaired upon discovery regardless of size', 'Structure to be inspected only after a hard landing or turbulence encounter'],
+      correct: 1,
+      explanation: 'Damage-tolerant design requires: cracks grow slowly enough that they are DETECTED at scheduled inspections before reaching critical size; residual strength is adequate with damage present until the next inspection interval.' },
+
+    { id: 'tg36_10', question: 'Hoop stress in a pressurised cylindrical fuselage is:',
+      options: ['Half the value of axial (longitudinal) stress', 'Equal to axial stress', 'Twice the value of axial (longitudinal) stress', 'Independent of fuselage radius'],
+      correct: 2,
+      explanation: 'For a pressurised cylinder: Hoop stress = pR/t; Axial stress = pR/2t. Therefore HOOP STRESS IS TWICE AXIAL STRESS. This is why longitudinal fuselage skin cracks (caused by hoop stress) are more critical than circumferential ones.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG42 — Undercarriage, Wheels, Tyres & Brakes
+  // ─────────────────────────────────────────────────────────────────
+  tg42: [
+    { id: 'tg42_01', question: 'Dynamic hydroplaning is recognised by:',
+      options: ['Total and immediate loss of all aircraft control', 'Tyre skidding on the runway at all landing speeds', 'Partial loss of directional control and significantly reduced braking effectiveness', 'Tyre burst due to rapid overheating from friction'],
+      correct: 2,
+      explanation: 'Dynamic hydroplaning: a water wedge lifts the tyre off the runway surface. Recognised by PARTIAL loss of directional control, significantly reduced or zero braking, and the wheel may spin up freely on contact.' },
+
+    { id: 'tg42_02', question: 'Large aircraft with tricycle undercarriage obtain primary ground steering by:',
+      options: ['Hydraulic nose wheel steering (NWS) system', 'Rudder aerodynamic forces', 'Differential main wheel braking', 'All of the above methods combined equally'],
+      correct: 0,
+      explanation: 'Large transport aircraft use a dedicated hydraulic NOSE WHEEL STEERING system as primary ground directional control. Differential braking and rudder supplement it but are not the primary method.' },
+
+    { id: 'tg42_03', question: 'A hydraulic landing gear retraction mechanism consists of sequence valves, uplocks, and:',
+      options: ['An anti-skid braking system', 'Downlocks', 'Torque links (scissors links)', 'A shock absorber (oleo strut) only'],
+      correct: 1,
+      explanation: 'The gear retraction system requires: SEQUENCE VALVES (control order of operations), UPLOCKS (lock gear retracted without hydraulic pressure), and DOWNLOCKS (lock gear extended and provide down-and-locked indication).' },
+
+    { id: 'tg42_04', question: 'Inadvertent retraction of landing gear on the ground is prevented by:',
+      options: ['The lever guard making retraction physically difficult', 'Insufficient hydraulic pressure at low engine RPM', 'The weight-on-wheels (squat switch / ground sensing) system', 'Pilot checklist alone'],
+      correct: 2,
+      explanation: 'The WEIGHT-ON-WHEELS system uses sensors (squat switches) on main undercarriage oleos to detect ground contact. While weight is on wheels, the gear retraction circuit is INHIBITED, making inadvertent retraction impossible.' },
+
+    { id: 'tg42_05', question: 'An anti-skid (anti-lock) braking system works by:',
+      options: ['Limiting maximum brake pressure to a fixed value below wheel lock-up pressure', 'Sensing impending wheel lock-up and momentarily reducing brake pressure on that wheel', 'Applying differential braking between left and right main gear automatically', 'Preventing the pilot from applying full brake pedal deflection above a set speed'],
+      correct: 1,
+      explanation: 'Anti-skid systems continuously SENSE WHEEL DECELERATION RATE. When a wheel approaches lock-up, the system momentarily REDUCES BRAKE PRESSURE on that wheel, allowing it to spin up, then reapplies — optimising braking friction.' },
+
+    { id: 'tg42_06', question: 'The speed below which dynamic hydroplaning cannot occur is approximately:',
+      options: ['V = 7.7 √p (where p = tyre pressure in psi)', 'V = 100 knots for all aircraft regardless of tyre pressure', 'V = 9 √p (where p = tyre pressure in psi)', 'V = stall speed × 1.3'],
+      correct: 0,
+      explanation: 'The minimum hydroplaning speed formula is V = 7.7 √p (knots), where p is tyre inflation pressure in psi. Below this speed, dynamic hydroplaning cannot be sustained. Higher tyre pressures raise the hydroplaning speed.' },
+
+    { id: 'tg42_07', question: 'The purpose of torque links (scissors links) on an oleo-pneumatic undercarriage leg is to:',
+      options: ['Provide the primary shock absorption through hydraulic damping', 'Prevent rotation of the outer cylinder relative to the inner cylinder, while allowing axial movement', 'Lock the undercarriage in the down-and-locked position', 'Connect the main gear to the wing attachment fitting'],
+      correct: 1,
+      explanation: 'Torque links/scissors prevent the OUTER CYLINDER from ROTATING relative to the INNER CYLINDER (which would steer the aircraft uncontrollably), while allowing the necessary axial (telescoping) shock-absorption movement.' },
+
+    { id: 'tg42_08', question: 'Autobrake systems on transport aircraft:',
+      options: ['Replace the anti-skid system during normal operations', 'Apply a pre-selected deceleration rate automatically on landing or RTO, independent of pilot brake pedal input', 'Are mandatory on all jet transport aircraft above 60,000 kg MTOW', 'Apply maximum braking automatically whenever thrust reversers are deployed'],
+      correct: 1,
+      explanation: 'AUTOBRAKE systems apply a pilot-selected deceleration rate automatically upon landing (weight-on-wheels) or RTO (above arming speed), WITHOUT pilot brake pedal input, working through the anti-skid system.' },
+
+    { id: 'tg42_09', question: 'The purpose of fuse plugs fitted in aircraft wheels is to:',
+      options: ['Electrically fuse the tyre pressure monitoring circuit if overloaded', 'Melt and deflate the tyre in a controlled manner if the wheel overheats, preventing a dangerous blowout', 'Retain the wheel to the axle if the wheel bearing fails', 'Prevent tyre rotation relative to the wheel rim during braking'],
+      correct: 1,
+      explanation: 'Fusible plugs MELT at a specific temperature if the wheel overheats (e.g., after heavy braking). They deflate the tyre in a CONTROLLED manner, preventing a dangerous explosive blowout that could damage structure or injure ground crew.' },
+
+    { id: 'tg42_10', question: 'What is the purpose of the oleo (air-oil) shock absorber in the undercarriage?',
+      options: ['To provide a rigid structural connection between the wheel and airframe', 'To absorb and dissipate the vertical energy of landing impact and ground manoeuvring', 'To provide nose wheel steering by differential compression', 'To lock the gear in the extended position without hydraulic pressure'],
+      correct: 1,
+      explanation: 'The oleo-pneumatic shock absorber ABSORBS AND DISSIPATES the kinetic energy of landing impact and ground loads. Oil flowing through metered orifices provides damping; compressed nitrogen provides the spring function.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG44 — Oxygen Systems
+  // ─────────────────────────────────────────────────────────────────
+  tg44: [
+    { id: 'tg44_01', question: 'Chemical oxygen generators:',
+      options: ['Are relatively light, self-contained devices requiring no plumbing', 'Supply oxygen for at least 30 minutes in all approved installations', 'Have a relief valve preventing pressure from exceeding 50 psi', 'Are rechargeable and reusable for multiple deployments'],
+      correct: 0,
+      explanation: 'Chemical O₂ generators are preferred for passenger systems because of LIGHT WEIGHT and SELF-CONTAINED nature — no heavy high-pressure cylinders or complex distribution pipework needed. They supply ~12–22 minutes of oxygen.' },
+
+    { id: 'tg44_02', question: 'LOX (liquid oxygen) systems:',
+      options: ['Store oxygen as a lean mixture under pressure', 'Store oxygen at low pressure in gaseous form', 'Store oxygen as a liquid at cryogenic temperature (approximately −183°C)', 'Are a type of lube oil heat exchanger system'],
+      correct: 2,
+      explanation: 'LOX = LIQUID OXygen, stored at cryogenic temperature (−183°C) in Dewar containers. LOX offers ~860× the density of gaseous oxygen by volume, making it efficient for military and some commercial applications. A converter warms it for breathing.' },
+
+    { id: 'tg44_03', question: 'A continuous-flow oxygen system supplies oxygen:',
+      options: ['Only when the user inhales, saving oxygen by not supplying during exhalation', 'Continuously regardless of whether the user is inhaling or exhaling', 'In bursts triggered by a pressure demand regulator when inhalation is detected', 'Only when the mask microphone detects speech, confirming the mask is being worn'],
+      correct: 1,
+      explanation: 'CONTINUOUS-FLOW systems supply oxygen continuously. They are simple and reliable but wasteful as oxygen flows during exhalation too. Used for passengers where simplicity is paramount. Diluter-demand systems are more efficient for crew.' },
+
+    { id: 'tg44_04', question: 'A pressure-demand oxygen regulator provides:',
+      options: ['A continuous flow of 100% oxygen at all altitudes', 'Pure oxygen under positive pressure — forcing oxygen into the lungs at very high altitudes', 'A diluted mixture of oxygen and cabin air proportional to altitude', 'Oxygen flow only on inhalation, with a small positive pressure to prevent contamination'],
+      correct: 1,
+      explanation: 'PRESSURE-DEMAND regulators supply oxygen at POSITIVE PRESSURE above ambient, physically forcing it into the lungs. Essential above 40,000 ft where even 100% O₂ at ambient pressure provides insufficient partial pressure for consciousness.' },
+
+    { id: 'tg44_05', question: 'Portable oxygen equipment on transport aircraft is required for:',
+      options: ['All passengers on flights above 10,000 ft', 'Cabin crew to administer first aid oxygen to passengers with medical conditions', 'Pilots only as a backup to the fixed oxygen system', 'Cargo inspection at high altitude airports only'],
+      correct: 1,
+      explanation: 'Portable oxygen is required for CABIN CREW use — to provide therapeutic/first-aid oxygen to ill passengers or to allow crew to move throughout the cabin during a decompression or smoke/fumes event when they are away from fixed outlets.' },
+
+    { id: 'tg44_06', question: 'The regulatory minimum oxygen supply duration for flight crew after a cabin decompression is:',
+      options: ['10 minutes at cruising altitude only', 'For the remainder of the flight at any altitude', 'From the point of decompression to descent to 10,000 ft, then 30 minutes more', 'Until the aircraft lands, regardless of descent altitude'],
+      correct: 2,
+      explanation: 'Regulations (e.g., CS-25) require crew oxygen from decompression until DESCENT TO 10,000 ft plus a further 30-minute reserve for continued flight. The total duration depends on cruise altitude and time to descend.' },
+
+    { id: 'tg44_07', question: 'Oxygen and oil/grease contamination creates a risk of:',
+      options: ['Reduced oxygen purity causing hypoxia at lower altitude than expected', 'Fire or explosion — oxygen dramatically lowers the ignition point of hydrocarbons', 'Corrosion of the oxygen cylinder and valve fittings', 'Freezing of the oxygen regulator at altitude'],
+      correct: 1,
+      explanation: 'Oxygen is a powerful OXIDISER. Contact with hydrocarbon oil/grease contamination can cause SPONTANEOUS IGNITION or EXPLOSION. All oxygen system components must be scrupulously clean and only approved oxygen-compatible lubricants used.' },
+
+    { id: 'tg44_08', question: 'When is a passenger oxygen system automatically or manually deployed?',
+      options: ['When cabin altitude exceeds 14,000 ft', 'When cabin altitude exceeds 10,000 ft or at pilot discretion', 'Only at pilot discretion — no automatic deployment exists', 'Automatically above 25,000 ft aircraft altitude regardless of cabin altitude'],
+      correct: 0,
+      explanation: 'Passenger oxygen must be available when cabin altitude exceeds 14,000 ft (some regulations 15,000 ft). Many systems deploy AUTOMATICALLY via cabin altitude sensors at this point, and can also be manually deployed by the crew.' },
+
+    { id: 'tg44_09', question: 'A diluter-demand oxygen system:',
+      options: ['Supplies pure 100% oxygen on every breath regardless of altitude', 'Mixes oxygen with cabin air in a ratio that increases oxygen concentration as altitude increases', 'Supplies oxygen continuously without requiring the user to inhale to trigger flow', 'Only operates in emergency; normal breathing uses cabin air exclusively'],
+      correct: 1,
+      explanation: 'DILUTER-DEMAND systems mix oxygen with cabin air in a proportion that increases the O₂ concentration progressively with altitude. At sea level it may supply ~21% (air only); at high altitude it supplies increasingly enriched or pure oxygen on demand.' },
+
+    { id: 'tg44_10', question: 'The colour coding for aircraft oxygen cylinders and pipework is:',
+      options: ['Red for high pressure, blue for low pressure', 'Green (international) or white (UK) for medical/aviator oxygen systems', 'Yellow for oxygen pipework in all aircraft', 'Black with white lettering, indicating compressed gas'],
+      correct: 1,
+      explanation: 'Aircraft oxygen cylinders and pipework are typically PAINTED GREEN (international aviation standard) or WHITE (former UK/British standard). Oxygen equipment must be clearly identified to prevent confusion with other gas systems.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG45 — Batteries & Electrical Storage
+  // ─────────────────────────────────────────────────────────────────
+  tg45: [
+    { id: 'tg45_01', question: 'Battery capacity efficiency must always be:',
+      options: ['At least 10% above saturation level', 'Above 70% of nameplate capacity', '80% or more of rated nameplate capacity', 'Above 90% of rated nameplate capacity'],
+      correct: 2,
+      explanation: 'Regulations require replacement or overhaul when capacity falls below 80% of rated nameplate capacity. Below 80%, the battery may not provide the guaranteed minimum power for emergency operations.' },
+
+    { id: 'tg45_02', question: 'Lead-acid batteries should be stored in a:',
+      options: ['Semi-charged state to prevent sulphation', 'Fully discharged state to prevent gassing', 'Fully charged state', '50% capacity state for best shelf life'],
+      correct: 2,
+      explanation: 'Lead-acid batteries must be stored FULLY CHARGED. Discharged storage causes SULPHATION — lead sulphate crystals harden and reduce capacity permanently, eventually making the battery unserviceable.' },
+
+    { id: 'tg45_03', question: 'Batteries susceptible to thermal runaway are:',
+      options: ['Nickel-Cadmium (Ni-Cad) batteries', 'Lead-acid batteries', 'Both Ni-Cad and lead-acid', 'Lithium-ion batteries only'],
+      correct: 0,
+      explanation: 'NI-CAD batteries are susceptible to THERMAL RUNAWAY. Ni-Cad internal resistance DECREASES with temperature → higher charging current → more heat → further resistance reduction → runaway. Lead-acid resistance increases with temperature, providing self-limiting protection.' },
+
+    { id: 'tg45_04', question: 'A Ni-Cad battery showing abnormally high temperature after engine start could indicate:',
+      options: ['Thermal runaway in progress', 'The battery is not connected to the battery bus', 'Normal temperature during post-start generator charging', 'A function of high outside air temperature only'],
+      correct: 0,
+      explanation: 'Abnormally HIGH TEMPERATURE in a Ni-Cad battery after engine start (generator beginning to charge) is the primary warning of THERMAL RUNAWAY in progress. Immediate action: isolate the battery from the charging circuit.' },
+
+    { id: 'tg45_05', question: 'Thermal runaway takes place in _____ when constant _____ charging is used:',
+      options: ['Alkaline batteries / current charging', 'Ni-Cad batteries / current charging', 'Alkaline batteries / voltage charging', 'Ni-Cad batteries / voltage charging'],
+      correct: 3,
+      explanation: 'THERMAL RUNAWAY in NI-CAD batteries with CONSTANT VOLTAGE charging: rising temperature → lower resistance → higher charging current → more heat → lower resistance — a self-reinforcing runaway spiral. Constant CURRENT charging is the correct method for Ni-Cad.' },
+
+    { id: 'tg45_06', question: 'The preferred method for charging aircraft batteries on charge is:',
+      options: ['Constant voltage charging', 'Constant current charging', 'Either method is equally acceptable', 'Pulse charging exclusively'],
+      correct: 0,
+      explanation: 'CONSTANT VOLTAGE charging is standard for aircraft batteries in service on the aircraft. As the battery charges and its terminal voltage rises, current naturally TAPERS off, preventing overcharging without requiring external current control.' },
+
+    { id: 'tg45_07', question: 'Secondary (rechargeable) cells can:',
+      options: ['Not be recharged — they are single-use primary cells', 'Be discharged and recharged many times over their service life', 'Be recharged only once before replacement is required', 'Be recharged by exposure to sunlight'],
+      correct: 1,
+      explanation: 'SECONDARY CELLS can be discharged and recharged repeatedly — hundreds to thousands of cycles depending on type. Primary cells cannot be recharged and are single-use only.' },
+
+    { id: 'tg45_08', question: 'The power source used to start the APU is:',
+      options: ['A ground power unit (GPU)', 'The aircraft main DC battery', 'The main engine generators', 'External compressed air (pneumatic starter)'],
+      correct: 1,
+      explanation: 'The APU electric starter motor is powered from the AIRCRAFT MAIN DC BATTERY. A serviceable, adequately charged battery is therefore essential before attempting an APU start.' },
+
+    { id: 'tg45_09', question: 'When connecting batteries in series, total voltage is:',
+      options: ['Equal to the voltage of one battery', 'Equal to the individual battery voltage only', 'The sum of all individual battery voltages', 'Double the voltage of the lowest individual battery'],
+      correct: 2,
+      explanation: 'Batteries in SERIES: total voltage = SUM of all individual battery voltages. Three 12V batteries in series = 36V. Current capacity (Ah) remains the same as a single battery.' },
+
+    { id: 'tg45_10', question: 'The effects of temperature on battery performance include:',
+      options: ['Temperature affects capacity and terminal voltage only', 'Low temperature decreases discharge rate and reduces available capacity', 'Lead-acid batteries show improved performance at higher temperatures (up to a limit)', 'All three of the above are correct'],
+      correct: 3,
+      explanation: 'All three are correct: (1) Temperature affects electrochemical reaction rate, capacity and voltage; (2) Cold significantly reduces available capacity (cold-soaked batteries may deliver only 50–70% of rated capacity); (3) Lead-acid performs better when warm (improved ionic mobility). All are true.' },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────
+  // TG56 — Instruments, Avionics, FBW & Health Monitoring (IHUMS)
+  // ─────────────────────────────────────────────────────────────────
+  tg56: [
+    { id: 'tg56_01', question: 'Advantages of fly-by-wire (FBW) flight control over conventional mechanical systems include:',
+      options: ['Lighter — no heavy mechanical cables and linkages required', 'Lower weight leads to improved fuel consumption', 'Both A and B are correct', 'Completely eliminates the need for hydraulic actuators'],
+      correct: 2,
+      explanation: 'FBW: (1) LIGHTER — replaces heavy cables, pushrods, and linkages with lightweight electrical signal wires; (2) FUEL SAVINGS — weight reduction reduces fuel burn. Both are genuine and significant FBW advantages.' },
+
+    { id: 'tg56_02', question: 'What types of sensors are used in an Integrated Health and Usage Monitoring System (IHUMS)?',
+      options: ['Accelerometers, tachometers, and magnetic pickups', 'Accelerometers, ground speed gauges, and magnetic pickups', 'Deformation (strain) gauges, tachometers, and magnetic pickups', 'Gyroscopes, pressure transducers, and optical sensors'],
+      correct: 2,
+      explanation: 'IHUMS uses: (1) STRAIN GAUGES to measure structural loads and accumulate fatigue; (2) TACHOMETERS for rotational speeds; (3) MAGNETIC PICKUPS for gear tooth speed and ferrous particle detection. Widely used on helicopters.' },
+
+    { id: 'tg56_03', question: 'If resistance increases with an increase in temperature, the material has a:',
+      options: ['Positive Temperature Coefficient (PTC)', 'Negative Temperature Coefficient (NTC)', 'Zero Temperature Coefficient (ZTC)', 'No consistent relationship between resistance and temperature'],
+      correct: 0,
+      explanation: 'POSITIVE TEMPERATURE COEFFICIENT (PTC): resistance INCREASES as temperature INCREASES. Most pure metals (copper, platinum) exhibit PTC. NTC materials (thermistors) have resistance that DECREASES with temperature.' },
+
+    { id: 'tg56_04', question: 'The most widely used electrical frequency in large aircraft AC systems is:',
+      options: ['20 Hz', '400 Hz', '200 Hz', '50 Hz'],
+      correct: 1,
+      explanation: '400 Hz is standard for large aircraft AC systems (typically 115V/400Hz). Compared to 50/60 Hz, transformers and motors can be 6–8× smaller and lighter at 400 Hz — a critical weight saving.' },
+
+    { id: 'tg56_05', question: 'A static inverter is:',
+      options: ['A device that reverses the polarity of a static charge on the airframe', 'A type of static discharge wick', 'A solid-state unit that converts DC power to AC power', 'A device that converts AC power to DC power'],
+      correct: 2,
+      explanation: 'A STATIC INVERTER is a solid-state electronic device that converts DC input to AC output. "Static" means no moving parts. Used to power AC instruments and avionics from the DC bus when AC generators are unavailable.' },
+
+    { id: 'tg56_06', question: 'Increasing supply frequency at constant voltage in a purely resistive circuit causes current to:',
+      options: ['Increase proportionally with frequency', 'Reduce proportionally with frequency', 'Remain the same — frequency does not affect a purely resistive circuit', 'Double for every doubling of frequency'],
+      correct: 2,
+      explanation: 'For a PURELY RESISTIVE circuit: I = V/R — neither R nor I is affected by frequency. Frequency only affects reactive components (capacitors and inductors). This is why 400 Hz is chosen for size/weight, not because it changes resistive load behaviour.' },
+
+    { id: 'tg56_07', question: 'In a parallel electrical circuit:',
+      options: ['All branches receive the same voltage from the supply', 'Failure of one branch does not affect remaining branches', 'Both A and B are correct', 'Total circuit resistance increases as more parallel components are added'],
+      correct: 2,
+      explanation: 'Parallel circuits: (1) ALL branches receive the SAME VOLTAGE; (2) Branch failure does not affect other branches (critical for aircraft redundancy). Total resistance DECREASES as more parallel paths are added.' },
+
+    { id: 'tg56_08', question: 'A thermal circuit breaker:',
+      options: ['Protects the circuit from overheating even without exceeding rated current magnitude', 'Is fast-acting, responding in approximately 1/100th of a second', 'Prevents all overcurrent regardless of its duration', 'Can be safely reset even if the fault that caused it to trip still exists'],
+      correct: 0,
+      explanation: 'A THERMAL CB uses a bimetallic strip that trips due to OVERHEATING — caused by overcurrent OR external heat — even if current is within rated limits. This distinguishes it from magnetic CBs that respond purely to current magnitude.' },
+
+    { id: 'tg56_09', question: 'The three basic types of overcurrent protection devices used in aircraft are:',
+      options: ['Cartridge fuses, HRC fuses, and trip-free (re-settable) circuit breakers', 'Cartridge fuses, HRC fuses, and current limiters', 'Trip-free and non-trip-free circuit breakers only', 'Thermal, magnetic, and electronic protection devices'],
+      correct: 1,
+      explanation: 'Three aircraft fuse types: (1) CARTRIDGE fuses — standard one-time fuses; (2) HRC (HIGH RUPTURING CAPACITY) fuses — safely interrupt very high fault currents; (3) CURRENT LIMITERS — for main bus bars and battery leads.' },
+
+    { id: 'tg56_10', question: 'When responding to a TCAS II Resolution Advisory (RA), the crew must respond within:',
+      options: ['2.5 seconds, applying approximately ±0.25g change', '5 seconds, applying approximately ±0.25g change', '5 seconds, applying approximately ±0.5g change', '1.5 seconds, applying approximately ±0.35g change'],
+      correct: 0,
+      explanation: 'TCAS II requires crew response within 2.5 SECONDS of the RA, applying approximately ±0.25g vertical acceleration change. Slow response significantly degrades the achieved vertical separation from the conflicting traffic.' },
+  ],
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 tg14:[
 {id:'tg14_01',q:'On a gust load diagram, the extreme right-hand limitation speed is:',opts:['Vd (design dive speed)','Vc (design cruise speed)','Vb (design speed for max gust)','Vs (stall speed)'],c:0,ex:'The V-n diagram extends to VD (design dive speed) at its rightmost point. VD is the maximum structural design speed. Vmo/Mmo keeps operations well below VD.'},
 {id:'tg14_02',q:'What is the limit load factor for a normal/transport category aircraft?',opts:['2.5g','1.75g','3.75g','1.5g'],c:0,ex:'Transport category (CS-25) positive limit load factor is 2.5g. Ultimate = 1.5 × 2.5 = 3.75g. Utility category has 4.4g.'},

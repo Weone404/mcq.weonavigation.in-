@@ -3771,7 +3771,7 @@ tg13:[
       explanation: 'TCAS II requires crew response within 2.5 SECONDS of the RA, applying approximately ±0.25g vertical acceleration change. Slow response significantly degrades the achieved vertical separation from the conflicting traffic.' },
   ],
 
-};
+
 
 
 

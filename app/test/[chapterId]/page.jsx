@@ -13,9 +13,16 @@ function shuffleArray(arr) {
 
 function pickQuestions(chapterId) {
   const raw = allQuestions[chapterId] || [];
-  return shuffleArray(raw);
+  // Normalise any short-form question objects
+  const normalised = raw.map(q => ({
+    id: q.id,
+    question: q.question ?? q.q,
+    options: q.options ?? q.opts,
+    correct: q.correct ?? q.c,
+    explanation: q.explanation ?? q.ex ?? '',
+  }));
+  return shuffleArray(normalised).filter(q => q.question && q.options);
 }
-
 export default function TestPage({ params }) {
   const { chapterId } = params;
   const router = useRouter();

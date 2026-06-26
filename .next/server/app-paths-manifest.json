@@ -1,4 +1,7 @@
 {
-  "/dashboard/page": "app/dashboard/page.js",
-  "/teacher/page": "app/teacher/page.js"
+  "/api/teacher/attendance/[batch]/route": "app/api/teacher/attendance/[batch]/route.js",
+  "/test/[chapterId]/page": "app/test/[chapterId]/page.js",
+  "/api/assigned-tests/submit/route": "app/api/assigned-tests/submit/route.js",
+  "/teacher/page": "app/teacher/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
 }

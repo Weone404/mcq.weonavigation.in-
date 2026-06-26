@@ -123,6 +123,15 @@ export default function AssignedTestPage({ params }) {
             isCorrect: answers[i] === q.correct,
         }));
 
+        console.log('📤 [handleSave] Submitting assigned test result:', {
+            testId: test.id,
+            studentEmail: user.email,
+            studentName: user.name,
+            score,
+            total,
+            pct: Math.round((score / total) * 100),
+        });
+
         try {
             const res = await fetch('/api/assigned-tests/submit', {
                 method: 'POST',
@@ -137,8 +146,14 @@ export default function AssignedTestPage({ params }) {
                 }),
             });
             const data = await res.json();
+            if (data.success) {
+                console.log('✅ [handleSave] Result submitted successfully, ID:', data.result?.id);
+            } else {
+                console.error('❌ [handleSave] Server returned error:', data.error);
+            }
             setSubmitStatus(data.success ? 'saved' : 'error');
-        } catch {
+        } catch (err) {
+            console.error('❌ [handleSave] Network/parse error:', err);
             setSubmitStatus('error');
         } finally {
             setSaving(false);

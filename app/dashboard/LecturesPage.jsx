@@ -352,7 +352,7 @@ const PERSONALYSIS_DATA = {
       { title: 'Nav: Mercator char – Ch ', chapter: 'Chapter 11', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/CjnqC8Fz68w?si=4gM61Fqb4BCcKAZj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: FANDAMENTEL OF DIRECTION  – Ch 11', chapter: 'Chapter 1', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/CPeyZDv-ju0?si=WjH9K7rGqTbr6Pgn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: Polar Stereographic Projection – Ch 11', chapter: 'Chapter 11', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/95zN5KuWeLA?si=jZWEFqGnegEZ1_4T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
-    ], 10),
+    ], 13),
   },
   'Instrument Navigation': {
     icon: '🛩️',

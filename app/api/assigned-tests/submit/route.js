@@ -34,6 +34,16 @@ export async function POST(request) {
         }
 
         const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
+        const parsedTestId = parseInt(testId, 10);
+
+        console.log('📝 [POST /api/assigned-tests/submit] Storing result:', {
+            testId: parsedTestId,
+            studentEmail: studentEmail.toLowerCase().trim(),
+            studentName,
+            score,
+            total,
+            accuracy,
+        });
 
         const { rows } = await pool.query(
             `INSERT INTO assigned_test_results 
@@ -41,7 +51,7 @@ export async function POST(request) {
              VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING *`,
             [
-                parseInt(testId, 10),
+                parsedTestId,
                 studentEmail.toLowerCase().trim(),
                 studentName || '',
                 score,
@@ -51,9 +61,10 @@ export async function POST(request) {
             ]
         );
 
+        console.log('✅ [POST] Result stored with ID:', rows[0]?.id);
         return NextResponse.json({ success: true, result: rows[0] });
     } catch (err) {
-        console.error('POST /api/assigned-tests/submit error:', err);
+        console.error('❌ POST /api/assigned-tests/submit error:', err);
         return NextResponse.json({ success: false, error: err.message }, { status: 500 });
     }
 }
@@ -69,6 +80,10 @@ export async function GET(request) {
             return NextResponse.json({ success: false, error: 'testId is required' }, { status: 400 });
         }
 
+        const parsedTestId = parseInt(testId, 10);
+        
+        console.log('🔍 [GET /api/assigned-tests/submit] Fetching results for testId:', parsedTestId);
+
         const { rows } = await pool.query(
             `SELECT 
                 r.*,
@@ -78,12 +93,34 @@ export async function GET(request) {
              JOIN assigned_tests t ON t.id = r.test_id
              WHERE r.test_id = $1
              ORDER BY r.submitted_at DESC`,
-            [parseInt(testId, 10)]
+            [parsedTestId]
         );
+
+        console.log(`✅ [GET] Found ${rows.length} result(s) for testId ${parsedTestId}`);
+        if (rows.length === 0) {
+            console.log('⚠️  No results found. Checking if test exists...');
+            const testCheck = await pool.query(
+                'SELECT id, title FROM assigned_tests WHERE id = $1',
+                [parsedTestId]
+            );
+            if (testCheck.rows.length > 0) {
+                console.log('✓ Test exists:', testCheck.rows[0]);
+                // Check if ANY results exist in the table at all
+                const totalCheck = await pool.query(
+                    'SELECT COUNT(*) as total FROM assigned_test_results'
+                );
+                console.log(`📊 Total records in assigned_test_results: ${totalCheck.rows[0]?.total || 0}`);
+                if (totalCheck.rows[0]?.total === 0) {
+                    console.log('💡 Possible cause: No students have submitted any assigned tests yet');
+                }
+            } else {
+                console.log('✗ Test NOT FOUND in database');
+            }
+        }
 
         return NextResponse.json({ success: true, results: rows });
     } catch (err) {
-        console.error('GET /api/assigned-tests/submit error:', err);
+        console.error('❌ GET /api/assigned-tests/submit error:', err);
         return NextResponse.json({ success: false, error: err.message }, { status: 500 });
     }
 }

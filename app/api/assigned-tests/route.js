@@ -38,9 +38,13 @@ export async function GET() {
              WHERE is_active = true
              ORDER BY created_at DESC`
         );
+        console.log(`📋 [GET /api/assigned-tests] Student fetched ${rows.length} active tests`);
+        if (rows.length > 0) {
+            console.log('   Tests available:', rows.map(t => `${t.id}: ${t.title}`).join(' | '));
+        }
         return NextResponse.json({ success: true, tests: rows });
     } catch (err) {
-        console.error('GET /api/assigned-tests error:', err);
+        console.error('❌ GET /api/assigned-tests error:', err);
         return NextResponse.json({ success: false, error: err.message }, { status: 500 });
     }
 }

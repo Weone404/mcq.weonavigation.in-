@@ -2246,9 +2246,26 @@ function AssignTestTab() {
         try {
             const res = await fetch(`/api/assigned-tests/submit?testId=${testId}`);
             const data = await res.json();
-            if (data.success) setTestResults(data.results);
-        } catch (err) { console.error(err); }
-        finally { setLoadingResults(false); }
+            if (data.success) {
+                setTestResults(data.results);
+            } else {
+                console.error('Failed to fetch test results:', data.error);
+                setTestResults([]);
+                flash(`Unable to load results: ${data.error || 'Server error'}`, 'err');
+            }
+        } catch (err) {
+            console.error(err);
+            setTestResults([]);
+            flash('Unable to load test results. Please try again.', 'err');
+        } finally {
+            setLoadingResults(false);
+        }
+    }
+
+    async function handleViewResults(testId) {
+        setSelectedTest(testId);
+        setTestResults([]);
+        await fetchTestResults(testId);
     }
 
     function flash(text, type = 'ok') {
@@ -2808,7 +2825,7 @@ function AssignTestTab() {
                                                 {test.is_active ? '⏸ Pause' : '▶ Activate'}
                                             </button>
                                             <button
-                                                onClick={() => { setSelectedTest(test.id); fetchTestResults(test.id); }}
+                                                onClick={() => handleViewResults(test.id)}
                                                 style={{ background: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', padding: '6px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
                                             >
                                                 📊 View Results

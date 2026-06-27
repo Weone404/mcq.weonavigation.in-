@@ -269,15 +269,19 @@ function ResultsContent() {
 
   useEffect(() => {
     const u = getUser();
-    if (!u) { router.replace('/login'); return; }
     setUser(u);
+    if (!u) {
+      setResults([]);
+      setLoading(false);
+      return;
+    }
     getResults(u.email)
       .then(setResults)
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [router]);
 
-  const handleLogout = () => { clearUser(); router.replace('/login'); };
+  const handleLogout = () => { clearUser(); setUser(null); setResults([]); router.replace('/dashboard'); };
 
   const handleNav = (page) => {
     if (page.startsWith('test/')) {
@@ -289,16 +293,25 @@ function ResultsContent() {
     }
   };
 
-  if (!user) return null;
-
   return (
     <div style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif", background: C.bg, minHeight: "100vh" }}>
       <style>{`@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}`}</style>
       <Sidebar active="results" onChange={handleNav} />
-      <TopBar user={user} onLogout={handleLogout} search={search} onSearchChange={setSearch} filter={filter} onFilterChange={setFilter} />
+      <TopBar user={user || { name: 'Guest' }} onLogout={handleLogout} search={search} onSearchChange={setSearch} filter={filter} onFilterChange={setFilter} />
       <main style={{ marginLeft: 220, paddingTop: 64 }}>
         <div style={{ padding: "28px 32px", maxWidth: 1300 }}>
-          <ResultsHome user={user} results={results} loading={loading} latestScore={latestScore} latestTotal={latestTotal} latestChapterId={latestChapterId} onNav={handleNav} search={search} onSearchChange={setSearch} filter={filter} onFilterChange={setFilter} />
+          {!user ? (
+            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 20, padding: "36px 32px", boxShadow: "0 10px 30px rgba(15,23,42,0.05)" }}>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>🔐</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: C.text, marginBottom: 8 }}>Results are saved only for signed-in users</div>
+              <div style={{ fontSize: 14, color: C.muted, marginBottom: 20, lineHeight: 1.6 }}>
+                Your completed test will stay on this page only after you sign in. For now, this view is ready for guest access without redirecting to the login screen.
+              </div>
+              <button onClick={() => router.push('/dashboard')} style={{ background: C.primary, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 18px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>Back to Dashboard</button>
+            </div>
+          ) : (
+            <ResultsHome user={user} results={results} loading={loading} latestScore={latestScore} latestTotal={latestTotal} latestChapterId={latestChapterId} onNav={handleNav} search={search} onSearchChange={setSearch} filter={filter} onFilterChange={setFilter} />
+          )}
         </div>
       </main>
       <div style={{ marginLeft: 220, background: C.sidebar, padding: "16px 32px", display: "flex", justifyContent: "space-around" }}>

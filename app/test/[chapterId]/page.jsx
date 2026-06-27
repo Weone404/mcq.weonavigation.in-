@@ -43,8 +43,7 @@ export default function TestPage({ params }) {
   // ✅ Load real user on mount — INSIDE the component
   useEffect(() => {
     const u = getUser();
-    if (!u) { router.replace('/login'); return; }
-    setCurrentUser(u);
+    setCurrentUser(u || null);
   }, [router]);
 
   // ── Tab-switch guard
@@ -132,7 +131,7 @@ export default function TestPage({ params }) {
   };
 
   async function handleSaveAndContinue() {
-    if (saving || !currentUser) return;
+    if (saving) return;
     setSaving(true);
 
     const score = questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0);
@@ -146,21 +145,24 @@ export default function TestPage({ params }) {
 
     const subjectId = subjectMap[chapterId] || chapterId;
 
-    try {
-      await saveResult({
-        userEmail: currentUser.email,  // ✅ real user
-        chapterId,
-        subjectId,                     // ✅ for Subjects tab
-        score,
-        total,
-        answers: answerDetails,
-      });
-      await updateLeaderboard(currentUser, score, total, chapterId);
-    } catch (err) {
-      console.error('Failed to save result:', err);
+    if (currentUser?.email) {
+      try {
+        await saveResult({
+          userEmail: currentUser.email,
+          chapterId,
+          subjectId,
+          score,
+          total,
+          answers: answerDetails,
+        });
+        await updateLeaderboard(currentUser, score, total, chapterId);
+      } catch (err) {
+        console.error('Failed to save result:', err);
+      }
     }
 
-    router.push(`/results?score=${score}&total=${total}&chapter=${chapterId}`);
+    setSaving(false);
+    router.push(`/results?score=${score}&total=${total}&chapter=${chapterId}${currentUser?.email ? '' : '&guest=1'}`);
   }
 
   const mins = Math.floor(timeLeft / 60);
@@ -428,7 +430,7 @@ export default function TestPage({ params }) {
             })}
           </div>
           <button className="save-btn" onClick={handleSaveAndContinue} disabled={saving}>
-            {saving ? '💾 Saving...' : 'Save Result & Continue →'}
+            {saving ? '💾 Saving...' : currentUser?.email ? 'Save Result & Continue →' : 'Continue →'}
           </button>
           <button className="retry-btn" onClick={resetTest}>↺ Retry Test</button>
         </div>

@@ -3,6 +3,49 @@
 import { useState } from "react";
 import { fetchAndStoreUser } from "../../lib/storage";
 
+const GUEST_SESSION_KEY = "guest_mock_session_id";
+
+function getPostLoginRedirect(hasTransfer = false) {
+  if (typeof window === "undefined") return hasTransfer ? "/dashboard?mockUnlock=1" : "/dashboard";
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get("next");
+  if (next && next.startsWith("/")) return next;
+  return hasTransfer ? "/dashboard?mockUnlock=1" : "/dashboard";
+}
+
+function getGuestIdFromUrl() {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const guestId = params.get("guestId");
+  if (guestId) {
+    localStorage.setItem(GUEST_SESSION_KEY, guestId);
+    localStorage.setItem("guestId", guestId);
+    return guestId;
+  }
+  return localStorage.getItem(GUEST_SESSION_KEY) || localStorage.getItem("guestId");
+}
+
+async function transferGuestResult(guestId, email, name) {
+  if (!guestId || !email) return null;
+  try {
+    const res = await fetch('/api/mock-leaderboard/transfer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ guestId, email, name }),
+    });
+    const data = await res.json();
+    if (res.ok && data.success && data.result) {
+      sessionStorage.setItem('transferred_mock_result', JSON.stringify(data.result));
+      localStorage.removeItem(GUEST_SESSION_KEY);
+      localStorage.removeItem('guestId');
+      return data.result;
+    }
+  } catch (err) {
+    console.error('Guest transfer failed:', err);
+  }
+  return null;
+}
+
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -492,7 +535,9 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(data.detail || "Login failed");
 
       await saveSessionAndHydrateUser(data, id);
-      window.location.href = "/dashboard";
+      const guestId = getGuestIdFromUrl();
+      const transferResult = await transferGuestResult(guestId, id, data?.user?.name || id);
+      window.location.href = getPostLoginRedirect(Boolean(transferResult));
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -537,7 +582,9 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(data.detail || "Invalid OTP");
 
       await saveSessionAndHydrateUser(data, id);
-      window.location.href = "/dashboard";
+      const guestId = getGuestIdFromUrl();
+      const transferResult = await transferGuestResult(guestId, id, data?.user?.name || id);
+      window.location.href = getPostLoginRedirect(Boolean(transferResult));
     } catch (e) {
       setError(e.message);
       setLoading(false);

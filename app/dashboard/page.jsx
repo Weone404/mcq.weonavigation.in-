@@ -1,8 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { getUser, clearUser, getStats, getResults, fetchAndStoreUser } from '../../lib/storage';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getUser, clearUser, getStats, getResults, fetchAndStoreUser, getPendingMockResult, setPendingMockResult, clearPendingMockResult, getTransferredMockResult, clearTransferredMockResult, getGuestSessionId } from '../../lib/storage';
 import { chapters, questions as allQuestions } from '../../data/questions';
 import LecturesPage from './LecturesPage.jsx';
 import ResourcesPage from './ResourcesPage.jsx';
@@ -2203,6 +2203,7 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
   const TOTAL_TIME = 6000;
   const TOTAL_Q = 100;
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
+  const searchParams = useSearchParams();
 
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [pool, setPool] = useState([]);
@@ -2213,9 +2214,12 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
   const [submitStatus, setSubmitStatus] = useState('idle');
   const [isAptlModeLocal, setIsAptlModeLocal] = useState(isAptlMode);
   const [lastAnswered, setLastAnswered] = useState(null);
+  const [pendingAuthResult, setPendingAuthResult] = useState(null);
   const timerRef = useRef(null);
 
   function handleSubjectSelect(subject) {
+    clearPendingMockResult();
+    setPendingAuthResult(null);
     const chapterIds = subject.id === 'all' ? null : subject.chapterIds;
     const newPool = buildMockPool(TOTAL_Q, chapterIds);
     setSelectedSubject(subject);
@@ -2223,11 +2227,14 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
     setAnswers({});
     setCurrentQ(0);
     setTimeLeft(TOTAL_TIME);
+    setSubmitStatus('idle');
     setScreen('intro');
   }
 
   function resetMock() {
     clearInterval(timerRef.current);
+    clearPendingMockResult();
+    setPendingAuthResult(null);
     setSelectedSubject(null);
     setPool([]);
     setAnswers({});
@@ -2249,6 +2256,65 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
 
+  useEffect(() => {
+    const transferredResult = getTransferredMockResult();
+    if (transferredResult) {
+      clearPendingMockResult();
+      clearTransferredMockResult();
+      setPendingAuthResult(transferredResult);
+      setSubmitStatus('saved');
+      setScreen('finish');
+      return;
+    }
+
+    const storedResult = getPendingMockResult();
+    if (!storedResult) return;
+
+    const currentUser = getUser();
+    if (currentUser) {
+      const unlockPendingResult = async () => {
+        try {
+          const res = await fetch('/api/mock-leaderboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: currentUser.email,
+              name: currentUser.name,
+              subject: storedResult.subject,
+              subjectLabel: storedResult.subjectLabel,
+              score: storedResult.score,
+              total: storedResult.total,
+              accuracy: storedResult.accuracy,
+              submittedAt: storedResult.submittedAt,
+            }),
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            clearPendingMockResult();
+            setPendingAuthResult(null);
+            setSubmitStatus('saved');
+            setScreen('finish');
+          } else {
+            setSubmitStatus('error');
+            setPendingAuthResult(storedResult);
+            setScreen('loginRequired');
+          }
+        } catch (err) {
+          console.error('Failed to unlock pending mock result:', err);
+          setSubmitStatus('error');
+          setPendingAuthResult(storedResult);
+          setScreen('loginRequired');
+        }
+      };
+
+      unlockPendingResult();
+      return;
+    }
+
+    setPendingAuthResult(storedResult);
+    setScreen('loginRequired');
+  }, [searchParams]);
+
   const answeringRef = useRef(false);
 
   function handleAnswer(idx) {
@@ -2266,46 +2332,82 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
 
   async function submit() {
     clearInterval(timerRef.current);
-    setScreen('finish');
 
-    setAnswers(currentAnswers => {
-      const finalScore = pool.reduce((a, q, i) => a + (currentAnswers[i] === q.correct ? 1 : 0), 0);
-      const finalTotal = pool.length;
-      const finalAccuracy = finalTotal > 0 ? Math.round((finalScore / finalTotal) * 100) : 0;
+    const finalAnswers = answers;
+    const finalScore = pool.reduce((a, q, i) => a + (finalAnswers[i] === q.correct ? 1 : 0), 0);
+    const finalTotal = pool.length;
+    const finalAccuracy = finalTotal > 0 ? Math.round((finalScore / finalTotal) * 100) : 0;
 
-      const saveResult = async () => {
-        try {
-          setSubmitStatus('saving');
-          const user = getUser();
-          if (user) {
-            const res = await fetch('/api/mock-leaderboard', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                email: user.email,
-                name: user.name,
-                subject: selectedSubject?.id || 'all',
-                subjectLabel: selectedSubject?.title || 'All Subjects',
-                score: finalScore,
-                total: finalTotal,
-                accuracy: finalAccuracy,
-                submittedAt: new Date().toISOString(),
-              }),
-            });
-            const data = await res.json();
-            setSubmitStatus(data.success ? 'saved' : 'error');
-          } else {
-            setSubmitStatus('error');
-          }
-        } catch (err) {
-          console.error('Failed to save mock result:', err);
-          setSubmitStatus('error');
-        }
-      };
+    const user = getUser();
 
-      saveResult();
-      return currentAnswers;
-    });
+    if (user) {
+      try {
+        setSubmitStatus('saving');
+        const res = await fetch('/api/mock-leaderboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: user.email,
+            name: user.name,
+            subject: selectedSubject?.id || 'all',
+            subjectLabel: selectedSubject?.title || 'All Subjects',
+            score: finalScore,
+            total: finalTotal,
+            accuracy: finalAccuracy,
+            submittedAt: new Date().toISOString(),
+          }),
+        });
+        const data = await res.json();
+        setSubmitStatus(data.success ? 'saved' : 'error');
+        setScreen('finish');
+      } catch (err) {
+        console.error('Failed to save mock result:', err);
+        setSubmitStatus('error');
+        setScreen('finish');
+      }
+      return;
+    }
+
+    const guestSessionId = getGuestSessionId();
+    const pendingResult = {
+      sessionId: guestSessionId,
+      subject: selectedSubject?.id || 'all',
+      subjectLabel: selectedSubject?.title || 'All Subjects',
+      score: finalScore,
+      total: finalTotal,
+      accuracy: finalAccuracy,
+      submittedAt: new Date().toISOString(),
+    };
+
+    try {
+      setSubmitStatus('saving');
+      const res = await fetch('/api/mock-leaderboard', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          guestId: guestSessionId,
+          name: 'Guest',
+          subject: pendingResult.subject,
+          subjectLabel: pendingResult.subjectLabel,
+          score: pendingResult.score,
+          total: pendingResult.total,
+          accuracy: pendingResult.accuracy,
+          submittedAt: pendingResult.submittedAt,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Unable to save guest result');
+      }
+      setSubmitStatus('loginRequired');
+    } catch (err) {
+      console.error('Failed to save guest result:', err);
+      setSubmitStatus('error');
+    }
+
+    setPendingAuthResult(pendingResult);
+    setPendingMockResult(pendingResult);
+    setScreen('loginRequired');
   }
 
   const mins = Math.floor(timeLeft / 60);
@@ -2319,6 +2421,13 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
   const answered = Object.keys(answers).length;
   const notAnswered = pool.length - answered;
   const wrong = answered - score;
+
+  const displayScore = pendingAuthResult?.score ?? score;
+  const displayTotal = pendingAuthResult?.total ?? pool.length;
+  const displayPct = pendingAuthResult ? pendingAuthResult.accuracy : scorePct;
+  const displaySubjectTitle = pendingAuthResult?.subjectLabel || selectedSubject?.title || 'All Subjects';
+  const displaySubjectIcon = selectedSubject?.icon || '🎯';
+  const displaySubjectColor = selectedSubject?.color || C.primary;
 
   function getDotState(i) {
     if (screen === 'finish') {
@@ -2377,13 +2486,13 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
           )}
 
           <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 7, marginBottom: 26 }}>
-            {[['❓', `${pool.length} Questions`], ['⏱️', '100 Minutes'], ['📚', selectedSubject?.id === 'all' ? 'All Chapters' : selectedSubject?.title], ['💡', 'Instant Results']].map(([icon, label]) => (
+            {[['❓', `${pool.length} Questions`], ['⏱️', '100 Minutes'], ['📚', selectedSubject?.id === 'all' ? 'All Chapters' : selectedSubject?.title], ['�', 'Unlock after login']].map(([icon, label]) => (
               <span key={label} style={{ background: C.primaryLight, color: C.primary, border: `1px solid ${hexAlpha(C.primary, 0.19)}`, padding: '6px 14px', borderRadius: 20, fontSize: 13, fontWeight: 700, display: 'inline-block' }}>{icon} {label}</span>
             ))}
           </div>
 
           <ul style={{ textAlign: 'left', listStyle: 'none', padding: 0, margin: '0 0 26px' }}>
-            {['Each question has 4 options — choose the best answer', 'Click the same option again to deselect', 'Test auto-submits when timer reaches zero', 'Score summary shown at the end'].map((r, i) => (
+            {['Each question has 4 options — choose the best answer', 'Click the same option again to deselect', 'Test auto-submits when timer reaches zero', 'Result stays hidden until you sign in'].map((r, i) => (
               <li key={r} style={{ background: C.bg, borderRadius: 10, padding: '10px 15px', fontSize: 14, color: C.text, marginBottom: 8, WebkitAnimation: `fadeIn .35s ease ${i * 0.07}s both`, animation: `fadeIn .35s ease ${i * 0.07}s both` }}>✔ {r}</li>
             ))}
           </ul>
@@ -2531,19 +2640,44 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
     );
   }
 
+  if (screen === 'loginRequired') {
+    return (
+      <div style={{ maxWidth: 560, margin: '0 auto', padding: isMobile ? '0 4px' : 0, WebkitAnimation: 'fadeIn .5s ease', animation: 'fadeIn .5s ease' }}>
+        <div style={{ background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, padding: isMobile ? '26px 20px' : '36px 32px', textAlign: 'center' }}>
+          <div style={{ fontSize: 52, marginBottom: 12 }}>🔐</div>
+          <h2 style={{ margin: '0 0 8px', fontWeight: 900, fontSize: 22, color: C.text, letterSpacing: -0.3 }}>Sign in to unlock your mock result</h2>
+          <p style={{ color: C.muted, fontSize: 14, lineHeight: 1.6, marginBottom: 18 }}>
+            Your mock result is held securely for this guest session. Sign in now to reveal it and save it to your account.
+          </p>
+
+          <div style={{ background: hexAlpha(C.primary, 0.08), border: `1px solid ${hexAlpha(C.primary, 0.2)}`, borderRadius: 14, padding: '18px 16px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 10 }}>Mock result locked</div>
+            <div style={{ fontSize: 14, color: C.muted, lineHeight: 1.7 }}>We won’t display your score until you log in.</div>
+          </div>
+
+          <button onClick={() => { const guestSessionId = getGuestSessionId(); window.location.href = `/login?guestId=${encodeURIComponent(guestSessionId)}&next=${encodeURIComponent('/dashboard?mockUnlock=1')}`; }} style={{ width: '100%', padding: '13px', background: `linear-gradient(135deg,${C.primary},${C.purple})`, border: 'none', borderRadius: 13, color: '#fff', fontSize: 15, fontWeight: 800, cursor: 'pointer', marginBottom: 10 }}>
+            🔓 Sign in to view result
+          </button>
+
+          <button onClick={resetMock} style={{ width: '100%', padding: '12px', background: 'none', border: `1px solid ${C.border}`, borderRadius: 13, color: C.muted, fontSize: 14, cursor: 'pointer' }}>🔄 Try another subject</button>
+        </div>
+      </div>
+    );
+  }
+
   // ── Screen: Finish / Results
   return (
     <div style={{ maxWidth: 560, margin: '0 auto', padding: isMobile ? '0 4px' : 0, WebkitAnimation: 'fadeIn .5s ease', animation: 'fadeIn .5s ease' }}>
       <div style={{ background: C.card, borderRadius: 20, border: `1px solid ${C.border}`, padding: isMobile ? '26px 20px' : '36px 32px', textAlign: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(selectedSubject?.color || C.purple, 0.08), border: `1px solid ${hexAlpha(selectedSubject?.color || C.purple, 0.2)}`, borderRadius: 20, padding: '5px 14px', marginBottom: 16 }}>
-          <span style={{ fontSize: 15 }}>{selectedSubject?.icon}</span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: selectedSubject?.color || C.purple }}>{selectedSubject?.title}</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: hexAlpha(displaySubjectColor, 0.08), border: `1px solid ${hexAlpha(displaySubjectColor, 0.2)}`, borderRadius: 20, padding: '5px 14px', marginBottom: 16 }}>
+          <span style={{ fontSize: 15 }}>{displaySubjectIcon}</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: displaySubjectColor }}>{displaySubjectTitle}</span>
         </div>
 
-        <div style={{ fontSize: 52, marginBottom: 12, WebkitAnimation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)', animation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)' }}>{scorePct >= 80 ? '🏆' : scorePct >= 50 ? '✈️' : '📚'}</div>
-        <h2 style={{ margin: '0 0 5px', fontWeight: 900, fontSize: 22, color: C.text, letterSpacing: -0.3 }}>{scorePct >= 80 ? 'Excellent!' : scorePct >= 50 ? 'Good Effort!' : 'Keep Practicing!'}</h2>
-        <div style={{ fontSize: 48, fontWeight: 900, color: getScoreColor(scorePct), lineHeight: 1, WebkitAnimation: 'countUp .8s ease', animation: 'countUp .8s ease' }}>{score}/{pool.length}</div>
-        <div style={{ fontSize: 22, fontWeight: 700, color: getScoreColor(scorePct), marginBottom: 18 }}>{scorePct}%</div>
+        <div style={{ fontSize: 52, marginBottom: 12, WebkitAnimation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)', animation: 'bounceIn .6s cubic-bezier(.4,0,.2,1)' }}>{displayPct >= 80 ? '🏆' : displayPct >= 50 ? '✈️' : '📚'}</div>
+        <h2 style={{ margin: '0 0 5px', fontWeight: 900, fontSize: 22, color: C.text, letterSpacing: -0.3 }}>{displayPct >= 80 ? 'Excellent!' : displayPct >= 50 ? 'Good Effort!' : 'Keep Practicing!'}</h2>
+        <div style={{ fontSize: 48, fontWeight: 900, color: getScoreColor(displayPct), lineHeight: 1, WebkitAnimation: 'countUp .8s ease', animation: 'countUp .8s ease' }}>{displayScore}/{displayTotal}</div>
+        <div style={{ fontSize: 22, fontWeight: 700, color: getScoreColor(displayPct), marginBottom: 18 }}>{displayPct}%</div>
 
         {/* Save status badge */}
         <div style={{ marginBottom: 22, minHeight: 34 }}>
@@ -2824,6 +2958,15 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState('home');
   const [subPage, setSubPage] = useState('subjects');
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const mockUnlock = searchParams.get('mockUnlock');
+    if (mockUnlock === '1') {
+      setPage('tests');
+      setSubPage('mock');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const storedUser = getUser();

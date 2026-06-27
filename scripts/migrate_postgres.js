@@ -41,6 +41,25 @@ CREATE TABLE IF NOT EXISTS test_results (
 CREATE INDEX IF NOT EXISTS idx_test_results_email ON test_results(LOWER(student_email));
 CREATE INDEX IF NOT EXISTS idx_test_results_date ON test_results(date);
 
+CREATE TABLE IF NOT EXISTS mock_leaderboard (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255),
+    guest_id VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
+    subject VARCHAR(255) NOT NULL DEFAULT 'all',
+    subject_label VARCHAR(255) NOT NULL DEFAULT 'All Subjects',
+    score INT DEFAULT 0,
+    total INT DEFAULT 0,
+    accuracy INT DEFAULT 0,
+    attempts INT DEFAULT 1,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    first_attempt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_mock_leaderboard_email ON mock_leaderboard(LOWER(email));
+CREATE INDEX IF NOT EXISTS idx_mock_leaderboard_guest_id ON mock_leaderboard(guest_id);
+CREATE INDEX IF NOT EXISTS idx_mock_leaderboard_subject ON mock_leaderboard(subject);
+
 CREATE TABLE IF NOT EXISTS attendance (
     id SERIAL PRIMARY KEY,
     student_email VARCHAR(255) NOT NULL,

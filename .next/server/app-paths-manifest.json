@@ -1,7 +1,13 @@
 {
-  "/api/teacher/attendance/[batch]/route": "app/api/teacher/attendance/[batch]/route.js",
+  "/login/page": "app/login/page.js",
   "/test/[chapterId]/page": "app/test/[chapterId]/page.js",
-  "/api/assigned-tests/submit/route": "app/api/assigned-tests/submit/route.js",
-  "/teacher/page": "app/teacher/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/api/user/route": "app/api/user/route.js",
+  "/page": "app/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/api/teacher/attendance/[batch]/route": "app/api/teacher/attendance/[batch]/route.js",
+  "/api/results/route": "app/api/results/route.js",
+  "/api/stats/route": "app/api/stats/route.js",
+  "/api/assigned-tests/route": "app/api/assigned-tests/route.js",
+  "/api/classes/route": "app/api/classes/route.js",
+  "/teacher/page": "app/teacher/page.js"
 }

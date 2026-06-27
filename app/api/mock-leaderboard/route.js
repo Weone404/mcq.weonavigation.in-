@@ -12,7 +12,7 @@ export async function GET(request) {
             ({ rows } = await pool.query(
                 `SELECT email, name, subject, subject_label, score, total, accuracy, attempts, submitted_at
                  FROM mock_leaderboard
-                 WHERE subject = $1
+                 WHERE email IS NOT NULL AND subject = $1
                  ORDER BY accuracy DESC, score DESC, submitted_at ASC
                  LIMIT 100`,
                 [subject]
@@ -21,6 +21,7 @@ export async function GET(request) {
             ({ rows } = await pool.query(
                 `SELECT email, name, subject, subject_label, score, total, accuracy, attempts, submitted_at
                  FROM mock_leaderboard
+                 WHERE email IS NOT NULL
                  ORDER BY accuracy DESC, score DESC, submitted_at ASC
                  LIMIT 100`
             ));
@@ -50,19 +51,20 @@ export async function GET(request) {
 // Only saves if new accuracy is better than existing best
 export async function POST(request) {
     try {
-        const { email, name, subject, subjectLabel, score, total, accuracy, submittedAt } = await request.json();
+        const { email, name, subject, subjectLabel, score, total, accuracy, submittedAt, guestId } = await request.json();
 
-        if (!email || !name || score == null || !total) {
+        if (!(email || guestId) || !name || score == null || !total) {
             return NextResponse.json({ success: false, error: 'Missing required fields.' }, { status: 400 });
         }
 
-        const cleanEmail = email.toLowerCase().trim();
         const subjectKey = subject || 'all';
         const newAccuracy = accuracy ?? (total > 0 ? Math.round((score / total) * 100) : 0);
+        const queryBy = email ? 'LOWER(email) = LOWER($1) AND subject = $2' : 'guest_id = $1 AND subject = $2';
+        const params = email ? [email.toLowerCase().trim(), subjectKey] : [guestId, subjectKey];
 
         const { rows: existingRows } = await pool.query(
-            `SELECT * FROM mock_leaderboard WHERE LOWER(email) = LOWER($1) AND subject = $2`,
-            [cleanEmail, subjectKey]
+            `SELECT * FROM mock_leaderboard WHERE ${queryBy}`,
+            params
         );
 
         const existing = existingRows[0];
@@ -76,18 +78,32 @@ export async function POST(request) {
                 return NextResponse.json({ success: true, updated: false, message: 'Existing score is better.' });
             }
 
+            const updateParams = email
+                ? [name, subjectLabel || subjectKey, Number(score), Number(total), newAccuracy, submittedAt || new Date().toISOString(), existing.id]
+                : [name, subjectLabel || subjectKey, Number(score), Number(total), newAccuracy, submittedAt || new Date().toISOString(), existing.id];
+
             await pool.query(
                 `UPDATE mock_leaderboard SET name=$1, subject_label=$2, score=$3, total=$4, accuracy=$5, attempts=COALESCE(attempts,0)+1, submitted_at=$6 WHERE id=$7`,
-                [name, subjectLabel || subjectKey, Number(score), Number(total), newAccuracy, submittedAt || new Date().toISOString(), existing.id]
+                updateParams
             );
 
             return NextResponse.json({ success: true, updated: true });
         }
 
+        const insertFields = email
+            ? 'email, name, subject, subject_label, score, total, accuracy, attempts, submitted_at, first_attempt'
+            : 'guest_id, name, subject, subject_label, score, total, accuracy, attempts, submitted_at, first_attempt';
+        const insertValues = email
+            ? '($1,$2,$3,$4,$5,$6,$7,1,$8,NOW())'
+            : '($1,$2,$3,$4,$5,$6,$7,1,$8,NOW())';
+        const insertParams = email
+            ? [email.toLowerCase().trim(), name, subjectKey, subjectLabel || subjectKey, Number(score), Number(total), newAccuracy, submittedAt || new Date().toISOString()]
+            : [guestId, name, subjectKey, subjectLabel || subjectKey, Number(score), Number(total), newAccuracy, submittedAt || new Date().toISOString()];
+
         await pool.query(
-            `INSERT INTO mock_leaderboard (email, name, subject, subject_label, score, total, accuracy, attempts, submitted_at, first_attempt)
-             VALUES ($1,$2,$3,$4,$5,$6,$7,1,$8,NOW())`,
-            [cleanEmail, name, subjectKey, subjectLabel || subjectKey, Number(score), Number(total), newAccuracy, submittedAt || new Date().toISOString()]
+            `INSERT INTO mock_leaderboard (${insertFields})
+             VALUES ${insertValues}`,
+            insertParams
         );
 
         return NextResponse.json({ success: true, updated: true, created: true });

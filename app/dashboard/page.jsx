@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getUser, clearUser, getStats, getResults, fetchAndStoreUser, getPendingMockResult, setPendingMockResult, clearPendingMockResult, getTransferredMockResult, clearTransferredMockResult, getGuestSessionId } from '../../lib/storage';
 import { chapters, questions as allQuestions } from '../../data/questions';
@@ -2199,11 +2199,10 @@ function AptlMockSelector({ onSelectSubject, onBack, isMobile }) {
 );
 }
 
-function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
+function MockTestPage({ onBack, isMobile, isAptlMode = false, searchParams }) {
   const TOTAL_TIME = 6000;
   const TOTAL_Q = 100;
   const btnBase = { border: 'none', cursor: 'pointer', WebkitAppearance: 'none', appearance: 'none' };
-  const searchParams = useSearchParams();
 
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [pool, setPool] = useState([]);
@@ -2753,6 +2752,11 @@ function MockTestPage({ onBack, isMobile, isAptlMode = false }) {
 }
 
 // ─── CHAPTER TESTS PAGE ───────────────────────────────────────────────────────
+function MockTestPageWithSearchParams(props) {
+  const searchParams = useSearchParams();
+  return <MockTestPage {...props} searchParams={searchParams} />;
+}
+
 function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 'subjects' }) {
   const [subView, setSubView] = useState(initialSubView);
 
@@ -2761,8 +2765,16 @@ function ChapterTestsPage({ allResults, onStartTest, isMobile, initialSubView = 
   const activeSubject = SUBJECTS.find(s => s.id === subView);
 
   if (activeSubject?.comingSoon) return <ComingSoonPage subject={activeSubject} onBack={() => setSubView('subjects')} />;
-  if (subView === 'mock') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} />;
-  if (subView === 'atpl') return <MockTestPage onBack={() => setSubView('subjects')} isMobile={isMobile} isAptlMode />;
+  if (subView === 'mock') return (
+    <Suspense fallback={null}>
+      <MockTestPageWithSearchParams onBack={() => setSubView('subjects')} isMobile={isMobile} />
+    </Suspense>
+  );
+  if (subView === 'atpl') return (
+    <Suspense fallback={null}>
+      <MockTestPageWithSearchParams onBack={() => setSubView('subjects')} isMobile={isMobile} isAptlMode />
+    </Suspense>
+  );
   if (activeSubject && activeSubject.chapterIds.length > 0) {
     const subjectChapters = activeSubject.chapterIds.map(id => {
       const chapterMeta = chapters.find(c => c.id === id);
@@ -2946,6 +2958,19 @@ function AssignedTestsSection({ user, onStartAssignedTest }) {
         </div>
     );
 }
+function DashboardSearchParamsBridge({ onMockUnlock }) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const mockUnlock = searchParams.get('mockUnlock');
+    if (mockUnlock === '1') {
+      onMockUnlock();
+    }
+  }, [onMockUnlock, searchParams]);
+
+  return null;
+}
+
 // ─── ROOT DASHBOARD ───────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const router = useRouter();
@@ -2958,15 +2983,11 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState('home');
   const [subPage, setSubPage] = useState('subjects');
-  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const mockUnlock = searchParams.get('mockUnlock');
-    if (mockUnlock === '1') {
-      setPage('tests');
-      setSubPage('mock');
-    }
-  }, [searchParams]);
+  const handleMockUnlock = useCallback(() => {
+    setPage('tests');
+    setSubPage('mock');
+  }, []);
 
   useEffect(() => {
     const storedUser = getUser();
@@ -3089,6 +3110,9 @@ export default function DashboardPage() {
 
   return (
     <div style={{ fontFamily: "'DM Sans','Segoe UI',system-ui,sans-serif", background: C.bg, minHeight: '100vh' }}>
+      <Suspense fallback={null}>
+        <DashboardSearchParamsBridge onMockUnlock={handleMockUnlock} />
+      </Suspense>
       <style>{`
         @-webkit-keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         @keyframes shimmer          { 0%{background-position:200% 0} 100%{background-position:-200% 0} }

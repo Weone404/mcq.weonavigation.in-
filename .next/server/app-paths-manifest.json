@@ -1,6 +1,4 @@
 {
-  "/login/page": "app/login/page.js",
-  "/test/[chapterId]/page": "app/test/[chapterId]/page.js",
-  "/teacher/page": "app/teacher/page.js",
+  "/api/classes/route": "app/api/classes/route.js",
   "/dashboard/page": "app/dashboard/page.js"
 }

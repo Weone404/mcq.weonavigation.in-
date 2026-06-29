@@ -313,7 +313,7 @@ const PERSONALYSIS_DATA = {
       { title: 'Met: METRELOGY SERVICE', chapter: '17', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/4FPHtzRKLWk?si=bycOUNwic-pQslH7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Met: TROPICAL SYSTEM', chapter: '18', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/AV_wbf16VZo?si=PQ7fsj4V6I28NqVT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       
-    ], 17),
+    ], 18),
   },
   'Air Regulations': {
     icon: '📋',
@@ -350,6 +350,14 @@ const PERSONALYSIS_DATA = {
       { title: 'Nav: Mercator char – Ch ', chapter: 'Chapter 11', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/CjnqC8Fz68w?si=4gM61Fqb4BCcKAZj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: FANDAMENTEL OF DIRECTION  – Ch 11', chapter: 'Chapter 1', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/CPeyZDv-ju0?si=WjH9K7rGqTbr6Pgn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
       { title: 'Nav: Polar Stereographic Projection – Ch 11', chapter: 'Chapter 11', description: 'Polar stereographic chart properties and plotting.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/95zN5KuWeLA?si=jZWEFqGnegEZ1_4T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: Soler system', chapter: '12', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/8PMHGHruJNo?si=pAangs_MNO7UJlwi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'Nav: TIME CONVERSION', chapter: '15', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/DzY7Hgrm2dE?si=PXIUsN7kv4Sv86nZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      // { title: 'Nav: ', chapter: '', description: '.', iframeCode: '' },
+      
+
+
+
+
     ], 13),
   },
   'Instrument Navigation': {
@@ -357,7 +365,34 @@ const PERSONALYSIS_DATA = {
     subtitle: 'Instrument Nav paper analysis & exam insights',
     examTags: ['ATPL', 'CPL'],
     color: '#06B6D4',
-    videos: makeSlots([], 10),
+    videos: makeSlots([
+
+      { title: 'IN: PITOT AND STATIC', chapter: '1', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/cl79lwok_ko?si=dQHOjCeUK6CAHi29" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: ASI', chapter: '2', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/7qhckvUt8M0?si=8ZvZv3Lfh24E30Fc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: ', chapter: '3', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/0zktWXkZ4XI?si=aidr4C5IxyfvvcS-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: The Principles and Mechenis of the Mecmiter', chapter: '4', description: 'The Principles and Mechenis of the Mecmiter.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/qZcH7NbSoF8?si=0LxVHDgTslr5wUpP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: Altimiter', chapter: '5', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/_Kqi0lOqNeY?si=MTQ0FbhiYxIPvqTv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: Air Temprature', chapter: '6', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/JXk1FZyxLHw?si=OkzyLflBLORSGSf0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: directional gyaro indicator', chapter: '7', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/S9-c81hqDNE?si=nDA-XZs5M3QJTL2J" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: Turn Cordinater 1', chapter: '8', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/HTM84FYW9DI?si=4eRQ8ZRPwxg3568u" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: ARTIFICIAL HONZON', chapter: '9', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/SXQIr0UIO0E?si=GxI_dkjWcihq2Sbx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: AIRCRAFT MEGNTISM', chapter: '10', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/4GTsSWB-EiE?si=gGbZ9-pZgnmY93h7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: TURN AND SLIP INDICATOR', chapter: '11', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/ZK_zswwy54Q?si=pdUEmKCnfs4Tvz70" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: ARM', chapter: '12', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/y9i1ljffZAo?si=r81w8hz-DyhcXT4y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: EFIS', chapter: '13', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/TT5upf6NDPM?si=UWvsNT4ijVlmeIWf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'IN: ', chapter: '14', description: '.', iframeCode: '' },
+      { title: 'IN: ', chapter: '15', description: '.', iframeCode: '' },
+      // { title: 'IN: ', chapter: '', description: '.', iframeCode: '' },
+
+      
+
+
+
+
+
+
+      
+    ], 13),
   },
   'Radio Navigation': {
     icon: '📻',
@@ -923,17 +958,7 @@ function VideoSectionWithFolders({
       )}
 
       {/* Add hint */}
-      {!selectedSubject && !effectiveLocked && (
-        <div style={{ background: addHintBg, border: `1px solid ${addHintBorder}`, borderRadius: 12, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-          <span style={{ fontSize: 20, flexShrink: 0 }}>💡</span>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 13, color: addHintTitleColor, marginBottom: 2 }}>How to add videos to a subject</div>
-            <div style={{ fontSize: 12, color: addHintBodyColor, lineHeight: 1.6 }}>
-              Open this file → find the <code style={{ background: addHintCodeBg, padding: '1px 5px', borderRadius: 4 }}>{dataName}</code> config → choose a subject → add entries with <code>title</code>, <code>chapter</code>, <code>description</code>, <code>iframeCode</code>, <code>duration</code>, <code>uploadedAt</code>.
-            </div>
-          </div>
-        </div>
-      )}
+      
 
       {/* Section heading */}
       {!selectedSubject && (

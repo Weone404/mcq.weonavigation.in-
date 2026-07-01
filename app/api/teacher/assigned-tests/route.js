@@ -27,10 +27,18 @@ async function ensureTable() {
 export async function GET() {
     try {
         await ensureTable();
-        const { rows } = await pool.query(
-            `SELECT * FROM assigned_tests ORDER BY created_at DESC`
-        );
-        return NextResponse.json({ success: true, tests: rows });
+        // By default, return only active tests. Use query param `all=1` to include inactive.
+        // Note: teacher listing should primarily show active tests; paused tests (is_active = false) are excluded.
+        const params = typeof globalThis !== 'undefined' && globalThis.location ? new URL(globalThis.location).searchParams : null;
+        let includeAll = false;
+        if (params) {
+            const maybe = params.get('all') || params.get('includeInactive');
+            includeAll = maybe === '1' || maybe === 'true';
+        }
+
+        const q = `SELECT * FROM assigned_tests ${includeAll ? '' : 'WHERE COALESCE(is_active, true) = true'} ORDER BY created_at DESC`;
+        const { rows } = await pool.query(q);
+        return NextResponse.json({ success: true, tests: rows, includeAll });
     } catch (err) {
         console.error('GET /api/teacher/assigned-tests error:', err);
         return NextResponse.json({ success: false, error: err.message }, { status: 500 });

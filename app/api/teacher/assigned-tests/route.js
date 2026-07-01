@@ -24,21 +24,18 @@ async function ensureTable() {
 }
 
 // GET — list all assigned tests (teacher view)
-export async function GET() {
+export async function GET(request) {
     try {
         await ensureTable();
-        // By default, return only active tests. Use query param `all=1` to include inactive.
-        // Note: teacher listing should primarily show active tests; paused tests (is_active = false) are excluded.
-        const params = typeof globalThis !== 'undefined' && globalThis.location ? new URL(globalThis.location).searchParams : null;
-        let includeAll = false;
-        if (params) {
-            const maybe = params.get('all') || params.get('includeInactive');
-            includeAll = maybe === '1' || maybe === 'true';
-        }
+        // Teacher view should return all tests (active and paused) so teacher can manage them.
+        const { searchParams } = new URL(request.url);
+        const maybe = searchParams.get('onlyActive') || searchParams.get('active');
+        const onlyActive = maybe === '1' || maybe === 'true';
 
-        const q = `SELECT * FROM assigned_tests ${includeAll ? '' : 'WHERE COALESCE(is_active, true) = true'} ORDER BY created_at DESC`;
+        const q = `SELECT * FROM assigned_tests ${onlyActive ? 'WHERE COALESCE(is_active, true) = true' : ''} ORDER BY created_at DESC`;
         const { rows } = await pool.query(q);
-        return NextResponse.json({ success: true, tests: rows, includeAll });
+        console.log(`📋 [GET /api/teacher/assigned-tests] Teacher fetched ${rows.length} tests (onlyActive=${onlyActive})`);
+        return NextResponse.json({ success: true, tests: rows, onlyActive });
     } catch (err) {
         console.error('GET /api/teacher/assigned-tests error:', err);
         return NextResponse.json({ success: false, error: err.message }, { status: 500 });
@@ -87,6 +84,7 @@ export async function POST(request) {
             ]
         );
 
+        console.log('✳️ [POST /api/teacher/assigned-tests] Created test:', rows[0]);
         return NextResponse.json({ success: true, test: rows[0] });
     } catch (err) {
         console.error('POST /api/teacher/assigned-tests error:', err);
@@ -123,11 +121,14 @@ export async function PATCH(request) {
         const { id, isActive } = await request.json();
         if (!id) return NextResponse.json({ success: false, error: 'Missing id' }, { status: 400 });
 
+        console.log(`🔧 [PATCH /api/teacher/assigned-tests] Toggling test ${id} -> is_active=${isActive}`);
+
         const { rows } = await pool.query(
             `UPDATE assigned_tests SET is_active = $1 WHERE id = $2 RETURNING *`,
             [isActive, id]
         );
 
+        console.log('   Updated row:', rows[0]);
         return NextResponse.json({ success: true, test: rows[0] });
     } catch (err) {
         console.error('PATCH /api/teacher/assigned-tests error:', err);

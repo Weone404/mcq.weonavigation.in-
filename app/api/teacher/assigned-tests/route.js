@@ -19,6 +19,7 @@ async function ensureTable() {
         );
         ALTER TABLE assigned_tests ADD COLUMN IF NOT EXISTS chapter_id TEXT DEFAULT '';
         ALTER TABLE assigned_tests ADD COLUMN IF NOT EXISTS chapter_label TEXT DEFAULT '';
+        ALTER TABLE assigned_tests ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
     `);
 }
 

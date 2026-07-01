@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import pool from '../../../lib/db';
 
 async function ensureTable() {
@@ -15,15 +15,16 @@ async function ensureTable() {
             is_active       BOOLEAN DEFAULT true,
             created_at      TIMESTAMPTZ DEFAULT NOW()
         );
+        ALTER TABLE assigned_tests ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
     `);
 }
 
-// GET — student fetches all active assigned tests
 export async function GET() {
     try {
         await ensureTable();
+
         const { rows } = await pool.query(
-            `SELECT 
+            `SELECT
                 id,
                 title,
                 subject_id      AS "subjectId",
@@ -38,10 +39,12 @@ export async function GET() {
              WHERE is_active = true
              ORDER BY created_at DESC`
         );
+
         console.log(`📋 [GET /api/assigned-tests] Student fetched ${rows.length} active tests`);
         if (rows.length > 0) {
             console.log('   Tests available:', rows.map(t => `${t.id}: ${t.title}`).join(' | '));
         }
+
         return NextResponse.json({ success: true, tests: rows });
     } catch (err) {
         console.error('❌ GET /api/assigned-tests error:', err);

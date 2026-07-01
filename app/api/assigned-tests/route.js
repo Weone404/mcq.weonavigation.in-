@@ -36,7 +36,7 @@ export async function GET() {
                 is_active       AS "isActive",
                 created_at      AS "createdAt"
              FROM assigned_tests
-             WHERE is_active = true
+             WHERE COALESCE(is_active, true) = true
              ORDER BY created_at DESC`
         );
 

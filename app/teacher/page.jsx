@@ -1959,6 +1959,10 @@ function TeacherLeaderboardTab() {
 // ASSIGN TEST TAB
 // ═══════════════════════════════════════════════════════════════════════════════
 function AssignTestTab() {
+    const TECHNICAL_CHAPTERS = chapters
+        .filter(ch => ch.part === 'Technical General')
+        .map(ch => ({ id: ch.id, label: ch.title }));
+
     const SUBJECT_OPTIONS = [
         {
             id: 'air_regulations',
@@ -2066,131 +2070,8 @@ function AssignTestTab() {
             icon: '🔧',
             color: '#F59E0B',
             gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
-            parts: [
-                {
-                    label: 'Part I – Principle of Flight',
-                    color: '#F59E0B',
-                    chapterIds: ['tg01', 'tg02'],
-                },
-                {
-                    label: 'Part II – Engines',
-                    color: '#D97706',
-                    chapterIds: ['tg03', 'tg04'],
-                },
-                {
-                    label: 'Part III – Aircraft Systems',
-                    color: '#B45309',
-                    chapterIds: ['tg05', 'tg06', 'tg07', 'tg08'],
-                },
-            ],
-            chapters: [
-                {
-                    id: 'tg01',
-                    title: 'Principle of Flight',
-                    topics: [
-                        { id: 'tg01_t01', label: 'Overview and Definitions' },
-                        { id: 'tg01_t02', label: 'Atmosphere' },
-                        { id: 'tg01_t03', label: 'Basic Aerodynamic Theory' },
-                        { id: 'tg01_t04', label: 'Subsonic Airflow' },
-                        { id: 'tg01_t05', label: 'Lift' },
-                        { id: 'tg01_t06', label: 'Drag' },
-                        { id: 'tg01_t07', label: 'Stalling' },
-                        { id: 'tg01_t08', label: 'High Lift Devices' },
-                        { id: 'tg01_t09', label: 'Airframe Contamination' },
-                        { id: 'tg01_t10', label: 'Stability and Control' },
-                        { id: 'tg01_t11', label: 'Controls' },
-                        { id: 'tg01_t12', label: 'Flight Mechanics' },
-                        { id: 'tg01_t13', label: 'High Speed Flight' },
-                        { id: 'tg01_t14', label: 'Limitations' },
-                        { id: 'tg01_t15', label: 'Windshear' },
-                        { id: 'tg01_t16', label: 'Propellers' },
-                    ],
-                },
-                {
-                    id: 'tg02',
-                    title: 'Performance',
-                    topics: [
-                        { id: 'tg02_t01', label: 'Performance' },
-                    ],
-                },
-                {
-                    id: 'tg03',
-                    title: 'Jet Engine',
-                    topics: [
-                        { id: 'tg03_t01', label: 'Basics of Jet Engine' },
-                        { id: 'tg03_t02', label: 'Types of Engine' },
-                        { id: 'tg03_t03', label: 'Compressors' },
-                        { id: 'tg03_t04', label: 'Combustion Chamber' },
-                        { id: 'tg03_t05', label: 'Turbine Assembly' },
-                        { id: 'tg03_t06', label: 'Jet Pipe' },
-                        { id: 'tg03_t07', label: 'Reverse Thrust' },
-                        { id: 'tg03_t08', label: 'Engine Starting System Requirements' },
-                        { id: 'tg03_t09', label: 'APU (Auxiliary Power Unit)' },
-                    ],
-                },
-                {
-                    id: 'tg04',
-                    title: 'Piston Engine',
-                    topics: [
-                        { id: 'tg04_t01', label: 'Introduction' },
-                        { id: 'tg04_t02', label: 'General' },
-                        { id: 'tg04_t03', label: 'Lubrication' },
-                        { id: 'tg04_t04', label: 'Cooling' },
-                        { id: 'tg04_t05', label: 'Ignition' },
-                        { id: 'tg04_t06', label: 'Fuel' },
-                        { id: 'tg04_t07', label: 'Mixture' },
-                        { id: 'tg04_t08', label: 'Carburettors' },
-                        { id: 'tg04_t09', label: 'Icing' },
-                        { id: 'tg04_t10', label: 'Fuel Injection' },
-                        { id: 'tg04_t11', label: 'Performance and Power Augmentation' },
-                        { id: 'tg04_t12', label: 'Propellers' },
-                    ],
-                },
-                {
-                    id: 'tg05',
-                    title: 'Airframe Systems',
-                    topics: [
-                        { id: 'tg05_t01', label: 'Fuselage, Wings and Stabilizing Surfaces' },
-                        { id: 'tg05_t02', label: 'Basic Hydraulics' },
-                        { id: 'tg05_t03', label: 'Landing Gear' },
-                        { id: 'tg05_t04', label: 'Aircraft Wheels' },
-                        { id: 'tg05_t05', label: 'Aircraft Tyres' },
-                        { id: 'tg05_t06', label: 'Aircraft Brakes' },
-                        { id: 'tg05_t07', label: 'Flight Control System' },
-                        { id: 'tg05_t08', label: 'Flight Controls' },
-                        { id: 'tg05_t09', label: 'Powered Flying Controls' },
-                        { id: 'tg05_t10', label: 'Aircraft Pneumatic Systems' },
-                        { id: 'tg05_t11', label: 'Pressurization Systems' },
-                        { id: 'tg05_t12', label: 'Ice and Rain Protection' },
-                        { id: 'tg05_t13', label: 'Aircraft Oxygen Equipment' },
-                        { id: 'tg05_t14', label: 'Smoke Detection' },
-                        { id: 'tg05_t15', label: 'Fire Detection and Protection' },
-                        { id: 'tg05_t16', label: 'Aircraft Fuel Systems' },
-                    ],
-                },
-                {
-                    id: 'tg06',
-                    title: 'Electrical Systems',
-                    topics: [
-                        { id: 'tg06_t01', label: 'Electrical Systems' },
-                    ],
-                },
-                {
-                    id: 'tg07',
-                    title: 'Instruments',
-                    topics: [
-                        { id: 'tg07_t01', label: 'Instruments' },
-                    ],
-                },
-                {
-                    id: 'tg08',
-                    title: 'Avionics',
-                    topics: [
-                        { id: 'tg08_t01', label: 'Avionics' },
-                    ],
-                },
-            ],
-            chapterIds: ['tg01', 'tg02', 'tg03', 'tg04', 'tg05', 'tg06', 'tg07', 'tg08'],
+            chapters: TECHNICAL_CHAPTERS,
+            chapterIds: TECHNICAL_CHAPTERS.map(ch => ch.id),
         },
         {
             id: 'rtfm',

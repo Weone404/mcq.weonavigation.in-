@@ -399,7 +399,34 @@ const PERSONALYSIS_DATA = {
     subtitle: 'Radio Nav paper analysis & exam insights',
     examTags: ['ATPL', 'CPL'],
     color: '#8B5CF6',
-    videos: makeSlots([], 10),
+    videos: makeSlots([
+      { title: 'RN: RADIO WAVES', chapter: '1', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/3ov6_H_b0dI?si=rW5gzPaeSwrUj7bJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: RADIO PROPAGATION', chapter: '2', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/_kUuHc9JGSI?si=RRwcXnk2b1HuhHur" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: RADIO WAVE MODULATION', chapter: '3', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/2sfAK5Ig7dM?si=tGwIT-Y26MjjNJfX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: VDF', chapter: '4', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/3TDTzuIgfQ4?si=_q08U1rDo34mVRE8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: ADF', chapter: '5', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/hBFnoIhqkBM?si=r53No-z4ifuMHniy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: VOR', chapter: '6', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/_ApjWrRli18?si=7fALm2-0v1bbCBPr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: ILS', chapter: '7', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/kEeVD08qkgw?si=7diipADLz2TjGi_c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: MLS MICRO LANDING SYSTEM', chapter: '8', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/J5vv_5o8Q5Y?si=7ZZz-rcks6bl9vSg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: DME', chapter: '9', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/xHowMkejWpo?si=Upb8SZL4gkAhDm7R" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: RADAR', chapter: '10', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Oob44-T3oKY?si=2ZDYLhlDacM1dlnc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      // { title: 'RN: ', chapter: '11', description: '.', iframeCode: '' },
+      // { title: 'RN: ', chapter: '12', description: '.', iframeCode: '' },
+      // { title: 'RN: ', chapter: '13', description: '.', iframeCode: '' },
+      { title: 'RN: Secondary Surveillance Radar Principles and Operations', chapter: '14', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/7lqR92uBzKs?si=t3xJlxS-ZXFOdeZ_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RN: Distance Measuring Equipment', chapter: '15', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/JYcSNLHhL4Y?si=dvIb5hnVXsGDHAlS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+   
+      // { title: 'RN: ', chapter: '', description: '.', iframeCode: '' },
+      // { title: 'RN: ', chapter: '', description: '.', iframeCode: '' },
+
+
+
+
+
+
+
+
+    ], 12),
   },
   'Technical General': {
     icon: '⚙️',

@@ -464,6 +464,28 @@ const PERSONALYSIS_DATA = {
 
     ], 21),
   },
+  'RTR': {
+    icon: '🎙️',
+    subtitle: 'RTR paper analysis & exam insights',
+    examTags: ['RTR (Aero)'],
+    color: '#EF4444',
+    videos: makeSlots([
+
+      { title: 'RTR: AVIATION BODIES AND REGISLATION', chapter: '1', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/4lBRPbm6bKE?si=QdGb4voaouayUn87" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RTR: RADIO WAVE PROPAGATION', chapter: '2', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/EZSXEu9wvDc?si=c6t2eXj339TC-WyG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RTR: RADIO TRANSMITTION AND PHONETICS', chapter: '3 , 4', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/WR_r7WuzYbQ?si=oY_l7AhksdZMr_ZQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RTR: NAV AIDS', chapter: '5', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/UJMTOr0FEk4?si=RgISLf4K3ZCOS7mk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RTR: OPERATIONAL PROCUDURE', chapter: '7', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/5P5vtfxRpKw?si=okZufOK4cXWhm8JF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      { title: 'RTR: RT PROTOCOL AND DISTRESS', chapter: '8 , 9', description: '.', iframeCode: '<iframe width="560" height="315" src="https://www.youtube.com/embed/lTgbnDrWeqo?si=CvKG7zD3-SNgHC_z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' },
+      // { title: 'RTR: ', chapter: '7', description: '.', iframeCode: '' },
+      // { title: 'RTR: ', chapter: '8', description: '.', iframeCode: '' },
+      // { title: 'RTR: ', chapter: '9', description: '.', iframeCode: '' },
+      // { title: 'RTR: ', chapter: '10', description: '.', iframeCode: '' },
+      // { title: 'RTR: ', chapter: '11', description: '.', iframeCode: '' },
+
+     
+    ], 6),
+  },
   'Radio Telephony': {
     icon: '📡',
     subtitle: 'RTF paper analysis & exam insights',

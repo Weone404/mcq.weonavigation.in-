@@ -462,7 +462,7 @@ const PERSONALYSIS_DATA = {
 
 
 
-    ], 10),
+    ], 21),
   },
   'Radio Telephony': {
     icon: '📡',

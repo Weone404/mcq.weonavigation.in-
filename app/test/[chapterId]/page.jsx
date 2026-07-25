@@ -382,7 +382,21 @@ export default function TestPage({ params }) {
           .answered-count { font-size: 0.82rem; color: #64748b; white-space: nowrap; }
           .submit-test-btn { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 8px; padding: 0.65rem 1.25rem; color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
           .submit-test-btn:hover { opacity: 0.9; }
-          @media (max-width: 480px) { .test-body { padding: 1rem 0.75rem; } .q-card { padding: 1.25rem; } .ch-name { display: none; } }
+          @media (max-width: 768px) {
+            .test-header { padding: 0.6rem 0.75rem; gap: 0.5rem; }
+            .ch-name { font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 50vw; }
+            .timer-wrap { width: 46px; height: 46px; }
+            .timer-wrap svg { width: 46px; height: 46px; }
+            .timer-text { font-size: 0.66rem; }
+            .nav-row { flex-wrap: wrap; justify-content: center; }
+            .nav-btn, .submit-test-btn { flex: 1 1 140px; }
+          }
+          @media (max-width: 480px) {
+            .test-body { padding: 1rem 0.75rem; }
+            .q-card { padding: 1.25rem; }
+            .ch-name { display: none; }
+            .dot { width: 30px; height: 30px; font-size: 0.72rem; }
+          }
         `}</style>
       </div>
     );
@@ -460,6 +474,14 @@ export default function TestPage({ params }) {
         .save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .retry-btn { width: 100%; padding: 0.8rem; background: none; border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; color: #374151; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
         .retry-btn:hover { background: rgba(59,130,246,0.05); }
+        @media (max-width: 640px) {
+          .finish-card { padding: 2rem 1.1rem; }
+          .result-title { font-size: 1.45rem; }
+          .score-display { font-size: 2.75rem; }
+          .breakdown { flex-direction: column; }
+          .dot-legend { flex-wrap: wrap; gap: 0.55rem; }
+          .fdot { width: 28px; height: 28px; }
+        }
       `}</style>
     </div>
   );

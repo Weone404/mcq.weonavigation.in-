@@ -50,6 +50,27 @@ function formatDate(iso) {
     return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+function useBreakpoint() {
+    const [bp, setBp] = useState({ isMobile: false, isTablet: false, isDesktop: true });
+
+    useEffect(() => {
+        const update = () => {
+            const w = window.innerWidth;
+            setBp({
+                isMobile: w < 640,
+                isTablet: w >= 640 && w < 1024,
+                isDesktop: w >= 1024,
+            });
+        };
+
+        update();
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
+    }, []);
+
+    return bp;
+}
+
 // ─── SUBJECT TABS ─────────────────────────────────────────────────────────────
 const SUBJECT_TABS = [
     { id: 'all', label: 'All Subjects', icon: '🎯', color: C.purple },
@@ -68,11 +89,21 @@ const NAV_ITEMS = [
     { icon: '📈', label: 'My Progress', id: 'progress' },
 ];
 
-function Sidebar({ user, onLogout, onNav }) {
+function Sidebar({ user, onLogout, onNav, isMobile, open, onClose }) {
+    if (isMobile && !open) return null;
+
     return (
-        <div style={{ width: 220, minHeight: '100vh', background: C.sidebar, display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 100, overflowY: 'auto' }}>
+        <>
+            {isMobile && (
+                <div
+                    onClick={onClose}
+                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99 }}
+                />
+            )}
+            <div style={{ width: 220, minHeight: '100vh', background: C.sidebar, display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 100, overflowY: 'auto', boxShadow: isMobile ? '4px 0 24px rgba(0,0,0,0.3)' : 'none' }}>
             <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid #1E3A5F' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <div style={{ width: 38, height: 38, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                         <img
                             src="/Logo.webp"
@@ -85,6 +116,10 @@ function Sidebar({ user, onLogout, onNav }) {
                         <div style={{ color: '#fff', fontWeight: 800, fontSize: 14, lineHeight: 1.1 }}>DGCA</div>
                         <div style={{ color: C.accent, fontWeight: 700, fontSize: 11, letterSpacing: 1 }}>PREP</div>
                     </div>
+                    </div>
+                    {isMobile && (
+                        <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#8BA3C5', fontSize: 20, cursor: 'pointer', padding: 4 }}>✕</button>
+                    )}
                 </div>
                 <div style={{ color: '#8BA3C5', fontSize: 10, marginTop: 6, fontStyle: 'italic' }}>Your Flight. Our Passion.</div>
             </div>
@@ -136,27 +171,32 @@ function Sidebar({ user, onLogout, onNav }) {
                     🚪 Logout
                 </button>
             </div>
-        </div>
+            </div>
+        </>
     );
 }
 
 // ─── TOP BAR ──────────────────────────────────────────────────────────────────
-function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefresh }) {
+function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefresh, isMobile, isTablet, onMenuToggle }) {
+    const sidebarWidth = (isMobile || isTablet) ? 0 : 220;
     return (
-        <div style={{ position: 'fixed', top: 0, left: 220, right: 0, height: 64, background: '#fff', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', padding: '0 28px', gap: 16, zIndex: 90 }}>
+        <div style={{ position: 'fixed', top: 0, left: sidebarWidth, right: 0, height: 64, background: '#fff', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', padding: isMobile ? '0 12px' : '0 28px', gap: isMobile ? 8 : 16, zIndex: 90 }}>
+            {(isMobile || isTablet) && (
+                <button onClick={onMenuToggle} style={{ background: 'transparent', border: 'none', fontSize: 20, cursor: 'pointer', padding: 4, color: C.text }}>☰</button>
+            )}
             <button
                 onClick={onBack}
                 style={{ width: 32, height: 32, borderRadius: 8, background: C.bg, border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 14, appearance: 'none', flexShrink: 0 }}
             >←</button>
 
-            <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 18, fontWeight: 800, color: C.text }}>🏆 Mock Test Leaderboard</div>
-                <div style={{ fontSize: 11, color: C.muted }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: isMobile ? 15 : 18, fontWeight: 800, color: C.text }}>🏆 Mock Test Leaderboard</div>
+                {!isMobile && <div style={{ fontSize: 11, color: C.muted }}>
                     {lastRefresh ? `Updated ${lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : 'Loading…'}
-                </div>
+                </div>}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, gap: 8 }}>
+            {!isMobile && <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '8px 14px', border: `1px solid ${C.border}`, gap: 8 }}>
                 <span style={{ color: C.muted, fontSize: 14 }}>🔍</span>
                 <input
                     placeholder="Search students…"
@@ -167,7 +207,7 @@ function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefre
                 {search && (
                     <button onClick={() => onSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.muted, fontSize: 14, padding: 0 }}>✕</button>
                 )}
-            </div>
+            </div>}
 
             <div style={{ position: 'relative', width: 38, height: 38, borderRadius: 10, background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: `1px solid ${C.border}`, flexShrink: 0, fontSize: 16 }}>
                 🔔
@@ -184,21 +224,21 @@ function TopBar({ user, onLogout, onBack, search, onSearch, onRefresh, lastRefre
                 <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(135deg,${C.primary},${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>
                     {getInitials(user?.name)}
                 </div>
-                <div>
+                {!isMobile && <div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{user?.name || 'Student'}</div>
                     <div style={{ fontSize: 10, color: C.muted }}>Student ▾</div>
-                </div>
+                </div>}
             </div>
 
-            <button onClick={onLogout} style={{ background: C.red, color: '#fff', border: 'none', borderRadius: 8, padding: '8px 16px', fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>
-                Logout
+            <button onClick={onLogout} style={{ background: C.red, color: '#fff', border: 'none', borderRadius: 8, padding: isMobile ? '7px 10px' : '8px 16px', fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>
+                {isMobile ? '↩' : 'Logout'}
             </button>
         </div>
     );
 }
 
 // ─── PODIUM ───────────────────────────────────────────────────────────────────
-function Podium({ top3, user }) {
+function Podium({ top3, user, isMobile }) {
     if (top3.length < 2) return null;
 
     const order = top3.length >= 3
@@ -208,42 +248,42 @@ function Podium({ top3, user }) {
     const podiumColors = { 1: C.accent, 2: C.primary, 3: C.purple };
 
     return (
-        <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: 24, marginBottom: 24 }}>
+        <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, padding: isMobile ? '16px 12px' : 24, marginBottom: 24 }}>
             <div style={{ textAlign: 'center', marginBottom: 20 }}>
-                <div style={{ fontSize: 18, fontWeight: 800, color: C.text, marginBottom: 4 }}>🏆 Top Performers</div>
+                <div style={{ fontSize: isMobile ? 16 : 18, fontWeight: 800, color: C.text, marginBottom: 4 }}>🏆 Top Performers</div>
                 <div style={{ fontSize: 13, color: C.muted }}>Highest accuracy in mock tests</div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: isMobile ? 8 : 16 }}>
                 {order.map(({ entry, rank, height }) => {
                     const isYou = entry.email === user?.email;
                     const color = podiumColors[rank];
                     return (
-                        <div key={entry.email} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: 140 }}>
+                        <div key={entry.email} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: isMobile ? 100 : 140 }}>
                             {isYou && (
                                 <span style={{ background: C.green + '25', color: C.green, fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 20, marginBottom: 4, display: 'inline-block' }}>You</span>
                             )}
                             <div style={{
-                                width: 60, height: 60, borderRadius: 30,
+                                width: isMobile ? 48 : 60, height: isMobile ? 48 : 60, borderRadius: isMobile ? 24 : 30,
                                 background: `linear-gradient(135deg,${color},${color}cc)`,
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                color: '#fff', fontWeight: 800, fontSize: 16, marginBottom: 8,
+                                color: '#fff', fontWeight: 800, fontSize: isMobile ? 13 : 16, marginBottom: 8,
                                 border: `3px solid ${isYou ? C.green : '#fff'}`,
                                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                             }}>
                                 {getInitials(entry.name)}
                             </div>
-                            <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 4, textAlign: 'center' }}>
+                            <div style={{ fontSize: isMobile ? 11 : 14, fontWeight: 700, color: C.text, marginBottom: 4, textAlign: 'center' }}>
                                 {entry.name.split(' ')[0]}
                             </div>
-                            <div style={{ fontSize: 16, fontWeight: 800, color, marginBottom: 8 }}>{entry.accuracy}%</div>
-                            <div style={{ fontSize: 20, marginBottom: 8 }}>{medals[rank - 1]}</div>
+                            <div style={{ fontSize: isMobile ? 13 : 16, fontWeight: 800, color, marginBottom: 8 }}>{entry.accuracy}%</div>
+                            <div style={{ fontSize: isMobile ? 16 : 20, marginBottom: 8 }}>{medals[rank - 1]}</div>
                             <div style={{
-                                width: '100%', height,
+                                width: '100%', height: isMobile ? Math.round(height * 0.7) : height,
                                 background: color + '20', border: `2px solid ${color}`,
                                 borderBottom: 'none', borderRadius: '8px 8px 0 0',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}>
-                                <span style={{ color, fontSize: 14, fontWeight: 900 }}>#{rank}</span>
+                                <span style={{ color, fontSize: isMobile ? 11 : 14, fontWeight: 900 }}>#{rank}</span>
                             </div>
                         </div>
                     );
@@ -254,7 +294,7 @@ function Podium({ top3, user }) {
 }
 
 // ─── LEADERBOARD TABLE ────────────────────────────────────────────────────────
-function LeaderboardTable({ board, user, loading }) {
+function LeaderboardTable({ board, user, loading, isMobile }) {
     if (loading) {
         return (
             <div style={{ background: C.card, borderRadius: 16, border: `1px solid ${C.border}`, overflow: 'hidden' }}>
@@ -296,13 +336,13 @@ function LeaderboardTable({ board, user, loading }) {
                 </div>
             </div>
 
-            <div style={{ padding: '8px 22px', background: C.bg, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 14 }}>
+            {!isMobile && <div style={{ padding: '8px 22px', background: C.bg, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 14 }}>
                 <div style={{ width: 36, fontSize: 11, color: C.muted, fontWeight: 700, flexShrink: 0 }}>Rank</div>
                 <div style={{ width: 42, flexShrink: 0 }} />
                 <div style={{ flex: 1, fontSize: 11, color: C.muted, fontWeight: 700 }}>Student</div>
                 <div style={{ width: 90, fontSize: 11, color: C.muted, fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Score</div>
                 <div style={{ width: 100, fontSize: 11, color: C.muted, fontWeight: 700, textAlign: 'right', flexShrink: 0 }}>Accuracy</div>
-            </div>
+            </div>}
 
             <div style={{ padding: '8px 0' }}>
                 {board.map((entry, i) => {
@@ -312,9 +352,9 @@ function LeaderboardTable({ board, user, loading }) {
                         <div
                             key={`${entry.email}-${entry.subject}`}
                             style={{
-                                padding: '14px 22px',
+                                padding: isMobile ? '12px 14px' : '14px 22px',
                                 borderTop: i > 0 ? `1px solid ${C.border}` : 'none',
-                                display: 'flex', alignItems: 'center', gap: 14,
+                                display: 'flex', alignItems: 'center', gap: 14, flexWrap: isMobile ? 'wrap' : 'nowrap',
                                 cursor: 'pointer', transition: 'background .2s',
                                 background: isYou ? C.primaryLight : 'transparent',
                             }}
@@ -346,11 +386,11 @@ function LeaderboardTable({ board, user, loading }) {
                                 </div>
                             </div>
 
-                            <div style={{ width: 90, textAlign: 'right', flexShrink: 0 }}>
+                            <div style={{ width: isMobile ? 72 : 90, textAlign: 'right', flexShrink: 0 }}>
                                 <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{entry.score}/{entry.total}</div>
                             </div>
 
-                            <div style={{ width: 100, flexShrink: 0 }}>
+                            <div style={{ width: isMobile ? 88 : 100, flexShrink: 0 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                                     <span style={{ fontSize: 14, fontWeight: 800, color: getAccuracyColor(entry.accuracy) }}>{entry.accuracy}%</span>
                                 </div>
@@ -368,6 +408,7 @@ function LeaderboardTable({ board, user, loading }) {
 function LeaderboardInner() {
     const router = useRouter();
     const searchParams = useSearchParams();          // ← safe inside Suspense
+    const { isMobile, isTablet, isDesktop } = useBreakpoint();
 
     const [user, setUser] = useState(null);
     const [board, setBoard] = useState([]);
@@ -375,6 +416,7 @@ function LeaderboardInner() {
     const [activeSubject, setActiveSubject] = useState(searchParams.get('subject') || 'all');
     const [search, setSearch] = useState('');
     const [lastRefresh, setLastRefresh] = useState(null);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         const u = getUser();
@@ -436,7 +478,7 @@ function LeaderboardInner() {
                 body { overflow-x: hidden; }
             `}</style>
 
-            <Sidebar user={user} onLogout={handleLogout} onNav={handleNav} />
+            <Sidebar user={user} onLogout={handleLogout} onNav={handleNav} isMobile={!isDesktop} open={isDesktop || sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             <TopBar
                 user={user}
@@ -446,27 +488,45 @@ function LeaderboardInner() {
                 onSearch={setSearch}
                 onRefresh={() => fetchBoard(activeSubject)}
                 lastRefresh={lastRefresh}
+                isMobile={isMobile}
+                isTablet={isTablet}
+                onMenuToggle={() => setSidebarOpen(o => !o)}
                 loading={loading}
             />
 
-            <main style={{ marginLeft: 220, paddingTop: 64 }}>
-                <div style={{ padding: '28px 32px', maxWidth: 1100 }}>
+            <main style={{ marginLeft: isDesktop ? 220 : 0, paddingTop: 64 }}>
+                <div style={{ padding: isMobile ? '16px 14px' : (isTablet ? '20px 20px' : '28px 32px'), maxWidth: 1100 }}>
+                    {isMobile && (
+                        <div style={{ display: 'flex', alignItems: 'center', background: C.bg, borderRadius: 10, padding: '8px 12px', border: `1px solid ${C.border}`, gap: 8, marginBottom: 12 }}>
+                            <span style={{ color: C.muted, fontSize: 14 }}>🔍</span>
+                            <input
+                                placeholder="Search students…"
+                                value={search}
+                                onChange={e => setSearch(e.target.value)}
+                                style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: C.text, width: '100%' }}
+                            />
+                            {search && (
+                                <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.muted, fontSize: 14, padding: 0 }}>✕</button>
+                            )}
+                        </div>
+                    )}
 
                     {/* Hero banner */}
                     <div style={{
                         background: `linear-gradient(120deg,${C.sidebar} 0%,${C.primary} 100%)`,
-                        borderRadius: 20, padding: '28px 32px', marginBottom: 24,
-                        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20,
+                        borderRadius: 20, padding: isMobile ? '20px 16px' : '28px 32px', marginBottom: 24,
+                        display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'center', gap: 20,
+                        flexDirection: isMobile ? 'column' : 'row',
                     }}>
                         <div>
                             <div style={{ color: '#93C5FD', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>🎯 Mock Test Rankings</div>
-                            <div style={{ color: '#fff', fontSize: 26, fontWeight: 800, lineHeight: 1.2, marginBottom: 8 }}>
-                                See Where You Stand<br />Among All Pilots
+                            <div style={{ color: '#fff', fontSize: isMobile ? 20 : 26, fontWeight: 800, lineHeight: 1.2, marginBottom: 8 }}>
+                                See Where You Stand{!isMobile && <br />}Among All Pilots
                             </div>
                             <div style={{ color: '#93C5FD', fontSize: 13, marginBottom: 18 }}>
                                 {loading ? 'Loading rankings...' : `${board.length} students · ranked by best accuracy`}
                             </div>
-                            <div style={{ display: 'flex', gap: 10 }}>
+                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                                 <button
                                     onClick={() => router.push('/dashboard')}
                                     style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
@@ -481,22 +541,22 @@ function LeaderboardInner() {
                                 </button>
                             </div>
                         </div>
-                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <div style={{ textAlign: isMobile ? 'left' : 'right', flexShrink: 0 }}>
                             <div style={{ color: '#93C5FD', fontSize: 12, marginBottom: 4 }}>Your Rank</div>
-                            <div style={{ color: '#fff', fontSize: 42, fontWeight: 900, lineHeight: 1 }}>
+                            <div style={{ color: '#fff', fontSize: isMobile ? 34 : 42, fontWeight: 900, lineHeight: 1 }}>
                                 {userRank > 0 ? `#${userRank}` : '–'}
                             </div>
                             {userEntry && (
                                 <>
                                     <div style={{ color: '#93C5FD', fontSize: 12, marginTop: 10, marginBottom: 2 }}>Your Best Score</div>
-                                    <div style={{ color: '#fff', fontSize: 32, fontWeight: 900, lineHeight: 1 }}>{userEntry.accuracy}%</div>
+                                    <div style={{ color: '#fff', fontSize: isMobile ? 26 : 32, fontWeight: 900, lineHeight: 1 }}>{userEntry.accuracy}%</div>
                                 </>
                             )}
                         </div>
                     </div>
 
                     {/* Stats row */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 24 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : (isTablet ? 'repeat(2,1fr)' : 'repeat(4,1fr)'), gap: 16, marginBottom: 24 }}>
                         {loading
                             ? Array(4).fill(0).map((_, i) => (
                                 <div key={i} style={{ background: C.card, borderRadius: 16, padding: 20, border: `1px solid ${C.border}` }}>
@@ -543,11 +603,11 @@ function LeaderboardInner() {
 
                     {/* Podium */}
                     {!loading && !search && top3.length >= 2 && (
-                        <Podium top3={top3} user={user} />
+                        <Podium top3={top3} user={user} isMobile={isMobile} />
                     )}
 
                     {/* Table */}
-                    <LeaderboardTable board={filteredBoard} user={user} loading={loading} />
+                    <LeaderboardTable board={filteredBoard} user={user} loading={loading} isMobile={isMobile} />
 
                     {/* Your position callout (if not in top 10) */}
                     {!loading && userEntry && userRank > 10 && (
@@ -578,7 +638,7 @@ function LeaderboardInner() {
                 </div>
 
                 {/* Footer */}
-                <div style={{ background: C.sidebar, padding: '16px 32px', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ background: C.sidebar, padding: isMobile ? '12px 10px' : '16px 32px', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 8 }}>
                     {[
                         ['🏆', 'Rankings', 'Compete'],
                         ['🎯', 'Accuracy', 'Score'],

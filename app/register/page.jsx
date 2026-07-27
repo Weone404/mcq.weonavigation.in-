@@ -348,24 +348,52 @@ export default function RegisterPage() {
         setErrors({});
         setServerError("");
         setLoading(true);
+
+        const userPayload = {
+            name: fullName,
+            email,
+            phone: `${dialCode}${phone.replace(/\D/g, "")}`,
+            password,
+        };
+
+        const createLocalUser = async () => {
+            const localRes = await fetch("/api/user", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: userPayload.name, email: userPayload.email, phone: userPayload.phone }),
+            });
+            const localData = await localRes.json().catch(() => null);
+            if (!localRes.ok) {
+                throw new Error(localData?.error || "Local registration failed");
+            }
+            return localData;
+        };
+
         try {
             const res = await fetch(`${API_BASE}/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: fullName,
-                    email,
-                    phone: `${dialCode}${phone.replace(/\D/g, "")}`,
-                    password,
-                }),
+                body: JSON.stringify(userPayload),
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || "Registration failed");
-            saveTokens(data);
-            await fetchAndStoreUser({
-                email,
-                phone: `${dialCode}${phone.replace(/\D/g, "")}`,
-            });
+
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                data = { detail: "Non-JSON response from auth backend" };
+            }
+
+            if (!res.ok) {
+                if (res.status >= 500 || data.detail === "Non-JSON response from auth backend") {
+                    await createLocalUser();
+                } else {
+                    throw new Error(data.detail || "Registration failed");
+                }
+            } else {
+                saveTokens(data);
+            }
+
+            await fetchAndStoreUser({ email, phone: userPayload.phone });
             window.location.href = "/dashboard";
         } catch (err) {
             setServerError(err.message);

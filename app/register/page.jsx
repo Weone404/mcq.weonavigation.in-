@@ -366,6 +366,10 @@ export default function RegisterPage() {
             if (!localRes.ok) {
                 throw new Error(localData?.error || "Local registration failed");
             }
+            if (localData?.email) {
+                localStorage.setItem('user', JSON.stringify(localData));
+                localStorage.setItem('dgca_user', JSON.stringify(localData));
+            }
             return localData;
         };
 

@@ -34,7 +34,7 @@ export async function POST(request) {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      batch: user.batch,
+      batch: user.batch || 'Batch A — Morning',
       is_verified: user.is_verified ?? false,
       created_at: user.created_at,
     });

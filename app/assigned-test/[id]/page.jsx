@@ -23,7 +23,6 @@ export default function AssignedTestPage({ params }) {
     const [saving, setSaving] = useState(false);
     const [submitStatus, setSubmitStatus] = useState('idle');
     const timerRef = useRef(null);
-    const testActiveRef = useRef(false);
 
     useEffect(() => {
         const u = getUser();
@@ -54,32 +53,6 @@ export default function AssignedTestPage({ params }) {
             })
             .catch(() => router.replace('/dashboard'));
     }, [id, router]);
-
-    // Tab-switch guard
-    useEffect(() => {
-        testActiveRef.current = screen === 'test';
-    }, [screen]);
-
-    useEffect(() => {
-        function handleVisibilityChange() {
-            if (document.hidden && testActiveRef.current) {
-                clearInterval(timerRef.current);
-                router.replace('/dashboard?reason=tab_switch');
-            }
-        }
-        function handleBlur() {
-            if (testActiveRef.current) {
-                clearInterval(timerRef.current);
-                router.replace('/dashboard?reason=tab_switch');
-            }
-        }
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        window.addEventListener('blur', handleBlur);
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            window.removeEventListener('blur', handleBlur);
-        };
-    }, [router]);
 
     const submitTest = useCallback(() => {
         clearInterval(timerRef.current);

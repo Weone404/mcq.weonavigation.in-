@@ -509,13 +509,13 @@ const PERSONALYSIS_DATA = {
      
     ], 6),
   },
-  'Radio Telephony': {
-    icon: '📡',
-    subtitle: 'RTF paper analysis & exam insights',
-    examTags: ['RTR (Aero)'],
-    color: '#EF4444',
-    videos: makeSlots([], 10),
-  },
+  // 'Radio Telephony': {
+  //   icon: '📡',
+  //   subtitle: 'RTF paper analysis & exam insights',
+  //   examTags: ['RTR (Aero)'],
+  //   color: '#EF4444',
+  //   videos: makeSlots([], 10),
+  // },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
